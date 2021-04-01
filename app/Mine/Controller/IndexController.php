@@ -16,7 +16,7 @@ use \Psr\Http\Message\ResponseInterface;
 class IndexController extends MineController
 {
     /**
-     * @GetMapping("/mine/index")
+     * @GetMapping("/")
      * @return ResponseInterface
      */
     public function index(): ResponseInterface

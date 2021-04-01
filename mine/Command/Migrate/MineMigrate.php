@@ -124,7 +124,7 @@ class MineMigrate extends BaseCommand
      */
     protected function getMigrationPath(): string
     {
-        return BASE_PATH . '/app/' . ucfirst($this->module) . '/Migrations';
+        return BASE_PATH . '/app/' . ucfirst($this->module) . '/Database/Migrations';
     }
 
     /**
