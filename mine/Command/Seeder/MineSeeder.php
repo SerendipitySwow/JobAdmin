@@ -40,8 +40,8 @@ class MineSeeder extends BaseCommand
      */
     public function __construct(SeederCreator $creator)
     {
-        parent::__construct('mine:seeder');
-        $this->setDescription('Create a new seeder class');
+        parent::__construct('mine:seeder-gen');
+        $this->setDescription('Generate a new MineAdmin module seeder class');
 
         $this->creator = $creator;
     }
@@ -51,7 +51,7 @@ class MineSeeder extends BaseCommand
      */
     public function handle()
     {
-        $this->module = Str::snake(trim($this->input->getArgument('module')));
+        $this->module = ucfirst(trim($this->input->getOption('module')));
         $name = Str::snake(trim($this->input->getArgument('name')));
 
         $this->writeMigration($name);
@@ -83,7 +83,6 @@ class MineSeeder extends BaseCommand
     protected function getArguments(): array
     {
         return [
-            ['module', InputArgument::REQUIRED, 'The name of the module'],
             ['name', InputArgument::REQUIRED, 'The name of the seeder'],
         ];
     }
@@ -91,6 +90,7 @@ class MineSeeder extends BaseCommand
     protected function getOptions(): array
     {
         return [
+            ['module', null, InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
             ['path', null, InputOption::VALUE_OPTIONAL, 'The location where the seeder file should be created'],
             ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided seeder file paths are pre-resolved absolute paths'],
         ];

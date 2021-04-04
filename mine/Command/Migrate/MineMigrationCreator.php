@@ -1,6 +1,6 @@
 <?php
 
-namespace Mine;
+namespace Mine\Command\Migrate;
 
 use Hyperf\Database\Migrations\MigrationCreator;
 

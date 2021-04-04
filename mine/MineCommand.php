@@ -1,8 +1,7 @@
 <?php
-
+declare(strict_types=1);
 namespace Mine;
 
-use Hyperf\Command\Annotation\Command;
 use Hyperf\Command\Command as HyperfCommand;
 
 

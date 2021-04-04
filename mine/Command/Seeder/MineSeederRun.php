@@ -71,7 +71,7 @@ class MineSeederRun extends BaseCommand
             return;
         }
 
-        $this->module = Str::snake(trim($this->input->getArgument('name')));
+        $this->module = ucfirst(trim($this->input->getArgument('module_name')));
 
         $this->seed->setOutput($this->output);
 
@@ -85,7 +85,7 @@ class MineSeederRun extends BaseCommand
     protected function getArguments(): array
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The run seeder class of the name'],
+            ['module_name', InputArgument::REQUIRED, 'The run seeder class of the name'],
         ];
     }
 
@@ -113,6 +113,6 @@ class MineSeederRun extends BaseCommand
                 : $targetPath;
         }
 
-        return BASE_PATH . '/app/' . ucfirst($this->module) . '/Database/Seeders';
+        return BASE_PATH . '/app/' . $this->module . '/Database/Seeders';
     }
 }

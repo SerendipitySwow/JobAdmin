@@ -7,7 +7,7 @@ use Hyperf\Command\Annotation\Command;
 use Hyperf\Database\Commands\Migrations\TableGuesser;
 use Hyperf\Database\Commands\Seeders\BaseCommand;
 use Hyperf\Utils\Str;
-use Mine\MineMigrationCreator;
+use Mine\Command\Migrate\MineMigrationCreator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Throwable;
@@ -24,7 +24,7 @@ class MineMigrate extends BaseCommand
     /**
      * The migration creator instance.
      *
-     * @var \Mine\MineMigrationCreator
+     * @var \Mine\Command\Migrate\MineMigrationCreator
      */
     protected $creator;
 
@@ -35,8 +35,8 @@ class MineMigrate extends BaseCommand
     public function __construct(MineMigrationCreator $creator)
     {
 
-        parent::__construct('mine:migrate');
-        $this->setDescription('Generate a new migration file');
+        parent::__construct('mine:migrate-gen');
+        $this->setDescription('Generate a new MineAdmin module migration file');
         $this->creator = $creator;
     }
 
@@ -48,9 +48,9 @@ class MineMigrate extends BaseCommand
         // It's possible for the developer to specify the tables to modify in this
         // schema operation. The developer may also specify if this table needs
         // to be freshly created so we can create the appropriate migrations.
-        $this->module = Str::snake(trim($this->input->getArgument('module')));
-
         $name = 'create_' . Str::snake(trim($this->input->getArgument('name'))).'_table';
+
+        $this->module = ucfirst($this->input->getOption('module'));
 
         $table = $this->input->getOption('table');
 
@@ -81,7 +81,6 @@ class MineMigrate extends BaseCommand
     protected function getArguments(): array
     {
         return [
-            ['module', InputArgument::REQUIRED, 'The name of the module'],
             ['name', InputArgument::REQUIRED, 'The name of the migration'],
         ];
     }
@@ -89,6 +88,7 @@ class MineMigrate extends BaseCommand
     protected function getOptions(): array
     {
         return [
+            ['module', null, InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
             ['create', null, InputOption::VALUE_OPTIONAL, 'The table to be created'],
             ['table', null, InputOption::VALUE_OPTIONAL, 'The table to migrate'],
             ['path', null, InputOption::VALUE_OPTIONAL, 'The location where the migration file should be created'],

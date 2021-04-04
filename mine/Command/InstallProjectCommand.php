@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Mine\Command;
 
 use Hyperf\Command\Annotation\Command;
@@ -55,8 +55,11 @@ class InstallProjectCommand extends MineCommand
             // 初始化数据
             $this->initData();
 
+            // 其他设置
+            $this->setOthers();
+
             // 安装完成
-            //$this->finish();
+            $this->finish();
         }
 
         // 重新安装
@@ -67,19 +70,19 @@ class InstallProjectCommand extends MineCommand
 
     protected function welcome()
     {
-        $this->line('-----------------------------------------------------------');
-        $this->line('Hello, welcome use MineAdmin system.');
-        $this->line('The installation is about to start, just a few steps');
-        $this->line('-----------------------------------------------------------');
+        $this->line('-----------------------------------------------------------', 'comment');
+        $this->line('Hello, welcome use MineAdmin system.', 'comment');
+        $this->line('The installation is about to start, just a few steps', 'comment');
+        $this->line('-----------------------------------------------------------', 'comment');
     }
 
     protected function checkEnv()
     {
-        $answer = $this->ask('Do you want to test the system environment now? (Y/N)');
+        $answer = $this->confirm('Do you want to test the system environment now?', true);
 
-        if ($this->isYes($answer)) {
+        if ($answer) {
 
-            $this->line(PHP_EOL . ' Checking environmenting...' . PHP_EOL);
+            $this->line(PHP_EOL . ' Checking environmenting...' . PHP_EOL, 'comment');
 
             if (version_compare(PHP_VERSION, '7.3.0', '<')) {
                 $this->error(sprintf(' php version should >= 7.3.0 >>> %sNO!%s', self::CONSOLE_RED_BEGIN, self::CONSOLE_END));
@@ -97,15 +100,15 @@ class InstallProjectCommand extends MineCommand
 
     protected function setDataBaseInformation(): void
     {
-        $answer = $this->ask('Do you need to set Database information? (Y/N)');
+        $answer = $this->confirm('Do you need to set Database information?', true);
         // 设置数据库
-        if ($this->isYes($answer)) {
-            $dbchar = $this->ask('please input database charset, default (utf8mb4)');
-            $dbname = $this->ask('please input database name, default(mineadmin)');
-            $dbhost = $this->ask('please input database host, default (127.0.0.1)');
-            $dbport = $this->ask('please input database host port, default (3306)');
-            $prefix = $this->ask('please input table prefix, default (null)');
-            $dbuser = $this->ask('please input database username, default (root)');
+        if ($answer) {
+            $dbchar = $this->ask('please input database charset, default:', 'utf8mb4');
+            $dbname = $this->ask('please input database name, default:', 'mineadmin');
+            $dbhost = $this->ask('please input database host, default:', '127.0.0.1');
+            $dbport = $this->ask('please input database host port, default:', '3306');
+            $prefix = $this->ask('please input table prefix, default:', 'Null');
+            $dbuser = $this->ask('please input database username, default:', 'root');
             $dbpass = '';
 
             $i = 3;
@@ -123,12 +126,12 @@ class InstallProjectCommand extends MineCommand
             }
 
             $this->database = [
-                'charset' => $dbchar ?: 'utf8mb4',
-                'dbname'  => $dbname ?: 'mineadmin',
-                'dbhost'  => $dbhost ?: '127.0.0.1',
-                'dbport'  => $dbport ?: '3306',
-                'prefix'  => $prefix ?: '',
-                'dbuser'  => $dbuser ?: 'root',
+                'charset' => $dbchar,
+                'dbname'  => $dbname,
+                'dbhost'  => $dbhost,
+                'dbport'  => $dbport,
+                'prefix'  => $prefix === 'Null' ? '' : $prefix,
+                'dbuser'  => $dbuser,
                 'dbpass'  => $dbpass ?: '',
             ];
 
@@ -194,9 +197,23 @@ class InstallProjectCommand extends MineCommand
 
     }
 
+    protected function setOthers()
+    {
+        $this->line(PHP_EOL . ' MineAdmin set others items...' . PHP_EOL, 'comment');
+        // 生成jwt
+        $this->call('gen:jwt-secret');
+    }
+
     protected function finish(): void
     {
-        $this->line(sprintf('
+        $i = 5;
+        $this->output->write(PHP_EOL . $this->getGreenText('The installation is almost complete'), false);
+        while($i > 0) {
+            $this->output->write($this->getGreenText('.'), false);
+            $i--;
+            sleep(1);
+        }
+        $this->line(PHP_EOL . sprintf('
 /---------------------- welcome to use -----------------------\
 |               _                ___       __          _      |
 |    ____ ___  (_)___  _____    /   | ____/ /___ ___  (_)___  |
@@ -209,7 +226,7 @@ class InstallProjectCommand extends MineCommand
 MineAdmin Version: %s
 default username: admin
 default password: admin123
-    ', date('Y'), Mine::getVersion()));
+    ', date('Y'), Mine::getVersion()), 'comment');
     }
 
     /**
@@ -222,14 +239,5 @@ default password: admin123
             exit;
         }
         $this->line(sprintf(' %s extension is installed >>> %sOK!%s', $extension, self::CONSOLE_GREEN_BEGIN, self::CONSOLE_END));
-    }
-
-    /**
-     * @param string $answer
-     * @return bool
-     */
-    protected function isYes(string $answer): bool
-    {
-        return $answer === 'Y' || $answer === 'y' || $answer === 'yes' || $answer === 'YES';
     }
 }
