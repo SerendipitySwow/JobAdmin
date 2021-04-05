@@ -33,7 +33,7 @@ class MineMigrateRun extends BaseCommand
     /**
      * The migrator instance.
      *
-     * @var \Hyperf\Database\Migrations\Migrator
+     * @var Migrator
      */
     protected $migrator;
 
@@ -41,12 +41,15 @@ class MineMigrateRun extends BaseCommand
 
     /**
      * Create a new migration command instance.
+     * @param Migrator $migrator
      */
     public function __construct(Migrator $migrator)
     {
         parent::__construct();
 
         $this->migrator = $migrator;
+
+        $this->setDescription('The run migrate class of MineAdmin module');
     }
 
     /**
@@ -109,7 +112,7 @@ class MineMigrateRun extends BaseCommand
     protected function getArguments(): array
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the module'],
+            ['name', InputArgument::REQUIRED, 'Please enter the module to be run'],
         ];
     }
 

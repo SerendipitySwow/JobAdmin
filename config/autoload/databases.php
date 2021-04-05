@@ -13,7 +13,7 @@ return [
     'default' => [
         'driver' => env('DB_DRIVER', 'mysql'),
         'host' => env('DB_HOST', 'localhost'),
-        'database' => env('DB_DATABASE', 'mine'),
+        'database' => env('DB_DATABASE', 'hyperf'),
         'port' => env('DB_PORT', 3306),
         'username' => env('DB_USERNAME', 'root'),
         'password' => env('DB_PASSWORD', 'root'),
@@ -32,7 +32,15 @@ return [
             'gen:model' => [
                 'path' => 'app/Model',
                 'force_casts' => true,
-                'inheritance' => 'Model',
+                'inheritance' => 'MineModel',
+                'uses' => 'Mine\MineModel',
+                'with_comments' => true,
+                'visitors' => [
+                    Hyperf\Database\Commands\Ast\ModelRewriteKeyInfoVisitor::class,
+                    Hyperf\Database\Commands\Ast\ModelRewriteTimestampsVisitor::class,
+                    Hyperf\Database\Commands\Ast\ModelRewriteSoftDeletesVisitor::class,
+//                    Hyperf\Database\Commands\Ast\ModelRewriteGetterSetterVisitor::class,
+                ],
             ],
         ],
     ],

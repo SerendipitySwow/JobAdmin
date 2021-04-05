@@ -6,7 +6,6 @@ use Hyperf\Command\Annotation\Command;
 use Mine\Helper\ConsoleTable;
 use Mine\Mine;
 use Mine\MineCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -30,26 +29,27 @@ class InstallLocalModuleCommand extends MineCommand
     {
         parent::configure();
         $this->mine = make(Mine::Class);
-        $this->setHelp('run "php bin/hyperf.php mine:module <module_name> -o install"');
+        $this->setHelp('run "php bin/hyperf.php mine:module --name cms --option install"');
         $this->setDescription('install command of module MineAdmin');
-        $this->addArgument(
-            'name', InputArgument::REQUIRED,
-            'input module name or "list" command show module list'
+        $this->addOption(
+            'option', null, InputOption::VALUE_OPTIONAL,
+            'input "--option list" show module list, "-option install" install module or "-option uninstall" uninstall module',
+            'list'
         );
         $this->addOption(
-            'option', '-o', InputOption::VALUE_OPTIONAL,
-            'input "-o install" install module or "-o uninstall" uninstall module'
+            'name', null, InputOption::VALUE_OPTIONAL,
+            'input module name or "list" command show module list',
         );
     }
 
     public function handle()
     {
-        $name = $this->input->getArgument('name');
+        $name = $this->input->getOption('name');
         $option = $this->input->getOption('option');
         $modules = $this->mine->getModuleInfo();
 
         // 模块名不能叫list，list是展示模块列表
-        if ($name === 'list') {
+        if ($option === 'list') {
             $table = new ConsoleTable();
             $table->setHeader(['Name', 'Description', 'Version', "Install", "Enable"]);
             foreach ($modules as $mod) {
@@ -67,7 +67,8 @@ class InstallLocalModuleCommand extends MineCommand
         }
 
         // other module
-        if (isset($modules[$name])) {
+        $name = ucfirst($name);
+        if (!empty($name) && isset($modules[$name])) {
             if (empty($option)) {
                 $this->line($this->getRedText('Please input the operation command for the module: -o install or -o uninstall'));
                 exit;

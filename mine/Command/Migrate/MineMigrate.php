@@ -7,7 +7,6 @@ use Hyperf\Command\Annotation\Command;
 use Hyperf\Database\Commands\Migrations\TableGuesser;
 use Hyperf\Database\Commands\Seeders\BaseCommand;
 use Hyperf\Utils\Str;
-use Mine\Command\Migrate\MineMigrationCreator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Throwable;
@@ -24,7 +23,7 @@ class MineMigrate extends BaseCommand
     /**
      * The migration creator instance.
      *
-     * @var \Mine\Command\Migrate\MineMigrationCreator
+     * @var MineMigrationCreator
      */
     protected $creator;
 
@@ -50,7 +49,14 @@ class MineMigrate extends BaseCommand
         // to be freshly created so we can create the appropriate migrations.
         $name = 'create_' . Str::snake(trim($this->input->getArgument('name'))).'_table';
 
-        $this->module = ucfirst($this->input->getOption('module'));
+        $this->module = $this->input->getOption('module');
+
+        if (empty($this->module)) {
+            $this->error("<--module module_name> required");
+            exit;
+        }
+
+        $this->module = ucfirst($this->module);
 
         $table = $this->input->getOption('table');
 
@@ -88,7 +94,7 @@ class MineMigrate extends BaseCommand
     protected function getOptions(): array
     {
         return [
-            ['module', null, InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
+            ['module', '-m', InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
             ['create', null, InputOption::VALUE_OPTIONAL, 'The table to be created'],
             ['table', null, InputOption::VALUE_OPTIONAL, 'The table to migrate'],
             ['path', null, InputOption::VALUE_OPTIONAL, 'The location where the migration file should be created'],

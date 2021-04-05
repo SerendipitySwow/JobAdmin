@@ -9,7 +9,6 @@ use Hyperf\Utils\Filesystem\Filesystem;
 use Hyperf\Utils\Str;
 use Mine\MineCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class CreateFormRequest
@@ -18,17 +17,17 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class CreateFormRequest extends MineCommand
 {
-    protected $name = 'mine:request';
+    protected $name = 'mine:request-gen';
 
     protected $module;
 
     public function configure()
     {
         parent::configure();
-        $this->setHelp('run "php bin/hyperf.php mine:module <module_name> -o install"');
-        $this->setDescription('generator validate form request class file');
+        $this->setHelp('run "php bin/hyperf.php mine:module <module_name> <name>"');
+        $this->setDescription('Generate validate form request class file');
         $this->addArgument(
-            'module', InputArgument::REQUIRED,
+            'module_name', InputArgument::REQUIRED,
             'input module name'
         );
 
@@ -40,16 +39,21 @@ class CreateFormRequest extends MineCommand
 
     public function handle()
     {
-        $this->module = ucfirst(Str::snake(trim($this->input->getArgument('module'))));
-        $this->name = ucfirst(Str::snake(trim($this->input->getArgument('name'))));
+        $this->module = ucfirst(trim($this->input->getArgument('module_name')));
+        $this->name = ucfirst(trim($this->input->getArgument('name')));
 
         $fs = new Filesystem();
 
-        $content = str_replace(
-            ['{MODULE_NAME}', '{CLASS_NAME}'],
-            [$this->module, $this->name],
-            $fs->get($this->getStub('form_request'))
-        );
+        try {
+            $content = str_replace(
+                ['{MODULE_NAME}', '{CLASS_NAME}'],
+                [$this->module, $this->name],
+                $fs->get($this->getStub('form_request'))
+            );
+        } catch (FileNotFoundException $e) {
+            $this->error($e->getMessage());
+            exit;
+        }
 
         $fs->put($this->getModulePath() . $this->name . 'FormRequest.php', $content);
 

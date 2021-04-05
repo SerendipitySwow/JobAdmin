@@ -15,7 +15,6 @@ use Hyperf\Command\Annotation\Command;
 use Hyperf\Command\ConfirmableTrait;
 use Hyperf\Database\Commands\Seeders\BaseCommand;
 use Hyperf\Database\Seeders\Seed;
-use Hyperf\Utils\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -45,7 +44,7 @@ class MineSeederRun extends BaseCommand
     /**
      * The seed instance.
      *
-     * @var \Hyperf\Database\Seeders\Seed
+     * @var Seed
      */
     protected $seed;
 
@@ -60,6 +59,8 @@ class MineSeederRun extends BaseCommand
         parent::__construct();
 
         $this->seed = $seed;
+
+        $this->setDescription('The run seeder class of MineAdmin module');
     }
 
     /**

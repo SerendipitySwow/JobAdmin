@@ -28,7 +28,7 @@ class MineSeeder extends BaseCommand
     /**
      * The seeder creator instance.
      *
-     * @var \Hyperf\Database\Seeders\SeederCreator
+     * @var SeederCreator
      */
     protected $creator;
 
@@ -59,6 +59,7 @@ class MineSeeder extends BaseCommand
 
     /**
      * Write the seeder file to disk.
+     * @param string $name
      */
     protected function writeMigration(string $name)
     {
@@ -71,7 +72,7 @@ class MineSeeder extends BaseCommand
         $this->info("<info>[INFO] Created Seeder:</info> {$file}");
     }
 
-    protected function ensureSeederDirectoryAlreadyExist(string $path)
+    protected function ensureSeederDirectoryAlreadyExist(string $path): string
     {
         if (! file_exists($path)) {
             mkdir($path, 0755, true);

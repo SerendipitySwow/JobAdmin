@@ -76,8 +76,6 @@ class Mine
             $modInfo = $mod . DIRECTORY_SEPARATOR . 'config.json';
             if (file_exists($modInfo)) {
                 $infos[basename($mod)] = json_decode($fs->sharedGet($modInfo), true);
-            } else {
-                $infos[basename($mod)] = [];
             }
         }
         $this->setModuleInfo($infos);
@@ -132,6 +130,7 @@ class Mine
      * @param $value
      * @param false $save
      * @return bool
+     * @noinspection PhpUnused
      */
     public function setModuleConfigValue($key, $value, $save = false): bool
     {
