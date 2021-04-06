@@ -94,7 +94,7 @@ class MineMigrate extends BaseCommand
     protected function getOptions(): array
     {
         return [
-            ['module', '-m', InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
+            ['module', '-M', InputOption::VALUE_REQUIRED, 'Please enter the module to be generated'],
             ['create', null, InputOption::VALUE_OPTIONAL, 'The table to be created'],
             ['table', null, InputOption::VALUE_OPTIONAL, 'The table to migrate'],
             ['path', null, InputOption::VALUE_OPTIONAL, 'The location where the migration file should be created'],

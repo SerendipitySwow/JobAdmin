@@ -61,7 +61,7 @@ class MineMigrateRun extends BaseCommand
             return;
         }
 
-        $this->module = Str::snake(trim($this->input->getArgument('name')));
+        $this->module = trim($this->input->getArgument('name'));
 
         $this->prepareDatabase();
 
