@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Class InstallProjectCommand
  * @Command
- * @package Mine\Command
+ * @package System\Command
  */
 class InstallProjectCommand extends MineCommand
 {
@@ -172,12 +172,15 @@ class InstallProjectCommand extends MineCommand
                 }
             }
             $dsn = sprintf("mysql:host=%s", $this->database['dbhost']);
-            $isSuccess = (new \PDO($dsn, $this->database['dbuser'], $this->database['dbpass']))->exec(
+            $pdo = new \PDO($dsn, $this->database['dbuser'], $this->database['dbpass']);
+            $isSuccess = $pdo->query(
                 sprintf(
                     'CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARSET %s COLLATE %s_general_ci;',
                     $this->database['dbname'], $this->database['charset'], $this->database['charset']
                 )
             );
+
+            $pdo = null;
 
             if ($isSuccess) {
                 $this->line($this->getGreenText(sprintf('"%s" database created successfully', $this->database['dbname'])));
@@ -213,20 +216,12 @@ class InstallProjectCommand extends MineCommand
             $i--;
             sleep(1);
         }
-        $this->line(PHP_EOL . sprintf('
-/---------------------- welcome to use -----------------------\
-|               _                ___       __          _      |
-|    ____ ___  (_)___  _____    /   | ____/ /___ ___  (_)___  |
-|   / __ `__ \/ / __ \/ ___/   / /| |/ __  / __ `__ \/ / __ \ |
-|  / / / / / / / / / / /__/   / ___ / /_/ / / / / / / / / / / |
-| /_/ /_/ /_/_/_/ /_/\___/   /_/  |_\__,_/_/ /_/ /_/_/_/ /_/  |
-|                                                             |
-\_____________  Copyright MineAdmin 2021 ~ %s  _____________|
+        $this->line(PHP_EOL . sprintf('%s
 
 MineAdmin Version: %s
 default username: admin
 default password: admin123
-    ', date('Y'), Mine::getVersion()), 'comment');
+    ', $this->getInfo(), Mine::getVersion()), 'comment');
     }
 
     /**

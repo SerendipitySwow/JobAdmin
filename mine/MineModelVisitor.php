@@ -7,7 +7,7 @@ use Hyperf\Utils\Str;
 
 /**
  * Class MineModelVisitor
- * @package Mine
+ * @package System
  */
 class MineModelVisitor extends  Visitor
 {

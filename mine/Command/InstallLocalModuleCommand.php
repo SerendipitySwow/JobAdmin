@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Class InstallLocalModuleCommand
  * @Command
- * @package Mine\Command
+ * @package System\Command
  */
 class InstallLocalModuleCommand extends MineCommand
 {
@@ -19,7 +19,7 @@ class InstallLocalModuleCommand extends MineCommand
      * 安装命令
      * @var string
      */
-    protected $name = 'mine:module';
+    protected $name = 'mine:module-local';
 
     protected $database = [];
 

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Class CreateModel
  * @Command
- * @package Mine\Command\Creater
+ * @package System\Command\Creater
  */
 class CreateModel extends MineCommand
 {
@@ -25,22 +25,51 @@ class CreateModel extends MineCommand
 
     public function handle()
     {
-        /** @var $mine Mine */
         $mine = make(Mine::class);
         $module = ucfirst(trim($this->input->getOption('module')));
-        $table  = ucfirst(trim($this->input->getOption('table')));
+        $table  = trim($this->input->getOption('table'));
+
+        if (empty($module)) {
+            $this->line('Missing parameter <--module < module_name>>', 'error');
+        }
 
         $moduleInfos = $mine->getModuleInfo();
-
 
         if (isset($moduleInfos[$module])) {
             $info = $moduleInfos[$module];
             $path = "app/{$module}/Model";
-//            strtolower;
+
+            $db = env('DB_DATABASE');
+            $prefix = env('DB_PREFIX');
+
+            $tables = Db::select('SHOW TABLES');
+            $key = "Tables_in_{$db}";
+            /** @var Array $tableList */
+            $tableList = [];
+            foreach ($tables as $k) {
+                $tmp = $k->$key;
+                if (!empty($prefix) && preg_match(sprintf("/%s_%s[_a-zA-Z0-9]+/i", $prefix, $module), $tmp)) {
+                    $tableList[] = $tmp;
+                }
+                if (preg_match(sprintf("/%s[_a-zA-Z0-9]+/i", $module), $tmp)) {
+                    $tableList[] = $tmp;
+                }
+            }
+
+            if (!empty($table)) {
+                if (!in_array($table, $tableList)) {
+                    $this->confirm("Table \"{$table}\" does not exist or not belong to the \"{$module}\" module. Are you sure to generate the model?", false)
+                    &&
+                    $this->call('gen:model', ['table' => $table, '--path' => $path]);
+                } else {
+                    $this->call('gen:model', ['table' => $table, '--path' => $path]);
+                }
+            } else {
+                foreach ($tableList as $table) {
+                    $this->call('gen:model', ['table' => $table, '--path' => $path]);
+                }
+            }
         }
-
-//        $this->call()
-
     }
 
     protected function getOptions(): array

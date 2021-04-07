@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Class CreateFormRequest
  * @Command
- * @package Mine\Command\Creater
+ * @package System\Command\Creater
  */
 class CreateFormRequest extends MineCommand
 {

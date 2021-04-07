@@ -7,7 +7,7 @@ use Hyperf\Command\Command as HyperfCommand;
 
 /**
  * Class MineCommand
- * @package Mine
+ * @package System
  */
 abstract class MineCommand extends HyperfCommand
 {
@@ -35,5 +35,19 @@ abstract class MineCommand extends HyperfCommand
     protected function getModulePath(): string
     {
         return BASE_PATH . '/app/' . $this->module . '/Request/';
+    }
+
+    protected function getInfo(): string
+    {
+        return sprintf('
+/---------------------- welcome to use -----------------------\
+|               _                ___       __          _      |
+|    ____ ___  (_)___  _____    /   | ____/ /___ ___  (_)___  |
+|   / __ `__ \/ / __ \/ ___/   / /| |/ __  / __ `__ \/ / __ \ |
+|  / / / / / / / / / / /__/   / ___ / /_/ / / / / / / / / / / |
+| /_/ /_/ /_/_/_/ /_/\___/   /_/  |_\__,_/_/ /_/ /_/_/_/ /_/  |
+|                                                             |
+\_____________  Copyright MineAdmin 2021 ~ %s  _____________|
+', date('Y'));
     }
 }

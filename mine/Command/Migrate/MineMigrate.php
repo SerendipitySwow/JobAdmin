@@ -14,7 +14,7 @@ use Throwable;
 /**
  * Class MineMigrate
  * @Command
- * @package Mine\Command\Migrate
+ * @package System\Command\Migrate
  */
 class MineMigrate extends BaseCommand
 {

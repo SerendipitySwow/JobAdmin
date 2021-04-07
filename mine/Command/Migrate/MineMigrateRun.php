@@ -15,7 +15,7 @@ use Hyperf\Command\Annotation\Command;
 /**
  * Class MineMigrateRun
  * @Command
- * @package Mine\Command\Migrate
+ * @package System\Command\Migrate
  */
 class MineMigrateRun extends BaseCommand
 {

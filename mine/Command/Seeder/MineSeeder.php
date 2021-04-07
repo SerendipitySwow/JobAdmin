@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Class MineSeeder
  * @Command
- * @package Mine\Command\Seeder
+ * @package System\Command\Seeder
  */
 class MineSeeder extends BaseCommand
 {

@@ -1,6 +1,6 @@
 {
-    "name": "mine",
-    "description": "system module dfsdfds",
+    "name": "system",
+    "description": "system module",
     "installed": true,
     "version": "0.1.1",
     "enabled": true
