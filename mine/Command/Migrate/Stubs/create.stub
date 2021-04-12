@@ -12,11 +12,12 @@ class DummyClass extends Migration
     public function up(): void
     {
         Schema::create('DummyTable', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('created_by', false);
-            $table->unsignedBigInteger('updated_by', false);
+            $table->unsignedBigInteger('id');
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
-            $table->unsignedInteger('deleted_at', false);
+            $table->softDeletes();
+            $table->primary('id');
         });
     }
 

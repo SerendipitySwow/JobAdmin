@@ -2,8 +2,6 @@
 /.vscode
 /vendor
 /package
-/runtime/container
-/runtime/logs
 *.log
 .env
 .gitee
