@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\System\Model\SystemUser;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\MineController;
@@ -20,6 +21,10 @@ class IndexController extends MineController
      */
     public function index(): ResponseInterface
     {
+        $systemUser = new SystemUser;
+        $systemUser->username = rand(0, 100000);
+        $systemUser->password = '321';
+        $systemUser->save();
         return $this->success();
     }
 }
