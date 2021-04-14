@@ -26,10 +26,10 @@ class MineResponse extends Response
 
     /**
      * @param string $message
-     * @param array $data
+     * @param array | object $data
      * @return ResponseInterface
      */
-    public function success(string $message = '', array $data = []): ResponseInterface
+    public function success(string $message = '', $data = []): ResponseInterface
     {
         $format = [
             'success' => true,

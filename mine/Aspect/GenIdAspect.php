@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Mine\Aspect;
 
-use http\Exception\RuntimeException;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
+use Mine\MineModel;
 
 /**
  * Class GenIdAspect
@@ -26,9 +26,10 @@ class GenIdAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        print_r($proceedingJoinPoint);
-        $result = $proceedingJoinPoint->process();
-        // 在调用后进行某些处理
-        return $result;
+        $instance = $proceedingJoinPoint->getInstance();
+        if ($instance instanceof MineModel && !$instance->incrementing && $instance->getPrimaryKeyType() === 'int') {
+            $instance->setPrimaryKeyValue($instance->genId());
+        }
+        return $proceedingJoinPoint->process();
     }
 }

@@ -22,9 +22,10 @@ class IndexController extends MineController
     public function index(): ResponseInterface
     {
         $systemUser = new SystemUser;
-        $systemUser->username = rand(0, 100000);
-        $systemUser->password = '321';
-        $systemUser->save();
-        return $this->success();
+        $data = $systemUser->get();
+        $data2 = $systemUser->find($data[0]->id);
+        return $this->success($data2);
+
+
     }
 }

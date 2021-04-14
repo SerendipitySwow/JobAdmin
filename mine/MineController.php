@@ -60,7 +60,7 @@ abstract class MineController
     {
         if (!empty($msgOrData) && is_string($msgOrData)) {
             return $this->response->success($msgOrData);
-        } else if (!empty($msgOrData) && is_array($msgOrData)) {
+        } else if (!empty($msgOrData) && (is_array($msgOrData) || is_object($msgOrData))) {
             return $this->response->success('', $msgOrData);
         } else {
             return $this->response->success($msgOrData, $data);

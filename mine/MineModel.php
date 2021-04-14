@@ -29,16 +29,28 @@ class MineModel extends Model
     }
 
     /**
-     * 重写保存方法
+     * 设置主键的值
+     * @param string | int $value
+     */
+    public function setPrimaryKeyValue($value): void
+    {
+        $this->{$this->primaryKey} = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrimaryKeyType(): string
+    {
+        return $this->keyType;
+    }
+
+    /**
      * @param array $options
      * @return bool
      */
     public function save(array $options = []): bool
     {
-        if (!$this->incrementing && $this->keyType === 'int') {
-            $key = $this->primaryKey;
-            $this->$key = $this->genId();
-        }
         return parent::save($options);
     }
 

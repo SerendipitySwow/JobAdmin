@@ -15,10 +15,10 @@ class CreateSystemUserTable extends Migration
             $table->engine = 'Innodb';
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '用户ID，主键']);
             $table->addColumn('string', 'username', ['length' => 20, 'comment' => '用户名']);
-            $table->addColumn('string', 'password', ['length' => 255, 'comment' => '密码']);
+            $table->addColumn('string', 'password', ['length' => 100, 'comment' => '密码']);
             $table->addColumn('string', 'user_type', ['length' => 3, 'comment' => '用户类型：(100系统用户)', 'default' => '100'])->nullable();
-            $table->addColumn('string', 'email', ['length' => 100, 'comment' => '用户邮箱'])->nullable();
-            $table->addColumn('string', 'avatar', ['length' => 255, 'comment' => '用户头像'])->nullable();
+            $table->addColumn('string', 'email', ['length' => 50, 'comment' => '用户邮箱'])->nullable();
+            $table->addColumn('string', 'avatar', ['length' => 100, 'comment' => '用户头像'])->nullable();
             $table->addColumn('bigInteger', 'dept_id', ['unsigned' => true, 'comment' => '部门ID'])->nullable();
             $table->addColumn('string', 'remember_token', ['length' => 100, 'comment' => '用户Token'])->nullable();
             $table->addColumn('tinyInteger', 'status', ['unsigned' => true, 'default' => 0, 'comment' => '状态 (0正常 1停用)'])->nullable();

@@ -45,5 +45,32 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'status' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected $casts = [
+        'id' => 'integer',
+        'dept_id' => 'integer',
+        'status' => 'integer',
+        'created_by' => 'integer',
+        'updated_by' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
+    /**
+     * @param $value
+     * @return false|string|null
+     */
+    public function setPasswordAttribute($value)
+    {
+        return $this->attributes['password'] = password_hash($value, PASSWORD_DEFAULT);
+    }
+
+    /**
+     * @param $password
+     * @param $hash
+     * @return bool
+     */
+    public function passwordVerify($password, $hash): bool
+    {
+        return password_verify($password, $hash);
+    }
 }

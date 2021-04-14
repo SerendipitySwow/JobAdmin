@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Mine\Command;
 
 use Hyperf\Command\Annotation\Command;
+use Hyperf\DbConnection\Db;
+use Mine\Helper\Id;
 use Mine\MineCommand;
 use Mine\Mine;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,6 +27,8 @@ class InstallProjectCommand extends MineCommand
     protected CONST CONSOLE_END = "\033[0m";
 
     protected $database = [];
+
+    protected $superAdminId = 0;
 
     public function configure()
     {
@@ -142,6 +146,8 @@ class InstallProjectCommand extends MineCommand
     protected function generatorEnvFile()
     {
         try {
+            $id = new Id();
+            $this->superAdminId = $id->getId();
             $env = parse_ini_file(BASE_PATH . '/.env.example', true);
             $env['APP_NAME'] = 'MineAdmin';
             $env['APP_ENV'] = 'dev';
@@ -158,6 +164,9 @@ class InstallProjectCommand extends MineCommand
             $env['REDIS_AUTH'] = '(NULL)';
             $env['REDIS_PORT'] = '6379';
             $env['REDIS_DB'] = '0';
+            $env['SUPER_ADMIN'] = (string) $this->superAdminId;
+
+            $id = null;
 
             $envContent = '';
             foreach ($env as $key => $e) {
@@ -205,6 +214,18 @@ class InstallProjectCommand extends MineCommand
         $this->line(PHP_EOL . ' MineAdmin set others items...' . PHP_EOL, 'comment');
         // 生成jwt
         $this->call('gen:jwt-secret');
+        // 创建超级管理员
+        Db::table("{$this->database['prefix']}system_user")->insert([
+            'id' => $this->superAdminId,
+            'username' => 'admin',
+            'password' => password_hash('admin123', PASSWORD_DEFAULT),
+            'user_type' => '100',
+            'created_by' => 0,
+            'updated_by' => 0,
+            'status' => 0,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 
     protected function finish(): void
