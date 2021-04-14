@@ -5,6 +5,7 @@ namespace App\System\Controller;
 use App\System\Model\SystemUser;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
+use Mine\Mine;
 use Mine\MineController;
 use \Psr\Http\Message\ResponseInterface;
 
@@ -21,11 +22,13 @@ class IndexController extends MineController
      */
     public function index(): ResponseInterface
     {
-        $systemUser = new SystemUser;
-        $data = $systemUser->get();
-        $data2 = $systemUser->find($data[0]->id);
-        return $this->success($data2);
+//        $systemUser = new SystemUser;
+//        $data = $systemUser->get();
+//        $data2 = $systemUser->find($data[0]->id);
+//        return $this->success($data2);
 
+        $mine = new Mine();
 
+        return $this->success($mine->getModuleInfo());
     }
 }

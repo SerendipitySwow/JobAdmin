@@ -44,9 +44,14 @@ class InstallProjectCommand extends MineCommand
         // 获取参数
         $option = $this->input->getOption('option');
 
-
         // 全新安装
         if ($option === null) {
+
+            if (file_exists(BASE_PATH . '/.env')) {
+                $this->line('Check the .Env file. The installation is finished', 'error');
+                return;
+            }
+
             // 欢迎
             $this->welcome();
 
@@ -56,8 +61,8 @@ class InstallProjectCommand extends MineCommand
             // 设置数据库
             $this->setDataBaseInformation();
 
-            // 初始化数据
-            $this->initData();
+            // 安装本地模块
+            $this->installLocalModule();
 
             // 其他设置
             $this->setOthers();
@@ -68,7 +73,7 @@ class InstallProjectCommand extends MineCommand
 
         // 重新安装
         if ($option === 'reset') {
-            echo 123;
+            $this->line('Reinstallation is not complete...', 'error');
         }
     }
 
@@ -204,9 +209,19 @@ class InstallProjectCommand extends MineCommand
         }
     }
 
-    protected function initData()
+    /**
+     * install modules
+     */
+    protected function installLocalModule()
     {
-
+        /* @var Mine $mine */
+        $mine = make(Mine::class);
+        $modules = $mine->getModuleInfo();
+        foreach ($modules as $name => $info) {
+            $this->call('mine:migrate-run', ['name' => $name]);
+            $this->call('mine:seeder-run',  ['name' => $name]);
+            $this->line($this->getGreenText(sprintf('"%s" module install successfully', $name)));
+        }
     }
 
     protected function setOthers()

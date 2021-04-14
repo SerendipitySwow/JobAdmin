@@ -72,7 +72,7 @@ class MineSeederRun extends BaseCommand
             return;
         }
 
-        $this->module = ucfirst(trim($this->input->getArgument('module_name')));
+        $this->module = ucfirst(trim($this->input->getArgument('name')));
 
         $this->seed->setOutput($this->output);
 
@@ -86,7 +86,7 @@ class MineSeederRun extends BaseCommand
     protected function getArguments(): array
     {
         return [
-            ['module_name', InputArgument::REQUIRED, 'The run seeder class of the name'],
+            ['name', InputArgument::REQUIRED, 'The run seeder class of the name'],
         ];
     }
 
