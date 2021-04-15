@@ -8,6 +8,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Mine;
 use Mine\MineController;
 use \Psr\Http\Message\ResponseInterface;
+use Mine\JwtAuth\UserJwtSubject;
 
 /**
  * Class IndexController
@@ -26,9 +27,7 @@ class IndexController extends MineController
 //        $data = $systemUser->get();
 //        $data2 = $systemUser->find($data[0]->id);
 //        return $this->success($data2);
-
-        $mine = new Mine();
-
-        return $this->success($mine->getModuleInfo());
+        $jwt = $this->request->getLoginUser()->getJwt()->check();
+        return $this->success(['token' => $jwt]);
     }
 }

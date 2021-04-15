@@ -28,7 +28,7 @@ class InstallProjectCommand extends MineCommand
 
     protected $database = [];
 
-    protected $superAdminId = 0;
+    protected $superAdminId = 1;
 
     public function configure()
     {
@@ -47,28 +47,48 @@ class InstallProjectCommand extends MineCommand
         // 全新安装
         if ($option === null) {
 
-            if (file_exists(BASE_PATH . '/.env')) {
-                $this->line('Check the .Env file. The installation is finished', 'error');
-                return;
+            if (!file_exists(BASE_PATH . '/.env')) {
+                // 欢迎
+                $this->welcome();
+
+                // 检测环境
+                $this->checkEnv();
+
+                // 设置数据库
+                $this->setDataBaseInformation();
+
+                $this->line("\n\nReset the \".env\" file. Please restart the service before running \nthe installation command to continue the installation.", "info");
+            } else if (file_exists(BASE_PATH . '/.env') && $this->confirm('Do you want to continue with the installation program?', true)) {
+
+                // 安装本地模块
+                $this->installLocalModule();
+
+                // 其他设置
+                $this->setOthers();
+
+                // 安装完成
+                $this->finish();
+
+            } else {
+
+                // 欢迎
+                $this->welcome();
+
+                // 检测环境
+                $this->checkEnv();
+
+                // 设置数据库
+                $this->setDataBaseInformation();
+
+                // 安装本地模块
+                $this->installLocalModule();
+
+                // 其他设置
+                $this->setOthers();
+
+                // 安装完成
+                $this->finish();
             }
-
-            // 欢迎
-            $this->welcome();
-
-            // 检测环境
-            $this->checkEnv();
-
-            // 设置数据库
-            $this->setDataBaseInformation();
-
-            // 安装本地模块
-            $this->installLocalModule();
-
-            // 其他设置
-            $this->setOthers();
-
-            // 安装完成
-            $this->finish();
         }
 
         // 重新安装
@@ -215,6 +235,7 @@ class InstallProjectCommand extends MineCommand
     protected function installLocalModule()
     {
         /* @var Mine $mine */
+        $this->line("Installation of local modules is about to begin...\n", 'comment');
         $mine = make(Mine::class);
         $modules = $mine->getModuleInfo();
         foreach ($modules as $name => $info) {
@@ -230,8 +251,8 @@ class InstallProjectCommand extends MineCommand
         // 生成jwt
         $this->call('gen:jwt-secret');
         // 创建超级管理员
-        Db::table("{$this->database['prefix']}system_user")->insert([
-            'id' => $this->superAdminId,
+        Db::table("system_user")->insert([
+            'id' => env('SUPER_ADMIN', 1),
             'username' => 'admin',
             'password' => password_hash('admin123', PASSWORD_DEFAULT),
             'user_type' => '100',
@@ -253,11 +274,9 @@ class InstallProjectCommand extends MineCommand
             sleep(1);
         }
         $this->line(PHP_EOL . sprintf('%s
-
 MineAdmin Version: %s
 default username: admin
-default password: admin123
-    ', $this->getInfo(), Mine::getVersion()), 'comment');
+default password: admin123', $this->getInfo(), Mine::getVersion()), 'comment');
     }
 
     /**
