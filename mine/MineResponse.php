@@ -38,6 +38,7 @@ class MineResponse extends Response
         ];
         $format = $this->toJson($format);
         return $this->getResponse()
+            ->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
             ->withBody(new SwooleStream($format));
     }
