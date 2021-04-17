@@ -25,11 +25,11 @@ class MineResponse extends Response
     public const ERROR_LOGIN_EXCEPTION    = 11008;  // 登录异常
 
     /**
-     * @param string $message
+     * @param string|null $message
      * @param array | object $data
      * @return ResponseInterface
      */
-    public function success(string $message = '', $data = []): ResponseInterface
+    public function success(string $message = null, $data = []): ResponseInterface
     {
         $format = [
             'success' => true,
@@ -66,7 +66,9 @@ class MineResponse extends Response
         }
 
         $format = $this->toJson($format);
-        return $this->getResponse()->withStatus($code)
+        return $this->getResponse()
+            ->withHeader('Server', 'MineAdmin')
+            ->withStatus($code)
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
             ->withBody(new SwooleStream($format));
     }

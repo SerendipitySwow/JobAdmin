@@ -4,7 +4,10 @@ namespace Mine\Helper;
 
 use HyperfExt\Jwt\Contracts\JwtFactoryInterface;
 use HyperfExt\Jwt\Contracts\ManagerInterface;
+use HyperfExt\Jwt\Exceptions\JwtException;
+use HyperfExt\Jwt\Exceptions\TokenInvalidException;
 use HyperfExt\Jwt\Jwt;
+use Mine\JwtAuth\UserJwtSubject;
 
 class LoginUser
 {
@@ -41,8 +44,57 @@ class LoginUser
         return $this->jwt;
     }
 
-    public function getToken()
+    /**
+     * @param bool $getPayload
+     * @return bool|\HyperfExt\Jwt\Payload
+     * @throws JwtException
+     * @throws TokenInvalidException
+     */
+    public function check(bool $getPayload = false): ?bool
     {
-        $this->jwt->getToken();
+        try {
+            if (! $this->jwt->getToken()) {
+                throw new JwtException;
+            }
+            return $this->jwt->check($getPayload);
+        } catch (\Exception $e) {
+            if ($e instanceof TokenInvalidException) {
+                throw new TokenInvalidException(__('jwt.validate_fail'), 401);
+            }
+            if ($e instanceof JwtException) {
+                throw new JwtException(__('jwt.no_login'), 401);
+            }
+            throw new JwtException(__('jwt.no_token'), 401);
+        }
+    }
+
+    /**
+     * @return string
+     * @throws JwtException
+     */
+    public function getId(): string
+    {
+        $this->check();
+        return $this->jwt->getClaim('id');
+    }
+
+    /**
+     * @return string
+     * @throws JwtException
+     */
+    public function getUsername(): string
+    {
+        $this->check();
+        return $this->jwt->getClaim('username');
+    }
+
+    /**
+     * @param array $user
+     * @return string
+     */
+    public function getToken(array $user): string
+    {
+        $usj = new UserJwtSubject($user);
+        return $this->jwt->fromUser($usj);
     }
 }

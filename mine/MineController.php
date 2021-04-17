@@ -58,7 +58,7 @@ abstract class MineController
      */
     public function success($msgOrData = '', $data = []): ResponseInterface
     {
-        if (!empty($msgOrData) && is_string($msgOrData)) {
+        if (is_string($msgOrData) || is_null($msgOrData)) {
             return $this->response->success($msgOrData);
         } else if (!empty($msgOrData) && (is_array($msgOrData) || is_object($msgOrData))) {
             return $this->response->success('', $msgOrData);
@@ -77,5 +77,28 @@ abstract class MineController
     public function error(string $message = '', array $data = [], int $code = 500, int $errorNo = 0): ResponseInterface
     {
         return $this->response->error($message = '', $data, $code, $errorNo);
+    }
+
+    /**
+     * 跳转
+     * @param string $toUrl
+     * @param int $status
+     * @param string $schema
+     * @return ResponseInterface
+     */
+    public function redirect(string $toUrl, int $status = 302, string $schema = 'http'): ResponseInterface
+    {
+        return $this->response->redirect($toUrl, $status, $schema);
+    }
+
+    /**
+     * 下载文件
+     * @param string $file
+     * @param string $name
+     * @return ResponseInterface
+     */
+    public function download(string $file, string $name = ''): ResponseInterface
+    {
+        return $this->response->download($file, $name);
     }
 }

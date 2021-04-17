@@ -7,7 +7,7 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
 /**
  * 用户权限验证。
  * @Annotation
- * @Target("CLASS")
+ * @Target({"METHOD"})
  */
 class Permission extends AbstractAnnotation
 {
@@ -15,5 +15,5 @@ class Permission extends AbstractAnnotation
      * 要验证的路由
      * @var string
      */
-    public $auth;
+    public $route;
 }

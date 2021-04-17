@@ -6,25 +6,21 @@ use App\System\Model\SystemUser;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use HyperfExt\Jwt\Exceptions\JwtException;
+use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
-use Mine\Mine;
 use Mine\MineController;
 use \Psr\Http\Message\ResponseInterface;
-use Mine\JwtAuth\UserJwtSubject;
-use Hyperf\Di\Annotation\AnnotationCollector;
 
 /**
  * Class IndexController
- * @Controller(prefix="system/index")
+ * @Controller(prefix="system")
  * @package App\MineServer\Controller
- * @Permission(auth="system/index")
  */
 class IndexController extends MineController
 {
     /**
-     * @GetMapping("/")
+     * @GetMapping("index")
      * @return ResponseInterface
-     * @throws JwtException
      */
     public function index(): ResponseInterface
     {
@@ -32,11 +28,28 @@ class IndexController extends MineController
 //        $data = $systemUser->get();
 //        $data2 = $systemUser->find($data[0]->id);
 //        return $this->success($data2);
-        try {
-            $jwt = $this->request->getLoginUser()->getJwt()->getClaim('id');
-            return $this->success(['token' => $jwt]);
-        } catch (JwtException $e) {
-            throw new JwtException($e->getMessage());
-        }
+        return $this->success('asdf');
+    }
+
+    /**
+     * @return ResponseInterface
+     * @GetMapping ("index/token")
+     * @Auth
+     */
+    public function getToken(): ResponseInterface
+    {
+        $userinfo = [
+            'id' => 1610339885485395968,
+            'username' => 'admin'
+        ];
+        return $this->success($this->request->getLoginUser()->getToken($userinfo));
+    }
+
+    /**
+     * @GetMapping("index/test")
+     */
+    public function test(): ResponseInterface
+    {
+        return $this->success();
     }
 }

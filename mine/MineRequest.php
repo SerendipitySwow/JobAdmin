@@ -29,5 +29,17 @@ class MineRequest extends Request
         return $this->loginUser;
     }
 
+    public function getId(): string
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return $this->loginUser->getId();
+    }
+
+    public function getUsername(): string
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return $this->loginUser->getUsername();
+    }
+
 }
 

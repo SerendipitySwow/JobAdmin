@@ -32,8 +32,11 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface
     {
-        $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
-        $this->logger->error($throwable->getTraceAsString());
+        // 一般抛出异常都不指定code，默认把200改为500，其他code正常输出。
+        if ($throwable->getCode() == 200) {
+            $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
+            $this->logger->error($throwable->getTraceAsString());
+        }
         $format = [
             'success' => false,
             'message' => $throwable->getMessage(),
@@ -41,7 +44,7 @@ class AppExceptionHandler extends ExceptionHandler
         ];
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
-            ->withStatus(500)->withBody(new SwooleStream(Json::encode($format)));
+            ->withStatus($throwable->getCode() == 200 ? 500 : $throwable->getCode())->withBody(new SwooleStream(Json::encode($format)));
     }
 
     public function isValid(Throwable $throwable): bool
