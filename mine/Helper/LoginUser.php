@@ -7,8 +7,7 @@ use HyperfExt\Jwt\Contracts\ManagerInterface;
 use HyperfExt\Jwt\Exceptions\JwtException;
 use HyperfExt\Jwt\Exceptions\TokenInvalidException;
 use HyperfExt\Jwt\Jwt;
-use Mine\JwtAuth\UserJwtSubject;
-use Mine\Exception\NoPermissionException;
+use Mine\Exception\TokenException;
 
 class LoginUser
 {
@@ -38,7 +37,9 @@ class LoginUser
     }
 
     /**
+     * 获取JWT对象
      * @return Jwt
+     * @noinspection PhpUnused
      */
     public function getJwt(): Jwt
     {
@@ -46,10 +47,9 @@ class LoginUser
     }
 
     /**
+     * 对用户身份验证
      * @param bool $getPayload
-     * @return bool|\HyperfExt\Jwt\Payload
-     * @throws JwtException
-     * @throws TokenInvalidException
+     * @return bool|null
      */
     public function check(bool $getPayload = false): ?bool
     {
@@ -60,16 +60,17 @@ class LoginUser
             return $this->jwt->check($getPayload);
         } catch (\Exception $e) {
             if ($e instanceof TokenInvalidException) {
-                throw new NoPermissionException(__('jwt.validate_fail'));
+                throw new TokenException(__('jwt.validate_fail'));
             }
             if ($e instanceof JwtException) {
-                throw new NoPermissionException(__('jwt.no_login'));
+                throw new TokenException(__('jwt.no_login'));
             }
-            throw new NoPermissionException(__('jwt.no_token'));
+            throw new TokenException(__('jwt.no_token'));
         }
     }
 
     /**
+     * 获取当前token用户ID
      * @return string
      * @throws JwtException
      */
@@ -80,6 +81,7 @@ class LoginUser
     }
 
     /**
+     * 获取当前token用户名
      * @return string
      * @throws JwtException
      */
@@ -90,6 +92,7 @@ class LoginUser
     }
 
     /**
+     * 获取当前token用户角色
      * @return string
      * @throws JwtException
      */
@@ -100,21 +103,44 @@ class LoginUser
     }
 
     /**
+     * 获取当前token用户类型
      * @return string
      * @throws JwtException
      */
-    public function getDept(): string
+    public function getUserType(): string
+    {
+        $this->check();
+        return $this->jwt->getClaim('user_type');
+    }
+
+    /**
+     * 获取当前token用户部门ID
+     * @return string
+     * @throws JwtException
+     */
+    public function getDeptId(): string
     {
         $this->check();
         return $this->jwt->getClaim('dept_id');
     }
 
     /**
-     * @param array $user
-     * @return string
+     * 是否为超级管理员（创始人），用户禁用对创始人没用
+     * @return bool
+     * @throws JwtException
      */
-    public function getToken(array $user): string
+    public function isSuperAdmin():bool
     {
-        return $this->jwt->fromUser(new UserJwtSubject($user));
+        return env('SUPER_ADMIN') == $this->getId();
+    }
+
+    /**
+     * 是否为管理员角色，用户禁用对该角色有用
+     * @return bool
+     * @throws JwtException
+     */
+    public function isAdminRole(): bool
+    {
+        return env('ADMIN_ROLE') == $this->getRole();
     }
 }

@@ -30,8 +30,6 @@ class InstallProjectCommand extends MineCommand
 
     protected $redis = [];
 
-    protected $superAdminId = 1;
-
     public function configure()
     {
         parent::configure();
@@ -191,7 +189,6 @@ class InstallProjectCommand extends MineCommand
     {
         try {
             $id = new Id();
-            $this->superAdminId = $id->getId();
             $env = parse_ini_file(BASE_PATH . '/.env.example', true);
             $env['APP_NAME'] = 'MineAdmin';
             $env['APP_ENV'] = 'dev';
@@ -208,7 +205,8 @@ class InstallProjectCommand extends MineCommand
             $env['REDIS_AUTH'] = $this->redis['auth'];
             $env['REDIS_PORT'] = $this->redis['port'];
             $env['REDIS_DB'] = (string) $this->redis['db'];
-            $env['SUPER_ADMIN'] = (string) $this->superAdminId;
+            $env['SUPER_ADMIN'] = (string) $id->getId();
+            $env['ADMIN_ROLE'] = (string) $id->getId();
             $env['CONSOLE_SQL'] = 'true';
 
             $id = null;
@@ -281,6 +279,20 @@ class InstallProjectCommand extends MineCommand
             'status' => 0,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
+        ]);
+        // 创建管理员角色
+        Db::table('system_role')->insert([
+            'id' => env('ADMIN_ROLE', 1),
+            'name' => '管理员',
+            'code' => 'admin',
+            'data_scope' => 0,
+            'sort' => 0,
+            'created_by' => env('SUPER_ADMIN', 0),
+            'updated_by' => 0,
+            'status' => 0,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+            'remark' => '系统内置角色，不可删除',
         ]);
     }
 

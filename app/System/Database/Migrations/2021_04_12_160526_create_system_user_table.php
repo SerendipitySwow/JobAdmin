@@ -13,6 +13,7 @@ class CreateSystemUserTable extends Migration
     {
         Schema::create('system_user', function (Blueprint $table) {
             $table->engine = 'Innodb';
+            $table->comment('用户信息表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '用户ID，主键']);
             $table->addColumn('string', 'username', ['length' => 20, 'comment' => '用户名']);
             $table->addColumn('string', 'password', ['length' => 100, 'comment' => '密码']);
