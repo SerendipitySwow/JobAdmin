@@ -8,6 +8,7 @@ use HyperfExt\Jwt\Exceptions\JwtException;
 use HyperfExt\Jwt\Exceptions\TokenInvalidException;
 use HyperfExt\Jwt\Jwt;
 use Mine\JwtAuth\UserJwtSubject;
+use Mine\Exception\NoPermissionException;
 
 class LoginUser
 {
@@ -59,12 +60,12 @@ class LoginUser
             return $this->jwt->check($getPayload);
         } catch (\Exception $e) {
             if ($e instanceof TokenInvalidException) {
-                throw new TokenInvalidException(__('jwt.validate_fail'), 401);
+                throw new NoPermissionException(__('jwt.validate_fail'));
             }
             if ($e instanceof JwtException) {
-                throw new JwtException(__('jwt.no_login'), 401);
+                throw new NoPermissionException(__('jwt.no_login'));
             }
-            throw new JwtException(__('jwt.no_token'), 401);
+            throw new NoPermissionException(__('jwt.no_token'));
         }
     }
 
@@ -89,12 +90,31 @@ class LoginUser
     }
 
     /**
+     * @return string
+     * @throws JwtException
+     */
+    public function getRole(): string
+    {
+        $this->check();
+        return $this->jwt->getClaim('role');
+    }
+
+    /**
+     * @return string
+     * @throws JwtException
+     */
+    public function getDept(): string
+    {
+        $this->check();
+        return $this->jwt->getClaim('dept_id');
+    }
+
+    /**
      * @param array $user
      * @return string
      */
     public function getToken(array $user): string
     {
-        $usj = new UserJwtSubject($user);
-        return $this->jwt->fromUser($usj);
+        return $this->jwt->fromUser(new UserJwtSubject($user));
     }
 }

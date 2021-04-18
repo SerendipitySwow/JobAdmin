@@ -5,11 +5,11 @@ namespace App\System\Controller;
 use App\System\Model\SystemUser;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
-use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use \Psr\Http\Message\ResponseInterface;
+use Hyperf\HttpMessage\Exception\HttpException;
 
 /**
  * Class IndexController
@@ -47,9 +47,13 @@ class IndexController extends MineController
 
     /**
      * @GetMapping("index/test")
+     * @throws \Exception
      */
     public function test(): ResponseInterface
     {
-        return $this->success();
+        $systemUser = new SystemUser;
+        $data = $systemUser->get();
+        $data2 = $systemUser->find($data[0]->id);
+        return $this->success($data2);
     }
 }

@@ -28,6 +28,8 @@ class InstallProjectCommand extends MineCommand
 
     protected $database = [];
 
+    protected $redis = [];
+
     protected $superAdminId = 1;
 
     public function configure()
@@ -55,7 +57,7 @@ class InstallProjectCommand extends MineCommand
                 $this->checkEnv();
 
                 // 设置数据库
-                $this->setDataBaseInformation();
+                $this->setDataBaseInformationAndRedis();
 
                 $this->line("\n\nReset the \".env\" file. Please restart the service before running \nthe installation command to continue the installation.", "info");
             } else if (file_exists(BASE_PATH . '/.env') && $this->confirm('Do you want to continue with the installation program?', true)) {
@@ -78,7 +80,7 @@ class InstallProjectCommand extends MineCommand
                 $this->checkEnv();
 
                 // 设置数据库
-                $this->setDataBaseInformation();
+                $this->setDataBaseInformationAndRedis();
 
                 // 安装本地模块
                 $this->installLocalModule();
@@ -127,11 +129,11 @@ class InstallProjectCommand extends MineCommand
         }
     }
 
-    protected function setDataBaseInformation(): void
+    protected function setDataBaseInformationAndRedis(): void
     {
-        $answer = $this->confirm('Do you need to set Database information?', true);
+        $dbAnswer = $this->confirm('Do you need to set Database information?', true);
         // 设置数据库
-        if ($answer) {
+        if ($dbAnswer) {
             $dbchar = $this->ask('please input database charset, default:', 'utf8mb4');
             $dbname = $this->ask('please input database name, default:', 'mineadmin');
             $dbhost = $this->ask('please input database host, default:', '127.0.0.1');
@@ -163,9 +165,26 @@ class InstallProjectCommand extends MineCommand
                 'dbuser'  => $dbuser,
                 'dbpass'  => $dbpass ?: '',
             ];
-
-            $this->generatorEnvFile();
         }
+
+        $redisAnswer = $this->confirm('Do you need to set Redis information?', true);
+
+        // 设置Redis
+        if ($redisAnswer) {
+            $redisHost = $this->ask('please input redis host, default:', '127.0.0.1');
+            $redisPort = $this->ask('please input redis host port, default:', '6379');
+            $redisPass = $this->ask('please input redis password, default:', 'Null');
+            $redisDb   = $this->ask('please input redis db, default:', '0');
+
+            $this->redis = [
+                'host' => $redisHost,
+                'port' => $redisPort,
+                'auth' => $redisPass === 'Null' ? '(NULL)' : $redisPass,
+                'db'   => $redisDb,
+            ];
+        }
+
+        $dbAnswer && $this->generatorEnvFile();
     }
 
     protected function generatorEnvFile()
@@ -185,11 +204,12 @@ class InstallProjectCommand extends MineCommand
             $env['DB_CHARSET'] = $this->database['charset'];
             $env['DB_COLLATION'] = sprintf('%s_general_ci', $this->database['charset']);
             $env['DB_PREFIX'] = $this->database['prefix'];
-            $env['REDIS_HOST'] = 'localhost';
-            $env['REDIS_AUTH'] = '(NULL)';
-            $env['REDIS_PORT'] = '6379';
-            $env['REDIS_DB'] = '0';
+            $env['REDIS_HOST'] = $this->redis['host'];
+            $env['REDIS_AUTH'] = $this->redis['auth'];
+            $env['REDIS_PORT'] = $this->redis['port'];
+            $env['REDIS_DB'] = (string) $this->redis['db'];
             $env['SUPER_ADMIN'] = (string) $this->superAdminId;
+            $env['CONSOLE_SQL'] = 'true';
 
             $id = null;
 

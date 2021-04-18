@@ -71,12 +71,11 @@ abstract class MineController
      * @param string $message
      * @param array $data
      * @param int $code
-     * @param int $errorNo
      * @return ResponseInterface
      */
-    public function error(string $message = '', array $data = [], int $code = 500, int $errorNo = 0): ResponseInterface
+    public function error(string $message = '', int $code = 500, array $data = []): ResponseInterface
     {
-        return $this->response->error($message = '', $data, $code, $errorNo);
+        return $this->response->error($message = '', $code, $data);
     }
 
     /**

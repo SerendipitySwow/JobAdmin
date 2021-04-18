@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Mine\Listener;
 
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Database\Events\QueryExecuted;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
@@ -30,9 +31,15 @@ class DbQueryExecutedListener implements ListenerInterface
      */
     private $logger;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @var StdoutLoggerInterface
+     */
+    protected $console;
+
+    public function __construct(StdoutLoggerInterface $console, ContainerInterface $container)
     {
         $this->logger = $container->get(LoggerFactory::class)->get('sql', 'sql');
+        $this->console = $console;
     }
 
     public function listen(): array
@@ -54,7 +61,7 @@ class DbQueryExecutedListener implements ListenerInterface
                     $sql = Str::replaceFirst('?', "'{$value}'", $sql);
                 }
             }
-
+            env('CONSOLE_SQL') && $this->console->info(sprintf('%s', $sql));
             $this->logger->info(sprintf('[%s] %s', $event->time, $sql));
         }
     }
