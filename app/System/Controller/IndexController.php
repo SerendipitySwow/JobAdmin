@@ -28,7 +28,8 @@ class IndexController extends MineController
 //        $data = $systemUser->get();
 //        $data2 = $systemUser->find($data[0]->id);
 //        return $this->success($data2);
-        return $this->success('asdf');
+        $url = array_merge($this->request->getServerParams(), $this->request->getHeaders());
+        return $this->success($url);
     }
 
     /**

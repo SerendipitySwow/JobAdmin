@@ -8,6 +8,7 @@ use HyperfExt\Jwt\Exceptions\JwtException;
 use HyperfExt\Jwt\Exceptions\TokenInvalidException;
 use HyperfExt\Jwt\Jwt;
 use Mine\Exception\TokenException;
+use Mine\JwtAuth\UserJwtSubject;
 
 class LoginUser
 {
@@ -76,7 +77,6 @@ class LoginUser
      */
     public function getId(): string
     {
-        $this->check();
         return $this->jwt->getClaim('id');
     }
 
@@ -87,7 +87,6 @@ class LoginUser
      */
     public function getUsername(): string
     {
-        $this->check();
         return $this->jwt->getClaim('username');
     }
 
@@ -98,7 +97,6 @@ class LoginUser
      */
     public function getRole(): string
     {
-        $this->check();
         return $this->jwt->getClaim('role');
     }
 
@@ -109,7 +107,6 @@ class LoginUser
      */
     public function getUserType(): string
     {
-        $this->check();
         return $this->jwt->getClaim('user_type');
     }
 
@@ -120,7 +117,6 @@ class LoginUser
      */
     public function getDeptId(): string
     {
-        $this->check();
         return $this->jwt->getClaim('dept_id');
     }
 
@@ -142,5 +138,24 @@ class LoginUser
     public function isAdminRole(): bool
     {
         return env('ADMIN_ROLE') == $this->getRole();
+    }
+
+    /**
+     * @return array
+     * @throws JwtException
+     */
+    public function getUserInfo(): array
+    {
+        return $this->jwt->getPayload()->getClaims()->toPlainArray();
+    }
+
+    /**
+     * 获取Token
+     * @param array $user
+     * @return string
+     */
+    public function getToken(array $user): string
+    {
+        return $this->jwt->fromUser(new UserJwtSubject($user));
     }
 }

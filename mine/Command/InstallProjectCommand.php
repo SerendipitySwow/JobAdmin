@@ -205,8 +205,9 @@ class InstallProjectCommand extends MineCommand
             $env['REDIS_AUTH'] = $this->redis['auth'];
             $env['REDIS_PORT'] = $this->redis['port'];
             $env['REDIS_DB'] = (string) $this->redis['db'];
+            // 俩ID 生成，离的太近，易被猜测，角色ID加随机数
             $env['SUPER_ADMIN'] = (string) $id->getId();
-            $env['ADMIN_ROLE'] = (string) $id->getId();
+            $env['ADMIN_ROLE'] = (string) ($id->getId() + rand(0, 99999));
             $env['CONSOLE_SQL'] = 'true';
 
             $id = null;
