@@ -7,10 +7,13 @@ use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
+use Mine\Event\UserLoginAfter;
+use Mine\Event\UserLoginBefore;
 use Mine\Exception\NormalStatusException;
 use Mine\Exception\UserBanException;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class SystemUserService
@@ -25,6 +28,12 @@ class SystemUserService
     protected $systemUserMapper;
 
     /**
+     * @Inject
+     * @var EventDispatcherInterface
+     */
+    protected $evDispatcher;
+
+    /**
      * 用户登陆
      * @param array $data
      * @param MineRequest $request
@@ -33,6 +42,7 @@ class SystemUserService
     public function Login(array $data, MineRequest $request): ?string
     {
         try {
+            $this->evDispatcher->dispatch(new UserLoginBefore($data));
             $userinfo = $this->systemUserMapper->checkUserByUsername($data['username']);
             if ($this->systemUserMapper->checkPass($data['password'], $userinfo['password'])) {
                 if (
@@ -40,6 +50,7 @@ class SystemUserService
                     ||
                     ($userinfo['status'] == SystemUser::USER_BAN && $userinfo['id'] == env('SUPER_ADMIN'))
                 ) {
+                    $this->evDispatcher->dispatch(new UserLoginAfter($userinfo));
                     return $request->getLoginUser()->getToken($userinfo);
                 } else {
                     throw new UserBanException;
