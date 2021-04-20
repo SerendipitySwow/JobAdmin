@@ -8,13 +8,12 @@ use Mine\MineModel;
 /**
  * @property int $id 用户ID，主键
  * @property string $username 用户名
- * @property string $password 密码
  * @property string $user_type 用户类型：(100系统用户)
  * @property string $email 用户邮箱
  * @property string $avatar 用户头像
  * @property int $dept_id 部门ID
  * @property string $remember_token 用户Token
- * @property int $status 状态 (0正常 1停用)
+ * @property string $status 状态 (0正常 1停用)
  * @property string $login_ip 最后登陆IP
  * @property string $login_time 最后登陆时间
  * @property int $created_by 创建者
@@ -23,10 +22,15 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-write mixed $password 密码
  */
 class SystemUser extends MineModel
 {
     use SoftDeletes;
+
+    public const USER_NORMAL = 0;
+    PUBLIC const USER_BAN    = 1;
+
     public $incrementing = false;
     /**
      * The table associated with the model.
@@ -45,16 +49,7 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $casts = [
-        'id' => 'integer',
-        'dept_id' => 'integer',
-        'status' => 'integer',
-        'created_by' => 'integer',
-        'updated_by' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime'
-    ];
-
+    protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
     /**
      * @param $value
      * @return false|string|null
@@ -63,13 +58,12 @@ class SystemUser extends MineModel
     {
         return $this->attributes['password'] = password_hash($value, PASSWORD_DEFAULT);
     }
-
     /**
      * @param $password
      * @param $hash
      * @return bool
      */
-    public function passwordVerify($password, $hash): bool
+    public static function passwordVerify($password, $hash) : bool
     {
         return password_verify($password, $hash);
     }

@@ -6,7 +6,7 @@ namespace App\System\Request;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class UserRequest extends FormRequest
+class SystemUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required',
+            'username' => 'required|max:20',
+            'password' => 'required|min:6',
         ];
     }
 }
