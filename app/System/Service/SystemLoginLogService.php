@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
-use App\System\Mapper\SystemUserMapper;
+use App\System\Mapper\SystemLoginLogMapper;
 use Mine\MineModelService;
 
 /**
@@ -13,7 +13,7 @@ use Mine\MineModelService;
  */
 class SystemLoginLogService extends MineModelService
 {
-    public function __construct(SystemUserMapper $mapper)
+    public function __construct(SystemLoginLogMapper $mapper)
     {
         parent::__construct($mapper);
     }

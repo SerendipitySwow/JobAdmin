@@ -7,7 +7,6 @@ use App\System\Service\SystemLoginLogService;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
 use Mine\Event\UserLoginAfter;
-use Mine\Event\UserLoginBefore;
 use Mine\MineRequest;
 use Psr\Container\ContainerInterface;
 
@@ -39,13 +38,13 @@ class LoginListener implements ListenerInterface
      */
     public function process(object $event)
     {
-        $ip = $this->request->ip();
+        $agent = $this->request->getHeader('user-agent')[0];
         $this->sysLoginLogService->save([
             'username' => $event->userinfo['username'],
             'ip' => $this->request->ip(),
             'ip_location' => __('jwt.unknown'),
-            'os' => $this->os(),
-            'browser' => $this->browser(),
+            'os' => $this->os($agent),
+            'browser' => $this->browser($agent),
             'status' => $event->loginStatus,
             'message' => $event->message,
             'login_time' => date('Y-m-d H:i:s')

@@ -6,8 +6,12 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
+use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Auth;
+use Mine\Exception\TokenException;
 use Mine\Helper\LoginUser;
+use Mine\MineRequest;
+use Mine\MineResponse;
 
 /**
  * Class AuthAspect
@@ -51,6 +55,6 @@ class AuthAspect extends AbstractAspect
         if ($this->loginUser->check()) {
             return $proceedingJoinPoint->process();
         }
-        return null;
+        throw new TokenException(__('jwt.validate_fail'));
     }
 }

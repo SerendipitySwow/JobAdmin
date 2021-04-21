@@ -1,20 +1,21 @@
 <?php
-
 declare(strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemLoginLog;
-use Hyperf\Database\Model\ModelNotFoundException;
-use Mine\MineModelMapper;
 
 /**
  * Class SystemUserMapper
  * @package App\System\Mapper
  */
-class SystemLoginLogMapper extends MineModelMapper
+class SystemLoginLogMapper
 {
-    public function __construct(SystemLoginLog $model)
+    /**
+     * @param array $data
+     * @return SystemLoginLog|\Hyperf\Database\Model\Model
+     */
+    public function save(array $data)
     {
-        parent::__construct($model);
+        return SystemLoginLog::create($data);
     }
 }

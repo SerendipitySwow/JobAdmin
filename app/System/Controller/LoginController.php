@@ -32,7 +32,7 @@ class LoginController extends MineController
      */
     public function login(SystemUserRequest $request): ResponseInterface
     {
-        $token = $this->systemUserService->login($request->validated(), $this->request);
+        $token = $this->systemUserService->login($request->validated());
         return $this->success(['token' => $token]);
     }
 

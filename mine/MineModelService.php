@@ -11,9 +11,9 @@ class MineModelService
         $this->mapper = $mapper;
     }
 
-    public function save()
+    public function save(array $data)
     {
-
+        $this->mapper->save($data);
     }
 
     public function delete()

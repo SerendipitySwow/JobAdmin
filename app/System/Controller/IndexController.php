@@ -43,7 +43,7 @@ class IndexController extends MineController
             'id' => 1610339885485395968,
             'username' => 'admin'
         ];
-        return $this->success($this->request->getLoginUser()->getToken($userinfo));
+        return $this->success($userinfo);
     }
 
     /**

@@ -5,13 +5,13 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\ModelNotFoundException;
-use Mine\MineModelMapper;
+use Hyperf\Utils\Collection;
 
 /**
  * Class SystemUserMapper
  * @package App\System\Mapper
  */
-class SystemUserMapper extends MineModelMapper
+class SystemUserMapper
 {
     /**
      * 通过用户名检查用户

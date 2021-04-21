@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
-use App\System\Mapper\SystemLoginLogMapper;
+use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
@@ -11,6 +11,7 @@ use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
 use Mine\Event\UserLoginBefore;
 use Mine\Exception\NormalStatusException;
+use Mine\Exception\TokenException;
 use Mine\Exception\UserBanException;
 use Mine\MineModelService;
 use Mine\MineRequest;
@@ -36,9 +37,13 @@ class SystemUserService extends MineModelService
      */
     protected $request;
 
-    public function __construct(SystemLoginLogMapper $mapper)
+    /**
+     * SystemUserService constructor.
+     * @param SystemUserMapper $mapper
+     */
+    public function __construct(SystemUserMapper $mapper)
     {
-        parent::__construct($mapper);
+        $this->mapper = $mapper;
     }
 
     /**
@@ -73,7 +78,7 @@ class SystemUserService extends MineModelService
                 $this->evDispatcher->dispatch($userLoginAfter);
                 throw new NormalStatusException;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($e instanceof ModelNotFoundException) {
                 throw new NormalStatusException(__('jwt.username_error'), MineCode::NO_DATA);
             }
@@ -92,8 +97,12 @@ class SystemUserService extends MineModelService
      */
     public function logout()
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
-        $this->request->getLoginUser()->getJwt()->unsetToken();
+        try {
+            $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
+            $this->request->getLoginUser()->getJwt()->invalidate();
+            $this->request->getLoginUser()->getJwt()->unsetToken();
+        } catch (\Exception $e) {
+            throw new TokenException(__('jwt.validate_fail'));
+        }
     }
 }
