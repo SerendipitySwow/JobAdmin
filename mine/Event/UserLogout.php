@@ -1,18 +1,11 @@
 <?php
 
-
 namespace Mine\Event;
 
 
-use Mine\MineRequest;
-
-class UserLoginAfter
+class UserLogout
 {
     public $userinfo;
-
-    public $loginStatus = true;
-
-    public $message;
 
     public function __construct(array $userinfo)
     {

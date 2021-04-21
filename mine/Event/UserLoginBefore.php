@@ -1,10 +1,6 @@
 <?php
 
-
 namespace Mine\Event;
-
-
-use Mine\MineRequest;
 
 class UserLoginBefore
 {
