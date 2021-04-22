@@ -43,7 +43,8 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['dept_id', 'username', 'user_type', 'email', 'status', 'remember_token', 'login_ip', 'login_time', 'password', 'avatar'];
+
     /**
      * The attributes that should be cast to native types.
      *

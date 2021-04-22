@@ -52,9 +52,14 @@ class IndexController extends MineController
      */
     public function test(): ResponseInterface
     {
-        $systemUser = new SystemUser;
-        $data = $systemUser->get();
-        $data2 = $systemUser->find($data[0]->id);
-        return $this->success($data2);
+        SystemUser::create([
+            'username' => 'test',
+            'password' => 'admin123',
+            'user_type' => '100',
+            'status' => 0,
+            'created_by' => 0,
+            'updated_by' => 0,
+        ]);
+        return $this->success();
     }
 }

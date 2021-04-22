@@ -5,6 +5,7 @@ namespace App\System\Service;
 
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
+use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Event\UserLoginAfter;
@@ -23,7 +24,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  * Class SystemUserService
  * @package App\System\Service
  */
-class SystemUserService extends MineModelService
+class SystemUserService
 {
     /**
      * @Inject
@@ -36,6 +37,8 @@ class SystemUserService extends MineModelService
      * @var MineRequest
      */
     protected $request;
+
+    protected $mapper;
 
     /**
      * SystemUserService constructor.
@@ -65,7 +68,7 @@ class SystemUserService extends MineModelService
                 ) {
                     $userLoginAfter->message = __('jwt.login_success');
                     $this->evDispatcher->dispatch($userLoginAfter);
-                    return $this->request->getLoginUser()->getToken($userinfo);
+                    return $this->request->getLoginUser()->getToken($userLoginAfter->userinfo);
                 } else {
                     $userLoginAfter->loginStatus = false;
                     $userLoginAfter->message = __('jwt.user_ban');
@@ -104,5 +107,33 @@ class SystemUserService extends MineModelService
         } catch (\Exception $e) {
             throw new TokenException(__('jwt.validate_fail'));
         }
+    }
+
+    /**
+     * 更新用户信息
+     * @param int $id
+     * @param array $data
+     * @return int
+     */
+    public function updateById(int $id, array $data): int
+    {
+        return $this->mapper->updateById($id, $data);
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public function getInfo(): array
+    {
+        $data['user']  = $this->request->getUserInfo();
+        $superAdmin = $this->request->getLoginUser()->isSuperAdmin();
+        if ($superAdmin) {
+            $data['permission'] = ['*'];
+            $data['roles'] = [__('system.super_admin')];
+        } else {
+            $data['permission'] = [];
+        }
+
+        return $data;
     }
 }

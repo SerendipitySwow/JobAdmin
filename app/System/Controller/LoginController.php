@@ -7,6 +7,7 @@ use App\System\Request\SystemUserRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -42,7 +43,16 @@ class LoginController extends MineController
      */
     public function logout(): ResponseInterface
     {
-        $this->systemUserService->logout();
+        $this->systemUserService->logout($this->request->getLoginUser());
         return $this->success();
     }
+
+    /**
+     * @GetMapping("getInfo")
+     */
+    public function getInfo(): ResponseInterface
+    {
+        return $this->success($this->systemUserService->getInfo($this->request->getLoginUser()));
+    }
+
 }

@@ -11,10 +11,17 @@ use Mine\MineModelService;
  * Class SystemLoginLogService
  * @package App\System\Service
  */
-class SystemLoginLogService extends MineModelService
+class SystemLoginLogService
 {
+    protected $mapper;
+
     public function __construct(SystemLoginLogMapper $mapper)
     {
-        parent::__construct($mapper);
+        $this->mapper = $mapper;
+    }
+
+    public function save(array $data)
+    {
+        return $this->mapper->save($data);
     }
 }

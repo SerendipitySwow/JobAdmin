@@ -26,6 +26,7 @@ class LoginUser
      */
     protected $jwt;
 
+
     /**
      * LoginUser constructor.
      * @param ManagerInterface $manager
@@ -157,5 +158,13 @@ class LoginUser
     public function getToken(array $user): string
     {
         return $this->jwt->fromUser(new UserJwtSubject($user));
+    }
+
+    public function __get($name): ?string
+    {
+        if ($name == 'id') {
+            return $this->getId();
+        }
+        return null;
     }
 }

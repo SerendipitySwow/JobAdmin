@@ -231,4 +231,23 @@ class Str
     {
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }
+
+    /**
+     * 获取IP的区域地址
+     * @param string $ip
+     * @return string
+     */
+    public static function ipToRegion(string $ip): string
+    {
+        $ip2Region = make(\Ip2Region::class);
+        $region = $ip2Region->btreeSearch($ip)['region'];
+        list($country, $number, $province, $city, $network) = explode('|', $region);
+        if ($country == '中国') {
+            return $province . '-' . $city . ':' . $network;
+        } else if ($country == '0') {
+            return __('jwt.unknown');
+        } else {
+            return $country;
+        }
+    }
 }

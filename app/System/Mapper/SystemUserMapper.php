@@ -34,4 +34,14 @@ class SystemUserMapper
     {
         return SystemUser::passwordVerify($password, $hash);
     }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return int
+     */
+    public function updateById(int $id, array $data): int
+    {
+        return SystemUser::query()->where('id', $id)->update($data);
+    }
 }
