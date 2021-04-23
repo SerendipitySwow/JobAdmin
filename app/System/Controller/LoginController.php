@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\System\Model\SystemUser;
 use App\System\Request\SystemUserRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
@@ -40,19 +41,21 @@ class LoginController extends MineController
     /**
      * @PostMapping("logout")
      * @return ResponseInterface
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function logout(): ResponseInterface
     {
-        $this->systemUserService->logout($this->request->getLoginUser());
+        $this->systemUserService->logout();
         return $this->success();
     }
 
     /**
      * @GetMapping("getInfo")
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function getInfo(): ResponseInterface
     {
-        return $this->success($this->systemUserService->getInfo($this->request->getLoginUser()));
+        return $this->success($this->systemUserService->getInfo());
     }
 
 }

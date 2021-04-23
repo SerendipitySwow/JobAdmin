@@ -5,7 +5,9 @@ namespace App\System\Service;
 
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
+use Co\System;
 use Hyperf\Cache\Annotation\Cacheable;
+use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Event\UserLoginAfter;
@@ -14,6 +16,7 @@ use Mine\Event\UserLoginBefore;
 use Mine\Exception\NormalStatusException;
 use Mine\Exception\TokenException;
 use Mine\Exception\UserBanException;
+use Mine\Helper\LoginUser;
 use Mine\MineModelService;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
@@ -97,16 +100,25 @@ class SystemUserService
 
     /**
      * 用户退出
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function logout()
     {
-        try {
-            $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
-            $this->request->getLoginUser()->getJwt()->invalidate();
-            $this->request->getLoginUser()->getJwt()->unsetToken();
-        } catch (\Exception $e) {
-            throw new TokenException(__('jwt.validate_fail'));
-        }
+        $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
+        $user = new SystemUser;
+        $user->id = $this->request->getId();
+        $this->clearCache($user);
+    }
+
+    /**
+     * @CacheEvict(prefix="loginInfo", value="userId_#{user.id}")
+     * @param SystemUser $user
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     */
+    protected function clearCache(SystemUser $user)
+    {
+        $this->request->getLoginUser()->getJwt()->invalidate();
+        $this->request->getLoginUser()->getJwt()->unsetToken();
     }
 
     /**
@@ -122,16 +134,31 @@ class SystemUserService
 
     /**
      * 获取用户信息
+     * @return array
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function getInfo(): array
     {
-        $data['user']  = $this->request->getUserInfo();
-        $superAdmin = $this->request->getLoginUser()->isSuperAdmin();
-        if ($superAdmin) {
+        $user = $this->mapper->findById((int) $this->request->getId());
+        return $this->getCacheInfo($this->request->getLoginUser(), $user);
+    }
+
+    /**
+     * 获取缓存用户信息
+     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
+     * @param LoginUser $loginUser
+     * @param SystemUser $user
+     * @return array
+     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     */
+    protected function getCacheInfo(LoginUser $loginUser, SystemUser $user): array
+    {
+        $data['user'] = $user->toArray();
+        if ($loginUser->isSuperAdmin()) {
             $data['permission'] = ['*'];
             $data['roles'] = [__('system.super_admin')];
         } else {
-            $data['permission'] = [];
+            // TODO
         }
 
         return $data;

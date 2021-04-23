@@ -159,12 +159,4 @@ class LoginUser
     {
         return $this->jwt->fromUser(new UserJwtSubject($user));
     }
-
-    public function __get($name): ?string
-    {
-        if ($name == 'id') {
-            return $this->getId();
-        }
-        return null;
-    }
 }

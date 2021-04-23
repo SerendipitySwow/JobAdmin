@@ -44,4 +44,10 @@ class SystemUserMapper
     {
         return SystemUser::query()->where('id', $id)->update($data);
     }
+
+    public function findById(int $id, bool $isArray = false)
+    {
+        $user = SystemUser::query()->find($id);
+        return $isArray ? $user->toArray() : $user;
+    }
 }
