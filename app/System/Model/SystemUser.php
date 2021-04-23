@@ -27,11 +27,10 @@ use Mine\MineModel;
 class SystemUser extends MineModel
 {
     use SoftDeletes;
-
     public const USER_NORMAL = 0;
-    PUBLIC const USER_BAN    = 1;
-
+    public const USER_BAN = 1;
     public $incrementing = false;
+
     /**
      * The table associated with the model.
      *
@@ -44,13 +43,22 @@ class SystemUser extends MineModel
      * @var array
      */
     protected $fillable = ['dept_id', 'username', 'user_type', 'email', 'status', 'remember_token', 'login_ip', 'login_time', 'password', 'avatar'];
-
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 通过中间表关联角色
+     * @return \Hyperf\Database\Model\Relations\BelongsToMany
+     */
+    public function roles(): \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemRole::class, 'system_user_role', 'user_id', 'role_id');
+    }
+
     /**
      * @param $value
      * @return false|string|null

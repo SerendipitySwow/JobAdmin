@@ -55,4 +55,13 @@ class MineModel extends Model
         return parent::save($options);
     }
 
+    /**
+     * @param array $models
+     * @return MineCollection
+     */
+    public function newCollection(array $models = []): MineCollection
+    {
+        return new MineCollection($models);
+    }
+
 }

@@ -13,7 +13,7 @@ use Mine\MineModelService;
  */
 class SystemLoginLogService
 {
-    protected $mapper;
+    public $mapper;
 
     public function __construct(SystemLoginLogMapper $mapper)
     {

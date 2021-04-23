@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemUserMapper;
+use App\System\Model\SystemMenu;
 use App\System\Model\SystemUser;
 use Co\System;
 use Hyperf\Cache\Annotation\Cacheable;
@@ -41,15 +42,22 @@ class SystemUserService
      */
     protected $request;
 
-    protected $mapper;
+    /**
+     * @var SystemMenuService
+     */
+    protected $sysMenuService;
+
+    public $mapper;
 
     /**
      * SystemUserService constructor.
      * @param SystemUserMapper $mapper
+     * @param SystemMenuService $service
      */
-    public function __construct(SystemUserMapper $mapper)
+    public function __construct(SystemUserMapper $mapper, SystemMenuService $service)
     {
         $this->mapper = $mapper;
+        $this->sysMenuService = $service;
     }
 
     /**
@@ -122,17 +130,6 @@ class SystemUserService
     }
 
     /**
-     * 更新用户信息
-     * @param int $id
-     * @param array $data
-     * @return int
-     */
-    public function updateById(int $id, array $data): int
-    {
-        return $this->mapper->updateById($id, $data);
-    }
-
-    /**
      * 获取用户信息
      * @return array
      * @throws \HyperfExt\Jwt\Exceptions\JwtException
@@ -143,9 +140,10 @@ class SystemUserService
         return $this->getCacheInfo($this->request->getLoginUser(), $user);
     }
 
+    //@Cacheable(prefix="loginInfo", value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
+     *
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -153,14 +151,26 @@ class SystemUserService
      */
     protected function getCacheInfo(LoginUser $loginUser, SystemUser $user): array
     {
+        $user->addHidden('deleted_at', 'password');
         $data['user'] = $user->toArray();
         if ($loginUser->isSuperAdmin()) {
-            $data['permission'] = ['*'];
-            $data['roles'] = [__('system.super_admin')];
+            $data['roles'] = ['super_admin'];
+            $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
         } else {
-            // TODO
+            $data['roles'] = $user->roles()->pluck('code')->toArray();
+            $data['routers'] = $this->sysMenuService->mapper->getRoutersByRoleIds($user->roles()->pluck('id')->toArray());
         }
-
         return $data;
+    }
+
+    /**
+     * 更新用户信息
+     * @param int $id
+     * @param array $data
+     * @return int
+     */
+    public function updateById(int $id, array $data): int
+    {
+        return $this->mapper->updateById($id, $data);
     }
 }
