@@ -17,7 +17,9 @@ class SystemMenuMapper
             'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
-        return SystemMenu::query()->select(...$menuField)->get()->toArray();
+        return SystemMenu::query()->select(...$menuField)
+            ->where('status', SystemMenu::ENABLE)->orderBy('sort', 'desc')
+            ->get()->sysMenuToRouterTree();
     }
 
     /**
@@ -29,6 +31,12 @@ class SystemMenuMapper
     {
         if (empty($ids)) return [];
 
-        return SystemRole::query()->whereIn('id', $ids)->with('menus')->get()->sysMenuToRouterTree();
+        $menuField = [
+            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
+            'component', 'is_out', 'is_cache', 'is_quick', 'type'
+        ];
+        return SystemRole::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
+            $query->select(...$menuField)->where('status', SystemMenu::ENABLE)->orderBy('sort', 'desc');
+        }])->get(['id'])->sysMenuToRouterTree();
     }
 }

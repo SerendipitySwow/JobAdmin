@@ -32,6 +32,21 @@ class SystemMenu extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
+
+    /**
+     * 状态
+     */
+    public const ENABLE  = 0;
+    public const DISABLE = 1;
+
+    /**
+     * 类型
+     */
+    public const TYPE_CLASSIFY = 'T';
+    public const CATALOG = 'C';
+    public const MENUS_LIST = 'M';
+    public const BUTTON = 'B';
+
     /**
      * The table associated with the model.
      *

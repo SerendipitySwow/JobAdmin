@@ -4,18 +4,16 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemUserMapper;
-use App\System\Model\SystemMenu;
 use App\System\Model\SystemUser;
-use Co\System;
 use Hyperf\Cache\Annotation\Cacheable;
 use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
+use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
 use Mine\Event\UserLoginBefore;
 use Mine\Exception\NormalStatusException;
-use Mine\Exception\TokenException;
 use Mine\Exception\UserBanException;
 use Mine\Helper\LoginUser;
 use Mine\MineModelService;
@@ -108,7 +106,7 @@ class SystemUserService
 
     /**
      * 用户退出
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     public function logout()
     {
@@ -121,7 +119,7 @@ class SystemUserService
     /**
      * @CacheEvict(prefix="loginInfo", value="userId_#{user.id}")
      * @param SystemUser $user
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     protected function clearCache(SystemUser $user)
     {
@@ -132,7 +130,8 @@ class SystemUserService
     /**
      * 获取用户信息
      * @return array
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
+     * @noinspection PhpParamsInspection
      */
     public function getInfo(): array
     {
@@ -140,14 +139,13 @@ class SystemUserService
         return $this->getCacheInfo($this->request->getLoginUser(), $user);
     }
 
-    //@Cacheable(prefix="loginInfo", value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     *
+     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     protected function getCacheInfo(LoginUser $loginUser, SystemUser $user): array
     {
