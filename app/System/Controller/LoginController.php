@@ -3,13 +3,13 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
-use App\System\Model\SystemUser;
 use App\System\Request\SystemUserRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Mine\Annotation\Auth;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class LoginController
  * @package App\System\Controller
  * @Controller(prefix="system")
+ * @Auth
  */
 class LoginController extends MineController
 {
