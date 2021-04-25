@@ -17,7 +17,6 @@ use Psr\Http\Message\ResponseInterface;
  * Class LoginController
  * @package App\System\Controller
  * @Controller(prefix="system")
- * @Auth
  */
 class LoginController extends MineController
 {
@@ -40,6 +39,7 @@ class LoginController extends MineController
     }
 
     /**
+     * @Auth
      * @PostMapping("logout")
      * @return ResponseInterface
      * @throws \HyperfExt\Jwt\Exceptions\JwtException
@@ -51,6 +51,7 @@ class LoginController extends MineController
     }
 
     /**
+     * @Auth
      * @GetMapping("getInfo")
      * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */

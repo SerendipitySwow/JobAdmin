@@ -111,18 +111,6 @@ class SystemUserService
     public function logout()
     {
         $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
-        $user = new SystemUser;
-        $user->id = $this->request->getId();
-        $this->clearCache($user);
-    }
-
-    /**
-     * @CacheEvict(prefix="loginInfo", value="userId_#{user.id}")
-     * @param SystemUser $user
-     * @throws JwtException
-     */
-    protected function clearCache(SystemUser $user)
-    {
         $this->request->getLoginUser()->getJwt()->invalidate();
         $this->request->getLoginUser()->getJwt()->unsetToken();
     }

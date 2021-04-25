@@ -9,11 +9,4 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-class Permission extends AbstractAnnotation
-{
-    /**
-     * 要验证的路由
-     * @var string
-     */
-    public $route;
-}
+class Permission extends AbstractAnnotation {}
