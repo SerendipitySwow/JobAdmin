@@ -5,19 +5,12 @@
         <li v-for="n in 10" :key="n"></li>
       </ul>
     </div>
-    <div
-      class="page-login--layer page-login--layer-time"
-      flex="main:center cross:center">
-      {{time}}
-    </div>
     <div class="page-login--layer">
       <div
         class="page-login--content"
         flex="dir:top main:justify cross:stretch box:justify">
         <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
-            时间是一切财富中最宝贵的财富
-          </p>
+          <p class="page-login--content-header-motto"></p>
         </div>
         <div
           class="page-login--content-main"
@@ -27,6 +20,7 @@
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
+              <div class="page-login-title">MineAdmin 后台管理系统</div>
               <el-form
                 ref="loginForm"
                 label-position="top"
@@ -68,39 +62,11 @@
                 </el-button>
               </el-form>
             </el-card>
-            <p
-              class="page-login--options"
-              flex="main:justify cross:center">
-              <span><d2-icon name="question-circle"/> 忘记密码</span>
-              <span>注册用户</span>
-            </p>
-            <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              快速选择用户（测试功能）
-            </el-button>
           </div>
         </div>
         <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
-            <a
-              v-for="language in $languages"
-              :key="language.value"
-              @click="onChangeLocale(language.value)">
-              {{ language.label }}
-            </a>
-          </p>
           <p class="page-login--content-footer-copyright">
-            Copyright
-            <d2-icon name="copyright"/>
-            2018 D2 Projects 开源组织出品
-            <a href="https://github.com/FairyEver">
-              @FairyEver
-            </a>
-          </p>
-          <p class="page-login--content-footer-options">
-            <a href="#">帮助</a>
-            <a href="#">隐私</a>
-            <a href="#">条款</a>
+            Copyright © 2021-2022 mineadmin.cn All Rights Reserved.
           </p>
         </div>
       </div>
@@ -185,20 +151,15 @@ export default {
     }
   },
   mounted () {
-    this.timeInterval = setInterval(() => {
-      this.refreshTime()
-    }, 1000)
+
   },
   beforeDestroy () {
-    clearInterval(this.timeInterval)
+
   },
   methods: {
     ...mapActions('d2admin/account', [
       'login'
     ]),
-    refreshTime () {
-      this.time = dayjs().format('HH:mm:ss')
-    },
     /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息
@@ -239,9 +200,12 @@ export default {
 <style lang="scss">
 .page-login {
   @extend %unable-select;
+  cursor:auto;
   $backgroundColor: #F0F2F5;
   // ---
   background-color: $backgroundColor;
+  background-image: url(./image/login@bg.jpg);
+  background-size: cover;
   height: 100%;
   position: relative;
   // 层
@@ -250,13 +214,6 @@ export default {
     overflow: auto;
   }
   .page-login--layer-area {
-    overflow: hidden;
-  }
-  // 时间
-  .page-login--layer-time {
-    font-size: 24em;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.03);
     overflow: hidden;
   }
   // 登陆页面控件的容器
@@ -277,16 +234,27 @@ export default {
   }
   // main
   .page-login--logo {
-    width: 240px;
+    display: none;
+    width: 280px;
     margin-bottom: 2em;
     margin-top: -2em;
   }
   // 登录表单
   .page-login--form {
-    width: 280px;
+    width: 380px;
     // 卡片
     .el-card {
       margin-bottom: 15px;
+      padding: .5rem 0;
+      background:hsla(0,0%,100%,.8);
+      .page-login-title {
+        font-family: consolas;
+        font-size: 18px;
+        text-align: center;
+        padding-bottom: 1.5rem;
+        font-weight: bold;
+        color: #444;
+      }
     }
     // 登录按钮
     .button-login {
@@ -316,30 +284,6 @@ export default {
       width: 100%;
     }
   }
-  // 快速选择用户面板
-  .page-login--quick-user {
-    @extend %flex-center-col;
-    padding: 10px 0px;
-    border-radius: 4px;
-    &:hover {
-      background-color: $color-bg;
-      i {
-        color: $color-text-normal;
-      }
-      span {
-        color: $color-text-normal;
-      }
-    }
-    i {
-      font-size: 36px;
-      color: $color-text-sub;
-    }
-    span {
-      font-size: 12px;
-      margin-top: 10px;
-      color: $color-text-sub;
-    }
-  }
   // footer
   .page-login--content-footer {
     padding: 1em 0;
@@ -366,7 +310,10 @@ export default {
       font-size: 12px;
       line-height: 12px;
       text-align: center;
-      color: $color-text-normal;
+      color: #fff;
+      box-sizing: inherit;
+      font-family: Arial;
+      letter-spacing:1px;
       a {
         color: $color-text-normal;
       }
