@@ -122,8 +122,7 @@ class SystemUserService
      */
     public function getInfo(): array
     {
-        $user = $this->mapper->findById((int) $this->request->getId());
-        return $this->getCacheInfo($this->request->getLoginUser(), $user);
+        return $this->getCacheInfo($this->request->getLoginUser(), SystemUser::find((int) $this->request->getId()));
     }
 
     /**
