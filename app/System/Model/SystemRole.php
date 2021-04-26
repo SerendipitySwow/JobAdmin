@@ -18,19 +18,22 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemMenu[] $menus 
  */
 class SystemRole extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
-
-    public const ALL_SCOPE = 0;         // 所有
-    public const CUSTOM_SCOPE = 1;      // 自定义
-    public const SELF_DEPT_SCOPE = 2;   // 本部门
-    public const DEPT_BELOW_SCOPE = 3;  // 本部门及子部门
-    public const SELF_SCOPE = 4;        // 本人
-
-
+    public const ALL_SCOPE = 0;
+    // 所有
+    public const CUSTOM_SCOPE = 1;
+    // 自定义
+    public const SELF_DEPT_SCOPE = 2;
+    // 本部门
+    public const DEPT_BELOW_SCOPE = 3;
+    // 本部门及子部门
+    public const SELF_SCOPE = 4;
+    // 本人
     /**
      * The table associated with the model.
      *
@@ -49,11 +52,10 @@ class SystemRole extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 通过中间表获取用户菜单
      */
-    public function menus(): \Hyperf\Database\Model\Relations\BelongsToMany
+    public function menus() : \Hyperf\Database\Model\Relations\BelongsToMany
     {
         return $this->belongsToMany(SystemMenu::class, 'system_role_menu', 'role_id', 'menu_id');
     }

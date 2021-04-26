@@ -22,8 +22,9 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemJob[] $jobs 
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemRole[] $roles 
  * @property-write mixed $password 密码
- * @method static withTrashed()
  */
 class SystemUser extends MineModel
 {
@@ -31,7 +32,6 @@ class SystemUser extends MineModel
     public const USER_NORMAL = 0;
     public const USER_BAN = 1;
     public $incrementing = false;
-
     /**
      * The table associated with the model.
      *
@@ -50,25 +50,22 @@ class SystemUser extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 通过中间表关联角色
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
      */
-    public function roles(): \Hyperf\Database\Model\Relations\BelongsToMany
+    public function roles() : \Hyperf\Database\Model\Relations\BelongsToMany
     {
         return $this->belongsToMany(SystemRole::class, 'system_user_role', 'user_id', 'role_id');
     }
-
     /**
      * 通过中间表关联岗位
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
      */
-    public function jobs(): \Hyperf\Database\Model\Relations\BelongsToMany
+    public function jobs() : \Hyperf\Database\Model\Relations\BelongsToMany
     {
         return $this->belongsToMany(SystemJob::class, 'system_user_job', 'user_id', 'job_id');
     }
-
     /**
      * @param $value
      * @return false|string|null
