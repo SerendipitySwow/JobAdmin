@@ -33,24 +33,19 @@ export default {
   theme: {
     list: [
       {
-        title: 'd2admin 经典',
-        name: 'd2',
-        preview: 'image/theme/d2/preview@2x.png'
-      },
-      {
-        title: 'Chester',
+        title: '暗黑',
         name: 'chester',
         preview: 'image/theme/chester/preview@2x.png'
+      },
+      {
+        title: '经典',
+        name: 'd2',
+        preview: 'image/theme/d2/preview@2x.png'
       },
       {
         title: 'Element',
         name: 'element',
         preview: 'image/theme/element/preview@2x.png'
-      },
-      {
-        title: '紫罗兰',
-        name: 'violet',
-        preview: 'image/theme/violet/preview@2x.png'
       },
       {
         title: '简约线条',

@@ -2,6 +2,7 @@ export default {
   path: '/demo/playground',
   title: '功能',
   icon: 'flask',
+  hidden:true,
   children: [
     { path: '/demo/playground/index', title: '功能', icon: 'home' },
     {

@@ -16,7 +16,7 @@
           class="page-login--content-main"
           flex="dir:top main:center cross:center">
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png">
+          <img class="page-login--logo" src="./image/logo.png">
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
@@ -31,8 +31,8 @@
                   <el-input
                     type="text"
                     v-model="formLogin.username"
-                    placeholder="用户名">
-                    <i slot="prepend" class="fa fa-user-circle-o"></i>
+                    placeholder="账号">
+                    <span slot="prepend">账号</span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -40,7 +40,7 @@
                     type="password"
                     v-model="formLogin.password"
                     placeholder="密码">
-                    <i slot="prepend" class="fa fa-keyboard-o"></i>
+                    <span slot="prepend">密码</span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="code">
@@ -71,24 +71,10 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="快速选择用户"
-      :visible.sync="dialogVisible"
-      width="400px">
-      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users" :key="index" :span="8">
-          <div class="page-login--quick-user" @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o"/>
-            <span>{{user.name}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
 import { mapActions } from 'vuex'
 import localeMixin from '@/locales/mixin.js'
 export default {
@@ -97,39 +83,18 @@ export default {
   ],
   data () {
     return {
-      timeInterval: null,
-      time: dayjs().format('HH:mm:ss'),
-      // 快速选择用户
-      dialogVisible: false,
-      users: [
-        {
-          name: 'Admin',
-          username: 'admin',
-          password: 'admin'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
-        }
-      ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
-        code: 'v9am'
+        username: null,
+        password: null,
+        code: null
       },
       // 表单校验
       rules: {
         username: [
           {
             required: true,
-            message: '请输入用户名',
+            message: '请输入账号',
             trigger: 'blur'
           }
         ],
@@ -150,25 +115,10 @@ export default {
       }
     }
   },
-  mounted () {
-
-  },
-  beforeDestroy () {
-
-  },
   methods: {
     ...mapActions('d2admin/account', [
       'login'
     ]),
-    /**
-     * @description 接收选择一个用户快速登录的事件
-     * @param {Object} user 用户信息
-     */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
-      this.submit()
-    },
     /**
      * @description 提交表单
      */
@@ -187,9 +137,6 @@ export default {
               // 重定向对象不存在则返回顶层路径
               this.$router.replace(this.$route.query.redirect || '/')
             })
-        } else {
-          // 登录表单校验失败
-          this.$message.error('表单校验失败，请检查')
         }
       })
     }
@@ -237,7 +184,7 @@ export default {
     display: none;
     width: 280px;
     margin-bottom: 2em;
-    margin-top: -2em;
+    margin-top: -3em;
   }
   // 登录表单
   .page-login--form {
@@ -270,18 +217,6 @@ export default {
       margin: 0px -20px;
       border-top-right-radius: 2px;
       border-bottom-right-radius: 2px;
-    }
-    // 登陆选项
-    .page-login--options {
-      margin: 0px;
-      padding: 0px;
-      font-size: 14px;
-      color: $color-primary;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-    .page-login--quick {
-      width: 100%;
     }
   }
   // footer
