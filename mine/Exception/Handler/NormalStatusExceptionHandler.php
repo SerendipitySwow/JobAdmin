@@ -23,8 +23,10 @@ class NormalStatusExceptionHandler extends ExceptionHandler
         $format = [
             'success' => false,
             'message' => $throwable->getMessage(),
-            'error_number' => $throwable->getCode() == 200 ? MineCode::NORMAL_STATUS : $throwable->getCode(),
         ];
+        if ($throwable->getCode() != 200 && $throwable->getCode() != 0) {
+            $format['error_number'] = $throwable->getCode();
+        }
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
             ->withStatus(200)->withBody(new SwooleStream(Json::encode($format)));

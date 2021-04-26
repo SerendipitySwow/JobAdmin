@@ -6,7 +6,6 @@ namespace App\System\Service;
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Cache\Annotation\Cacheable;
-use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
@@ -150,13 +149,75 @@ class SystemUserService
     }
 
     /**
-     * 更新用户信息
-     * @param int $id
+     * 新增用户
      * @param array $data
      * @return int
      */
-    public function updateById(int $id, array $data): int
+    public function create(array $data): int
     {
-        return $this->mapper->updateById($id, $data);
+        if ($this->mapper->existsByUsername($data['username'])) {
+            throw new NormalStatusException(__('system.username_exists'));
+        } else {
+            if (!is_array($data['role_ids'])) {
+                $data['role_ids'] = explode(',', $data['role_ids']);
+            }
+            if (($key = array_search(env('ADMIN_ROLE'), $data['role_ids'])) !== false) {
+                unset($data['role_ids'][$key]);
+            }
+            if (!empty($data['job_ids']) && !is_array($data['job_ids'])) {
+                $data['job_ids'] = explode(',', $data['job_ids']);
+            }
+            return $this->mapper->create($data);
+        }
+    }
+
+    /**
+     * 单个或批量软删除用户
+     * @param String $ids
+     * @return bool
+     */
+    public function delete(String $ids): bool
+    {
+        return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
+    }
+
+    /**
+     * 真实删除用户（清空回收站）
+     * @param String $ids
+     * @return bool
+     */
+    public function realDelete(String $ids): bool
+    {
+        return empty($ids) ? false : $this->mapper->realDelete(explode(',', $ids));
+    }
+
+    /**
+     * 批量恢复软删除的用户
+     * @param String $ids
+     * @return bool
+     */
+    public function recovery(String $ids): bool
+    {
+        return empty($ids) ? false : $this->mapper->recovery(explode(',', $ids));
+    }
+
+    /**
+     * 获取用户信息
+     * @param int $id
+     * @return SystemUser
+     */
+    public function read(int $id): SystemUser
+    {
+        return $this->mapper->read($id);
+    }
+
+    /**
+     * 更新用户信息
+     * @param array $data
+     * @return int
+     */
+    public function update(array $data): int
+    {
+        return $this->mapper->update($data);
     }
 }

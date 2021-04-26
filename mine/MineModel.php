@@ -20,6 +20,12 @@ class MineModel extends Model
     protected $gen;
 
     /**
+     * 隐藏的字段列表
+     * @var string[]
+     */
+    protected $hidden = ['deleted_at'];
+
+    /**
      * 生成一个主键 ID
      * @return int
      */

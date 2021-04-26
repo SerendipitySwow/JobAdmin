@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\System\Controller;
 
 use App\System\Request\SystemUserRequest;
+use App\System\Request\User\SystemUserLoginRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Auth;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -29,10 +31,10 @@ class LoginController extends MineController
 
     /**
      * @PostMapping("login")
-     * @param SystemUserRequest $request
+     * @param SystemUserLoginRequest $request
      * @return ResponseInterface
      */
-    public function login(SystemUserRequest $request): ResponseInterface
+    public function login(SystemUserLoginRequest $request): ResponseInterface
     {
         $token = $this->systemUserService->login($request->validated());
         return $this->success(['token' => $token]);
@@ -42,7 +44,7 @@ class LoginController extends MineController
      * @Auth
      * @PostMapping("logout")
      * @return ResponseInterface
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     public function logout(): ResponseInterface
     {
@@ -53,7 +55,7 @@ class LoginController extends MineController
     /**
      * @Auth
      * @GetMapping("getInfo")
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     public function getInfo(): ResponseInterface
     {

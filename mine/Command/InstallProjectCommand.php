@@ -284,7 +284,7 @@ class InstallProjectCommand extends MineCommand
         // 创建管理员角色
         Db::table('system_role')->insert([
             'id' => env('ADMIN_ROLE', 1),
-            'name' => '管理员',
+            'name' => '超级管理员（创始人）',
             'code' => 'admin',
             'data_scope' => 0,
             'sort' => 0,

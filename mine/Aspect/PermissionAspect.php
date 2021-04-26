@@ -7,10 +7,9 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
+use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Permission;
 use Mine\Exception\NoPermissionException;
-use Mine\Exception\TokenException;
-use Mine\Helper\LoginUser;
 use Mine\MineRequest;
 
 /**
@@ -45,7 +44,7 @@ class PermissionAspect extends AbstractAspect
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
      * @throws Exception
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
+     * @throws JwtException
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
@@ -53,7 +52,7 @@ class PermissionAspect extends AbstractAspect
             return $proceedingJoinPoint->process();
         }
         $routers = $this->service->getInfo()['routers'];
-        $pathInfo = $this->request->getPathInfo();
+        $pathInfo = $this->request->path();
         foreach ($routers as $router) {
             if ($router['route'] === $pathInfo) {
                 // 进一步检查

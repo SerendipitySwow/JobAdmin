@@ -23,6 +23,7 @@ use Mine\MineModel;
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
  * @property-write mixed $password 密码
+ * @method static withTrashed()
  */
 class SystemUser extends MineModel
 {
@@ -57,6 +58,15 @@ class SystemUser extends MineModel
     public function roles(): \Hyperf\Database\Model\Relations\BelongsToMany
     {
         return $this->belongsToMany(SystemRole::class, 'system_user_role', 'user_id', 'role_id');
+    }
+
+    /**
+     * 通过中间表关联岗位
+     * @return \Hyperf\Database\Model\Relations\BelongsToMany
+     */
+    public function jobs(): \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemJob::class, 'system_user_job', 'user_id', 'job_id');
     }
 
     /**

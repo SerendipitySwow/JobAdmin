@@ -5,7 +5,6 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\ModelNotFoundException;
-use Hyperf\Utils\Collection;
 
 /**
  * Class SystemUserMapper
@@ -25,6 +24,16 @@ class SystemUserMapper
     }
 
     /**
+     * 通过用户名检查是否存在
+     * @param string $username
+     * @return bool
+     */
+    public function existsByUsername(string $username): bool
+    {
+        return SystemUser::query()->where('username', $username)->exists();
+    }
+
+    /**
      * 检查用户密码
      * @param String $password
      * @param $hash
@@ -36,18 +45,74 @@ class SystemUserMapper
     }
 
     /**
-     * @param int $id
+     * 新增用户
      * @param array $data
      * @return int
      */
-    public function updateById(int $id, array $data): int
+    public function create(array $data): int
     {
-        return SystemUser::query()->where('id', $id)->update($data);
+        $user = SystemUser::create($data);
+        $user->roles()->sync($data['role_ids'], false);
+        !empty($data['job_ids']) && $user->jobs()->sync($data['job_ids'], false);
+        return $user->id;
     }
 
-    public function findById(int $id, bool $isArray = false)
+    /**
+     * 批量软删除用户
+     * @param array $ids
+     * @return bool
+     */
+    public function delete(array $ids): bool
     {
-        $user = SystemUser::query()->find($id);
-        return $isArray ? $user->toArray() : $user;
+        SystemUser::destroy($ids);
+        return true;
+    }
+
+    /**
+     * 真实批量删除用户
+     * @param array $ids
+     * @return bool
+     */
+    public function realDelete(array $ids): bool
+    {
+        foreach ($ids as $id) {
+            $user = SystemUser::withTrashed()->find($id);
+            $user->roles()->detach();
+            $user->jobs()->detach();
+            $user->forceDelete();
+        }
+        return true;
+    }
+
+    /**
+     * 批量恢复软删除的用户
+     * @param array $ids
+     * @return bool
+     */
+    public function recovery(array $ids): bool
+    {
+        return SystemUser::withTrashed()->whereIn('id', $ids)->restore();
+    }
+
+    /**
+     * 获取用户信息
+     * @param int $id
+     * @return SystemUser
+     */
+    public function read(int $id): SystemUser
+    {
+        $user = SystemUser::find($id);
+        $user->jobs  = $user->jobs()->get();
+        $user->roles = $user->roles()->get();
+        return $user;
+    }
+
+    /**
+     * @param array $data
+     * @return int
+     */
+    public function update(array $data): int
+    {
+        return SystemUser::query()->update($data);
     }
 }
