@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace App\System\Service;
 
@@ -22,6 +21,7 @@ use Mine\MineModelService;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -72,12 +72,13 @@ class SystemUserService
      * 获取验证码
      * @throws InvalidArgumentException
      * @throws \Exception
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
-    public function genCaptcha()
+    public function genCaptcha(): array
     {
-        $cache = $this->container->get(\Psr\SimpleCache\CacheInterface::class);
+        $cache = $this->container->get(CacheInterface::class);
         $captcha = new MineCaptcha();
-        $captcha->initialize(['width' => 90,'height' => 38]);
+        $captcha->initialize([]);
         $img = $captcha->create()->getBase64();
         $code = $captcha->getText();
         $cache->set(sprintf('captcha:%s', md5($code)), $code, 60);
@@ -92,13 +93,13 @@ class SystemUserService
     public function checkCaptcha(String $code): bool
     {
         try {
-            $cache = $this->container->get(\Psr\SimpleCache\CacheInterface::class);
+            $cache = $this->container->get(CacheInterface::class);
             $key = 'captcha:' . md5($code);
             if ($code == $cache->get($key)) {
                 $cache->delete($key);
                 return true;
             } else {
-                throw new CaptchaException(__('jwt.code_error'));
+                return false;
             }
         } catch (InvalidArgumentException $e) {
             throw new Exception;
@@ -114,9 +115,13 @@ class SystemUserService
     {
         try {
             $this->evDispatcher->dispatch(new UserLoginBefore($data));
-            $this->checkCaptcha($data['code']);
             $userinfo = $this->mapper->checkUserByUsername($data['username']);
             $userLoginAfter = new UserLoginAfter($userinfo);
+            if (!$this->checkCaptcha($data['code'])) {
+                $userLoginAfter->message = __('jwt.code_error');
+                $this->evDispatcher->dispatch($userLoginAfter);
+                throw new CaptchaException;
+            }
             if ($this->mapper->checkPass($data['password'], $userinfo['password'])) {
                 if (
                     ($userinfo['status'] == SystemUser::USER_NORMAL)
@@ -149,7 +154,7 @@ class SystemUserService
                 throw new NormalStatusException(__('jwt.user_ban'), MineCode::USER_BAN);
             }
             if ($e instanceof CaptchaException) {
-                throw new NormalStatusException($e->getMessage());
+                throw new NormalStatusException(__('jwt.code_error'));
             }
             throw new NormalStatusException(__('jwt.unknown_error'));
         }
@@ -170,7 +175,6 @@ class SystemUserService
      * 获取用户信息
      * @return array
      * @throws JwtException
-     * @noinspection PhpParamsInspection
      */
     public function getInfo(): array
     {

@@ -13,7 +13,7 @@ class MineCaptcha extends CaptchaBuilder
     public function getBase64(): string
     {
         ob_start();
-        imagepng($this->image,null, 1);
+        imagepng($this->image, null, 1);
         $png = ob_get_contents();
         ob_end_clean();
         return 'data:image/png;base64,' . base64_encode($png);
