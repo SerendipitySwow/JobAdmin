@@ -30,6 +30,16 @@ class LoginController extends MineController
     protected $systemUserService;
 
     /**
+     * @GetMapping("captcha")
+     * @return ResponseInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function captcha(): ResponseInterface
+    {
+        return $this->success($this->systemUserService->genCaptcha());
+    }
+
+    /**
      * @PostMapping("login")
      * @param SystemUserLoginRequest $request
      * @return ResponseInterface

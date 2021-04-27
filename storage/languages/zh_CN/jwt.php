@@ -10,6 +10,7 @@ return [
     'username_error' => '用户不存在',
     'password_error' => '密码不正确',
     'user_ban' => '用户被禁用',
+    'code_error' => '验证码失效或错误',
     'unknown_error' => '未知错误',
     'unknown' => '未知',
 ];

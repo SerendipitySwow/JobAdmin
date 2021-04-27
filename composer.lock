@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69dc80442d959e39ff3c08b3c3633bda",
+    "content-hash": "6836eb68e542d5932c0034b84dc8cd37",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2916,6 +2916,59 @@
                 }
             ],
             "time": "2020-08-20T13:22:28+00:00"
+        },
+        {
+            "name": "lifei6671/php-captcha",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lifei6671/php-captcha.git",
+                "reference": "ad25d4005f730aad5a7c38f269bb4b26a7bf5b54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lifei6671/php-captcha/zipball/ad25d4005f730aad5a7c38f269bb4b26a7bf5b54",
+                "reference": "ad25d4005f730aad5a7c38f269bb4b26a7bf5b54",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Minho\\Captcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Minho",
+                    "email": "lifei6671@163.com",
+                    "homepage": "https://www.iminho.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "One php captcha",
+            "homepage": "https://github.com/lifei6671/php-captcha",
+            "keywords": [
+                "captcha"
+            ],
+            "support": {
+                "issues": "https://github.com/lifei6671/php-captcha/issues",
+                "source": "https://github.com/lifei6671/php-captcha/tree/master"
+            },
+            "time": "2017-01-12T02:32:31+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -8714,6 +8767,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.3",
+        "ext-gd": "*",
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",

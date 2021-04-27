@@ -10,6 +10,7 @@ return [
     'username_error' => 'User does not exist',
     'password_error' => 'The password is incorrect',
     'user_ban' => 'User disabled',
+    'code_error' => 'Verification code expired or error',
     'unknown_error' => 'unknown error',
     'unknown' => 'unknown',
 ];

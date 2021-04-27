@@ -13,6 +13,7 @@
     "license": "Apache-2.0",
     "require": {
         "php": ">=7.3",
+        "ext-gd": "*",
         "ext-json": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",
@@ -34,6 +35,7 @@
         "hyperf/redis": "2.1.*",
         "hyperf/translation": "2.1.*",
         "hyperf/validation": "2.1.*",
+        "lifei6671/php-captcha": "^0.1.1",
         "zoujingli/ip2region": "^1.0"
     },
     "require-dev": {

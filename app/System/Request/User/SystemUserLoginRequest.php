@@ -24,6 +24,7 @@ class SystemUserLoginRequest extends FormRequest
         return [
             'username' => 'required|max:20',
             'password' => 'required|min:6',
+            'code'     => 'required',
         ];
     }
 }

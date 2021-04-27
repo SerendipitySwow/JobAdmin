@@ -6,19 +6,23 @@ namespace App\System\Service;
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Cache\Annotation\Cacheable;
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
 use Mine\Event\UserLoginBefore;
+use Mine\Exception\CaptchaException;
 use Mine\Exception\NormalStatusException;
 use Mine\Exception\UserBanException;
 use Mine\Helper\LoginUser;
+use Mine\Helper\MineCaptcha;
 use Mine\MineModelService;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * 用户业务
@@ -40,6 +44,11 @@ class SystemUserService
     protected $request;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @var SystemMenuService
      */
     protected $sysMenuService;
@@ -48,13 +57,52 @@ class SystemUserService
 
     /**
      * SystemUserService constructor.
+     * @param ContainerInterface $container
      * @param SystemUserMapper $mapper
      * @param SystemMenuService $service
      */
-    public function __construct(SystemUserMapper $mapper, SystemMenuService $service)
+    public function __construct(ContainerInterface $container, SystemUserMapper $mapper, SystemMenuService $service)
     {
         $this->mapper = $mapper;
         $this->sysMenuService = $service;
+        $this->container = $container;
+    }
+
+    /**
+     * 获取验证码
+     * @throws InvalidArgumentException
+     * @throws \Exception
+     */
+    public function genCaptcha()
+    {
+        $cache = $this->container->get(\Psr\SimpleCache\CacheInterface::class);
+        $captcha = new MineCaptcha();
+        $captcha->initialize(['width' => 90,'height' => 38]);
+        $img = $captcha->create()->getBase64();
+        $code = $captcha->getText();
+        $cache->set(sprintf('captcha:%s', md5($code)), $code, 60);
+        return ['img' => $img];
+    }
+
+    /**
+     * 检查用户提交的验证码
+     * @param String $code
+     * @return bool
+     */
+    public function checkCaptcha(String $code): bool
+    {
+        try {
+            $cache = $this->container->get(\Psr\SimpleCache\CacheInterface::class);
+            $key = 'captcha:' . md5($code);
+            if ($code == $cache->get($key)) {
+                $cache->delete($key);
+                return true;
+            } else {
+                throw new CaptchaException(__('jwt.code_error'));
+            }
+        } catch (InvalidArgumentException $e) {
+            throw new Exception;
+        }
     }
 
     /**
@@ -66,6 +114,7 @@ class SystemUserService
     {
         try {
             $this->evDispatcher->dispatch(new UserLoginBefore($data));
+            $this->checkCaptcha($data['code']);
             $userinfo = $this->mapper->checkUserByUsername($data['username']);
             $userLoginAfter = new UserLoginAfter($userinfo);
             if ($this->mapper->checkPass($data['password'], $userinfo['password'])) {
@@ -98,6 +147,9 @@ class SystemUserService
             }
             if ($e instanceof UserBanException) {
                 throw new NormalStatusException(__('jwt.user_ban'), MineCode::USER_BAN);
+            }
+            if ($e instanceof CaptchaException) {
+                throw new NormalStatusException($e->getMessage());
             }
             throw new NormalStatusException(__('jwt.unknown_error'));
         }
