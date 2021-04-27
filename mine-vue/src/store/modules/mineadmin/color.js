@@ -20,7 +20,7 @@ export default {
       // store 赋值
       state.value = color || process.env.VUE_APP_ELEMENT_COLOR
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'color.value',
         value: state.value,
@@ -40,7 +40,7 @@ export default {
       // 记录上个值
       const old = state.value
       // store 赋值
-      state.value = await dispatch('d2admin/db/get', {
+      state.value = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'color.value',
         defaultValue: process.env.VUE_APP_ELEMENT_COLOR,

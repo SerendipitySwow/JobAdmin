@@ -39,7 +39,7 @@ export default {
      */
     async openedLoad ({ state, commit, dispatch }) {
       // store 赋值
-      const value = await dispatch('d2admin/db/get', {
+      const value = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'page.opened',
         defaultValue: setting.page.opened,
@@ -78,7 +78,7 @@ export default {
      */
     async opened2db ({ state, dispatch }) {
       // 设置数据
-      dispatch('d2admin/db/set', {
+      dispatch('store/db/set', {
         dbName: 'sys',
         path: 'page.opened',
         value: state.opened,

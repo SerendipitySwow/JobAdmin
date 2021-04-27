@@ -50,7 +50,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/menu', [
+    ...mapState('store/menu', [
       'header',
       'aside',
       'asideTransition'
@@ -90,11 +90,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('d2admin/menu', [
+    ...mapMutations('store/menu', [
       'headerSet',
       'asideSet'
     ]),
-    ...mapActions('d2admin/menu', [
+    ...mapActions('store/menu', [
       'asideTransitionToggle'
     ]),
     /**

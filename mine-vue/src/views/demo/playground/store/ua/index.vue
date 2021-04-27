@@ -11,7 +11,7 @@
 import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState('d2admin/ua', {
+    ...mapState('store/ua', {
       uaData: 'data'
     }),
     uaStr () {

@@ -6,6 +6,9 @@ const { set, each, compact, map, keys } = require('lodash')
 
 const resolve = dir => require('path').join(__dirname, dir)
 
+// 端口
+const port = process.env.port || process.env.npm_config_port || 80
+
 // Add environment variable
 process.env.VUE_APP_VERSION = require('./package.json').version
 process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
@@ -79,6 +82,20 @@ module.exports = {
   publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
   lintOnSave: true,
   devServer: {
+    host: '0.0.0.0',
+    port: port,
+    open: true,
+    proxy: {
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
+      [process.env.VUE_APP_API]: {
+        target: `http://localhost:9501`,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_API]: ''
+        }
+      }
+    },
+    disableHostCheck: true,
     publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
     disableHostCheck: process.env.NODE_ENV === 'development'
   },

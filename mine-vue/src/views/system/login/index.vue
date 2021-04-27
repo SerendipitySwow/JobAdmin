@@ -20,7 +20,7 @@
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
-              <div class="page-login-title">MineAdmin 后台管理系统</div>
+              <!-- <div class="page-login-title">MineAdmin 后台管理系统</div> -->
               <el-form
                 ref="loginForm"
                 label-position="top"
@@ -32,7 +32,7 @@
                     type="text"
                     v-model="formLogin.username"
                     placeholder="账号">
-                    <span slot="prepend">账号</span>
+                    <span slot="prepend"><d2-icon name="user-circle-o"/></span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -40,16 +40,17 @@
                     type="password"
                     v-model="formLogin.password"
                     placeholder="密码">
-                    <span slot="prepend">密码</span>
+                    <span slot="prepend"><d2-icon name="keyboard-o"/></span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="code">
                   <el-input
                     type="text"
                     v-model="formLogin.code"
+                    prefix-icon="fa fa-shield"
                     placeholder="验证码">
                     <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
+                      <img class="login-code" :src="captchaImg" @click="getCaptchaImg">
                     </template>
                   </el-input>
                 </el-form-item>
@@ -57,9 +58,8 @@
                   size="default"
                   @click="submit"
                   type="primary"
-                  class="button-login">
-                  登录
-                </el-button>
+                  icon="fa fa-paper-plane-o"
+                  class="button-login"> 登 录 </el-button>
               </el-form>
             </el-card>
           </div>
@@ -76,13 +76,15 @@
 
 <script>
 import { mapActions } from 'vuex'
-import localeMixin from '@/locales/mixin.js'
+import localeMixin from '@/locales/mixin'
+import { getCaptcha } from '@/api/system/login'
 export default {
   mixins: [
     localeMixin
   ],
   data () {
     return {
+      captchaImg: null,
       // 表单
       formLogin: {
         username: null,
@@ -115,14 +117,21 @@ export default {
       }
     }
   },
+  mounted () {
+    this.getCaptchaImg()
+  },
   methods: {
-    ...mapActions('d2admin/account', [
-      'login'
-    ]),
+    ...mapActions('store/account', ['login']),
+
+    getCaptchaImg () {
+      getCaptcha().then(res => {
+        this.captchaImg = res.img
+      })
+    },
+
     /**
      * @description 提交表单
      */
-    // 提交登录信息
     submit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
@@ -151,7 +160,7 @@ export default {
   $backgroundColor: #F0F2F5;
   // ---
   background-color: $backgroundColor;
-  background-image: url(./image/login@bg.jpg);
+  // background-image: url(./image/login@bg.jpg);
   background-size: cover;
   height: 100%;
   position: relative;

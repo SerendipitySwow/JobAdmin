@@ -6,7 +6,7 @@
         :closable="false"
         title="私有存储指当前用户专用的存储区域，
           不同用户之间存储不会相互干扰，
-          使用 await this.$store.dispatch('d2admin/db/database', { user: true }) 获得存储实例进行操作，
+          使用 await this.$store.dispatch('store/db/database', { user: true }) 获得存储实例进行操作，
           不同用户条件下获取的存储实例指向位置不同"/>
     </template>
     <el-row>
@@ -62,7 +62,7 @@ export default {
     this.load()
   },
   methods: {
-    ...mapActions('d2admin/db', [
+    ...mapActions('store/db', [
       'database',
       'databaseClear'
     ]),

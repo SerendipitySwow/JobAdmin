@@ -100,7 +100,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('d2admin/db', [
+    ...mapActions('store/db', [
       'pageSet',
       'pageGet',
       'pageClear'

@@ -4,19 +4,19 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSystemJobTable extends Migration
+class CreateSystemPostTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('system_job', function (Blueprint $table) {
+        Schema::create('system_post', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('职位信息表');
+            $table->comment('岗位信息表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
-            $table->addColumn('string', 'name', ['length' => 50, 'comment' => '职位名称']);
-            $table->addColumn('string', 'code', ['length' => 100, 'comment' => '职位代码']);
+            $table->addColumn('string', 'name', ['length' => 50, 'comment' => '岗位名称']);
+            $table->addColumn('string', 'code', ['length' => 100, 'comment' => '岗位代码']);
             $table->addColumn('tinyInteger', 'sort', ['unsigned' => true, 'default' => 0, 'comment' => '排序'])->nullable();
             $table->addColumn('char', 'status', ['length' => 1, 'default' => '0', 'comment' => '状态 (0正常 1停用)'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();

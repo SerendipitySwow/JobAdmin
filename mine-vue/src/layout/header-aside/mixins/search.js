@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      searchToggle: 'd2admin/search/toggle',
-      searchSet: 'd2admin/search/set'
+      searchToggle: 'storesearch/toggle',
+      searchSet: 'storesearch/set'
     }),
     /**
      * 接收点击搜索按钮

@@ -16,7 +16,7 @@ export default {
     apply ({ state, commit }, refresh) {
       Vue.prototype.$ELEMENT.size = state.value
       if (refresh) {
-        commit('d2admin/page/keepAliveClean', null, { root: true })
+        commit('store/page/keepAliveClean', null, { root: true })
         router.replace('/refresh')
       }
     },
@@ -43,7 +43,7 @@ export default {
       // 应用
       dispatch('apply', true)
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'size.value',
         value: state.value,
@@ -56,7 +56,7 @@ export default {
      */
     async load ({ state, dispatch }) {
       // store 赋值
-      state.value = await dispatch('d2admin/db/get', {
+      state.value = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'size.value',
         defaultValue: 'default',

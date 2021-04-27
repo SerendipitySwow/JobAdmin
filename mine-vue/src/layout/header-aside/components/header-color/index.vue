@@ -26,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/color', [
+    ...mapState('store/color', [
       'value'
     ])
   },
@@ -36,7 +36,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('d2admin/color', [
+    ...mapActions('store/color', [
       'set'
     ])
   }

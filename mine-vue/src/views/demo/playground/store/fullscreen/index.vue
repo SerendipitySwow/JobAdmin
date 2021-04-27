@@ -11,7 +11,7 @@
 import { mapActions } from 'vuex'
 export default {
   methods: {
-    ...mapActions('d2admin/fullscreen', [
+    ...mapActions('store/fullscreen', [
       'toggle'
     ])
   }

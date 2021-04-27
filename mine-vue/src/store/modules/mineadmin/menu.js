@@ -23,7 +23,7 @@ export default {
       // store 赋值
       state.asideCollapse = collapse
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'menu.asideCollapse',
         value: state.asideCollapse,
@@ -38,7 +38,7 @@ export default {
       // store 赋值
       state.asideCollapse = !state.asideCollapse
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'menu.asideCollapse',
         value: state.asideCollapse,
@@ -54,7 +54,7 @@ export default {
       // store 赋值
       state.asideTransition = transition
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'menu.asideTransition',
         value: state.asideTransition,
@@ -69,7 +69,7 @@ export default {
       // store 赋值
       state.asideTransition = !state.asideTransition
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'menu.asideTransition',
         value: state.asideTransition,
@@ -82,7 +82,7 @@ export default {
      */
     async asideLoad ({ state, dispatch }) {
       // store 赋值
-      const menu = await dispatch('d2admin/db/get', {
+      const menu = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'menu',
         defaultValue: setting.menu,

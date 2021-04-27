@@ -12,7 +12,7 @@ import store from '@/store'
  */
 function handleError (error) {
   // 添加到日志
-  store.dispatch('d2admin/log/push', {
+  store.dispatch('store/log/push', {
     message: '数据请求异常',
     type: 'danger',
     meta: {
@@ -50,43 +50,17 @@ function createService () {
   // 响应拦截
   service.interceptors.response.use(
     response => {
-      // http 状态码 200 情况
-      // 根据 前后端约定的 response.data.code 判断接口是否请求成功
-      // 例如 接口返回数据为
-      // {
-      //   code: 0,
-      //   msg: 'success',
-      //   data: {
-      //     list: [],
-      //     count: 0
-      //   }
-      // }
-      // 此时
-      // response.data.code :
-      // 0
-      // response.data.msg :
-      // 'success'
-      // response.data.data : (在调用接口)
-      // {
-      //   list: [],
-      //   count: 0
-      // }
-      // 默认约定 code 为 0 时代表成功
-      // 你也可以不使用这种方法，改为在下面的 http 错误拦截器里做处理
-
-      // 没有 code 视为非项目接口不作处理
-      if (response.data.code === undefined) {
-        return response.data
-      }
-
       // 有 code 判断为项目接口请求
-      switch (response.data.code) {
-        // 返回响应内容
-        case 0: return response.data.data
-        // 例如在 code 401 情况下退回到登录页面
-        case 401: throw new Error('请重新登录')
-        // 根据需要添加其它判断
-        default: throw new Error(`${response.data.msg}: ${response.config.url}`)
+      if (response.status === 200 && response.data.success) {
+        return response.data.data
+      } else {
+        switch (response.status) {
+          // 例如在 code 401 情况下退回到登录页面
+          case 401: throw new Error(response.data.message)
+          case 403: throw new Error(response.data.message)
+          // 根据需要添加其它判断
+          default: throw new Error(`${response.data.message}: ${response.config.url}`)
+        }
       }
     },
     error => {
@@ -125,7 +99,7 @@ function createRequest (service) {
     const token = util.cookies.get('token')
     const configDefault = {
       headers: {
-        Authorization: token,
+        Authorization: `bearer ${token}`,
         'Content-Type': get(config, 'headers.Content-Type', 'application/json')
       },
       timeout: 5000,

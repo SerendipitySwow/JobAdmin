@@ -17,7 +17,7 @@ export default {
       // store 赋值
       state.active = active
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'transition.active',
         value: state.active,
@@ -30,7 +30,7 @@ export default {
      */
     async load ({ state, dispatch }) {
       // store 赋值
-      state.active = await dispatch('d2admin/db/get', {
+      state.active = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'transition.active',
         defaultValue: setting.transition.active,

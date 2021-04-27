@@ -78,7 +78,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/log', [
+    ...mapState('store/log', [
       'log'
     ])
   },

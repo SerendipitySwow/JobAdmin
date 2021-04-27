@@ -29,7 +29,7 @@ export default {
       // 将 vuex 中的主题应用到 dom
       commit('dom')
       // 持久化
-      await dispatch('d2admin/db/set', {
+      await dispatch('store/db/set', {
         dbName: 'sys',
         path: 'theme.activeName',
         value: state.activeName,
@@ -41,7 +41,7 @@ export default {
      */
     async load ({ state, commit, dispatch }) {
       // store 赋值
-      const activeName = await dispatch('d2admin/db/get', {
+      const activeName = await dispatch('store/db/get', {
         dbName: 'sys',
         path: 'theme.activeName',
         defaultValue: state.list[0].name,
@@ -53,7 +53,7 @@ export default {
       } else {
         state.activeName = state.list[0].name
         // 持久化
-        await dispatch('d2admin/db/set', {
+        await dispatch('store/db/set', {
           dbName: 'sys',
           path: 'theme.activeName',
           value: state.activeName,

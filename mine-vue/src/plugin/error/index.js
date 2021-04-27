@@ -7,7 +7,7 @@ export default {
     function writeLog (logType) {
       return (error, vm, info = '') => {
         Vue.nextTick(() => {
-          store.dispatch('d2admin/log/push', {
+          store.dispatch('store/log/push', {
             message: `${info}: ${isObject(error) ? error.message : error}`,
             type: logType,
             meta: {
@@ -31,7 +31,7 @@ export default {
     }
     Vue.config.errorHandler = writeLog('danger')
     window.onunhandledrejection = error => {
-      store.dispatch('d2admin/log/push', {
+      store.dispatch('store/log/push', {
         message: get(error, 'reason.message', 'Unknown error'),
         type: 'danger',
         meta: {
@@ -41,7 +41,7 @@ export default {
       })
     }
     window.onerror = (event, source, lineno, colno, error) => {
-      store.dispatch('d2admin/log/push', {
+      store.dispatch('store/log/push', {
         message: get(error, 'message', 'Unknown error'),
         type: 'danger',
         meta: {

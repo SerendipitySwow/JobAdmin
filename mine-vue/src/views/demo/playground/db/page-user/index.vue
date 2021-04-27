@@ -8,7 +8,7 @@
           并且同时还根据用户区分，
           相当于结合了 “路由存储” 和 “私有存储”，
           不同路由以及不同用户之间存储不会相互干扰，
-          使用 await this.$store.dispatch('d2admin/db/databasePage', { user: true }) 获得存储实例进行操作，
+          使用 await this.$store.dispatch('store/db/databasePage', { user: true }) 获得存储实例进行操作，
           不同路由和用户条件下获取的存储实例指向位置不同，
           可以指定路由区分依据 name | path | fullPath，
           默认根据路由的 name 区分不同的路由"/>
@@ -66,7 +66,7 @@ export default {
     this.load()
   },
   methods: {
-    ...mapActions('d2admin/db', [
+    ...mapActions('store/db', [
       'databasePage',
       'databasePageClear'
     ]),

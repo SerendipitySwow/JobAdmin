@@ -4,7 +4,7 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSystemUserJobTable extends Migration
+class CreateSystemUserPostTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSystemUserJobTable extends Migration
     {
         Schema::create('system_user_job', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('用户与职位关联表');
+            $table->comment('用户与岗位关联表');
             $table->addColumn('bigInteger', 'user_id', ['unsigned' => true, 'comment' => '用户主键']);
-            $table->addColumn('bigInteger', 'job_id', ['unsigned' => true, 'comment' => '职位主键']);
+            $table->addColumn('bigInteger', 'post_id', ['unsigned' => true, 'comment' => '岗位主键']);
             $table->primary('id');
         });
     }

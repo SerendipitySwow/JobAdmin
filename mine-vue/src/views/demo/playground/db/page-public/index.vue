@@ -6,7 +6,7 @@
         :closable="false"
         title="路由存储指当前路由的存储区域，
           不同路由之间存储不会相互干扰，
-          使用 await this.$store.dispatch('d2admin/db/databasePage') 获得存储实例进行操作，
+          使用 await this.$store.dispatch('store/db/databasePage') 获得存储实例进行操作，
           不同路由条件下获取的存储实例指向位置不同，
           可以指定路由区分依据 name | path | fullPath，
           默认根据路由的 name 区分不同的路由"/>
@@ -64,7 +64,7 @@ export default {
     this.load()
   },
   methods: {
-    ...mapActions('d2admin/db', [
+    ...mapActions('store/db', [
       'databasePage',
       'databasePageClear'
     ]),

@@ -9,8 +9,9 @@ export default {
      */
     versionShow () {
       util.log.capsule('MineAdmin', `v${process.env.VUE_APP_VERSION}`)
-      console.log('D2 Admin  https://github.com/d2-projects/d2-admin')
-      console.log('Document  https://d2.pub/zh/doc/d2-admin')
+      console.log('MineAdmin 官网 https://www.mineadmin.com')
+      console.log('MineAdmin 文档 https://doc.mineadmin.com')
+      console.log('请不要吝啬您的 star，谢谢 ~')
     }
   }
 }

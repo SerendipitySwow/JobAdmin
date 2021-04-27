@@ -61,9 +61,9 @@ class SystemUser extends MineModel
      * 通过中间表关联岗位
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
      */
-    public function jobs() : \Hyperf\Database\Model\Relations\BelongsToMany
+    public function posts() : \Hyperf\Database\Model\Relations\BelongsToMany
     {
-        return $this->belongsToMany(SystemJob::class, 'system_user_job', 'user_id', 'job_id');
+        return $this->belongsToMany(SystemPost::class, 'system_user_post', 'user_id', 'post_id');
     }
     /**
      * @param $value

@@ -47,12 +47,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/gray', {
+    ...mapState('store/gray', {
       grayActive: 'active'
     })
   },
   methods: {
-    ...mapMutations('d2admin/gray', {
+    ...mapMutations('store/gray', {
       grayToggle: 'toggle',
       graySet: 'set'
     }),

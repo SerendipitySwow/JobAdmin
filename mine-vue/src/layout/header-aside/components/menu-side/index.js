@@ -31,7 +31,7 @@ export default {
     </div>
   },
   computed: {
-    ...mapState('d2admin/menu', [
+    ...mapState('store/menu', [
       'aside',
       'asideCollapse',
       'asideTransition'

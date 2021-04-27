@@ -53,7 +53,7 @@ class SystemUserMapper
     {
         $user = SystemUser::create($data);
         $user->roles()->sync($data['role_ids'], false);
-        !empty($data['job_ids']) && $user->jobs()->sync($data['job_ids'], false);
+        !empty($data['post_ids']) && $user->posts()->sync($data['post_ids'], false);
         return $user->id;
     }
 
@@ -78,7 +78,7 @@ class SystemUserMapper
         foreach ($ids as $id) {
             $user = SystemUser::withTrashed()->find($id);
             $user->roles()->detach();
-            $user->jobs()->detach();
+            $user->posts()->detach();
             $user->forceDelete();
         }
         return true;
@@ -102,7 +102,7 @@ class SystemUserMapper
     public function read(int $id): SystemUser
     {
         $user = SystemUser::find($id);
-        $user->jobs  = $user->jobs()->get();
+        $user->jobs  = $user->posts()->get();
         $user->roles = $user->roles()->get();
         return $user;
     }

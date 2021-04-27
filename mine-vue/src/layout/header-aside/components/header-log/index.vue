@@ -26,7 +26,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('d2admin/log', [
+    ...mapMutations('store/log', [
       'clean'
     ]),
     handleClick () {

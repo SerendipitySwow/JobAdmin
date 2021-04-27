@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/menu', [
+    ...mapState('store/menu', [
       'header'
     ]),
     dataView () {
@@ -46,8 +46,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      pageInit: 'd2admin/page/init',
-      headerSet: 'd2admin/menu/headerSet'
+      pageInit: 'storepage/init',
+      headerSet: 'storemenu/headerSet'
     }),
     onClick ({ title, name, path, component }) {
       // vue router 的设计暂时不能支持在路由示例上访问动态添加的路由

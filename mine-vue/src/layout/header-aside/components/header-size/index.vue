@@ -26,16 +26,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/size', [
+    ...mapState('store/size', [
       'value'
     ])
   },
   methods: {
     ...mapMutations({
-      pageKeepAliveClean: 'd2admin/page/keepAliveClean'
+      pageKeepAliveClean: 'store/page/keepAliveClean'
     }),
     ...mapActions({
-      sizeSet: 'd2admin/size/set'
+      sizeSet: 'store/size/set'
     }),
     handleChange (value) {
       this.sizeSet(value)

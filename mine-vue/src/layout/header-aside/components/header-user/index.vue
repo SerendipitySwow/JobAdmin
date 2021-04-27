@@ -14,12 +14,12 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState('d2admin/user', [
+    ...mapState('store/user', [
       'info'
     ])
   },
   methods: {
-    ...mapActions('d2admin/account', [
+    ...mapActions('store/account', [
       'logout'
     ]),
     /**

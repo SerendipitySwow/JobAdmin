@@ -18,7 +18,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin/size', [
+    ...mapState('store/size', [
       'value'
     ])
   },
@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('d2admin/size', [
+    ...mapActions('store/size', [
       'set'
     ])
   }

@@ -46,11 +46,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('d2admin/page', [
+    ...mapMutations('store/page', [
       'keepAliveRemove',
       'keepAliveClean'
     ]),
-    ...mapActions('d2admin/page', [
+    ...mapActions('store/page', [
       'close',
       'closeLeft',
       'closeRight',

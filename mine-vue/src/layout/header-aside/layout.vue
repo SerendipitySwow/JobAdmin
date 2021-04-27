@@ -145,7 +145,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('d2admin/menu', [
+    ...mapActions('store/menu', [
       'asideCollapseToggle'
     ]),
     /**

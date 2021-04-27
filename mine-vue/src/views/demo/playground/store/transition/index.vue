@@ -13,12 +13,12 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState('d2admin/transition', [
+    ...mapState('store/transition', [
       'active'
     ])
   },
   methods: {
-    ...mapActions('d2admin/transition', [
+    ...mapActions('store/transition', [
       'set'
     ])
   }

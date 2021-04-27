@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 50726
  Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 22/04/2021 22:39:55
+ Date: 27/04/2021 17:09:24
 */
 
 SET NAMES utf8mb4;
@@ -26,7 +26,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of migrations
@@ -40,7 +40,7 @@ INSERT INTO `migrations` VALUES (6, '2021_04_18_224626_create_system_config_tabl
 INSERT INTO `migrations` VALUES (7, '2021_04_18_224723_create_system_dict_data_table', 1);
 INSERT INTO `migrations` VALUES (8, '2021_04_18_224727_create_system_dict_type_table', 1);
 INSERT INTO `migrations` VALUES (9, '2021_04_18_224817_create_system_dept_table', 1);
-INSERT INTO `migrations` VALUES (10, '2021_04_18_224835_create_system_job_table', 1);
+INSERT INTO `migrations` VALUES (15, '2021_04_18_224835_create_system_post_table', 2);
 INSERT INTO `migrations` VALUES (11, '2021_04_18_224912_create_system_login_log_table', 1);
 INSERT INTO `migrations` VALUES (12, '2021_04_18_224938_create_system_oper_log_table', 1);
 INSERT INTO `migrations` VALUES (13, '2021_04_18_225055_create_system_task_table', 1);
@@ -131,25 +131,6 @@ CREATE TABLE `system_dict_type`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for system_job
--- ----------------------------
-DROP TABLE IF EXISTS `system_job`;
-CREATE TABLE `system_job`  (
-  `id` bigint(20) UNSIGNED NOT NULL COMMENT '主键',
-  `created_by` bigint(20) NULL DEFAULT NULL COMMENT '创建者',
-  `updated_by` bigint(20) NULL DEFAULT NULL COMMENT '更新者',
-  `created_at` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `deleted_at` timestamp(0) NULL DEFAULT NULL COMMENT '删除时间',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '职位信息表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of system_job
--- ----------------------------
-
--- ----------------------------
 -- Table structure for system_login_log
 -- ----------------------------
 DROP TABLE IF EXISTS `system_login_log`;
@@ -162,7 +143,7 @@ CREATE TABLE `system_login_log`  (
   `browser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '登录状态 (0成功 1失败)',
   `message` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提示消息',
-  `login_time` timestamp(0) NOT NULL COMMENT '登录时间',
+  `login_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '登录时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志表' ROW_FORMAT = Dynamic;
@@ -172,6 +153,29 @@ CREATE TABLE `system_login_log`  (
 -- ----------------------------
 INSERT INTO `system_login_log` VALUES (1612847228076953600, 'admin', '172.17.0.1', '未知', '未知', '未知', '0', '密码不正确', '2021-04-22 21:55:44', NULL);
 INSERT INTO `system_login_log` VALUES (1612853915127123968, 'admin', '172.17.0.1', '未知', '未知', '未知', '0', '密码不正确', '2021-04-22 22:22:18', NULL);
+INSERT INTO `system_login_log` VALUES (1613051681652609024, 'test', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 11:28:09', NULL);
+INSERT INTO `system_login_log` VALUES (1613069144842833920, 'test', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 12:37:33', NULL);
+INSERT INTO `system_login_log` VALUES (1613071646795501568, 'admin', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 12:47:30', NULL);
+INSERT INTO `system_login_log` VALUES (1613097516981555200, 'test', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 14:30:17', NULL);
+INSERT INTO `system_login_log` VALUES (1613119163704807424, 'test', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 15:56:18', NULL);
+INSERT INTO `system_login_log` VALUES (1613134547514298368, 'test', '172.17.0.1', '未知', '未知', '未知', '1', '登录成功', '2021-04-23 16:57:26', NULL);
+INSERT INTO `system_login_log` VALUES (1613824887560867840, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 14:40:36', NULL);
+INSERT INTO `system_login_log` VALUES (1613824914987421696, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 14:40:43', NULL);
+INSERT INTO `system_login_log` VALUES (1613824927612276736, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 14:40:46', NULL);
+INSERT INTO `system_login_log` VALUES (1613824940006445056, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 14:40:49', NULL);
+INSERT INTO `system_login_log` VALUES (1613825106277044224, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 14:41:28', NULL);
+INSERT INTO `system_login_log` VALUES (1613844368622358528, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '0', '用户被禁用', '2021-04-25 15:58:01', NULL);
+INSERT INTO `system_login_log` VALUES (1613844406182350848, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-25 15:58:10', NULL);
+INSERT INTO `system_login_log` VALUES (1613861008667840512, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-25 17:04:08', NULL);
+INSERT INTO `system_login_log` VALUES (1613864850696441856, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-25 17:19:24', NULL);
+INSERT INTO `system_login_log` VALUES (1614102842363088896, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 09:05:06', NULL);
+INSERT INTO `system_login_log` VALUES (1614124845895782400, 'test', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 10:32:32', NULL);
+INSERT INTO `system_login_log` VALUES (1614169474020151296, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 13:29:52', NULL);
+INSERT INTO `system_login_log` VALUES (1614185059848294400, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 14:31:48', NULL);
+INSERT INTO `system_login_log` VALUES (1614207871178772480, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 16:02:27', NULL);
+INSERT INTO `system_login_log` VALUES (1614228518936252416, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 17:24:29', NULL);
+INSERT INTO `system_login_log` VALUES (1614531325732065280, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 13:27:44', NULL);
+INSERT INTO `system_login_log` VALUES (1614533708486807552, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 13:37:12', NULL);
 
 -- ----------------------------
 -- Table structure for system_menu
@@ -227,6 +231,30 @@ CREATE TABLE `system_oper_log`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for system_post
+-- ----------------------------
+DROP TABLE IF EXISTS `system_post`;
+CREATE TABLE `system_post`  (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT '主键',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位名称',
+  `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位代码',
+  `sort` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '排序',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '状态 (0正常 1停用)',
+  `created_by` bigint(20) NULL DEFAULT NULL COMMENT '创建者',
+  `updated_by` bigint(20) NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp(0) NULL DEFAULT NULL COMMENT '删除时间',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '职位信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of system_post
+-- ----------------------------
+INSERT INTO `system_post` VALUES (1, '321', '123', 0, '0', NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- ----------------------------
 -- Table structure for system_role
 -- ----------------------------
 DROP TABLE IF EXISTS `system_role`;
@@ -249,7 +277,8 @@ CREATE TABLE `system_role`  (
 -- ----------------------------
 -- Records of system_role
 -- ----------------------------
-INSERT INTO `system_role` VALUES (1612846635858006083, '管理员', 'admin', '0', '0', 0, 1612846635858006016, 0, '2021-04-22 21:54:14', '2021-04-22 21:54:14', NULL, '系统内置角色，不可删除');
+INSERT INTO `system_role` VALUES (1612846635858006083, '超级管理员（创始人）', 'super_admin', '0', '0', 0, 1612846635858006016, 0, '2021-04-22 21:54:14', '2021-04-22 21:54:14', NULL, '系统内置角色，不可删除');
+INSERT INTO `system_role` VALUES (1612846635858006084, '管理员', 'admin', '0', '0', 0, 1612846635858006016, 0, '2021-04-22 21:54:14', '2021-04-22 21:54:14', NULL, '系统内置角色，不可删除');
 
 -- ----------------------------
 -- Table structure for system_role_menu
@@ -264,7 +293,7 @@ CREATE TABLE `system_role_menu`  (
 -- ----------------------------
 -- Records of system_role_menu
 -- ----------------------------
-INSERT INTO `system_role_menu` VALUES (1, 1);
+INSERT INTO `system_role_menu` VALUES (1612846635858006084, 1);
 
 -- ----------------------------
 -- Table structure for system_task
@@ -334,8 +363,25 @@ CREATE TABLE `system_user`  (
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1612846635858006016, 'admin', '$2y$10$F3iCSPGSVMqi4/E9NHspS.f/IH0ijs1NLjgg30NB6vJlec0PZd9p2', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, 0, 0, '2021-04-22 21:54:14', '2021-04-22 21:54:14', NULL, NULL);
-INSERT INTO `system_user` VALUES (1612856850330423296, 'test', '$2y$10$Sqrmct1UFJQX0geYb2Dm8ubFXR2l1ZQB16J52OhOaujoKOBGj8tuu', '100', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-22 22:33:58', '2021-04-22 22:33:58', NULL, NULL);
+INSERT INTO `system_user` VALUES (1612846635858006016, 'admin', '$2y$10$F3iCSPGSVMqi4/E9NHspS.f/IH0ijs1NLjgg30NB6vJlec0PZd9p2', '100', NULL, NULL, 1, NULL, '0', '127.0.0.1', '2021-04-27 13:37:12', 0, 0, '2021-04-22 21:54:14', '2021-04-27 13:37:12', NULL, NULL);
+INSERT INTO `system_user` VALUES (1612856850330423296, 'test', '$2y$10$Sqrmct1UFJQX0geYb2Dm8ubFXR2l1ZQB16J52OhOaujoKOBGj8tuu', '100', NULL, NULL, NULL, NULL, '0', '127.0.0.1', '2021-04-26 10:32:32', NULL, NULL, '2021-04-22 22:33:58', '2021-04-26 10:32:32', NULL, NULL);
+INSERT INTO `system_user` VALUES (1614175990198571008, 'test1', '$2y$10$YXO4PvpuUiU4o6G6k4ep.Oh01baeQc1qqQYo6x4N13RS2Wdrl1tYa', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 13:55:46', '2021-04-26 13:55:46', NULL, NULL);
+INSERT INTO `system_user` VALUES (1614177417914486784, 'test2', '$2y$10$Rknjhe6W80rYYokNbISj6.fv/RvpyOMA0JL5Rayqa7TnUIrr4WHvG', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 14:01:26', '2021-04-26 14:01:26', NULL, NULL);
+INSERT INTO `system_user` VALUES (1614185115464765440, 'test3', '$2y$10$nOkg4bpaNezVUzgbgbTbHu9jGaxbsKc0DRugwWv5O8CgRWHUfSpPm', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 14:32:01', '2021-04-26 14:32:01', NULL, NULL);
+INSERT INTO `system_user` VALUES (1614185381211672576, 'test4', '$2y$10$OD1YuWZvIIQNCXfum8UzdOrwnzYu4bDp1LUpWSk1vZekbppIT0Hou', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 14:33:04', '2021-04-26 14:33:04', NULL, NULL);
+
+-- ----------------------------
+-- Table structure for system_user_post
+-- ----------------------------
+DROP TABLE IF EXISTS `system_user_post`;
+CREATE TABLE `system_user_post`  (
+  `user_id` bigint(20) UNSIGNED NOT NULL COMMENT '用户主键',
+  `job_id` bigint(20) UNSIGNED NOT NULL COMMENT '岗位主键'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户与岗位关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of system_user_post
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for system_user_role
@@ -350,6 +396,11 @@ CREATE TABLE `system_user_role`  (
 -- ----------------------------
 -- Records of system_user_role
 -- ----------------------------
-INSERT INTO `system_user_role` VALUES (1612856850330423296, 1);
+INSERT INTO `system_user_role` VALUES (1612846635858006016, 1612846635858006083);
+INSERT INTO `system_user_role` VALUES (1612856850330423296, 1612846635858006084);
+INSERT INTO `system_user_role` VALUES (1614175990198571008, 1612846635858006084);
+INSERT INTO `system_user_role` VALUES (1614177417914486784, 1612846635858006084);
+INSERT INTO `system_user_role` VALUES (1614185115464765440, 1612846635858006084);
+INSERT INTO `system_user_role` VALUES (1614185381211672576, 1612846635858006084);
 
 SET FOREIGN_KEY_CHECKS = 1;

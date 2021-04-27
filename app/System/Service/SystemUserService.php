@@ -215,8 +215,8 @@ class SystemUserService
             if (($key = array_search(env('ADMIN_ROLE'), $data['role_ids'])) !== false) {
                 unset($data['role_ids'][$key]);
             }
-            if (!empty($data['job_ids']) && !is_array($data['job_ids'])) {
-                $data['job_ids'] = explode(',', $data['job_ids']);
+            if (!empty($data['post_ids']) && !is_array($data['post_ids'])) {
+                $data['post_ids'] = explode(',', $data['post_ids']);
             }
             return $this->mapper->create($data);
         }
