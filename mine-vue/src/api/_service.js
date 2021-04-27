@@ -1,4 +1,4 @@
-import { Message } from 'element-ui'
+import { Notification } from 'element-ui'
 import axios from 'axios'
 import Adapter from 'axios-mock-adapter'
 import { get, isEmpty } from 'lodash'
@@ -24,10 +24,11 @@ function handleError (error) {
     util.log.danger('>>>>>> Error >>>>>>')
     console.log(error)
   }
+
   // 显示提示
-  Message({
+  Notification.error({
     message: error.message,
-    type: 'error',
+    title: '错误',
     duration: 5 * 1000
   })
 }
@@ -43,7 +44,6 @@ function createService () {
     config => config,
     error => {
       // 发送失败
-      console.log(error)
       return Promise.reject(error)
     }
   )
@@ -53,9 +53,13 @@ function createService () {
       // 有 code 判断为项目接口请求
       if (response.status === 200 && response.data.success) {
         return response.data.data
+      } else if (response.status === 200 && !response.data.success) {
+        Notification.warning(
+          { message: response.data.message, title: '提示', duration: 5 * 1000 }
+        )
+        throw new Error()
       } else {
         switch (response.status) {
-          // 例如在 code 401 情况下退回到登录页面
           case 401: throw new Error(response.data.message)
           case 403: throw new Error(response.data.message)
           // 根据需要添加其它判断
@@ -67,11 +71,11 @@ function createService () {
       const status = get(error, 'response.status')
       switch (status) {
         case 400: error.message = '请求错误'; break
-        case 401: error.message = '未授权，请登录'; break
-        case 403: error.message = '拒绝访问'; break
+        case 401: error.message = `${error.response.data.message}`; break
+        case 403: error.message = `${error.response.data.message}`; break
         case 404: error.message = `请求地址出错: ${error.response.config.url}`; break
         case 408: error.message = '请求超时'; break
-        case 500: error.message = '服务器内部错误'; break
+        case 500: error.message = `${error.response.data.message}`; break
         case 501: error.message = '服务未实现'; break
         case 502: error.message = '网关错误'; break
         case 503: error.message = '服务不可用'; break
@@ -107,14 +111,12 @@ function createRequest (service) {
       data: {}
     }
     const option = Object.assign(configDefault, config)
-    // 处理 get 请求的参数
-    // 请根据实际需要修改
+    // json
     if (!isEmpty(option.params)) {
       option.url = option.url + '?' + stringify(option.params)
       option.params = {}
     }
-    // 当需要以 form 形式发送时 处理发送的数据
-    // 请根据实际需要修改
+    // form
     if (!isEmpty(option.data) && option.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
       option.data = stringify(option.data)
     }

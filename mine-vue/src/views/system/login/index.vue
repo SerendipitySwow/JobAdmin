@@ -20,7 +20,7 @@
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
-              <!-- <div class="page-login-title">MineAdmin 后台管理系统</div> -->
+              <div class="page-login-title">MineAdmin 后台管理系统</div>
               <el-form
                 ref="loginForm"
                 label-position="top"
@@ -135,17 +135,18 @@ export default {
     submit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          // 登录
-          // 注意 这里的演示没有传验证码
-          // 具体需要传递的数据请自行修改代码
           this.login({
             username: this.formLogin.username,
-            password: this.formLogin.password
-          })
-            .then(() => {
-              // 重定向对象不存在则返回顶层路径
-              this.$router.replace(this.$route.query.redirect || '/')
+            password: this.formLogin.password,
+            code: this.formLogin.code
+          }).then(() => {
+            this.$router.replace(this.$route.query.redirect || '/')
+            this.$notify({
+              title: '提示',
+              message: '登录成功',
+              type: 'success'
             })
+          })
         }
       })
     }
@@ -160,7 +161,7 @@ export default {
   $backgroundColor: #F0F2F5;
   // ---
   background-color: $backgroundColor;
-  // background-image: url(./image/login@bg.jpg);
+  background-image: url(./image/login@bg.jpg);
   background-size: cover;
   height: 100%;
   position: relative;

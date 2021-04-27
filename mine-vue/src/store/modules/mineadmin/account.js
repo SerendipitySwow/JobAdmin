@@ -1,7 +1,7 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
 import router from '@/router'
-import { login } from '@/api/system/login.js'
+import { login, logout } from '@/api/system/login.js'
 
 export default {
   namespaced: true,
@@ -32,11 +32,12 @@ export default {
      * @param {Object} context
      * @param {Object} payload confirm {Boolean} 是否需要确认
      */
-    logout ({ commit, dispatch }, { confirm = false } = {}) {
+    async logout ({ commit, dispatch }, { confirm = false } = {}) {
       /**
        * @description 注销
        */
-      async function logout () {
+      async function goodBye () {
+        await logout()
         // 删除cookie
         util.cookies.remove('token')
         util.cookies.remove('uuid')
@@ -51,14 +52,14 @@ export default {
         MessageBox.confirm('确定要注销当前用户吗', '注销用户', { type: 'warning' })
           .then(() => {
             commit('store/gray/set', false, { root: true })
-            logout()
+            goodBye()
           })
           .catch(() => {
             commit('store/gray/set', false, { root: true })
             Message({ message: '取消注销操作' })
           })
       } else {
-        logout()
+        goodBye()
       }
     },
     /**
