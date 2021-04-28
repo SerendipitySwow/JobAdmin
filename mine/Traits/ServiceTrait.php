@@ -52,7 +52,7 @@ trait ServiceTrait
      */
     public function delete(int $ids): bool
     {
-        return $this->mapper->delete(explode(',', $ids));
+        return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
     }
 
     /**
@@ -73,7 +73,7 @@ trait ServiceTrait
      */
     public function realDelete(string $ids): bool
     {
-        return $this->realDelete(explode(',', $ids));
+        return empty($ids) ? false : $this->realDelete(explode(',', $ids));
     }
 
     /**
@@ -83,7 +83,7 @@ trait ServiceTrait
      */
     public function recovery(string $ids): bool
     {
-        return $this->mapper->recovery(explode(',', $ids));
+        return empty($ids) ? false : $this->mapper->recovery(explode(',', $ids));
     }
 
     /**
@@ -94,7 +94,7 @@ trait ServiceTrait
      */
     public function disable(string $ids, string $field = 'status'): bool
     {
-        return $this->disable(explode(',', $ids), $field);
+        return empty($ids) ? false : $this->disable(explode(',', $ids), $field);
     }
 
     /**
@@ -105,6 +105,6 @@ trait ServiceTrait
      */
     public function enable(string $ids, string $field = 'status'): bool
     {
-        return $this->enable(explode(',', $ids), $field);
+        return empty($ids) ? false : $this->enable(explode(',', $ids), $field);
     }
 }
