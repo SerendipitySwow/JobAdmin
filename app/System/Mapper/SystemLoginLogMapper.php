@@ -3,19 +3,22 @@ declare(strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemLoginLog;
+use App\System\Model\SystemUser;
+use Mine\Abstracts\AbstractMapper;
 
 /**
  * Class SystemUserMapper
  * @package App\System\Mapper
  */
-class SystemLoginLogMapper
+class SystemLoginLogMapper extends AbstractMapper
 {
     /**
-     * @param array $data
-     * @return SystemLoginLog|\Hyperf\Database\Model\Model
+     * @var SystemLoginLog
      */
-    public function save(array $data)
+    public $model;
+
+    public function assignModel()
     {
-        return SystemLoginLog::create($data);
+        $this->model = SystemLoginLog::class;
     }
 }

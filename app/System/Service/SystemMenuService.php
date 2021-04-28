@@ -4,9 +4,13 @@ namespace App\System\Service;
 
 
 use App\System\Mapper\SystemMenuMapper;
+use Mine\Abstracts\AbstractService;
 
-class SystemMenuService
+class SystemMenuService extends AbstractService
 {
+    /**
+     * @var SystemMenuMapper
+     */
     public $mapper;
     /**
      * SystemMenuMapper constructor.

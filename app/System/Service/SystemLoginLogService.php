@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemLoginLogMapper;
+use Mine\Abstracts\AbstractService;
 use Mine\MineModelService;
 
 /**
@@ -11,17 +12,15 @@ use Mine\MineModelService;
  * Class SystemLoginLogService
  * @package App\System\Service
  */
-class SystemLoginLogService
+class SystemLoginLogService extends AbstractService
 {
+    /**
+     * @var SystemLoginLogMapper
+     */
     public $mapper;
 
     public function __construct(SystemLoginLogMapper $mapper)
     {
         $this->mapper = $mapper;
-    }
-
-    public function save(array $data)
-    {
-        return $this->mapper->save($data);
     }
 }

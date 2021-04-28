@@ -18,6 +18,7 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemMenu[] $menus 
  */
 class SystemRole extends MineModel
 {
@@ -44,7 +45,7 @@ class SystemRole extends MineModel
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['id', 'name', 'code', 'data_scope', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

@@ -49,9 +49,9 @@ class UserController extends MineController
      * @return ResponseInterface
      * @Permission()
      */
-    public function create(SystemUserCreateRequest $request): ResponseInterface
+    public function save(SystemUserCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->systemUserService->create($request->validated())]);
+        return $this->success(['id' => $this->systemUserService->save($request->validated())]);
     }
 
     /**
@@ -63,20 +63,20 @@ class UserController extends MineController
      */
     public function read(int $id): ResponseInterface
     {
-        $this->systemUserService->read($id);
-        return $this->success();
+        return $this->success($this->systemUserService->read($id));
     }
 
     /**
      * 更新一个用户信息
-     * @PutMapping("update}")
+     * @PutMapping("update/{id}")
+     * @param int $id
      * @param SystemUserUpdateRequest $request
      * @return ResponseInterface
      * @Permission()
      */
-    public function update(SystemUserUpdateRequest $request): ResponseInterface
+    public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
-        return $this->success($this->systemUserService->update($request->validated()));
+        return $this->systemUserService->update($id, $request->validated()) ? $this->success() : $this->error();
     }
 
     /**

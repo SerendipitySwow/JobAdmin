@@ -26,6 +26,17 @@ class MineModel extends Model
     protected $hidden = ['deleted_at'];
 
     /**
+     * 状态
+     */
+    public const ENABLE = 0;
+    public const DISABLE = 1;
+
+    /**
+     * 默认每页记录数
+     */
+    public const PAGE_SIZE = 15;
+
+    /**
      * 生成一个主键 ID
      * @return int
      */

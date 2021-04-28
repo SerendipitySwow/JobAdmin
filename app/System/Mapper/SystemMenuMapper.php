@@ -4,9 +4,23 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemMenu;
 use App\System\Model\SystemRole;
+use App\System\Model\SystemUser;
+use Mine\Abstracts\AbstractMapper;
 
-class SystemMenuMapper
+class SystemMenuMapper extends AbstractMapper
 {
+
+    /**
+     * @var SystemMenu
+     */
+    public $model;
+
+    public function assignModel()
+    {
+        $this->model = SystemMenu::class;
+    }
+
+
     /**
      * 获取超级管理员（创始人）的路由菜单
      * @return array
@@ -17,8 +31,8 @@ class SystemMenuMapper
             'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
-        return SystemMenu::query()->select(...$menuField)
-            ->where('status', SystemMenu::ENABLE)->orderBy('sort', 'desc')
+        return $this->model::query()->select(...$menuField)
+            ->where('status', $this->model::ENABLE)->orderBy('sort', 'desc')
             ->get()->sysMenuToRouterTree();
     }
 
@@ -36,7 +50,7 @@ class SystemMenuMapper
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
         return SystemRole::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
-            $query->select(...$menuField)->where('status', SystemMenu::ENABLE)->orderBy('sort', 'desc');
+            $query->select(...$menuField)->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
         }])->get(['id'])->sysMenuToRouterTree();
     }
 }

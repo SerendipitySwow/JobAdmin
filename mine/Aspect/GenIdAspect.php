@@ -27,7 +27,7 @@ class GenIdAspect extends AbstractAspect
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
         $instance = $proceedingJoinPoint->getInstance();
-        if ($instance instanceof MineModel && !$instance->incrementing && $instance->getPrimaryKeyType() === 'int') {
+        if ($instance instanceof MineModel && !$instance->incrementing && $instance->getPrimaryKeyType() === 'int' && empty($instance->{$instance->getKeyName()})) {
             $instance->setPrimaryKeyValue($instance->genId());
         }
         return $proceedingJoinPoint->process();

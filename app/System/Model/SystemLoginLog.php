@@ -31,7 +31,7 @@ class SystemLoginLog extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'username', 'ip', 'ip_location', 'os', 'browser', 'status', 'message', 'login_time'];
+    protected $fillable = ['id', 'username', 'ip', 'ip_location', 'os', 'browser', 'status', 'message', 'login_time', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

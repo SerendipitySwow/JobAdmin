@@ -16,9 +16,9 @@ class SystemUserMapper extends AbstractMapper
     /**
      * @var SystemUser
      */
-    protected $model;
+    public $model;
 
-    protected function assignModel()
+    public function assignModel()
     {
         $this->model = SystemUser::class;
     }
@@ -60,7 +60,7 @@ class SystemUserMapper extends AbstractMapper
      * @param array $data
      * @return int
      */
-    public function create(array $data): int
+    public function save(array $data): int
     {
         $user = $this->model::create($data);
         $user->roles()->sync($data['role_ids'], false);
@@ -69,13 +69,17 @@ class SystemUserMapper extends AbstractMapper
     }
 
     /**
-     * 批量软删除用户
-     * @param array $ids
+     * 更新用户
+     * @param int $id
+     * @param array $data
      * @return bool
      */
-    public function delete(array $ids): bool
+    public function update(int $id, array $data): bool
     {
-        $this->model::destroy($ids);
+        $this->model::query()->where('id', $id)->update($data);
+        $user = $this->model::find($id);
+        $user->roles()->sync($data['role_ids']);
+        !empty($data['post_ids']) && $user->posts()->sync($data['post_ids']);
         return true;
     }
 
@@ -96,16 +100,6 @@ class SystemUserMapper extends AbstractMapper
     }
 
     /**
-     * 批量恢复软删除的用户
-     * @param array $ids
-     * @return bool
-     */
-    public function recovery(array $ids): bool
-    {
-        return $this->model::withTrashed()->whereIn('id', $ids)->restore();
-    }
-
-    /**
      * 获取用户信息
      * @param int $id
      * @return SystemUser
@@ -113,17 +107,8 @@ class SystemUserMapper extends AbstractMapper
     public function read(int $id): SystemUser
     {
         $user = $this->model::find($id);
-        $user->jobs  = $user->posts()->get();
-        $user->roles = $user->roles()->get();
+        $user->postList = $user->posts()->get();
+        $user->roleList = $user->roles()->get();
         return $user;
-    }
-
-    /**
-     * @param array $data
-     * @return int
-     */
-    public function update(array $data): int
-    {
-        return $this->model::query()->update($data);
     }
 }

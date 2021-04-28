@@ -10,6 +10,7 @@ use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Abstracts\AbstractMapper;
+use Mine\Abstracts\AbstractService;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
 use Mine\Event\UserLoginBefore;
@@ -30,7 +31,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class SystemUserService
  * @package App\System\Service
  */
-class SystemUserService
+class SystemUserService extends AbstractService
 {
     /**
      * @Inject
@@ -54,6 +55,9 @@ class SystemUserService
      */
     protected $sysMenuService;
 
+    /**
+     * @var SystemUserMapper
+     */
     public $mapper;
 
     /**
@@ -209,7 +213,7 @@ class SystemUserService
      * @param array $data
      * @return int
      */
-    public function create(array $data): int
+    public function save(array $data): int
     {
         if ($this->mapper->existsByUsername($data['username'])) {
             throw new NormalStatusException(__('system.username_exists'));
@@ -223,7 +227,7 @@ class SystemUserService
             if (!empty($data['post_ids']) && !is_array($data['post_ids'])) {
                 $data['post_ids'] = explode(',', $data['post_ids']);
             }
-            return $this->mapper->create($data);
+            return $this->mapper->save($data);
         }
     }
 
@@ -269,11 +273,12 @@ class SystemUserService
 
     /**
      * 更新用户信息
+     * @param int $id
      * @param array $data
-     * @return int
+     * @return bool
      */
-    public function update(array $data): int
+    public function update(int $id, array $data): bool
     {
-        return $this->mapper->update($data);
+        return $this->mapper->update($id, $data);
     }
 }

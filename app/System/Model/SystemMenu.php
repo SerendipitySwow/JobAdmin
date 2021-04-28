@@ -33,11 +33,6 @@ class SystemMenu extends MineModel
     use SoftDeletes;
     public $incrementing = false;
     /**
-     * 状态
-     */
-    public const ENABLE = 0;
-    public const DISABLE = 1;
-    /**
      * 类型
      */
     public const TYPE_CLASSIFY = 'T';
@@ -55,7 +50,7 @@ class SystemMenu extends MineModel
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'component', 'is_out', 'is_cache', 'is_quick', 'is_hidden', 'type', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
