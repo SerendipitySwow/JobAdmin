@@ -36,6 +36,7 @@ return [
                 'inheritance' => 'MineModel',
                 'uses' => 'Mine\MineModel',
                 'with_comments' => true,
+                'refresh_fillable' => true,
                 'visitors' => [
                     Hyperf\Database\Commands\Ast\ModelRewriteKeyInfoVisitor::class,
                     Hyperf\Database\Commands\Ast\ModelRewriteTimestampsVisitor::class,
