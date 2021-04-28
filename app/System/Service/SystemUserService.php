@@ -9,7 +9,6 @@ use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
-use Mine\Abstracts\AbstractMapper;
 use Mine\Abstracts\AbstractService;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
@@ -273,6 +272,7 @@ class SystemUserService extends AbstractService
 
     /**
      * 更新用户信息
+     * @Cacheable(prefix="loginInfo", value="userId_#{id}")
      * @param int $id
      * @param array $data
      * @return bool
