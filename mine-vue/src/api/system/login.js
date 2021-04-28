@@ -36,3 +36,16 @@ export function logout (params = {}) {
     data: params
   })
 }
+
+/**
+ * 获取登录用户信息
+ * @param {object} params
+ * @returns
+ */
+export function getInfo (params = {}) {
+  return request({
+    url: 'system/getInfo',
+    method: 'get',
+    data: params
+  })
+}

@@ -9,6 +9,7 @@ use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
+use Mine\Abstracts\AbstractMapper;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UserLogout;
 use Mine\Event\UserLoginBefore;

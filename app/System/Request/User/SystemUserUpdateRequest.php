@@ -23,7 +23,6 @@ class SystemUserUpdateRequest extends FormRequest
     {
         return [
             'username' => 'required|max:20',
-            'password' => 'required|min:6',
             'dept_id'  => 'required',
             'role_ids' => 'required'
         ];

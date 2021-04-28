@@ -5,13 +5,24 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\ModelNotFoundException;
+use Mine\Abstracts\AbstractMapper;
 
 /**
  * Class SystemUserMapper
  * @package App\System\Mapper
  */
-class SystemUserMapper
+class SystemUserMapper extends AbstractMapper
 {
+    /**
+     * @var SystemUser
+     */
+    protected $model;
+
+    protected function assignModel()
+    {
+        $this->model = SystemUser::class;
+    }
+
     /**
      * 通过用户名检查用户
      * @param string $username
@@ -20,7 +31,7 @@ class SystemUserMapper
      */
     public function checkUserByUsername(string $username): array
     {
-        return SystemUser::query()->where('username', $username)->firstOrFail()->toArray();
+        return $this->model::query()->where('username', $username)->firstOrFail()->toArray();
     }
 
     /**
@@ -30,7 +41,7 @@ class SystemUserMapper
      */
     public function existsByUsername(string $username): bool
     {
-        return SystemUser::query()->where('username', $username)->exists();
+        return $this->model::query()->where('username', $username)->exists();
     }
 
     /**
@@ -41,7 +52,7 @@ class SystemUserMapper
      */
     public function checkPass(String $password, string $hash): bool
     {
-        return SystemUser::passwordVerify($password, $hash);
+        return $this->model::passwordVerify($password, $hash);
     }
 
     /**
@@ -51,7 +62,7 @@ class SystemUserMapper
      */
     public function create(array $data): int
     {
-        $user = SystemUser::create($data);
+        $user = $this->model::create($data);
         $user->roles()->sync($data['role_ids'], false);
         !empty($data['post_ids']) && $user->posts()->sync($data['post_ids'], false);
         return $user->id;
@@ -64,7 +75,7 @@ class SystemUserMapper
      */
     public function delete(array $ids): bool
     {
-        SystemUser::destroy($ids);
+        $this->model::destroy($ids);
         return true;
     }
 
@@ -76,7 +87,7 @@ class SystemUserMapper
     public function realDelete(array $ids): bool
     {
         foreach ($ids as $id) {
-            $user = SystemUser::withTrashed()->find($id);
+            $user = $this->model::withTrashed()->find($id);
             $user->roles()->detach();
             $user->posts()->detach();
             $user->forceDelete();
@@ -91,7 +102,7 @@ class SystemUserMapper
      */
     public function recovery(array $ids): bool
     {
-        return SystemUser::withTrashed()->whereIn('id', $ids)->restore();
+        return $this->model::withTrashed()->whereIn('id', $ids)->restore();
     }
 
     /**
@@ -101,7 +112,7 @@ class SystemUserMapper
      */
     public function read(int $id): SystemUser
     {
-        $user = SystemUser::find($id);
+        $user = $this->model::find($id);
         $user->jobs  = $user->posts()->get();
         $user->roles = $user->roles()->get();
         return $user;
@@ -113,6 +124,6 @@ class SystemUserMapper
      */
     public function update(array $data): int
     {
-        return SystemUser::query()->update($data);
+        return $this->model::query()->update($data);
     }
 }

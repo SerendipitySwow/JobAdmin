@@ -63,7 +63,8 @@ class UserController extends MineController
      */
     public function read(int $id): ResponseInterface
     {
-        return $this->success($this->systemUserService->read($id));
+        $this->systemUserService->read($id);
+        return $this->success();
     }
 
     /**
@@ -75,7 +76,7 @@ class UserController extends MineController
      */
     public function update(SystemUserUpdateRequest $request): ResponseInterface
     {
-        return $this->success();
+        return $this->success($this->systemUserService->update($request->validated()));
     }
 
     /**
@@ -107,6 +108,7 @@ class UserController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
+     * @Permission()
      */
     public function recovery(String $ids): ResponseInterface
     {
