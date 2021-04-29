@@ -57,7 +57,7 @@ trait MapperTrait
      * @param array|null $params
      * @return Builder
      */
-    protected function listQuerySetting(?array &$params = null): Builder
+    protected function listQuerySetting(?array $params = null): Builder
     {
         if ($params['force'] ?? false) {
             $query = $this->initQueryBuilder();
@@ -183,18 +183,18 @@ trait MapperTrait
     /**
      * 初始化查询构造器
      */
-    protected function initQueryBuilder()
+    protected function initQueryBuilder(): MapperTrait
     {
         $this->query = $this->model::query();
         return $this;
     }
 
-    public function getQuery()
+    public function getQuery(): ?Builder
     {
         return $this->query;
     }
 
-    public function getModel()
+    public function getModel(): MineModel
     {
         return $this->model;
     }
