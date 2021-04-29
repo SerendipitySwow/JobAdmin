@@ -4,7 +4,6 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemMenu;
 use App\System\Model\SystemRole;
-use App\System\Model\SystemUser;
 use Mine\Abstracts\AbstractMapper;
 
 class SystemMenuMapper extends AbstractMapper

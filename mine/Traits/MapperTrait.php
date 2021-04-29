@@ -3,9 +3,8 @@
 declare (strict_types = 1);
 namespace Mine\Traits;
 
-use Hyperf\Contract\LengthAwarePaginatorInterface;
 use Hyperf\Database\Model\Builder;
-use Mine\MineCollection;
+use Hyperf\Database\Model\Collection;
 use Mine\MineModel;
 
 trait MapperTrait
@@ -16,16 +15,16 @@ trait MapperTrait
     public $model;
 
     /**
-     * @var \Hyperf\Database\Model\Builder
+     * @var Builder
      */
     public $query = null;
 
     /**
      * 获取列表数据
      * @param array|null $params
-     * @return \Hyperf\Database\Model\Collection|null[]
+     * @return Collection|null[]
      */
-    public function getList(?array $params): ?\Hyperf\Database\Model\Collection
+    public function getList(?array $params): ?Collection
     {
         return $this->listQuerySetting($params)->get();
     }
@@ -54,6 +53,10 @@ trait MapperTrait
 
     }
 
+    /**
+     * @param array|null $params
+     * @return Builder
+     */
     protected function listQuerySetting(?array &$params = null): Builder
     {
         if ($params['force'] ?? false) {
