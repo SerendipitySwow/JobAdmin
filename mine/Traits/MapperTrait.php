@@ -4,7 +4,6 @@ declare (strict_types = 1);
 namespace Mine\Traits;
 
 use Hyperf\Database\Model\Builder;
-use Hyperf\Database\Model\Collection;
 use Mine\MineModel;
 
 trait MapperTrait
@@ -22,11 +21,11 @@ trait MapperTrait
     /**
      * 获取列表数据
      * @param array|null $params
-     * @return Collection|null[]
+     * @return array
      */
-    public function getList(?array $params): ?Collection
+    public function getList(?array $params): array
     {
-        return $this->listQuerySetting($params)->get();
+        return $this->listQuerySetting($params)->get()->toArray();
     }
 
     /**
