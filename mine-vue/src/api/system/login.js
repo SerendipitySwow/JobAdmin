@@ -16,7 +16,7 @@ export function getCaptcha () {
  * @param {object} params
  * @returns
  */
-export function login (params = {}) {
+export function Login (params = {}) {
   return request({
     url: 'system/login',
     method: 'post',
@@ -29,7 +29,7 @@ export function login (params = {}) {
  * @param {object} params
  * @returns
  */
-export function logout (params = {}) {
+export function Logout (params = {}) {
   return request({
     url: 'system/logout',
     method: 'post',

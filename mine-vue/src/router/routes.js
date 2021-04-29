@@ -13,13 +13,13 @@ const _import = require('@/libs/util.import.' + process.env.NODE_ENV)
 const frameIn = [
   {
     path: '/',
-    redirect: { name: 'index' },
+    redirect: { name: 'dashboard' },
     component: layoutHeaderAside,
     children: [
       // 首页
       {
-        path: 'index',
-        name: 'index',
+        path: 'dashboard',
+        name: 'dashboard',
         meta: {
           title: '首页',
           auth: true
