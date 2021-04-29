@@ -20,9 +20,4 @@ abstract class AbstractMapper
     {
         $this->assignModel();
     }
-
-    public function getModel()
-    {
-        return $this->model;
-    }
 }

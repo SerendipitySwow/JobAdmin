@@ -15,6 +15,30 @@ trait ServiceTrait
     public $mapper;
 
     /**
+     * 获取列表数据
+     */
+    public function getList()
+    {
+        $this->mapper->getList();
+    }
+
+    /**
+     * 获取列表数据（带分页）
+     */
+    public function getPageList()
+    {
+        $this->mapper->getPageList();
+    }
+
+    /**
+     * 获取树列表
+     */
+    public function getTreeList()
+    {
+        $this->mapper->getTreeList();
+    }
+
+    /**
      * 新增数据
      * @param array $data
      * @return int

@@ -3,6 +3,9 @@
 declare (strict_types = 1);
 namespace Mine\Traits;
 
+use Hyperf\Contract\LengthAwarePaginatorInterface;
+use Hyperf\Database\Model\Builder;
+use Mine\MineCollection;
 use Mine\MineModel;
 
 trait MapperTrait
@@ -11,6 +14,64 @@ trait MapperTrait
      * @var MineModel
      */
     public $model;
+
+    /**
+     * @var \Hyperf\Database\Model\Builder
+     */
+    public $query = null;
+
+    /**
+     * 获取列表数据
+     * @param array|null $params
+     * @return \Hyperf\Database\Model\Collection|null[]
+     */
+    public function getList(?array $params): ?\Hyperf\Database\Model\Collection
+    {
+        return $this->listQuerySetting($params)->get();
+    }
+
+    /**
+     * 获取列表数据（带分页）
+     * @param array|null $params
+     * @return array
+     */
+    public function getPageList(?array $params): array
+    {
+        $paginate = $this->listQuerySetting($params)->paginate($params['page_size'] ?? $this->model::PAGE_SIZE);
+        return [
+            'total' => $paginate->total(),
+            'current_page' => $paginate->currentPage(),
+            'items' => $paginate->items(),
+            'total_page' => ceil($paginate->total() / $params['page_size'] ?? $this->model::PAGE_SIZE)
+        ];
+    }
+
+    /**
+     * 获取树列表
+     */
+    public function getTreeList()
+    {
+
+    }
+
+    protected function listQuerySetting(?array &$params = null): Builder
+    {
+        if ($params['force'] ?? false) {
+            $query = $this->initQueryBuilder();
+        } else {
+            $query = $this->query;
+        }
+
+        if ($params['select'] ?? false) {
+            $query = $query->select($params['select']);
+        }
+
+        if ($params['order_by'] ?? false) {
+            $query = $query->orderBy($params['order_by'], $params['order_type'] ?? 'asc');
+        }
+
+        return $query;
+    }
 
     /**
      * 新增数据
@@ -114,5 +175,24 @@ trait MapperTrait
     {
         $this->model::query()->whereIn((new $this->model)->getKeyName(), $ids)->update([$field => $this->model::ENABLE]);
         return true;
+    }
+
+    /**
+     * 初始化查询构造器
+     */
+    protected function initQueryBuilder()
+    {
+        $this->query = $this->model::query();
+        return $this;
+    }
+
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 }
