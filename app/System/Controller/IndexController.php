@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\System\Controller;
 
 use App\System\Model\SystemUser;
+use App\System\Service\SystemLoginLogService;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Annotation\Auth;
@@ -30,6 +31,26 @@ class IndexController extends MineController
 //        return $this->success($data2);
         $url = array_merge($this->request->getServerParams(), $this->request->getHeaders());
         return $this->success($url);
+    }
+
+    /**
+     * @GetMapping("list")
+     * @param SystemLoginLogService $service
+     * @return ResponseInterface
+     */
+    public function getLoginLog(SystemLoginLogService $service)
+    {
+        return $this->success(
+            $service->getPageList(
+                [
+                    'select'=>'id,login_time, username, message',
+                    'page_size' => 5,
+                    'order_by' => 'login_time',
+                    'order_type' => 'desc',
+                    'page' => 2
+                ]
+            )
+        );
     }
 
     /**

@@ -25,54 +25,100 @@ trait MapperTrait
      */
     public function getList(?array $params): array
     {
+        $this->query = null;
         return $this->listQuerySetting($params)->get()->toArray();
     }
 
     /**
      * 获取列表数据（带分页）
      * @param array|null $params
+     * @param string $pageName
      * @return array
      */
-    public function getPageList(?array $params): array
+    public function getPageList(?array $params, string $pageName = 'page'): array
     {
-        $paginate = $this->listQuerySetting($params)->paginate($params['page_size'] ?? $this->model::PAGE_SIZE);
+        $paginate = $this->listQuerySetting($params)->paginate(
+            $params['page_size'] ?? $this->model::PAGE_SIZE, [], $pageName, $params[$pageName] ?? 1
+        );
+        $this->query = null;
         return [
             'total' => $paginate->total(),
             'current_page' => $paginate->currentPage(),
-            'items' => $paginate->items(),
-            'total_page' => ceil($paginate->total() / $params['page_size'] ?? $this->model::PAGE_SIZE)
+            'total_page' => ceil($paginate->total() / ($params['page_size'] ?? $this->model::PAGE_SIZE)),
+            'items' => $paginate->items()
         ];
     }
 
     /**
      * 获取树列表
+     * @param array|null $params
+     * @param int $parentId
+     * @param string $id
+     * @param string $parentField
+     * @param string $children
+     * @return array
      */
-    public function getTreeList()
+    public function getTreeList(
+        ?array $params,
+        int $parentId = 0,
+        string $id = 'id',
+        string $parentField = 'parent_id',
+        string $children='children'
+    ): array
     {
-
+        return $this->listQuerySetting($params)->get()->toTree([], $parentId, $id, $parentField, $children);
     }
 
     /**
-     * @param array|null $params
+     * 返回模型查询构造器
+     * @param array $params
      * @return Builder
      */
-    protected function listQuerySetting(?array $params = null): Builder
+    protected function listQuerySetting(array $params): Builder
     {
-        if ($params['force'] ?? false) {
+        $query = ($params['force'] ?? false) ? $this->initQueryBuilder() : $this->query;
+
+        if (is_null($query)) {
             $query = $this->initQueryBuilder();
-        } else {
-            $query = $this->query;
         }
 
         if ($params['select'] ?? false) {
-            $query = $query->select($params['select']);
+            $query = $query->select($this->filterAttributes($params['select']));
         }
 
         if ($params['order_by'] ?? false) {
             $query = $query->orderBy($params['order_by'], $params['order_type'] ?? 'asc');
         }
 
+        if ($params['query_raw'] ?? false) {
+            $query = $query->whereRaw($params['query_raw']);
+        }
+
         return $query;
+    }
+
+    /**
+     * 过滤属性
+     * @param array $fields
+     * @param bool $removePk
+     * @return array
+     */
+    protected function filterAttributes(array $fields, bool $removePk = false): array
+    {
+        $model = new $this->model;
+        $attrs = $model->getFillable();
+        foreach ($fields as $key => $field) {
+            if (!in_array(trim($field), $attrs)) {
+                unset($fields[$key]);
+            } else {
+                $fields[$key] = trim($field);
+            }
+        }
+        if ($removePk && in_array($model->getKeyName(), $fields)) {
+            unset($fields[array_search($model->getKeyName(), $fields)]);
+        }
+        $model = null;
+        return ( count($fields) < 1 ) ? ['*'] : $fields;
     }
 
     /**
@@ -181,20 +227,35 @@ trait MapperTrait
 
     /**
      * 初始化查询构造器
+     * @return Builder
      */
-    protected function initQueryBuilder(): MapperTrait
+    protected function initQueryBuilder(): Builder
     {
         $this->query = $this->model::query();
-        return $this;
+        return $this->query;
     }
 
+    /**
+     * @return Builder|null
+     */
     public function getQuery(): ?Builder
     {
         return $this->query;
     }
 
+    /**
+     * @return MineModel
+     */
     public function getModel(): MineModel
     {
         return $this->model;
+    }
+
+    /**
+     * 清空查询构造器
+     */
+    public function clearQuery()
+    {
+        $this->query = null;
     }
 }

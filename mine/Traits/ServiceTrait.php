@@ -16,26 +16,41 @@ trait ServiceTrait
 
     /**
      * 获取列表数据
+     * @param array|null $params
+     * @return array
      */
-    public function getList()
+    public function getList(?array $params = null): array
     {
-        $this->mapper->getList();
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        return $this->mapper->getList($params);
     }
 
     /**
      * 获取列表数据（带分页）
+     * @param array|null $params
+     * @return array
      */
-    public function getPageList()
+    public function getPageList(?array $params = null): array
     {
-        $this->mapper->getPageList();
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        return $this->mapper->getPageList($params);
     }
 
     /**
      * 获取树列表
+     * @param array|null $params
+     * @return array
      */
-    public function getTreeList()
+    public function getTreeList(?array $params = null): array
     {
-        $this->mapper->getTreeList();
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        return $this->mapper->getTreeList($params);
     }
 
     /**
