@@ -25,8 +25,7 @@ trait MapperTrait
      */
     public function getList(?array $params): array
     {
-        $this->query = null;
-        return $this->listQuerySetting($params)->get()->toArray();
+        return $this->listQuerySetting($this->model::query(), $params)->get()->toArray();
     }
 
     /**
@@ -37,10 +36,9 @@ trait MapperTrait
      */
     public function getPageList(?array $params, string $pageName = 'page'): array
     {
-        $paginate = $this->listQuerySetting($params)->paginate(
+        $paginate = $this->listQuerySetting($this->model::query(), $params)->paginate(
             $params['page_size'] ?? $this->model::PAGE_SIZE, [], $pageName, $params[$pageName] ?? 1
         );
-        $this->query = null;
         return [
             'total' => $paginate->total(),
             'current_page' => $paginate->currentPage(),
@@ -66,7 +64,8 @@ trait MapperTrait
         string $children='children'
     ): array
     {
-        return $this->listQuerySetting($params)->get()->toTree([], $parentId, $id, $parentField, $children);
+        return $this->listQuerySetting($this->model::query(), $params)->get()
+            ->toTree([], $parentId, $id, $parentField, $children);
     }
 
     /**
@@ -74,14 +73,8 @@ trait MapperTrait
      * @param array $params
      * @return Builder
      */
-    protected function listQuerySetting(array $params): Builder
+    protected function listQuerySetting(Builder $query, array $params): Builder
     {
-        $query = ($params['force'] ?? false) ? $this->initQueryBuilder() : $this->query;
-
-        if (is_null($query)) {
-            $query = $this->initQueryBuilder();
-        }
-
         if ($params['select'] ?? false) {
             $query = $query->select($this->filterAttributes($params['select']));
         }
@@ -93,7 +86,6 @@ trait MapperTrait
         if ($params['query_raw'] ?? false) {
             $query = $query->whereRaw($params['query_raw']);
         }
-
         return $query;
     }
 
