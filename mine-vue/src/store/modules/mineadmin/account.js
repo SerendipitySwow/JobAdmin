@@ -1,7 +1,6 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
 import router from '@/router'
-import store from '@/store'
 import { Login, Logout, getInfo } from '@/api/system/login.js'
 
 export default {
@@ -16,15 +15,26 @@ export default {
      */
     async login ({ dispatch }, { username = '', password = '', code = '' } = {}) {
       await Login({ username, password, code }).then(res => {
-        getInfo().then(info => {
-          util.cookies.set('uuid', info.id)
-          util.cookies.set('token', res.token)
-          store.commit('store/account/setRouters', info)
+        util.cookies.set('token', res.data.token)
+      })
+    },
+    async userinfo ({ commit, dispatch }) {
+      return new Promise((resolve, reject) => {
+        getInfo().then(response => {
+          if (response.data.roles && response.data.routers.length > 0) {
+            util.cookies.set('uuid', response.data.id)
+            // 设置 vuex 用户信息
+            dispatch('store/user/set', { name: response.data.username }, { root: true })
+            // 用户登录后从持久化数据加载一系列的设置
+            dispatch('load')
+            commit('store/permission/setUserInfo', response.data.user)
+            commit('store/permission/setRoles', response.data.roles)
+            commit('store/permission/setRouters', response.data.routers)
+            resolve()
+          }
+        }).catch(error => {
+          reject(error)
         })
-        // 设置 vuex 用户信息
-        dispatch('store/user/set', { name: res.name }, { root: true })
-        // 用户登录后从持久化数据加载一系列的设置
-        dispatch('load')
       })
     },
     /**

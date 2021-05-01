@@ -125,7 +125,7 @@ export default {
 
     getCaptchaImg () {
       getCaptcha().then(res => {
-        this.captchaImg = res.img
+        this.captchaImg = res.data.img
       })
     },
 

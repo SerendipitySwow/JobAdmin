@@ -2,10 +2,16 @@ import store from '@/store'
 
 export default {
   namespaced: true,
-  state: { routers: [] },
+  state: { routers: [], userinfo: null, roles: [] },
   mutations: {
     setRouters: (state, routers) => {
       state.routers = routers
+    },
+    setUserInfo: (state, userinfo) => {
+      state.userinfo = userinfo
+    },
+    setRoles: (state, roles) => {
+      state.roles = roles
     }
   },
   actions: {
@@ -15,6 +21,7 @@ export default {
      */
     async genRouters ({ commit }) {
       return new Promise(resolve => {
+        console.log('route', store.permission)
         const accessedRoutes = filterAsyncRouter(store.state.routers)
         // accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('setRouters', accessedRoutes)

@@ -52,7 +52,7 @@ function createService () {
     response => {
       // 有 code 判断为项目接口请求
       if (response.status === 200 && response.data.success) {
-        return response.data.data
+        return response.data
       } else if (response.status === 200 && !response.data.success) {
         Notification.warning(
           { message: response.data.message, title: '提示', duration: 5 * 1000 }
@@ -104,7 +104,7 @@ function createRequest (service) {
     const configDefault = {
       headers: {
         Authorization: `bearer ${token}`,
-        'Content-Type': get(config, 'headers.Content-Type', 'application/json')
+        'Content-Type': get(config, 'headers.Content-Type', 'application/json;charset=UTF-8')
       },
       timeout: 5000,
       baseURL: process.env.VUE_APP_API,
@@ -117,7 +117,7 @@ function createRequest (service) {
       option.params = {}
     }
     // form
-    if (!isEmpty(option.data) && option.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+    if (!isEmpty(option.data) && option.headers['Content-Type'] === 'application/x-www-form-urlencoded;charset=UTF-8') {
       option.data = stringify(option.data)
     }
     return service(option)

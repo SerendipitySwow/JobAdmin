@@ -47,14 +47,15 @@ router.beforeEach(async (to, from, next) => {
   store.commit('store/search/set', false)
   const token = util.cookies.get('token')
   if (token && token !== 'undefined') {
-    console.log('jinlaile')
     if (to.name === 'login') {
       next({ path: defaultRoutePath })
       NProgress.done()
     } else {
-      store.dispatch('store/account/genRouters').then(accessRoutes => {
-        router.addRoutes(accessRoutes)
-        next({ ...to, replace: true })
+      store.dispatch('store/account/userinfo').then(() => {
+        store.dispatch('store/permission/genRouters').then(accessRoutes => {
+          router.addRoutes(accessRoutes)
+          next({ ...to, replace: true })
+        })
       }).catch(() => {
         store.dispatch('store/account/logout')
       })
