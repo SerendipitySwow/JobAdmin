@@ -30,6 +30,6 @@ class SystemRoleMapper extends AbstractMapper
         ];
         return $this->model::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
             $query->select('id')->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
-        }])->get(['id']);
+        }])->get(['id'])->toArray();
     }
 }
