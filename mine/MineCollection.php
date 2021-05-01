@@ -28,7 +28,7 @@ class MineCollection extends Collection
             }
         }
         unset($data);
-        return $this->toTree(array_unique($routers));
+        return $this->toTree($routers);
     }
 
     /**
@@ -75,14 +75,15 @@ class MineCollection extends Collection
 
         foreach ($data as $value) {
             if ($value[$parentField] == $parentId) {
-                $tree = $this->toTree($data, $value[$id]);
-                if (!empty($tree)) {
-                    $value[$children] = $tree;
+                $child = $this->toTree($data, $value[$id]);
+                if (!empty($child)) {
+                    $value[$children] = $child;
                 }
                 array_push($tree, $value);
             }
         }
 
+        unset($data);
         return $tree;
     }
 }

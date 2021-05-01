@@ -36,20 +36,17 @@ class SystemMenuMapper extends AbstractMapper
     }
 
     /**
-     * 通过角色ID列表获取菜单权限
+     * 通过菜单ID列表获取菜单数据
      * @param array $ids
      * @return array
      */
-    public function getRoutersByRoleIds(array $ids): array
+    public function getRoutersByIds(array $ids): array
     {
-        if (empty($ids)) return [];
-
         $menuField = [
             'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'is_hidden',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
-        return SystemRole::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
-            $query->select(...$menuField)->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
-        }])->get(['id'])->sysMenuToRouterTree();
+        return $this->model::query()->whereIn('id', $ids)->where('status', $this->model::ENABLE)
+            ->orderBy('sort', 'desc')->select(...$menuField)->get()->sysMenuToRouterTree();
     }
 }

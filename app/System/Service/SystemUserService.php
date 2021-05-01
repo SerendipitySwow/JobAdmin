@@ -55,6 +55,11 @@ class SystemUserService extends AbstractService
     protected $sysMenuService;
 
     /**
+     * @var sysRoleService
+     */
+    protected $sysRoleService;
+
+    /**
      * @var SystemUserMapper
      */
     public $mapper;
@@ -63,12 +68,19 @@ class SystemUserService extends AbstractService
      * SystemUserService constructor.
      * @param ContainerInterface $container
      * @param SystemUserMapper $mapper
-     * @param SystemMenuService $service
+     * @param SystemMenuService $systemMenuService
+     * @param SystemRoleService $systemRoleService
      */
-    public function __construct(ContainerInterface $container, SystemUserMapper $mapper, SystemMenuService $service)
+    public function __construct(
+        ContainerInterface $container,
+        SystemUserMapper $mapper,
+        SystemMenuService $systemMenuService,
+        SystemRoleService $systemRoleService
+    )
     {
         $this->mapper = $mapper;
-        $this->sysMenuService = $service;
+        $this->sysMenuService = $systemMenuService;
+        $this->sysRoleService = $systemRoleService;
         $this->container = $container;
     }
 
@@ -201,10 +213,28 @@ class SystemUserService extends AbstractService
             $data['roles'] = ['super_admin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
         } else {
+            $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
             $data['roles'] = $user->roles()->pluck('code')->toArray();
-            $data['routers'] = $this->sysMenuService->mapper->getRoutersByRoleIds($user->roles()->pluck('id')->toArray());
+            $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($this->filterMenuIds($roles));
         }
         return $data;
+    }
+
+    /**
+     * 过滤通过角色查询出来的菜单id列表，并去重
+     * @param array $roleData
+     * @return array
+     */
+    protected function filterMenuIds(array &$roleData): array
+    {
+        $ids = [];
+        foreach ($roleData as $val) {
+            foreach ($val['menu'] as $menu) {
+                $ids[] = $menu['id'];
+            }
+        }
+        unset($roleData);
+        return array_unique($ids);
     }
 
     /**
