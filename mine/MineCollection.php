@@ -15,12 +15,24 @@ class MineCollection extends Collection
         $data = $this->toArray();
         if (empty($data)) return [];
 
-        $routers = [];
+        $routers = $tempRoute = [];
         if (isset($data[0]['menus'])) {
             foreach ($data as $value) {
                 foreach ($value['menus'] as $menu) {
-                    unset($menu['pivot']);
-                    array_push($routers, $menu);
+                    $tempRoute = [
+                        // 权限标识
+                        'name' => $menu['code'],
+                        'component' => $menu['component'],
+                        'path' => $menu['route'],
+                        'redirect' => $menu['is_out'] == 0 ? 'noRedirect' : $menu['route'],
+                        'hidden' => $menu['is_hidden'] == 0,
+                        'meta' => [
+                            'keepAlive' => $menu['is_cache'] == 0,
+                            'icon' => $menu['icon'],
+                            'title' => $menu['name'],
+                        ]
+                    ];
+                    array_push($routers, $tempRoute);
                 }
             }
             unset($data);

@@ -48,7 +48,7 @@ class SystemMenuMapper extends AbstractMapper
             'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
-        return SystemRole::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
+        return $this->model::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
             $query->select(...$menuField)->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
         }])->get(['id'])->sysMenuToRouterTree();
     }
