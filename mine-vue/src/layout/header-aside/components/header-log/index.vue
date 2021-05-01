@@ -13,7 +13,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   computed: {
-    ...mapGetters('d2admin', {
+    ...mapGetters('store', {
       logLength: 'log/length',
       logLengthError: 'log/lengthError'
     }),

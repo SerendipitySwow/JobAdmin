@@ -19,25 +19,42 @@ class MineCollection extends Collection
         if (isset($data[0]['menus'])) {
             foreach ($data as $value) {
                 foreach ($value['menus'] as $menu) {
-                    $tempRoute = [
-                        // 权限标识
-                        'name' => $menu['code'],
-                        'component' => $menu['component'],
-                        'path' => $menu['route'],
-                        'redirect' => $menu['is_out'] == 0 ? 'noRedirect' : $menu['route'],
-                        'hidden' => $menu['is_hidden'] == 0,
-                        'meta' => [
-                            'keepAlive' => $menu['is_cache'] == 0,
-                            'icon' => $menu['icon'],
-                            'title' => $menu['name'],
-                        ]
-                    ];
-                    array_push($routers, $tempRoute);
+                    array_push($routers, $this->setRouter($menu));
                 }
             }
-            unset($data);
+        } else {
+            foreach ($data as $menu) {
+                array_push($routers, $this->setRouter($menu));
+            }
         }
+        unset($data);
         return $this->toTree(array_unique($routers));
+    }
+
+    /**
+     * @param $menu
+     * @return array
+     */
+    private function setRouter(&$menu): array
+    {
+        $route = [
+            'id' => $menu['id'],
+            'parent_id' => $menu['parent_id'],
+            'name' => $menu['code'],
+            'component' => $menu['component'],
+            'path' => $menu['route'],
+            'hidden' => ($menu['is_hidden'] == 0),
+            'type' => $menu['type'],
+            'meta' => [
+                'keepAlive' => ($menu['is_cache'] == 0),
+                'icon' => $menu['icon'],
+                'title' => $menu['name'],
+            ]
+        ];
+        if ($menu['is_out'] == 0) {
+            $route['redirect'] = $menu['route'];
+        }
+        return $route;
     }
 
     /**

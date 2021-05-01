@@ -27,7 +27,7 @@ class SystemMenuMapper extends AbstractMapper
     public function getSuperAdminRouters(): array
     {
         $menuField = [
-            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
+            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'is_hidden',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
         return $this->model::query()->select(...$menuField)
@@ -45,10 +45,10 @@ class SystemMenuMapper extends AbstractMapper
         if (empty($ids)) return [];
 
         $menuField = [
-            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route',
+            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'is_hidden',
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
-        return $this->model::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
+        return SystemRole::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
             $query->select(...$menuField)->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
         }])->get(['id'])->sysMenuToRouterTree();
     }

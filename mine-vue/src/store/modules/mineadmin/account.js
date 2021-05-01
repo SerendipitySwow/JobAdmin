@@ -13,7 +13,7 @@ export default {
      * @param {Object} payload password {String} 密码
      * @param {Object} payload route {Object} 登录成功后定向的路由对象 任何 vue-router 支持的格式
      */
-    async login ({ dispatch }, { username = '', password = '', code = '' } = {}) {
+    async login ({ commit }, { username = '', password = '', code = '' } = {}) {
       await Login({ username, password, code }).then(res => {
         util.cookies.set('token', res.data.token)
       })
@@ -27,9 +27,9 @@ export default {
             dispatch('store/user/set', { name: response.data.username }, { root: true })
             // 用户登录后从持久化数据加载一系列的设置
             dispatch('load')
-            commit('store/permission/setUserInfo', response.data.user)
-            commit('store/permission/setRoles', response.data.roles)
-            commit('store/permission/setRouters', response.data.routers)
+            commit('store/permission/setUserInfo', response.data.user, { root: true })
+            commit('store/permission/setRoles', response.data.roles, { root: true })
+            commit('store/permission/setRouters', response.data.routers, { root: true })
             resolve()
           }
         }).catch(error => {

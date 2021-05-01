@@ -116,14 +116,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('d2admin', {
+    ...mapState('store', {
       keepAlive: state => state.page.keepAlive,
       grayActive: state => state.gray.active,
       transitionActive: state => state.transition.active,
       asideCollapse: state => state.menu.asideCollapse,
       asideTransition: state => state.menu.asideTransition
     }),
-    ...mapGetters('d2admin', {
+    ...mapGetters('store', {
       themeActiveSetting: 'theme/activeSetting'
     }),
     /**

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Notification } from 'element-ui'
 
 // 进度条
 import NProgress from 'nprogress'
@@ -51,14 +52,25 @@ router.beforeEach(async (to, from, next) => {
       next({ path: defaultRoutePath })
       NProgress.done()
     } else {
-      store.dispatch('store/account/userinfo').then(() => {
-        store.dispatch('store/permission/genRouters').then(accessRoutes => {
-          router.addRoutes(accessRoutes)
-          next({ ...to, replace: true })
+      if (store.state.store.permission.routers.length === 0) {
+        store.dispatch('store/account/userinfo').then(() => {
+          store.dispatch('store/permission/genRouters').then(accessRoutes => {
+            console.log(accessRoutes)
+            router.addRoutes([])
+            next({ ...to, replace: true })
+          })
+        }).catch(() => {
+          Notification.error({
+            message: '请求用户信息失败，请重试',
+            title: '错误',
+            duration: 5 * 1000
+          })
+          store.dispatch('store/account/logout')
         })
-      }).catch(() => {
-        store.dispatch('store/account/logout')
-      })
+      } else {
+        next()
+        NProgress.done()
+      }
     }
   } else {
     if (whiteList.includes(to.name)) {

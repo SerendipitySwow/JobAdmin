@@ -1,8 +1,8 @@
-import store from '@/store'
+import mainLayout from '@/layout/header-aside'
 
 export default {
   namespaced: true,
-  state: { routers: [], userinfo: null, roles: [] },
+  state: { routers: [], userinfo: null, roles: [], permissions: [] },
   mutations: {
     setRouters: (state, routers) => {
       state.routers = routers
@@ -12,6 +12,9 @@ export default {
     },
     setRoles: (state, roles) => {
       state.roles = roles
+    },
+    setPermissions: (state, permissions) => {
+      state.permissions = permissions
     }
   },
   actions: {
@@ -19,12 +22,11 @@ export default {
      * 动态生成路由
      * @param { object } context
      */
-    async genRouters ({ commit }) {
+    async genRouters ({ state, commit }) {
       return new Promise(resolve => {
-        console.log('route', store.permission)
-        const accessedRoutes = filterAsyncRouter(store.state.routers)
+        const accessedRoutes = filterAsyncRouter(state.routers)
         // accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
-        commit('setRouters', accessedRoutes)
+        commit('setPermissions', accessedRoutes)
         resolve(accessedRoutes)
       })
     }
@@ -34,8 +36,9 @@ export default {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter (asyncRouterMap) {
   return asyncRouterMap.filter(route => {
-    // if (route.type === 3) {
-    //   route.component = PageLayout
+    if (route.type === 'T') {
+      route.component = mainLayout
+    }
     // } else if (route.type === 1) {
     //   route.component = loadView(route.module, route.component)
     // } else if (route.type === 2 && typeof route.component === 'string') {

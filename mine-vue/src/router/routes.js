@@ -18,7 +18,7 @@ const frameIn = [
     children: [
       // 首页
       {
-        path: 'dashboard',
+        path: '/dashboard',
         name: 'dashboard',
         meta: {
           title: '首页',
@@ -26,35 +26,8 @@ const frameIn = [
         },
         component: _import('system/index')
       },
-      // 系统 前端日志
-      {
-        path: 'log',
-        name: 'log',
-        meta: {
-          title: '前端日志',
-          auth: true
-        },
-        component: _import('system/log')
-      },
-      // 刷新页面 必须保留
-      {
-        path: 'refresh',
-        name: 'refresh',
-        hidden: true,
-        component: _import('system/function/refresh')
-      },
-      // 页面重定向 必须保留
-      {
-        path: 'redirect/:route*',
-        name: 'redirect',
-        hidden: true,
-        component: _import('system/function/redirect')
-      }
     ]
-  },
-  playground,
-  plugins,
-  components
+  }
 ]
 
 /**
@@ -80,6 +53,33 @@ const errorPage = [
   }
 ]
 
+const otherPage = [
+  // 系统 前端日志
+  {
+    path: 'log',
+    name: 'log',
+    meta: {
+      title: '前端日志',
+      auth: true
+    },
+    component: _import('system/log')
+  },
+  // 刷新页面 必须保留
+  {
+    path: 'refresh',
+    name: 'refresh',
+    hidden: true,
+    component: _import('system/function/refresh')
+  },
+  // 页面重定向 必须保留
+  {
+    path: 'redirect/:route*',
+    name: 'redirect',
+    hidden: true,
+    component: _import('system/function/redirect')
+  }
+]
+
 // 导出需要显示菜单的
 export const frameInRoutes = frameIn
 
@@ -87,5 +87,6 @@ export const frameInRoutes = frameIn
 export default [
   ...frameIn,
   ...frameOut,
-  ...errorPage
+  ...errorPage,
+  ...otherPage
 ]
