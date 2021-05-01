@@ -15,7 +15,7 @@ class MineCollection extends Collection
         $data = $this->toArray();
         if (empty($data)) return [];
 
-        $routers = $tempRoute = [];
+        $routers = [];
         if (isset($data[0]['menus'])) {
             foreach ($data as $value) {
                 foreach ($value['menus'] as $menu) {
