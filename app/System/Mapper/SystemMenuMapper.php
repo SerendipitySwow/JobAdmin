@@ -47,6 +47,8 @@ class SystemMenuMapper extends AbstractMapper
             'component', 'is_out', 'is_cache', 'is_quick', 'type'
         ];
         return $this->model::query()->whereIn('id', $ids)->where('status', $this->model::ENABLE)
-            ->orderBy('sort', 'desc')->select(...$menuField)->get()->sysMenuToRouterTree();
+            ->where('type', '!=', 'B')
+            ->orderBy('sort', 'desc')
+            ->select(...$menuField)->get()->sysMenuToRouterTree();
     }
 }

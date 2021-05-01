@@ -56,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch('store/account/userinfo').then(() => {
           store.dispatch('store/permission/genRouters').then(accessRoutes => {
             console.log(accessRoutes)
-            router.addRoutes([])
+            router.addRoute(accessRoutes)
             next({ ...to, replace: true })
           })
         }).catch(() => {
@@ -65,7 +65,12 @@ router.beforeEach(async (to, from, next) => {
             title: '错误',
             duration: 5 * 1000
           })
-          store.dispatch('store/account/logout')
+          util.cookies.remove('token')
+          util.cookies.remove('uuid')
+          // 清空 vuex 用户信息
+          store.dispatch('store/user/set', {}, { root: true })
+          // 跳转路由
+          router.push({ name: 'login' })
         })
       } else {
         next()
