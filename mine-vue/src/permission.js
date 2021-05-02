@@ -8,8 +8,6 @@ import 'nprogress/nprogress.css'
 import store from '@/store/index'
 import util from '@/libs/util.js'
 
-import { uniqueId } from 'lodash'
-
 const whiteList = ['login']
 const defaultRoutePath = '/dashboard'
 
@@ -35,9 +33,8 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch('store/account/userinfo').then(() => {
           store.dispatch('store/permission/genRouters').then(accessRoutes => {
             // 挂载菜单
-            console.log(accessRoutes)
-            store.commit('store/menu/headerSet', supplementPath(accessRoutes))
-            store.commit('store/search/init', supplementPath(accessRoutes))
+            store.commit('store/menu/headerSet', util.supplementPath(accessRoutes))
+            store.commit('store/search/init', util.supplementPath(accessRoutes))
             accessRoutes.push({ path: '*', name: '404', hidden: true, component: (resolve) => require(['@/views/system/error/404'], resolve) })
             router.addRoutes(accessRoutes)
             next({ ...to, replace: true })
@@ -79,22 +76,3 @@ router.afterEach(to => {
   // 更改标题
   util.title(to.meta.title)
 })
-
-/**
- * @description 给菜单数据补充上 path 字段
- * @description https://github.com/d2-projects/d2-admin/issues/209
- * @param {Array} menu 原始的菜单数据
- */
-function supplementPath (menu) {
-  return menu.map(e => {
-    return {
-      ...e,
-      path: e.path || uniqueId('d2-menu-empty-'),
-      title: e.meta.title,
-      icon: e.meta.icon,
-      ...e.children ? {
-        children: supplementPath(e.children)
-      } : {}
-    }
-  })
-}
