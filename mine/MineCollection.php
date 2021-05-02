@@ -43,8 +43,8 @@ class MineCollection extends Collection
         return [
             'name' => sprintf('%s-public', Str::lower($menu['name'])),
             'type' => 'C',
-            'component' => 'public/index',
-            'path' => sprintf('%s/public', $menu['path']),
+            'component' => 'public',
+            'path' => sprintf('%s/public/index', $menu['path']),
             'meta' => [
                 'keepAlive' => true,
                 'title' => sprintf('%s首页', $menu['meta']['title']),
