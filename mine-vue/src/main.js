@@ -2,25 +2,18 @@ import Vue from 'vue'
 import i18n from './i18n'
 import App from './App'
 import d2Admin from '@/plugin/d2admin'
-import store from '@/store/index'
 import router from './router'
+import store from '@/store/index'
 import './permission'
 
 // 核心插件
 Vue.use(d2Admin)
-
-// const menuAside = store.state.store.menu
-// console.log(menuAside)
 
 new Vue({
   store,
   i18n,
   router,
   render: h => h(App),
-  created () {
-    // 处理路由 得到每一级的路由设置
-    // this.$store.commit('store/page/init', router)
-  },
   mounted () {
     // 展示系统信息
     this.$store.commit('store/releases/versionShow')

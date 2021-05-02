@@ -215,27 +215,22 @@ class SystemUserService extends AbstractService
         if ($loginUser->isSuperAdmin()) {
             $data['roles'] = ['super_admin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
-            $quickMenu = $this->sysMenuService->mapper->getQuickMenu();
+            $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu();
         } else {
             $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
             $ids = $this->filterMenuIds($roles);
             $data['roles'] = $user->roles()->pluck('code')->toArray();
             $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($ids);
-            $quickMenu = $this->sysMenuService->mapper->getQuickMenu($ids);
+            $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu($ids);
         }
-
-        // 加入快捷菜单
-        if (count($data['routers']) && count($quickMenu)) {
-            foreach ($data['routers'] as &$router) {
-                if ($router['name'] == 'Dashboard') {
-                    $router['children'] = [];
-                    foreach ($quickMenu as $quick) {
-                        array_push($router['children'], $collect->setRouter($quick));
-                    }
-                    break;
-                }
+        $data['quickMenu'] = [];
+        // 快捷菜单
+        if (count($tempQuickMenu)) {
+            foreach ($tempQuickMenu as $quick) {
+                array_push($data['quickMenu'], $collect->setRouter($quick));
             }
         }
+        unset($tempQuickMenu);
 
         return $data;
     }

@@ -40,8 +40,8 @@ function filterAsyncRouter (asyncRouterMap) {
     }
     if (route.type === 'T') {
       route.component = mainLayout
-    } else if (route.type === 'C' && typeof route.component === 'string') {
-      route.component = loadView(route.component)
+    } else if (route.type === 'C') {
+      route.component = null
     } else if (route.type === 'M' && typeof route.component === 'string') {
       route.component = loadView(route.component)
     }
