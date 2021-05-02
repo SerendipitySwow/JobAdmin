@@ -1,7 +1,7 @@
 import { throttle } from 'lodash'
 import { mapState } from 'vuex'
 import menuMixin from '../mixin/menu'
-import { createMenu } from '../libs/util.menu'
+import { createHeaderMenu } from '../libs/util.menu'
 
 export default {
   name: 'd2-layout-header-aside-menu-header',
@@ -27,7 +27,7 @@ export default {
             mode="horizontal"
             defaultActive={ this.active }
             onSelect={ this.handleMenuSelect }>
-            { this.header.map(menu => createMenu.call(this, h, menu)) }
+            { this.header.map(menu => createHeaderMenu.call(this, h, menu)) }
           </el-menu>
         </div>
       </div>

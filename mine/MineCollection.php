@@ -25,9 +25,10 @@ class MineCollection extends Collection
         foreach ($menus as &$menu) {
             if ($menu['name'] != 'Dashboard') {
                 if (isset($menu['children'])) {
-                    array_push($menu['children'], $this->setPublicRouter($menu));
+                    array_unshift($menu['children'], $this->setPublicRouter($menu));
                 } else {
-                    $menu['children'][] = $this->setPublicRouter($menu);
+                    $menu['children'] = [];
+                    array_unshift($menu['children'], $this->setPublicRouter($menu));
                 }
             }
         }
@@ -42,7 +43,7 @@ class MineCollection extends Collection
     {
         return [
             'name' => sprintf('%s-public', Str::lower($menu['name'])),
-            'type' => 'C',
+            'type' => 'M',
             'component' => 'public',
             'path' => sprintf('%s/public/index', $menu['path']),
             'meta' => [

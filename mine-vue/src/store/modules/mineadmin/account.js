@@ -83,9 +83,9 @@ export default {
       // 加载页面过渡效果设置
       await dispatch('store/transition/load', null, { root: true })
       // 持久化数据加载上次退出时的多页列表
-      // await dispatch('store/page/openedLoad', null, { root: true })
+      await dispatch('store/page/openedLoad', null, { root: true })
       // 持久化数据加载侧边栏配置
-      // await dispatch('store/menu/asideLoad', null, { root: true })
+      await dispatch('store/menu/asideLoad', null, { root: true })
       // 持久化数据加载全局尺寸
       await dispatch('store/size/load', null, { root: true })
       // 持久化数据加载颜色设置
