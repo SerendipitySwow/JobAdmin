@@ -1,5 +1,4 @@
 import mainLayout from '@/layout/header-aside'
-import otherRoute from '@/router/other-router'
 
 export default {
   namespaced: true,
@@ -37,9 +36,6 @@ export default {
 function filterAsyncRouter (asyncRouterMap) {
   return asyncRouterMap.filter(route => {
     if (route.name === 'Dashboard') {
-      otherRoute.forEach(r => {
-        route.children.push(r)
-      })
       route.redirect = { name: 'dashboard/index' }
     }
     if (route.type === 'T') {
@@ -52,13 +48,10 @@ function filterAsyncRouter (asyncRouterMap) {
     if (route.children != null && route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children)
     }
-    // } else if (typeof route.component === 'string') {
-    //   route.component = loadView(route.module, route.component)
-    // }
     return true
   })
 }
 
-export const loadView = (module, view) => { // 路由懒加载
-  return (resolve) => require([`@/views/${module}/${view}`], resolve)
+export const loadView = (view) => { // 路由懒加载
+  return (resolve) => require([`@/views/${view}`], resolve)
 }

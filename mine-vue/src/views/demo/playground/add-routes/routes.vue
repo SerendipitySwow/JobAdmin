@@ -23,7 +23,7 @@
 <script>
 import { cloneDeep } from 'lodash'
 import { mapState, mapMutations } from 'vuex'
-import { frameInRoutes } from '@/router/routes'
+// import { frameInRoutes } from '@/router/routes'
 import layoutHeaderAside from '@/layout/header-aside'
 export default {
   data () {
@@ -74,10 +74,10 @@ export default {
           ]
         }
       ]
-      this.$router.addRoutes(route)
+      // this.$router.addRoutes(route)
       // 更新标签页池
       this.pageInit([
-        ...frameInRoutes,
+        // ...frameInRoutes,
         ...route
       ])
       // 演示更新菜单
