@@ -1,4 +1,5 @@
 import mainLayout from '@/layout/header-aside'
+import otherRoute from '@/router/other-router'
 
 export default {
   namespaced: true,
@@ -25,7 +26,6 @@ export default {
     async genRouters ({ state, commit }) {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
-        // accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('setPermissions', accessedRoutes)
         resolve(accessedRoutes)
       })
@@ -36,16 +36,22 @@ export default {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter (asyncRouterMap) {
   return asyncRouterMap.filter(route => {
+    if (route.name === 'Dashboard') {
+      otherRoute.forEach(r => {
+        route.children.push(r)
+      })
+      route.redirect = { name: 'dashboard/index' }
+    }
     if (route.type === 'T') {
       route.component = mainLayout
+    } else if (route.type === 'C' && typeof route.component === 'string') {
+      route.component = loadView(route.component)
+    } else if (route.type === 'M' && typeof route.component === 'string') {
+      route.component = loadView(route.component)
     }
-    // } else if (route.type === 1) {
-    //   route.component = loadView(route.module, route.component)
-    // } else if (route.type === 2 && typeof route.component === 'string') {
-    //   route.component = loadView(route.module, route.component)
-    // }
-    // if (route.children != null && route.children && route.children.length) {
-    //   route.children = filterAsyncRouter(route.children)
+    if (route.children != null && route.children && route.children.length) {
+      route.children = filterAsyncRouter(route.children)
+    }
     // } else if (typeof route.component === 'string') {
     //   route.component = loadView(route.module, route.component)
     // }

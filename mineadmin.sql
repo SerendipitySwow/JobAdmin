@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 107.148.247.10
  Source Server Type    : MySQL
- Source Server Version : 50726
- Source Host           : localhost:3306
+ Source Server Version : 50733
+ Source Host           : 107.148.247.10:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 50733
  File Encoding         : 65001
 
- Date: 27/04/2021 17:09:24
+ Date: 02/05/2021 00:35:38
 */
 
 SET NAMES utf8mb4;
@@ -131,6 +131,25 @@ CREATE TABLE `system_dict_type`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for system_job
+-- ----------------------------
+DROP TABLE IF EXISTS `system_job`;
+CREATE TABLE `system_job`  (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT '主键',
+  `created_by` bigint(20) NULL DEFAULT NULL COMMENT '创建者',
+  `updated_by` bigint(20) NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` timestamp(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp(0) NULL DEFAULT NULL COMMENT '删除时间',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '职位信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of system_job
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for system_login_log
 -- ----------------------------
 DROP TABLE IF EXISTS `system_login_log`;
@@ -176,6 +195,49 @@ INSERT INTO `system_login_log` VALUES (1614207871178772480, 'admin', '127.0.0.1'
 INSERT INTO `system_login_log` VALUES (1614228518936252416, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-26 17:24:29', NULL);
 INSERT INTO `system_login_log` VALUES (1614531325732065280, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 13:27:44', NULL);
 INSERT INTO `system_login_log` VALUES (1614533708486807552, 'admin', '127.0.0.1', '未知', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 13:37:12', NULL);
+INSERT INTO `system_login_log` VALUES (1614661541024501760, 'admin', '42.224.228.253', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 22:05:10', NULL);
+INSERT INTO `system_login_log` VALUES (1614665521867788288, 'admin', '42.224.228.253', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 22:20:59', NULL);
+INSERT INTO `system_login_log` VALUES (1614682292586811392, 'admin', '42.224.229.115', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-04-27 23:27:37', NULL);
+INSERT INTO `system_login_log` VALUES (1616002033578414080, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '验证码错误或已失效', '2021-05-01 14:51:48', NULL);
+INSERT INTO `system_login_log` VALUES (1616002062359728128, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 14:51:55', NULL);
+INSERT INTO `system_login_log` VALUES (1616020360908509184, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:04:38', NULL);
+INSERT INTO `system_login_log` VALUES (1616022956729700352, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:14:57', NULL);
+INSERT INTO `system_login_log` VALUES (1616023244224073728, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:16:05', NULL);
+INSERT INTO `system_login_log` VALUES (1616024046850281472, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:19:17', NULL);
+INSERT INTO `system_login_log` VALUES (1616024298747596800, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:20:17', NULL);
+INSERT INTO `system_login_log` VALUES (1616024862457860096, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:22:31', NULL);
+INSERT INTO `system_login_log` VALUES (1616031840370429952, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:50:15', NULL);
+INSERT INTO `system_login_log` VALUES (1616032112299741184, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '验证码错误或已失效', '2021-05-01 16:51:19', NULL);
+INSERT INTO `system_login_log` VALUES (1616032139139092480, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:51:26', NULL);
+INSERT INTO `system_login_log` VALUES (1616033353524318208, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:56:15', NULL);
+INSERT INTO `system_login_log` VALUES (1616033739173793792, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:57:47', NULL);
+INSERT INTO `system_login_log` VALUES (1616034142493872128, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 16:59:24', NULL);
+INSERT INTO `system_login_log` VALUES (1616034558367502336, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:01:03', NULL);
+INSERT INTO `system_login_log` VALUES (1616038619762397184, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:17:11', NULL);
+INSERT INTO `system_login_log` VALUES (1616039079604916224, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:19:01', NULL);
+INSERT INTO `system_login_log` VALUES (1616039421507801088, 'admin', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:20:22', NULL);
+INSERT INTO `system_login_log` VALUES (1616039482878857216, 'test', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:20:37', NULL);
+INSERT INTO `system_login_log` VALUES (1616039778497597440, 'test', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:21:47', NULL);
+INSERT INTO `system_login_log` VALUES (1616040468552880128, 'test', '42.224.224.88', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:24:32', NULL);
+INSERT INTO `system_login_log` VALUES (1616042189555503104, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:31:22', NULL);
+INSERT INTO `system_login_log` VALUES (1616042354148380672, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:32:01', NULL);
+INSERT INTO `system_login_log` VALUES (1616042944668635136, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:34:22', NULL);
+INSERT INTO `system_login_log` VALUES (1616043839410147328, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:37:55', NULL);
+INSERT INTO `system_login_log` VALUES (1616044368244772864, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:40:02', NULL);
+INSERT INTO `system_login_log` VALUES (1616045897966161920, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:46:06', NULL);
+INSERT INTO `system_login_log` VALUES (1616046368202166272, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:47:58', NULL);
+INSERT INTO `system_login_log` VALUES (1616046587132252160, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:48:51', NULL);
+INSERT INTO `system_login_log` VALUES (1616047868475346944, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 17:53:56', NULL);
+INSERT INTO `system_login_log` VALUES (1616062500619423744, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 18:52:05', NULL);
+INSERT INTO `system_login_log` VALUES (1616086874802098176, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '验证码错误或已失效', '2021-05-01 20:28:56', NULL);
+INSERT INTO `system_login_log` VALUES (1616086904158031872, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 20:29:03', NULL);
+INSERT INTO `system_login_log` VALUES (1616088371556257792, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 20:34:53', NULL);
+INSERT INTO `system_login_log` VALUES (1616104636186365952, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 21:39:31', NULL);
+INSERT INTO `system_login_log` VALUES (1616130441046134784, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 23:22:03', NULL);
+INSERT INTO `system_login_log` VALUES (1616133398424719360, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Safari', '1', '登录成功', '2021-05-01 23:33:48', NULL);
+INSERT INTO `system_login_log` VALUES (1616134286937690112, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Safari', '1', '登录成功', '2021-05-01 23:37:20', NULL);
+INSERT INTO `system_login_log` VALUES (1616134704140914688, 'test', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Safari', '1', '登录成功', '2021-05-01 23:38:59', NULL);
+INSERT INTO `system_login_log` VALUES (1616134780758265856, 'admin', '42.224.225.8', '河南-洛阳:联通', 'Windows 10', 'Edge', '1', '登录成功', '2021-05-01 23:39:18', NULL);
 
 -- ----------------------------
 -- Table structure for system_menu
@@ -209,7 +271,11 @@ CREATE TABLE `system_menu`  (
 -- ----------------------------
 -- Records of system_menu
 -- ----------------------------
-INSERT INTO `system_menu` VALUES (1, 0, '0，', '首页', 'dashbold', '1', 'dashbold', '2312', '1', '0', '1', '1', 'T', '0', 0, NULL, NULL, '2021-04-22 22:38:58', '2021-04-22 22:39:00', NULL, NULL);
+INSERT INTO `system_menu` VALUES (1, 0, '0，', '首页', 'Dashboard', '1', '/dashboard', 'mainLayout', '1', '0', '1', '1', 'T', '0', 0, NULL, NULL, '2021-04-22 22:38:58', '2021-04-22 22:39:00', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2, 0, '0,', '系统', 'System', '2', '/system', 'mainLayout', '1', '0', '1', '1', 'T', '0', 0, NULL, NULL, '2021-05-01 19:56:33', '2021-05-01 19:56:29', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3, 2, '0,2,', '权限管理', 'System:permission', '3', '/system/permission', 'public', '1', '0', '1', '1', 'C', '0', 0, NULL, NULL, '2021-05-01 20:15:50', '2021-05-01 20:15:52', NULL, NULL);
+INSERT INTO `system_menu` VALUES (4, 3, '0,2,3,', '菜单管理', 'Sysem:permission:menu', '4', '/system/permission/menu', 'system/permission/menu', '1', '0', '1', '1', 'M', '0', 0, NULL, NULL, '2021-05-01 20:21:39', '2021-05-01 20:21:44', NULL, NULL);
+INSERT INTO `system_menu` VALUES (5, 4, '0,2,3,4', '新增菜单', 'System:permission:addmenu', '5', '', '', '1', '0', '1', '1', 'B', '0', 0, NULL, NULL, '2021-05-01 20:24:10', '2021-05-01 20:24:13', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for system_oper_log
@@ -363,8 +429,8 @@ CREATE TABLE `system_user`  (
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1612846635858006016, 'admin', '$2y$10$F3iCSPGSVMqi4/E9NHspS.f/IH0ijs1NLjgg30NB6vJlec0PZd9p2', '100', NULL, NULL, 1, NULL, '0', '127.0.0.1', '2021-04-27 13:37:12', 0, 0, '2021-04-22 21:54:14', '2021-04-27 13:37:12', NULL, NULL);
-INSERT INTO `system_user` VALUES (1612856850330423296, 'test', '$2y$10$Sqrmct1UFJQX0geYb2Dm8ubFXR2l1ZQB16J52OhOaujoKOBGj8tuu', '100', NULL, NULL, NULL, NULL, '0', '127.0.0.1', '2021-04-26 10:32:32', NULL, NULL, '2021-04-22 22:33:58', '2021-04-26 10:32:32', NULL, NULL);
+INSERT INTO `system_user` VALUES (1612846635858006016, 'admin', '$2y$10$F3iCSPGSVMqi4/E9NHspS.f/IH0ijs1NLjgg30NB6vJlec0PZd9p2', '100', NULL, NULL, 1, NULL, '0', '42.224.225.8', '2021-05-01 23:39:18', 0, 0, '2021-04-22 21:54:14', '2021-05-01 23:39:18', NULL, NULL);
+INSERT INTO `system_user` VALUES (1612856850330423296, 'test', '$2y$10$Sqrmct1UFJQX0geYb2Dm8ubFXR2l1ZQB16J52OhOaujoKOBGj8tuu', '100', NULL, NULL, NULL, NULL, '0', '42.224.225.8', '2021-05-01 23:38:59', NULL, NULL, '2021-04-22 22:33:58', '2021-05-01 23:38:59', NULL, NULL);
 INSERT INTO `system_user` VALUES (1614175990198571008, 'test1', '$2y$10$YXO4PvpuUiU4o6G6k4ep.Oh01baeQc1qqQYo6x4N13RS2Wdrl1tYa', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 13:55:46', '2021-04-26 13:55:46', NULL, NULL);
 INSERT INTO `system_user` VALUES (1614177417914486784, 'test2', '$2y$10$Rknjhe6W80rYYokNbISj6.fv/RvpyOMA0JL5Rayqa7TnUIrr4WHvG', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 14:01:26', '2021-04-26 14:01:26', NULL, NULL);
 INSERT INTO `system_user` VALUES (1614185115464765440, 'test3', '$2y$10$nOkg4bpaNezVUzgbgbTbHu9jGaxbsKc0DRugwWv5O8CgRWHUfSpPm', '100', NULL, NULL, 1, NULL, '0', NULL, NULL, NULL, NULL, '2021-04-26 14:32:01', '2021-04-26 14:32:01', NULL, NULL);

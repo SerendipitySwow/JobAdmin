@@ -7,7 +7,7 @@
           :x="contentmenuX"
           :y="contentmenuY">
           <d2-contextmenu-list
-            :menulist="tagName === '/index' ? contextmenuListIndex : contextmenuList"
+            :menulist="tagName === '/dashboard' ? contextmenuListIndex : contextmenuList"
             @rowClick="contextmenuClick"/>
         </d2-contextmenu>
         <el-tabs
@@ -80,7 +80,7 @@ export default {
         { icon: 'times', title: '关闭其它', value: 'other' },
         { icon: 'times-circle', title: '关闭全部', value: 'all' }
       ],
-      tagName: '/index'
+      tagName: '/dashboard'
     }
   },
   computed: {
@@ -103,7 +103,7 @@ export default {
      * @param {Object} page 其中一个标签页
      */
     isTabClosable (page) {
-      return page.name !== 'index'
+      return page.name !== 'dashboard'
     },
     /**
      * @description 右键菜单功能点击

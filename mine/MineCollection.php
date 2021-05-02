@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Mine;
 
 use Hyperf\Database\Model\Collection;
+use Mine\Helper\Str;
 
 class MineCollection extends Collection
 {
@@ -16,26 +17,47 @@ class MineCollection extends Collection
         if (empty($data)) return [];
 
         $routers = [];
-        if (isset($data[0]['menus'])) {
-            foreach ($data as $value) {
-                foreach ($value['menus'] as $menu) {
-                    array_push($routers, $this->setRouter($menu));
-                }
-            }
-        } else {
-            foreach ($data as $menu) {
-                array_push($routers, $this->setRouter($menu));
-            }
+        foreach ($data as $menu) {
+            array_push($routers, $this->setRouter($menu));
         }
         unset($data);
-        return $this->toTree($routers);
+        $menus = $this->toTree($routers);
+        foreach ($menus as &$menu) {
+            if ($menu['name'] != 'Dashboard') {
+                if (isset($menu['children'])) {
+                    array_push($menu['children'], $this->setPublicRouter($menu));
+                } else {
+                    $menu['children'][] = $this->setPublicRouter($menu);
+                }
+            }
+        }
+        return $menus;
     }
 
     /**
      * @param $menu
      * @return array
      */
-    private function setRouter(&$menu): array
+    private function setPublicRouter($menu): array
+    {
+        return [
+            'name' => sprintf('%s-public', Str::lower($menu['name'])),
+            'type' => 'C',
+            'component' => 'public/index',
+            'path' => sprintf('%s/public', $menu['path']),
+            'meta' => [
+                'keepAlive' => true,
+                'title' => sprintf('%s首页', $menu['meta']['title']),
+                'icon' => 'home'
+            ]
+        ];
+    }
+
+    /**
+     * @param $menu
+     * @return array
+     */
+    public function setRouter(&$menu): array
     {
         $route = [
             'id' => $menu['id'],
@@ -51,7 +73,9 @@ class MineCollection extends Collection
                 'title' => $menu['name'],
             ]
         ];
-        if ($menu['is_out'] == 0) {
+        if ($menu['type'] === 'T' && $menu['code'] != 'Dashboard') {
+            $route['redirect'] = ['name' => sprintf('%s-public', Str::lower($menu['code']))];
+        } else if ($menu['is_out'] == 0) {
             $route['redirect'] = $menu['route'];
         }
         return $route;

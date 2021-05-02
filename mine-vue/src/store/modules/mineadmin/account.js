@@ -24,7 +24,7 @@ export default {
           if (response.data.roles && response.data.routers.length > 0) {
             util.cookies.set('uuid', response.data.id)
             // 设置 vuex 用户信息
-            dispatch('store/user/set', { name: response.data.username }, { root: true })
+            dispatch('store/user/set', { name: response.data.user.username }, { root: true })
             // 用户登录后从持久化数据加载一系列的设置
             dispatch('load')
             commit('store/permission/setUserInfo', response.data.user, { root: true })
@@ -49,6 +49,9 @@ export default {
         util.cookies.remove('uuid')
         // 清空 vuex 用户信息
         await dispatch('store/user/set', {}, { root: true })
+        // 清空动态路由信息
+        commit('store/permission/setRouters', [], { root: true })
+        commit('store/permission/setPermissions', [], { root: true })
         // 跳转路由
         router.push({ name: 'login' })
       }

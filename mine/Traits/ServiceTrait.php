@@ -86,10 +86,10 @@ trait ServiceTrait
 
     /**
      * 单个或批量软删除数据
-     * @param int $ids
+     * @param string $ids
      * @return bool
      */
-    public function delete(int $ids): bool
+    public function delete(String $ids): bool
     {
         return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
     }

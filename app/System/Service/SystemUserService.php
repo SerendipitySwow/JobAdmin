@@ -18,6 +18,7 @@ use Mine\Exception\NormalStatusException;
 use Mine\Exception\UserBanException;
 use Mine\Helper\LoginUser;
 use Mine\Helper\MineCaptcha;
+use Mine\MineCollection;
 use Mine\MineModelService;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
@@ -197,9 +198,10 @@ class SystemUserService extends AbstractService
         return $this->getCacheInfo($this->request->getLoginUser(), SystemUser::find((int) $this->request->getId()));
     }
 
+    //@Cacheable(prefix="loginInfo", value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
+     *
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -209,14 +211,32 @@ class SystemUserService extends AbstractService
     {
         $user->addHidden('deleted_at', 'password');
         $data['user'] = $user->toArray();
+        $collect = new MineCollection();
         if ($loginUser->isSuperAdmin()) {
             $data['roles'] = ['super_admin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
+            $quickMenu = $this->sysMenuService->mapper->getQuickMenu();
         } else {
             $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
+            $ids = $this->filterMenuIds($roles);
             $data['roles'] = $user->roles()->pluck('code')->toArray();
-            $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($this->filterMenuIds($roles));
+            $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($ids);
+            $quickMenu = $this->sysMenuService->mapper->getQuickMenu($ids);
         }
+
+        // 加入快捷菜单
+        if (count($data['routers']) && count($quickMenu)) {
+            foreach ($data['routers'] as &$router) {
+                if ($router['name'] == 'Dashboard') {
+                    $router['children'] = [];
+                    foreach ($quickMenu as $quick) {
+                        array_push($router['children'], $collect->setRouter($quick));
+                    }
+                    break;
+                }
+            }
+        }
+
         return $data;
     }
 
@@ -229,7 +249,7 @@ class SystemUserService extends AbstractService
     {
         $ids = [];
         foreach ($roleData as $val) {
-            foreach ($val['menu'] as $menu) {
+            foreach ($val['menus'] as $menu) {
                 $ids[] = $menu['id'];
             }
         }

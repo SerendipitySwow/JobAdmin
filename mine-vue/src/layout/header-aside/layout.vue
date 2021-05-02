@@ -7,7 +7,7 @@
       <!-- 顶栏 -->
       <div class="d2-theme-header" :style="{ opacity: this.searchActive ? 0.5 : 1 }" flex-box="0" flex>
         <router-link
-          to="/index"
+          to="/dashboard"
           :class="{'logo-group': true, 'logo-transition': asideTransition}"
           :style="{width: asideCollapse ? asideWidthCollapse : asideWidth}"
           flex-box="0">
@@ -26,8 +26,8 @@
           <d2-header-fullscreen/>
           <d2-header-theme/>
           <d2-header-size/>
-          <d2-header-locales/>
-          <d2-header-color/>
+          <!-- <d2-header-locales/> -->
+          <!-- <d2-header-color/> -->
           <d2-header-user/>
         </div>
       </div>
@@ -90,7 +90,7 @@ import d2HeaderLog from './components/header-log'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import mixinSearch from './mixins/search'
 export default {
-  name: 'd2-layout-header-aside',
+  name: 'main-layout',
   mixins: [
     mixinSearch
   ],

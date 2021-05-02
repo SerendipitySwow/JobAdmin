@@ -54,7 +54,7 @@ export default {
       state.opened = value
         .map(opened => {
           // 忽略首页
-          if (opened.fullPath === '/index') {
+          if (opened.fullPath === '/dashboard') {
             valid.push(1)
             return opened
           }
@@ -309,15 +309,15 @@ export default {
     async closeAll ({ state, commit, dispatch }) {
       // 删除打开的页面 并在缓存设置中删除
       for (let i = state.opened.length - 1; i >= 0; i--) {
-        if (state.opened[i].name === 'index') continue
+        if (state.opened[i].name === 'dashboard') continue
         commit('keepAliveRemove', state.opened[i].name)
         state.opened.splice(i, 1)
       }
       // 持久化
       await dispatch('opened2db')
       // 关闭所有的标签页后需要判断一次现在是不是在首页
-      if (router.app.$route.name !== 'index') {
-        await router.push({ name: 'index' })
+      if (router.app.$route.name !== 'dashboard') {
+        await router.push({ name: 'dashboard' })
       }
     }
   },

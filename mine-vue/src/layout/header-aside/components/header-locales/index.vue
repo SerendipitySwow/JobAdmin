@@ -18,6 +18,7 @@
 <script>
 import localeMixin from '@/locales/mixin.js'
 export default {
+  name: 'd2-header-locales',
   mixins: [
     localeMixin
   ]

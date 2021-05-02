@@ -1,7 +1,3 @@
-import playground from './modules/playground'
-import plugins from './modules/plugins'
-import components from './modules/components'
-
 import layoutHeaderAside from '@/layout/header-aside'
 
 // 由于懒加载页面太多的话会造成webpack热更新太慢，所以开发环境不使用懒加载，只有生产环境使用懒加载
@@ -25,7 +21,7 @@ const frameIn = [
           auth: true
         },
         component: _import('system/index')
-      },
+      }
     ]
   }
 ]
@@ -53,33 +49,6 @@ const errorPage = [
   }
 ]
 
-const otherPage = [
-  // 系统 前端日志
-  {
-    path: 'log',
-    name: 'log',
-    meta: {
-      title: '前端日志',
-      auth: true
-    },
-    component: _import('system/log')
-  },
-  // 刷新页面 必须保留
-  {
-    path: 'refresh',
-    name: 'refresh',
-    hidden: true,
-    component: _import('system/function/refresh')
-  },
-  // 页面重定向 必须保留
-  {
-    path: 'redirect/:route*',
-    name: 'redirect',
-    hidden: true,
-    component: _import('system/function/redirect')
-  }
-]
-
 // 导出需要显示菜单的
 export const frameInRoutes = frameIn
 
@@ -87,6 +56,5 @@ export const frameInRoutes = frameIn
 export default [
   ...frameIn,
   ...frameOut,
-  ...errorPage,
-  ...otherPage
+  ...errorPage
 ]
