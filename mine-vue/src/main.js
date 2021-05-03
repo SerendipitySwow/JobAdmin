@@ -30,13 +30,12 @@ new Vue({
     '$route.matched': {
       handler (matched) {
         if (matched.length > 0) {
-          const _side = this.$store.state.store.menu.header.filter(menu => {
-            if (menu.name === 'Dashboard' && matched[0].quick) {
-              return true
-            }
-            return menu.path === matched[0].path
-          })
-          this.$store.commit('store/menu/asideSet', _side.length > 0 ? _side[0].children : [])
+          const _side = this.$store.state.store.menu.header.filter(menu => menu.path === matched[0].path)
+          if (matched[0].name === 'dashboard') {
+            this.$store.commit('store/menu/asideSet', this.$store.state.store.permission.quick)
+          } else {
+            this.$store.commit('store/menu/asideSet', _side.length > 0 ? _side[0].children : [])
+          }
         }
       },
       immediate: true

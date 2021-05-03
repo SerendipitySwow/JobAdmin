@@ -2,7 +2,6 @@ import cookies from './util.cookies'
 import db from './util.db'
 import log from './util.log'
 import { uniqueId } from 'lodash'
-import store from '@/store/index'
 
 const util = {
   cookies,
@@ -48,20 +47,6 @@ util.supplementPath = function (menu) {
       ...e.children ? {
         children: util.supplementPath(e.children)
       } : {}
-    }
-  })
-}
-
-/**
- * @param {*} menu
- */
-util.genMenuSide = function (menu) {
-  return menu.filter(e => {
-    if (e.name === 'Dashboard') {
-      e.children = util.supplementPath(store.state.store.permission.quick)
-      return true
-    } else {
-      return true
     }
   })
 }

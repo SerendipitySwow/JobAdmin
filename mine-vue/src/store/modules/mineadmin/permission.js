@@ -35,7 +35,7 @@ export default {
     async genRouters ({ commit, state }) {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
-        const menu = util.genMenuSide(util.supplementPath(accessedRoutes))
+        const menu = util.supplementPath(accessedRoutes)
         commit('store/menu/headerSet', menu, { root: true })
         commit('store/search/init', menu, { root: true })
         commit('setPermissions', accessedRoutes)
