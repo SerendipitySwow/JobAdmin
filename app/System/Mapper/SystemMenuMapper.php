@@ -29,7 +29,7 @@ class SystemMenuMapper extends AbstractMapper
     {
         $menuField = [
             'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden',
-            'component', 'is_out', 'is_cache', 'type'
+            'component', 'is_quick', 'is_out', 'is_cache', 'type'
         ];
         return $this->model::query()->select(...$menuField)
             ->where('status', $this->model::ENABLE)
@@ -47,7 +47,7 @@ class SystemMenuMapper extends AbstractMapper
     {
         $menuField = [
             'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden',
-            'component', 'is_out', 'is_cache', 'type'
+            'component', 'is_quick', 'is_out', 'is_cache', 'type'
         ];
         return $this->model::query()->whereIn('id', $ids)->where('status', $this->model::ENABLE)
             ->where('type', '!=', 'B')
