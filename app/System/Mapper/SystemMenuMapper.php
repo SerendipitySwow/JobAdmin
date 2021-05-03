@@ -66,7 +66,7 @@ class SystemMenuMapper extends AbstractMapper
             'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden',
             'component', 'is_out', 'is_cache', 'type'
         ];
-        $query = $this->model::query()->where('status', $this->model::ENABLE)->where('type', 'M')
+        $query = $this->model::query()->where('is_quick', '0')->where('status', $this->model::ENABLE)->where('type', 'M')
             ->orderBy('sort', 'desc');
         if (is_array($ids) && count($ids)) {
             return $query->whereIn('id', $ids)->select(...$menuField)->get()->toArray();

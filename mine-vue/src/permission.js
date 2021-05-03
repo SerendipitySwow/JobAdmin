@@ -16,10 +16,6 @@ const defaultRoutePath = '/dashboard'
  * 权限验证
  */
 router.beforeEach(async (to, from, next) => {
-  // 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
-  // await store.dispatch('store/page/isLoaded')
-  // 确认已经加载组件尺寸设置 https://github.com/d2-projects/d2-admin/issues/198
-  // await store.dispatch('store/size/isLoaded')
   // 进度条
   NProgress.start()
   // 关闭搜索面板
@@ -43,17 +39,7 @@ router.beforeEach(async (to, from, next) => {
             title: '错误',
             duration: 5 * 1000
           })
-          util.cookies.remove('token')
-          util.cookies.remove('uuid')
-          // 清空 vuex 用户信息
-          store.dispatch('store/user/set', {}, { root: true })
-          // 清空动态路由信息
-          store.commit('store/permission/setRoles', [], { root: true })
-          store.commit('store/permission/setPermissions', [], { root: true })
-          store.commit('store/permission/setRouters', [], { root: true })
-          store.commit('store/permission/setQuick', [], { root: true })
-          // 跳转路由
-          router.push({ name: 'login' })
+          store.dispatch('store/user/cancellation', { root: true })
         })
       } else {
         next()

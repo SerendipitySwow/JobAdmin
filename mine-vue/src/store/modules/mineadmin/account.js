@@ -1,6 +1,5 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
-import router from '@/router'
 import { Login, Logout, getInfo } from '@/api/system/login.js'
 
 export default {
@@ -44,35 +43,29 @@ export default {
      * @param {Object} payload confirm {Boolean} 是否需要确认
      */
     async logout ({ commit, dispatch }, { confirm = false } = {}) {
-      async function goodBye () {
-        await Logout()
-        util.cookies.remove('token')
-        util.cookies.remove('uuid')
-        // 清空 vuex 用户信息
-        await dispatch('store/user/set', {}, { root: true })
-        // 清空动态路由信息
-        commit('store/permission/setRoles', [], { root: true })
-        commit('store/permission/setPermissions', [], { root: true })
-        commit('store/permission/setRouters', [], { root: true })
-        commit('store/permission/setQuick', [], { root: true })
-        // 跳转路由
-        router.push({ name: 'login' })
-      }
-      // 判断是否需要确认
-      if (confirm) {
-        commit('store/gray/set', true, { root: true })
-        MessageBox.confirm('确定要注销当前用户吗', '注销用户', { type: 'warning' })
-          .then(() => {
-            commit('store/gray/set', false, { root: true })
-            goodBye()
-          })
-          .catch(() => {
-            commit('store/gray/set', false, { root: true })
-            Message({ message: '取消注销操作' })
-          })
-      } else {
-        goodBye()
-      }
+      return new Promise((resolve) => {
+        async function goodBye () {
+          await Logout()
+        }
+        // 判断是否需要确认
+        if (confirm) {
+          commit('store/gray/set', true, { root: true })
+          MessageBox.confirm('确定要注销当前用户吗', '注销用户', { type: 'warning' })
+            .then(() => {
+              commit('store/gray/set', false, { root: true })
+              goodBye()
+              resolve(true)
+            })
+            .catch(() => {
+              commit('store/gray/set', false, { root: true })
+              Message({ message: '取消注销操作' })
+              resolve(false)
+            })
+        } else {
+          goodBye()
+          resolve(true)
+        }
+      })
     },
     /**
      * @description 用户登录后从持久化数据加载一系列的设置

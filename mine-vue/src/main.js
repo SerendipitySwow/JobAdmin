@@ -24,6 +24,10 @@ new Vue({
     this.$store.commit('store/ua/get')
     // 初始化全屏监听
     this.$store.dispatch('store/fullscreen/listen')
+    // 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
+    this.$store.dispatch('store/page/isLoaded')
+    // 确认已经加载组件尺寸设置 https://github.com/d2-projects/d2-admin/issues/198
+    this.$store.dispatch('store/size/isLoaded')
   },
   watch: {
     // 检测路由变化切换侧边栏内容

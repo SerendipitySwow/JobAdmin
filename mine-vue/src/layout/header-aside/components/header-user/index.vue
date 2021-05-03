@@ -22,12 +22,17 @@ export default {
     ...mapActions('store/account', [
       'logout'
     ]),
+    ...mapActions('store/user', [
+      'cancellation'
+    ]),
     /**
      * @description 登出
      */
     logOff () {
       this.logout({
         confirm: true
+      }).then(e => {
+        e && this.cancellation()
       })
     }
   }
