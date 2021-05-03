@@ -1,20 +1,30 @@
 import mainLayout from '@/layout/header-aside'
+import util from '@/libs/util.js'
 
 export default {
   namespaced: true,
-  state: { routers: [], userinfo: null, roles: [], permissions: [] },
+  state: {
+    userinfo: null,
+    routers: [],
+    roles: [],
+    permissions: [],
+    quick: []
+  },
   mutations: {
-    setRouters: (state, routers) => {
-      state.routers = routers
-    },
     setUserInfo: (state, userinfo) => {
       state.userinfo = userinfo
+    },
+    setRouters: (state, routers) => {
+      state.routers = routers
     },
     setRoles: (state, roles) => {
       state.roles = roles
     },
     setPermissions: (state, permissions) => {
       state.permissions = permissions
+    },
+    setQuick: (state, quick) => {
+      state.quick = quick
     }
   },
   actions: {
@@ -22,9 +32,12 @@ export default {
      * 动态生成路由
      * @param { object } context
      */
-    async genRouters ({ state, commit }) {
+    async genRouters ({ commit, state }) {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
+        const menu = util.genMenuSide(util.supplementPath(accessedRoutes))
+        commit('store/menu/headerSet', menu, { root: true })
+        commit('store/search/init', menu, { root: true })
         commit('setPermissions', accessedRoutes)
         resolve(accessedRoutes)
       })

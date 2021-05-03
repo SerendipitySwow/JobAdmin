@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import i18n from './i18n'
 import App from './App'
-import d2Admin from '@/plugin/d2admin'
-import router from './router'
-import store from '@/store/index'
+import mineadmin from '@/plugin/mineadmin'
 import './permission'
 
+import router from './router'
+import store from '@/store/index'
+
 // 核心插件
-Vue.use(d2Admin)
+Vue.use(mineadmin)
 
 new Vue({
   store,
@@ -29,7 +30,12 @@ new Vue({
     '$route.matched': {
       handler (matched) {
         if (matched.length > 0) {
-          const _side = this.$store.state.store.menu.header.filter(menu => menu.path === matched[0].path)
+          const _side = this.$store.state.store.menu.header.filter(menu => {
+            if (menu.name === 'Dashboard' && matched[0].quick) {
+              return true
+            }
+            return menu.path === matched[0].path
+          })
           this.$store.commit('store/menu/asideSet', _side.length > 0 ? _side[0].children : [])
         }
       },

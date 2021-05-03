@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
   // 进度条
   NProgress.start()
   // 关闭搜索面板
-  store.commit('store/search/set', false)
+  // store.commit('store/search/set', false)
   const token = util.cookies.get('token')
   if (token && token !== 'undefined') {
     if (to.name === 'login') {
@@ -33,8 +33,6 @@ router.beforeEach(async (to, from, next) => {
         store.dispatch('store/account/userinfo').then(() => {
           store.dispatch('store/permission/genRouters').then(accessRoutes => {
             // 挂载菜单
-            store.commit('store/menu/headerSet', util.supplementPath(accessRoutes))
-            store.commit('store/search/init', util.supplementPath(accessRoutes))
             accessRoutes.push({ path: '*', name: '404', hidden: true, component: (resolve) => require(['@/views/system/error/404'], resolve) })
             router.addRoutes(accessRoutes)
             next({ ...to, replace: true })
@@ -50,8 +48,10 @@ router.beforeEach(async (to, from, next) => {
           // 清空 vuex 用户信息
           store.dispatch('store/user/set', {}, { root: true })
           // 清空动态路由信息
-          store.commit('store/permission/setRouters', [], { root: true })
+          store.commit('store/permission/setRoles', [], { root: true })
           store.commit('store/permission/setPermissions', [], { root: true })
+          store.commit('store/permission/setRouters', [], { root: true })
+          store.commit('store/permission/setQuick', [], { root: true })
           // 跳转路由
           router.push({ name: 'login' })
         })

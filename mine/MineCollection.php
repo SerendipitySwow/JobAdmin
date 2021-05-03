@@ -68,6 +68,7 @@ class MineCollection extends Collection
             'path' => $menu['route'],
             'hidden' => ($menu['is_hidden'] == 0),
             'type' => $menu['type'],
+            'quick' => ($menu['is_quick'] == 0),
             'meta' => [
                 'keepAlive' => ($menu['is_cache'] == 0),
                 'icon' => $menu['icon'],

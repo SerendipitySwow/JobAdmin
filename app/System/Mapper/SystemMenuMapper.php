@@ -54,24 +54,4 @@ class SystemMenuMapper extends AbstractMapper
             ->orderBy('sort', 'desc')
             ->select(...$menuField)->get()->sysMenuToRouterTree();
     }
-
-    /**
-     * 获取快捷菜单
-     * @param array|null $ids
-     * @return array
-     */
-    public function getQuickMenu(array $ids = null): array
-    {
-        $menuField = [
-            'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden',
-            'component', 'is_out', 'is_cache', 'type'
-        ];
-        $query = $this->model::query()->where('status', $this->model::ENABLE)->where('type', 'M')
-            ->orderBy('sort', 'desc');
-        if (is_array($ids) && count($ids)) {
-            return $query->whereIn('id', $ids)->select(...$menuField)->get()->toArray();
-        } else {
-            return $query->select(...$menuField)->get()->toArray();
-        }
-    }
 }

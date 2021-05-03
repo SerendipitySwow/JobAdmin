@@ -30,6 +30,7 @@ export default {
             commit('store/permission/setUserInfo', response.data.user, { root: true })
             commit('store/permission/setRoles', response.data.roles, { root: true })
             commit('store/permission/setRouters', response.data.routers, { root: true })
+            commit('store/permission/setQuick', response.data.quickMenu, { root: true })
             resolve()
           }
         }).catch(error => {
@@ -50,8 +51,10 @@ export default {
         // 清空 vuex 用户信息
         await dispatch('store/user/set', {}, { root: true })
         // 清空动态路由信息
-        commit('store/permission/setRouters', [], { root: true })
+        commit('store/permission/setRoles', [], { root: true })
         commit('store/permission/setPermissions', [], { root: true })
+        commit('store/permission/setRouters', [], { root: true })
+        commit('store/permission/setQuick', [], { root: true })
         // 跳转路由
         router.push({ name: 'login' })
       }
