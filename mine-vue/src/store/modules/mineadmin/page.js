@@ -207,7 +207,7 @@ export default {
       await dispatch('openmadb')
       // 决定最后停留的页面
       if (isCurrent) {
-        const { name = 'index', params = {}, query = {} } = newPage
+        const { name = 'dashboard', params = {}, query = {} } = newPage
         const routerObj = { name, params, query }
         await router.push(routerObj)
       }
@@ -240,7 +240,7 @@ export default {
       if (currentIndex > 0) {
         // 删除打开的页面 并在缓存设置中删除
         for (let i = state.opened.length - 1; i >= 0; i--) {
-          if (state.opened[i].name === 'index' || i >= currentIndex) continue
+          if (state.opened[i].name === 'dashboard' || i >= currentIndex) continue
           commit('keepAliveRemove', state.opened[i].name)
           state.opened.splice(i, 1)
         }
@@ -265,7 +265,7 @@ export default {
       })
       // 删除打开的页面 并在缓存设置中删除
       for (let i = state.opened.length - 1; i >= 0; i--) {
-        if (state.opened[i].name === 'index' || currentIndex >= i) continue
+        if (state.opened[i].name === 'dashboard' || currentIndex >= i) continue
         commit('keepAliveRemove', state.opened[i].name)
         state.opened.splice(i, 1)
       }
@@ -289,7 +289,7 @@ export default {
       })
       // 删除打开的页面数据 并更新缓存设置
       for (let i = state.opened.length - 1; i >= 0; i--) {
-        if (state.opened[i].name === 'index' || currentIndex === i) continue
+        if (state.opened[i].name === 'dashboard' || currentIndex === i) continue
         commit('keepAliveRemove', state.opened[i].name)
         state.opened.splice(i, 1)
       }
