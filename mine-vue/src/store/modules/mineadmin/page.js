@@ -74,7 +74,7 @@ export default {
      * 将 opened 属性赋值并持久化 在这之前请先确保已经更新了 state.opened
      * @param {Object} context
      */
-    async opened2db ({ state, dispatch }) {
+    async openmadb ({ state, dispatch }) {
       // 设置数据
       dispatch('store/db/set', {
         dbName: 'sys',
@@ -97,7 +97,7 @@ export default {
       page.fullPath = fullPath || page.fullPath
       state.opened.splice(index, 1, page)
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
     },
     /**
      * @class opened
@@ -111,7 +111,7 @@ export default {
       state.opened.splice(oldIndex, 1)
       state.opened.splice(newIndex, 0, page)
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
     },
     /**
      * @class opened
@@ -130,7 +130,7 @@ export default {
       // 如果这个页面需要缓存 将其添加到缓存设置
       if (isKeepAlive(newTag)) commit('keepAlivePush', tag.name)
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
     },
     /**
      * @class current
@@ -204,7 +204,7 @@ export default {
         state.opened.splice(index, 1)
       }
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
       // 决定最后停留的页面
       if (isCurrent) {
         const { name = 'index', params = {}, query = {} } = newPage
@@ -246,7 +246,7 @@ export default {
         }
       }
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
       // 设置当前的页面
       state.current = pageAim
       if (router.app.$route.fullPath !== pageAim) await router.push(pageAim)
@@ -270,7 +270,7 @@ export default {
         state.opened.splice(i, 1)
       }
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
       // 设置当前的页面
       state.current = pageAim
       if (router.app.$route.fullPath !== pageAim) await router.push(pageAim)
@@ -294,7 +294,7 @@ export default {
         state.opened.splice(i, 1)
       }
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
       // 设置新的页面
       state.current = pageAim
       if (router.app.$route.fullPath !== pageAim) await router.push(pageAim)
@@ -312,7 +312,7 @@ export default {
         state.opened.splice(i, 1)
       }
       // 持久化
-      await dispatch('opened2db')
+      await dispatch('openmadb')
       // 关闭所有的标签页后需要判断一次现在是不是在首页
       if (router.app.$route.name !== 'dashboard') {
         await router.push({ name: 'dashboard' })

@@ -34,7 +34,6 @@ util.open = function (url) {
 
 /**
  * @description 给菜单数据补充上 path 字段
- * @description https://github.com/d2-projects/d2-admin/issues/209
  * @param {Array} menu 原始的菜单数据
  */
 util.supplementPath = function (menu) {

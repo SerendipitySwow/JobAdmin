@@ -1,0 +1,13 @@
+{
+	"_element": "zh-CN",
+	"_name": "简体中文",
+	"page": {
+		"demo": {
+			"playground": {
+				"locales": {
+					"text": "测试"
+				}
+			}
+		}
+	}
+}
