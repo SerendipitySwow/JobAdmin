@@ -1,10 +1,7 @@
 <?php
-
-
+declare(strict_types = 1);
 namespace App\System\Mapper;
 
-
-use App\System\Model\SystemMenu;
 use App\System\Model\SystemRole;
 use Mine\Abstracts\AbstractMapper;
 
@@ -24,11 +21,7 @@ class SystemRoleMapper extends AbstractMapper
     {
         if (empty($ids)) return [];
 
-        $menuField = [
-            'id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'is_hidden',
-            'component', 'is_out', 'is_cache', 'is_quick', 'type'
-        ];
-        return $this->model::query()->whereIn('id', $ids)->with(['menus' => function($query) use($menuField) {
+        return $this->model::query()->whereIn('id', $ids)->with(['menus' => function($query) {
             $query->select('id')->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
         }])->get(['id'])->toArray();
     }

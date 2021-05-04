@@ -12,6 +12,7 @@ class SystemMenuService extends AbstractService
      * @var SystemMenuMapper
      */
     public $mapper;
+
     /**
      * SystemMenuMapper constructor.
      * @param SystemMenuMapper $mapper
