@@ -10,7 +10,7 @@
     -->
     <preset_collections/>
     <framework>vue-json</framework>
-    <filename>d2-admin.babel</filename>
+    <filename>mine-admin.babel</filename>
     <source_root_dir></source_root_dir>
     <folder_node>
         <name></name>

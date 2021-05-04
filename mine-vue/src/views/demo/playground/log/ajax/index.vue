@@ -8,13 +8,9 @@
 </template>
 
 <script>
-import { DEMO_LOG_AJAX } from '@/api/demo.js'
 
 export default {
   methods: {
-    handleClick () {
-      DEMO_LOG_AJAX()
-    }
   }
 }
 </script>
