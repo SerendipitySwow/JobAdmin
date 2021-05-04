@@ -79,12 +79,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-import localeMixin from '@/locales/mixin'
 import { getCaptcha } from '@/api/system/login'
 export default {
-  mixins: [
-    localeMixin
-  ],
   data () {
     return {
       captchaImg: null,
@@ -149,7 +145,7 @@ export default {
               message: '登录成功',
               type: 'success'
             })
-          })
+          }).catch(() => this.getCaptchaImg())
         }
       })
     }

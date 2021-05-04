@@ -37,6 +37,7 @@ export default {
         const accessedRoutes = filterAsyncRouter(state.routers)
         const menu = util.supplementPath(accessedRoutes)
         commit('store/menu/headerSet', menu, { root: true })
+        commit('store/page/init', menu, { root: true })
         commit('store/search/init', menu, { root: true })
         commit('setPermissions', accessedRoutes)
         resolve(accessedRoutes)
