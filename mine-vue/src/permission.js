@@ -16,8 +16,8 @@ const defaultRoutePath = '/dashboard'
  * 权限验证
  */
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch('d2admin/page/isLoaded')
-  await store.dispatch('d2admin/size/isLoaded')
+  await store.dispatch('store/page/isLoaded')
+  await store.dispatch('store/size/isLoaded')
   // 进度条
   NProgress.start()
   // 关闭搜索面板
