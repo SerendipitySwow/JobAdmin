@@ -1,4 +1,4 @@
-import mainLayout from '@/layout/header-aside'
+import mainLayout from '@/layout'
 import util from '@/libs/util.js'
 
 export default {

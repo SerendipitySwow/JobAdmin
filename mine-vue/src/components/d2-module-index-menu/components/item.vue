@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import mixinMenu from '@/layout/header-aside/components/mixin/menu'
+import mixinMenu from '@/layout/components/mixin/menu'
 export default {
   mixins: [
     mixinMenu
