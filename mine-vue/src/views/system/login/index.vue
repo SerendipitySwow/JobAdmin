@@ -31,6 +31,7 @@
                   <el-input
                     type="text"
                     v-model="formLogin.username"
+                    @keyup.enter.native="submit()"
                     placeholder="账号">
                     <span slot="prepend"><d2-icon name="user-circle-o"/></span>
                   </el-input>
@@ -39,6 +40,7 @@
                   <el-input
                     type="password"
                     v-model="formLogin.password"
+                    @keyup.enter.native="submit()"
                     placeholder="密码">
                     <span slot="prepend"><d2-icon name="keyboard-o"/></span>
                   </el-input>
@@ -48,6 +50,7 @@
                     type="text"
                     v-model="formLogin.code"
                     prefix-icon="fa fa-shield"
+                    @keyup.enter.native="submit()"
                     placeholder="验证码">
                     <template slot="append">
                       <img class="login-code" :src="captchaImg" @click="getCaptchaImg">
