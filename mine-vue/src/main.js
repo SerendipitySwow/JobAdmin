@@ -2,10 +2,9 @@ import Vue from 'vue'
 import i18n from './i18n'
 import App from './App'
 import mineadmin from '@/plugin/mineadmin'
-import './permission'
-
 import router from './router'
 import store from '@/store/index'
+import './permission'
 
 // 核心插件
 Vue.use(mineadmin)
@@ -24,9 +23,9 @@ new Vue({
     this.$store.commit('store/ua/get')
     // 初始化全屏监听
     this.$store.dispatch('store/fullscreen/listen')
-    // 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
+    // 确认已经加载多标签页数据
     this.$store.dispatch('store/page/isLoaded')
-    // 确认已经加载组件尺寸设置 https://github.com/d2-projects/d2-admin/issues/198
+    // 确认已经加载组件尺寸设置
     this.$store.dispatch('store/size/isLoaded')
   },
   watch: {

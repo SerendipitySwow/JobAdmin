@@ -12,7 +12,6 @@ export default {
     pool: [],
     // 当前显示的多页面列表
     opened: get(setting, 'page.opened', []),
-    // 已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
     openedLoaded: false,
     // 当前页面
     current: '',
@@ -21,7 +20,7 @@ export default {
   },
   actions: {
     /**
-     * @description 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
+     * @description 确认已经加载多标签页数据
      * @param {Object} context
      */
     isLoaded ({ state }) {
@@ -67,7 +66,6 @@ export default {
           return Object.assign({}, opened, find)
         })
         .filter((opened, index) => valid[index] === 1)
-      // 标记已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
       state.openedLoaded = true
       // 根据 opened 数据生成缓存设置
       commit('keepAliveRefresh')
