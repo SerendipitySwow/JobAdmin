@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\System\Controller;
 
 use App\System\Service\SystemMenuService;
+use Hyperf\HttpServer\Annotation\Controller;
 use Mine\Annotation\Auth;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
