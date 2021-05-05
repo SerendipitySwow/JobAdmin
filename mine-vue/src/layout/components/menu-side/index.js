@@ -23,7 +23,7 @@ export default {
           this.aside.length === 0 && !this.asideCollapse
             ? <div class="d2-layout-header-aside-menu-empty" flex="dir:top main:center cross:center">
               <d2-icon name="inbox"/>
-              <span>请设置快捷菜单</span>
+              <span>还未设置菜单</span>
             </div>
             : null
         }

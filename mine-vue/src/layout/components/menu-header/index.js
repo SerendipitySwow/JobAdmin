@@ -71,7 +71,7 @@ export default {
   watch: {
     '$route.matched': {
       handler (val) {
-        this.active = val[val.length - 1].path
+        this.active = val[0].path === '' ? '/' : val[0].path
       },
       immediate: true
     }
