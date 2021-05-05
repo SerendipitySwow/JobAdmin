@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class MenuController
  * @package App\System\Controller
- * @Controller(perfix="system/menu")
+ * @Controller(prefix="system/menu")
  * @Auth
  */
 class MenuController extends MineController
