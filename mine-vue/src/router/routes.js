@@ -21,7 +21,7 @@ const frameIn = [
           title: '首页',
           auth: true
         },
-        component: _import('system/index')
+        component: _import('public/index')
       },
       // 系统 前端日志
       {
@@ -31,21 +31,21 @@ const frameIn = [
           title: '前端日志',
           auth: true
         },
-        component: _import('system/log')
+        component: _import('public/log')
       },
       // 刷新页面 必须保留
       {
         path: 'refresh',
         name: 'refresh',
         hidden: true,
-        component: _import('system/function/refresh')
+        component: _import('public/function/refresh')
       },
       // 页面重定向 必须保留
       {
         path: 'redirect/:route*',
         name: 'redirect',
         hidden: true,
-        component: _import('system/function/redirect')
+        component: _import('public/function/redirect')
       }
     ]
   },

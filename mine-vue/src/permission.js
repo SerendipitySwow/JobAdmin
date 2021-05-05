@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
       if (store.state.store.permission.routers.length === 0) {
         store.dispatch('store/account/userinfo').then(() => {
           store.dispatch('store/permission/genRouters').then(accessRoutes => {
-            accessRoutes.push({ path: '*', name: '404', hidden: true, component: (resolve) => require(['@/views/system/error/404'], resolve) })
+            accessRoutes.push({ path: '*', name: '404', hidden: true, component: (resolve) => require(['@/views/public/error/404'], resolve) })
             router.addRoutes(accessRoutes)
             next({ ...to, replace: true })
           })
