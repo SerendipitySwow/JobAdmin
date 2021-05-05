@@ -43,14 +43,21 @@ trait ServiceTrait
     /**
      * 获取树列表
      * @param array|null $params
+     * @param array $setting
      * @return array
      */
-    public function getTreeList(?array $params = null): array
+    public function getTreeList(?array $params = null, array $setting = []): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
         }
-        return $this->mapper->getTreeList($params);
+        $treeSetting = [
+            'parentId' => $setting['parentId'] ?? 0,
+            'id' => $setting['id'] ?? 'id',
+            'parentField' => $setting['parentField'] ?? 'parent_id',
+            'children' => $setting['children'] ?? 'children'
+        ];
+        return $this->mapper->getTreeList($params, ...$treeSetting);
     }
 
     /**
