@@ -57,7 +57,7 @@ trait MapperTrait
      * @return array
      */
     public function getTreeList(
-        ?array $params,
+        ?array $params = null,
         int $parentId = 0,
         string $id = 'id',
         string $parentField = 'parent_id',
@@ -70,10 +70,11 @@ trait MapperTrait
 
     /**
      * 返回模型查询构造器
-     * @param array $params
+     * @param Builder $query
+     * @param array|null $params
      * @return Builder
      */
-    protected function listQuerySetting(Builder $query, array $params): Builder
+    protected function listQuerySetting(Builder $query, ?array $params = null): Builder
     {
         if ($params['select'] ?? false) {
             $query = $query->select($this->filterAttributes($params['select']));
