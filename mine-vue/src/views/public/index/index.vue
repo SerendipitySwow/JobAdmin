@@ -53,7 +53,6 @@ export default {
       }
     },
     goto (path) {
-      console.log(path)
       this.$router.push({ path })
     }
   }
