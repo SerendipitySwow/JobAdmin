@@ -25,7 +25,7 @@ trait MapperTrait
      */
     public function getList(?array $params): array
     {
-        return $this->listQuerySetting($this->model::query(), $params)->get()->toArray();
+        return $this->listQuerySetting($params)->get()->toArray();
     }
 
     /**
@@ -36,7 +36,7 @@ trait MapperTrait
      */
     public function getPageList(?array $params, string $pageName = 'page'): array
     {
-        $paginate = $this->listQuerySetting($this->model::query(), $params)->paginate(
+        $paginate = $this->listQuerySetting($params)->paginate(
             $params['page_size'] ?? $this->model::PAGE_SIZE, [], $pageName, $params[$pageName] ?? 1
         );
         return [
@@ -64,18 +64,19 @@ trait MapperTrait
         string $children='children'
     ): array
     {
-        return $this->listQuerySetting($this->model::query(), $params)->get()
+        return $this->listQuerySetting($params)->get()
             ->toTree([], $parentId, $id, $parentField, $children);
     }
 
     /**
      * 返回模型查询构造器
-     * @param Builder $query
      * @param array|null $params
      * @return Builder
      */
-    protected function listQuerySetting(Builder $query, ?array $params = null): Builder
+    protected function listQuerySetting(?array $params = null): Builder
     {
+        $query = (($params['recycle'] ?? false) === true) ? $this->model::onlyTrashed() : $this->model::query();
+
         if ($params['select'] ?? false) {
             $query = $query->select($this->filterAttributes($params['select']));
         }
@@ -87,6 +88,7 @@ trait MapperTrait
         if ($params['query_raw'] ?? false) {
             $query = $query->whereRaw($params['query_raw']);
         }
+
         return $query;
     }
 

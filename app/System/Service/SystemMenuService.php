@@ -21,4 +21,22 @@ class SystemMenuService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeList(?array $params = null): array
+    {
+        return parent::getTreeList(['order_by' => 'sort', 'order_type' => 'desc']);
+    }
+
+    /**
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeListByRecycle(?array $params = null): array
+    {
+        return parent::getTreeListByRecycle(['order_by' => 'sort', 'order_type' => 'desc']);
+    }
 }

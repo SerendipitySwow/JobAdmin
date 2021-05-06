@@ -10,6 +10,7 @@ use Mine\Helper\Id;
 /**
  * Class MineModel
  * @package Mine
+ * @method static onlyTrashed()
  */
 class MineModel extends Model
 {

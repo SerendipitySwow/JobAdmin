@@ -24,6 +24,21 @@ trait ServiceTrait
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
         }
+        $params['recycle'] = false;
+        return $this->mapper->getList($params);
+    }
+
+    /**
+     * 从回收站过去列表数据
+     * @param array|null $params
+     * @return array
+     */
+    public function getListByRecycle(?array $params = null): array
+    {
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        $params['recycle'] = true;
         return $this->mapper->getList($params);
     }
 
@@ -41,22 +56,45 @@ trait ServiceTrait
     }
 
     /**
-     * 获取树列表
+     * 从回收站获取列表数据（带分页）
      * @param array|null $params
-     * @param array $setting
      * @return array
      */
-    public function getTreeList(
-        ?array $params = null,
-        int $parentId = 0,
-        string $id = 'id',
-        string $parentField = 'parent_id',
-        string $children='children'): array
+    public function getPageListByRecycle(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
         }
-        return $this->mapper->getTreeList($params, $parentId, $id, $parentField, $children);
+        $params['recycle'] = true;
+        return $this->mapper->getPageList($params);
+    }
+
+    /**
+     * 获取树列表
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeList(?array $params = null): array
+    {
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        $params['recycle'] = false;
+        return $this->mapper->getTreeList($params);
+    }
+
+    /**
+     * 从回收站获取树列表
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeListByRecycle(?array $params = null): array
+    {
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        $params['recycle'] = true;
+        return $this->mapper->getTreeList($params);
     }
 
     /**

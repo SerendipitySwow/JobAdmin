@@ -1,6 +1,6 @@
 import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
-import { Login, Logout, getInfo } from '@/api/system/login.js'
+import { Login, Logout, getInfo } from '@/api/login.js'
 
 export default {
   namespaced: true,

@@ -198,9 +198,10 @@ class SystemUserService extends AbstractService
         return $this->getCacheInfo($this->request->getLoginUser(), SystemUser::find((int) $this->request->getId()));
     }
 
+    //@Cacheable(prefix="loginInfo", value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
+     *
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array

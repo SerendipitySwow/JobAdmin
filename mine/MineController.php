@@ -60,10 +60,10 @@ abstract class MineController
     {
         if (is_string($msgOrData) || is_null($msgOrData)) {
             return $this->response->success($msgOrData);
-        } else if (!empty($msgOrData) && (is_array($msgOrData) || is_object($msgOrData))) {
-            return $this->response->success('', $msgOrData);
+        } else if (is_array($msgOrData) || is_object($msgOrData)) {
+            return $this->response->success(null, $msgOrData);
         } else {
-            return $this->response->success($msgOrData, $data);
+            return $this->response->success(null, $data);
         }
     }
 
@@ -75,7 +75,7 @@ abstract class MineController
      */
     public function error(string $message = '', int $code = 500, array $data = []): ResponseInterface
     {
-        return $this->response->error($message = '', $code, $data);
+        return $this->response->error($message, $code, $data);
     }
 
     /**

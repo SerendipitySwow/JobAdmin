@@ -79,7 +79,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { getCaptcha } from '@/api/system/login'
+import { getCaptcha } from '@/api/login'
 export default {
   data () {
     return {

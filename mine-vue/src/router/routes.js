@@ -21,7 +21,7 @@ const frameIn = [
           title: '首页',
           auth: true
         },
-        component: _import('public/index')
+        component: _import('dashboard')
       },
       // 系统 前端日志
       {
@@ -53,7 +53,7 @@ const frameIn = [
   {
     path: '/login',
     name: 'login',
-    component: _import('system/login')
+    component: _import('login')
   }
 ]
 
