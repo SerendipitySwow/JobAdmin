@@ -5,6 +5,7 @@ namespace App\System\Model;
 
 use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
+
 /**
  * @property int $id 主键
  * @property string $name 岗位名称
@@ -40,4 +41,12 @@ class SystemPost extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 通过中间表获取用户
+     */
+    public function users() : \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemUser::class, 'system_user_post', 'post_id', 'user_id');
+    }
 }

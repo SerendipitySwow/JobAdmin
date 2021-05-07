@@ -57,4 +57,12 @@ class SystemMenu extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'parent_id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 通过中间表获取角色
+     */
+    public function roles() : \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemRole::class, 'system_role_menu', 'menu_id', 'role_id');
+    }
 }

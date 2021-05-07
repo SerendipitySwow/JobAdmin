@@ -59,10 +59,26 @@ class SystemRole extends MineModel
      */
     protected $casts = ['id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
     /**
-     * 通过中间表获取用户菜单
+     * 通过中间表获取菜单
      */
     public function menus() : \Hyperf\Database\Model\Relations\BelongsToMany
     {
         return $this->belongsToMany(SystemMenu::class, 'system_role_menu', 'role_id', 'menu_id');
+    }
+
+    /**
+     * 通过中间表获取用户
+     */
+    public function users() : \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemUser::class, 'system_user_role', 'role_id', 'user_id');
+    }
+
+    /**
+     * 通过中间表获取部门
+     */
+    public function depts() : \Hyperf\Database\Model\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SystemDept::class, 'system_role_dept', 'role_id', 'dept_id');
     }
 }
