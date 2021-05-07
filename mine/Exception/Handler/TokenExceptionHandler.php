@@ -6,7 +6,7 @@ namespace Mine\Exception\Handler;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\Utils\Codec\Json;
-use Mine\Exception\NoPermissionException;
+use Mine\Exception\TokenException;
 use Mine\Helper\MineCode;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -32,6 +32,6 @@ class TokenExceptionHandler extends ExceptionHandler
 
     public function isValid(Throwable $throwable): bool
     {
-        return $throwable instanceof NoPermissionException;
+        return $throwable instanceof TokenException;
     }
 }

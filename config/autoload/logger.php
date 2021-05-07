@@ -12,9 +12,9 @@ declare(strict_types=1);
 return [
     'default' => [
         'handler' => [
-            'class' => Monolog\Handler\StreamHandler::class,
+            'class' => Monolog\Handler\RotatingFileHandler::class,
             'constructor' => [
-                'stream' => BASE_PATH . '/runtime/logs/default.log',
+                'filename' => BASE_PATH . '/runtime/logs/debug/mine.log',
                 'level' => Monolog\Logger::DEBUG,
             ],
         ],
@@ -29,9 +29,9 @@ return [
     ],
     'sql' => [
         'handler' => [
-            'class' => Monolog\Handler\StreamHandler::class,
+            'class' => Monolog\Handler\RotatingFileHandler::class,
             'constructor' => [
-                'stream' => BASE_PATH . '/runtime/logs/sql.log',
+                'filename' => BASE_PATH . '/runtime/logs/sql/sql.log',
                 'level' => Monolog\Logger::DEBUG,
             ],
         ],
