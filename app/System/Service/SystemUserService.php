@@ -324,6 +324,15 @@ class SystemUserService extends AbstractService
      */
     public function update(int $id, array $data): bool
     {
+        if (!is_array($data['role_ids'])) {
+            $data['role_ids'] = explode(',', $data['role_ids']);
+        }
+        if (($key = array_search(env('ADMIN_ROLE'), $data['role_ids'])) !== false) {
+            unset($data['role_ids'][$key]);
+        }
+        if (!empty($data['post_ids']) && !is_array($data['post_ids'])) {
+            $data['post_ids'] = explode(',', $data['post_ids']);
+        }
         return $this->mapper->update($id, $data);
     }
 }

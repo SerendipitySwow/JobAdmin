@@ -33,11 +33,11 @@ class UserController extends MineController
     protected $systemUserService;
 
     /**
-     * @GetMapping("getListPage")
+     * @GetMapping("index")
      * @return ResponseInterface
      * @Permission()
      */
-    public function getListPage(): ResponseInterface
+    public function index(): ResponseInterface
     {
         return $this->success();
     }
@@ -51,7 +51,7 @@ class UserController extends MineController
      */
     public function save(SystemUserCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->systemUserService->save($request->validated())]);
+        return $this->success(['id' => $this->systemUserService->save($request->all())]);
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends MineController
      */
     public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
-        return $this->systemUserService->update($id, $request->validated()) ? $this->success() : $this->error();
+        return $this->systemUserService->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**

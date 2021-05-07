@@ -27,10 +27,10 @@ class MenuController extends MineController
 
     /**
      * 获取菜单树
-     * @GetMapping("getTree")
+     * @GetMapping("index")
      * @Permission
      */
-    public function getTree(): ResponseInterface
+    public function index(): ResponseInterface
     {
         return $this->success($this->systemMenuService->getTreeList());
     }

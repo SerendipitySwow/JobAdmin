@@ -6,7 +6,7 @@ import { request } from '@/api/_service.js'
  */
 export function getMenuTree (params = {}) {
   return request({
-    url: 'system/menu/getTree',
+    url: 'system/menu/index',
     method: 'get',
     data: params
   })
