@@ -22,8 +22,6 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
- * @property-read \Mine\MineCollection|\App\System\Model\SystemPost[] $posts 
- * @property-read \Mine\MineCollection|\App\System\Model\SystemRole[] $roles 
  * @property-write mixed $password 密码
  * @method static withTrashed()
  */

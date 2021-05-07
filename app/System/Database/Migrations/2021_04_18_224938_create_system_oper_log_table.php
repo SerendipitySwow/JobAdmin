@@ -15,6 +15,13 @@ class CreateSystemOperLogTable extends Migration
             $table->engine = 'Innodb';
             $table->comment('操作日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
+            $table->addColumn('string', 'username', ['length' => 20, 'comment' => '用户名']);
+            $table->addColumn('string', 'method', ['length' => 20, 'comment' => '请求方式']);
+            $table->addColumn('string', 'router', ['length' => 100, 'comment' => '请求路由']);
+            $table->addColumn('string', 'service_name', ['length' => 30, 'comment' => '业务名称']);
+            $table->addColumn('ipAddress', 'ip', ['comment' => '请求IP地址'])->nullable();
+            $table->addColumn('string', 'ip_location', ['length' => 255, 'comment' => 'IP所属地'])->nullable();
+            $table->addColumn('text', 'data', ['comment' => '请求数据'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();

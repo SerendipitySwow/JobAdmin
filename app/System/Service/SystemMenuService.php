@@ -39,4 +39,17 @@ class SystemMenuService extends AbstractService
     {
         return parent::getTreeListByRecycle(['order_by' => 'sort', 'order_type' => 'desc']);
     }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    public function findNameByCode(string $code): string
+    {
+        if (strlen($code) < 1) {
+            return __('system.undefined_menu');
+        }
+        $name = $this->mapper->findNameByCode($code);
+        return $name ? $name : __('system.undefined_menu');
+    }
 }

@@ -24,16 +24,22 @@ class SystemRole extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
-    public const ALL_SCOPE = 0;
+
     // 所有
-    public const CUSTOM_SCOPE = 1;
+    public const ALL_SCOPE = 0;
+
     // 自定义
-    public const SELF_DEPT_SCOPE = 2;
+    public const CUSTOM_SCOPE = 1;
+
     // 本部门
-    public const DEPT_BELOW_SCOPE = 3;
+    public const SELF_DEPT_SCOPE = 2;
+
     // 本部门及子部门
-    public const SELF_SCOPE = 4;
+    public const DEPT_BELOW_SCOPE = 3;
+
     // 本人
+    public const SELF_SCOPE = 4;
+
     /**
      * The table associated with the model.
      *

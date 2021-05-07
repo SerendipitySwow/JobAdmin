@@ -74,4 +74,14 @@ class SystemMenuMapper extends AbstractMapper
             return $query->select(...$this->menuField)->get()->toArray();
         }
     }
+
+    /**
+     * 通过 code 查询菜单名称
+     * @param string $code
+     * @return string
+     */
+    public function findNameByCode(string $code): ?string
+    {
+        return $this->model::query()->where('code', $code)->value('name');
+    }
 }

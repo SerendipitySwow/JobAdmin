@@ -4,7 +4,7 @@
   </d2-container>
 </template>
 <script>
-import { getMenuTree, getMenuTreeByRecycle } from '@/api/system/menu'
+import { getMenuTree } from '@/api/system/menu'
 export default {
   name: 'sys-menu',
   mounted () {
@@ -15,7 +15,6 @@ export default {
       getMenuTree().then(res => {
         console.log(res)
       })
-      getMenuTreeByRecycle()
     }
   }
 }
