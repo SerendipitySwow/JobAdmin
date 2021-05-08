@@ -25,12 +25,11 @@ use Psr\Http\Message\ResponseInterface;
  */
 class UserController extends MineController
 {
-
     /**
      * @Inject
      * @var SystemUserService
      */
-    protected $systemUserService;
+    protected $service;
 
     /**
      * @GetMapping("index")
@@ -39,7 +38,7 @@ class UserController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success();
+        return $this->success($this->service->getPageList());
     }
 
     /**
@@ -51,7 +50,7 @@ class UserController extends MineController
      */
     public function save(SystemUserCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->systemUserService->save($request->all())]);
+        return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
@@ -63,7 +62,7 @@ class UserController extends MineController
      */
     public function read(int $id): ResponseInterface
     {
-        return $this->success($this->systemUserService->read($id));
+        return $this->success($this->service->read($id));
     }
 
     /**
@@ -76,7 +75,7 @@ class UserController extends MineController
      */
     public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
-        return $this->systemUserService->update($id, $request->all()) ? $this->success() : $this->error();
+        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**
@@ -88,7 +87,7 @@ class UserController extends MineController
      */
     public function delete(String $ids): ResponseInterface
     {
-        return $this->systemUserService->delete($ids) ? $this->success() : $this->error();
+        return $this->service->delete($ids) ? $this->success() : $this->error();
     }
 
     /**
@@ -100,7 +99,7 @@ class UserController extends MineController
      */
     public function realDelete(String $ids): ResponseInterface
     {
-        return $this->systemUserService->realDelete($ids) ? $this->success() : $this->error();
+        return $this->service->realDelete($ids) ? $this->success() : $this->error();
     }
 
     /**
@@ -112,6 +111,6 @@ class UserController extends MineController
      */
     public function recovery(String $ids): ResponseInterface
     {
-        return $this->systemUserService->recovery($ids) ? $this->success() : $this->error();
+        return $this->service->recovery($ids) ? $this->success() : $this->error();
     }
 }

@@ -6,4 +6,5 @@ return [
     'no_permission' => '无权限访问',
     'username_exists' => '用户名已存在',
     'undefined_menu' => '未定义菜单',
+    'rolecode_exists' => '角色代码已存在',
 ];

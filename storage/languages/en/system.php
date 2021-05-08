@@ -6,4 +6,5 @@ return [
     'no_permission' => 'No permission',
     'username_exists' => 'Username exists',
     'undefined_menu' => 'No menu defined',
+    'rolecode_exists' => 'Role code already exists',
 ];
