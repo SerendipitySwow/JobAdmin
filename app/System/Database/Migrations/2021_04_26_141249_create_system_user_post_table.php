@@ -16,7 +16,7 @@ class CreateSystemUserPostTable extends Migration
             $table->comment('用户与岗位关联表');
             $table->addColumn('bigInteger', 'user_id', ['unsigned' => true, 'comment' => '用户主键']);
             $table->addColumn('bigInteger', 'post_id', ['unsigned' => true, 'comment' => '岗位主键']);
-            $table->primary('id');
+            $table->primary(['user_id', 'post_id']);
         });
     }
 
