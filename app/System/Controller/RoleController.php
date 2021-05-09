@@ -61,32 +61,8 @@ class RoleController extends MineController
      * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
      */
-    public function update(int $id, SystemRoleCreateRequest $request)
+    public function update(int $id, SystemRoleCreateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 单个或批量删除用户到回收站
-     * @DeleteMapping("delete/{ids}")
-     * @param String $ids
-     * @return ResponseInterface
-     * @Permission()
-     */
-    public function delete(String $ids): ResponseInterface
-    {
-        return $this->service->delete($ids) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 单个或批量真实删除角色 （清空回收站）
-     * @DeleteMapping("realDelete/{ids}")
-     * @param String $ids
-     * @return ResponseInterface
-     * @Permission()
-     */
-    public function realDelete(String $ids): ResponseInterface
-    {
-        return $this->service->realDelete($ids) ? $this->success() : $this->error();
     }
 }

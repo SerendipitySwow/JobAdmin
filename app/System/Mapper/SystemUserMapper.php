@@ -64,7 +64,7 @@ class SystemUserMapper extends AbstractMapper
     {
         $user = $this->model::create($data);
         $user->roles()->sync($data['role_ids'], false);
-        $user->posts()->sync($data['post_ids'], false);
+        empty($data['post_ids']) || $user->posts()->sync($data['post_ids'], false);
         return $user->id;
     }
 
@@ -79,7 +79,7 @@ class SystemUserMapper extends AbstractMapper
         $this->model::query()->where('id', $id)->update($data);
         $user = $this->model::find($id);
         $user->roles()->sync($data['role_ids']);
-        $user->posts()->sync($data['post_ids']);
+        empty($data['post_ids']) || $user->posts()->sync($data['post_ids']);
         return true;
     }
 

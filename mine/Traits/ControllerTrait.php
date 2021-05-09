@@ -3,7 +3,6 @@
 declare(strict_types = 1);
 namespace Mine\Traits;
 
-use App\System\Request\Role\SystemRoleCreateRequest;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
@@ -22,8 +21,8 @@ trait ControllerTrait
     /**
      * 获取列表数据
      * @GetMapping("index")
-     * @Permission
      * @return ResponseInterface
+     * @Permission
      */
     public function index(): ResponseInterface
     {
@@ -33,8 +32,8 @@ trait ControllerTrait
     /**
      * 获取树型数据
      * @GetMapping("tree")
-     * @Permission
      * @return ResponseInterface
+     * @Permission
      */
     public function tree()
     {

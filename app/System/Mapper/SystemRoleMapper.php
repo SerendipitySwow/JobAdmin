@@ -49,8 +49,8 @@ class SystemRoleMapper extends AbstractMapper
     public function save(array $data): int
     {
         $role = $this->model::create($data);
-        $role->menus()->sync(array_unique($data['menu_ids']), false);
-        $role->depts()->sync($data['dept_ids'], false);
+        empty($data['menu_ids']) || $role->menus()->sync(array_unique($data['menu_ids']), false);
+        empty($data['dept_ids']) || $role->depts()->sync($data['dept_ids'], false);
         return $role->id;
     }
 
@@ -64,8 +64,8 @@ class SystemRoleMapper extends AbstractMapper
     {
         $this->model::query()->where('id', $id)->update($data);
         $role = $this->model::find($id);
-        $role->menus()->sync(array_unique($data['menu_ids']));
-        $role->depts()->sync($data['dept_ids']);
+        empty($data['menu_ids']) || $role->menus()->sync(array_unique($data['menu_ids']));
+        empty($data['dept_ids']) || $role->depts()->sync($data['dept_ids']);
         return true;
     }
 
