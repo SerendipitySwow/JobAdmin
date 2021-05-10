@@ -9,17 +9,19 @@ const _import = require('@/libs/util.import.' + process.env.NODE_ENV)
 const frameIn = [
   {
     path: '/',
-    redirect: { name: 'dashboard/index' },
-    name: 'dashboard',
+    redirect: { name: 'dashboard' },
     component: mainLayout,
     children: [
       // 首页
       {
         path: '/dashboard',
-        name: 'dashboard/index',
+        name: 'dashboard',
         meta: {
           title: '首页',
-          auth: true
+          hidden: true,
+          icon: 'Home',
+          cache: true,
+          type: 'T'
         },
         component: _import('dashboard')
       },
@@ -29,7 +31,7 @@ const frameIn = [
         name: 'log',
         meta: {
           title: '前端日志',
-          auth: true
+          hidden: true
         },
         component: _import('public/log')
       },

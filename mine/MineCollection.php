@@ -69,7 +69,7 @@ class MineCollection extends Collection
             'hidden' => ($menu['is_hidden'] == 0),
             'type' => $menu['type'],
             'meta' => [
-                'keepAlive' => ($menu['is_cache'] == 0),
+                'cache' => ($menu['is_cache'] == 0),
                 'icon' => $menu['icon'],
                 'title' => $menu['name'],
             ]

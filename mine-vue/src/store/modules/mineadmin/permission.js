@@ -36,6 +36,7 @@ export default {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
         const menu = util.supplementPath(accessedRoutes)
+        menu.unshift({ title: '首页', path: '/', name: 'dashboard', icon: 'home' })
         commit('store/menu/headerSet', menu, { root: true })
         commit('store/page/init', menu, { root: true })
         commit('store/search/init', menu, { root: true })

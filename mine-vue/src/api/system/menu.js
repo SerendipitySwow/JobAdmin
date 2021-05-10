@@ -16,10 +16,11 @@ export function getMenuTree (params = {}) {
  * 从回收站获取菜单树
  * @returns
  */
-export function getMenuTreeByRecycle (params = {}) {
+export function getRecycle (params = {}) {
   return request({
-    url: 'system/menu/getTreeByRecycle',
-    method: 'get'
+    url: 'system/menu/getRecycle',
+    method: 'get',
+    data: params
   })
 }
 
