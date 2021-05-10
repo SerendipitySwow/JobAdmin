@@ -68,6 +68,7 @@ trait ControllerTrait
      * @PutMapping("update/{id}")
      * @param int $id
      * @return ResponseInterface
+     * @Permission
      */
     public function update(int $id)
     {

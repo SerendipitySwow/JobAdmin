@@ -34,6 +34,7 @@ class RoleController extends MineController
     protected $service;
 
     /**
+     * 获取角色列表
      * @GetMapping("index")
      * @Permission
      * @return ResponseInterface
@@ -44,6 +45,7 @@ class RoleController extends MineController
     }
 
     /**
+     * 新增角色
      * @PostMapping("save")
      * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
@@ -60,6 +62,7 @@ class RoleController extends MineController
      * @param int $id
      * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
+     * @Permission
      */
     public function update(int $id, SystemRoleCreateRequest $request): ResponseInterface
     {
