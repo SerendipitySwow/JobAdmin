@@ -5,10 +5,10 @@
       content="主题"
       placement="bottom">
       <el-button
-        class="d2-ml-0 d2-mr btn-text can-hover"
+        class="ma-ml-0 ma-mr btn-text can-hover"
         type="text"
         @click="dialogVisible = true">
-        <d2-icon
+        <ma-icon
           name="diamond"
           style="font-size: 16px"/>
       </el-button>
@@ -18,16 +18,16 @@
       width="600px"
       :visible.sync="dialogVisible"
       :append-to-body="true">
-      <d2-theme-list style="margin-top: -25px;"/>
+      <ma-theme-list style="margin-top: -25px;"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import themeList from './components/d2-theme-list'
+import themeList from './components/ma-theme-list'
 export default {
   components: {
-    'd2-theme-list': themeList
+    'ma-theme-list': themeList
   },
   data () {
     return {

@@ -1,14 +1,14 @@
 import { mount, createLocalVue } from '@vue/test-utils'
-import D2IconSelect from '@/components/d2-icon-select/index.vue'
+import maIconSelect from '@/components/ma-icon-select/index.vue'
 import ElementUI from 'element-ui'
 
-describe('d2-icon-select', () => {
+describe('ma-icon-select', () => {
   const localVue = createLocalVue()
   localVue.use(ElementUI)
 
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2IconSelect, {
+    const wrapper = mount(maIconSelect, {
       stubs: ['el-popover', 'el-button', 'el-input', 'el-collapse', 'el-collapse-item', 'el-col', 'el-row']
     })
 
@@ -18,7 +18,7 @@ describe('d2-icon-select', () => {
 
   // // props
   // it('has props', () => {
-  //   const wrapper = mount(D2IconSelect, {
+  //   const wrapper = mount(maIconSelect, {
   //     propsData: {
   //       value: 'value',
   //       placeholder: '请选择',

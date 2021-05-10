@@ -33,7 +33,7 @@
                     v-model="formLogin.username"
                     @keyup.enter.native="submit()"
                     placeholder="账号">
-                    <span slot="prepend"><d2-icon name="user-circle-o"/></span>
+                    <span slot="prepend"><ma-icon name="user-circle-o"/></span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
@@ -42,7 +42,7 @@
                     v-model="formLogin.password"
                     @keyup.enter.native="submit()"
                     placeholder="密码">
-                    <span slot="prepend"><d2-icon name="keyboard-o"/></span>
+                    <span slot="prepend"><ma-icon name="keyboard-o"/></span>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="code">

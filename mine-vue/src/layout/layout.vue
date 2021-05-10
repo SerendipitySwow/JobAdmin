@@ -1,11 +1,11 @@
 <template>
-  <div class="d2-layout-header-aside-group" :style="styleLayoutMainGroup" :class="{grayMode: grayActive}">
+  <div class="ma-layout-header-aside-group" :style="styleLayoutMainGroup" :class="{grayMode: grayActive}">
     <!-- 半透明遮罩 -->
-    <div class="d2-layout-header-aside-mask"></div>
+    <div class="ma-layout-header-aside-mask"></div>
     <!-- 主体内容 -->
-    <div class="d2-layout-header-aside-content" flex="dir:top">
+    <div class="ma-layout-header-aside-content" flex="dir:top">
       <!-- 顶栏 -->
-      <div class="d2-theme-header" :style="{ opacity: this.searchActive ? 0.5 : 1 }" flex-box="0" flex>
+      <div class="ma-theme-header" :style="{ opacity: this.searchActive ? 0.5 : 1 }" flex-box="0" flex>
         <router-link
           to="/dashboard"
           :class="{'logo-group': true, 'logo-transition': asideTransition}"
@@ -15,52 +15,52 @@
           <img v-else :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/all.png`">
         </router-link>
         <div class="toggle-aside-btn" @click="handleToggleAside" flex-box="0">
-          <d2-icon name="bars"/>
+          <ma-icon name="bars"/>
         </div>
-        <d2-menu-header flex-box="1"/>
+        <ma-menu-header flex-box="1"/>
         <!-- 顶栏右侧 -->
-        <div class="d2-header-right" flex-box="0">
+        <div class="ma-header-right" flex-box="0">
           <!-- 如果你只想在开发环境显示这个按钮请添加 v-if="$env === 'development'" -->
-          <d2-header-search @click="handleSearchClick"/>
-          <d2-header-log v-if="$env === 'development'"/>
-          <d2-header-fullscreen/>
-          <d2-header-theme/>
-          <d2-header-size/>
-          <!-- <d2-header-locales/> -->
-          <!-- <d2-header-color/> -->
-          <d2-header-user/>
+          <ma-header-search @click="handleSearchClick"/>
+          <ma-header-log v-if="$env === 'development'"/>
+          <ma-header-fullscreen/>
+          <ma-header-theme/>
+          <ma-header-size/>
+          <!-- <ma-header-locales/> -->
+          <!-- <ma-header-color/> -->
+          <ma-header-user/>
         </div>
       </div>
       <!-- 下面 主体 -->
-      <div class="d2-theme-container" flex-box="1" flex>
+      <div class="ma-theme-container" flex-box="1" flex>
         <!-- 主体 侧边栏 -->
         <div
           flex-box="0"
           ref="aside"
-          :class="{'d2-theme-container-aside': true, 'd2-theme-container-transition': asideTransition}"
+          :class="{'ma-theme-container-aside': true, 'ma-theme-container-transition': asideTransition}"
           :style="{
             width: asideCollapse ? asideWidthCollapse : asideWidth,
             opacity: this.searchActive ? 0.5 : 1
           }">
-          <d2-menu-side/>
+          <ma-menu-side/>
         </div>
         <!-- 主体 -->
-        <div class="d2-theme-container-main" flex-box="1" flex>
+        <div class="ma-theme-container-main" flex-box="1" flex>
           <!-- 搜索 -->
           <transition name="fade-scale">
-            <div v-if="searchActive" class="d2-theme-container-main-layer" flex>
-              <d2-panel-search ref="panelSearch" @close="searchPanelClose"/>
+            <div v-if="searchActive" class="ma-theme-container-main-layer" flex>
+              <ma-panel-search ref="panelSearch" @close="searchPanelClose"/>
             </div>
           </transition>
           <!-- 内容 -->
           <transition name="fade-scale">
-            <div v-if="!searchActive" class="d2-theme-container-main-layer" flex="dir:top">
+            <div v-if="!searchActive" class="ma-theme-container-main-layer" flex="dir:top">
               <!-- tab -->
-              <div class="d2-theme-container-main-header" flex-box="0">
-                <d2-tabs/>
+              <div class="ma-theme-container-main-header" flex-box="0">
+                <ma-tabs/>
               </div>
               <!-- 页面 -->
-              <div class="d2-theme-container-main-body" flex-box="1">
+              <div class="ma-theme-container-main-body" flex-box="1">
                 <transition :name="transitionActive ? 'fade-transverse' : ''">
                   <keep-alive :include="keepAlive">
                     <router-view :key="routerViewKey" />
@@ -76,15 +76,15 @@
 </template>
 
 <script>
-import d2MenuSide from './components/menu-side'
-import d2MenuHeader from './components/menu-header'
-import d2Tabs from './components/tabs'
-import d2HeaderFullscreen from './components/header-fullscreen'
-import d2HeaderSearch from './components/header-search'
-import d2HeaderSize from './components/header-size'
-import d2HeaderTheme from './components/header-theme'
-import d2HeaderUser from './components/header-user'
-import d2HeaderLog from './components/header-log'
+import maMenuSide from './components/menu-side'
+import maMenuHeader from './components/menu-header'
+import maTabs from './components/tabs'
+import maHeaderFullscreen from './components/header-fullscreen'
+import maHeaderSearch from './components/header-search'
+import maHeaderSize from './components/header-size'
+import maHeaderTheme from './components/header-theme'
+import maHeaderUser from './components/header-user'
+import maHeaderLog from './components/header-log'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import mixinSearch from './mixins/search'
 export default {
@@ -93,15 +93,15 @@ export default {
     mixinSearch
   ],
   components: {
-    d2MenuSide,
-    d2MenuHeader,
-    d2Tabs,
-    d2HeaderFullscreen,
-    d2HeaderSearch,
-    d2HeaderSize,
-    d2HeaderTheme,
-    d2HeaderUser,
-    d2HeaderLog
+    maMenuSide,
+    maMenuHeader,
+    maTabs,
+    maHeaderFullscreen,
+    maHeaderSearch,
+    maHeaderSize,
+    maHeaderTheme,
+    maHeaderUser,
+    maHeaderLog
   },
   data () {
     return {

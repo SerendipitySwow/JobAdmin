@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2ContainerCardBs from '@/components/d2-container/components/d2-container-card-bs.vue'
+import maContainerCardBs from '@/components/ma-container/components/ma-container-card-bs.vue'
 
-describe('d2-container-card-bs', () => {
+describe('ma-container-card-bs', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ContainerCardBs)
+    const wrapper = mount(maContainerCardBs)
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.isVueInstance()).toBeTruthy()
@@ -12,7 +12,7 @@ describe('d2-container-card-bs', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2ContainerCardBs, {
+    const wrapper = mount(maContainerCardBs, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',
@@ -20,16 +20,16 @@ describe('d2-container-card-bs', () => {
       }
     })
 
-    expect(wrapper.is('.d2-container-card-bs')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card-bs__header')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card-bs__body')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card-bs__body-card')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card-bs__footer')).toBeTruthy()
+    expect(wrapper.is('.ma-container-card-bs')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card-bs__header')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card-bs__body')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card-bs__body-card')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card-bs__footer')).toBeTruthy()
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ContainerCardBs, {
+    const wrapper = mount(maContainerCardBs, {
       propsData: {
         betterScrollOptions: {}
       }
@@ -40,7 +40,7 @@ describe('d2-container-card-bs', () => {
 
   // 渲染slot
   it('has one or more slots', () => {
-    const wrapper = mount(D2ContainerCardBs, {
+    const wrapper = mount(maContainerCardBs, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',

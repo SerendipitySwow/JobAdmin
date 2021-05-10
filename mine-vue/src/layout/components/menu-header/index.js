@@ -4,22 +4,22 @@ import menuMixin from '../mixin/menu'
 import { createHeaderMenu } from '../libs/util.menu'
 
 export default {
-  name: 'd2-layout-header-aside-menu-header',
+  name: 'ma-layout-header-aside-menu-header',
   mixins: [
     menuMixin
   ],
   render (h) {
     return <div
       flex="cross:center"
-      class={ { 'd2-theme-header-menu': true, 'is-scrollable': this.isScroll } }
+      class={ { 'ma-theme-header-menu': true, 'is-scrollable': this.isScroll } }
       ref="page">
       <div
         ref="content"
-        class="d2-theme-header-menu__content"
+        class="ma-theme-header-menu__content"
         flex-box="1"
         flex>
         <div
-          class="d2-theme-header-menu__scroll"
+          class="ma-theme-header-menu__scroll"
           flex-box="0"
           style={ { transform: `translateX(${this.currentTranslateX}px)` } }
           ref="scroll">
@@ -35,14 +35,14 @@ export default {
         this.isScroll
           ? [
             <div
-              class="d2-theme-header-menu__prev"
+              class="ma-theme-header-menu__prev"
               flex="main:center cross:center"
               flex-box="0"
               onClick={ () => this.scroll('left') }>
               <i class="el-icon-arrow-left"></i>
             </div>,
             <div
-              class="d2-theme-header-menu__next"
+              class="ma-theme-header-menu__next"
               flex="main:center cross:center"
               flex-box="0"
               onClick={ () => this.scroll('right') }>

@@ -10,7 +10,7 @@
   }
 
   .el-card {
-    &.d2-card {
+    &.ma-card {
       border: $theme-container-border-outer;
       .el-card__header {
         border-bottom: $theme-container-border-outer;
@@ -19,9 +19,9 @@
   }
 
   // 背景图片和遮罩
-  .d2-layout-header-aside-group {
+  .ma-layout-header-aside-group {
     background-color: $theme-bg-color;
-    .d2-layout-header-aside-mask {
+    .ma-layout-header-aside-mask {
       background: $theme-bg-mask;
     }
   }
@@ -70,10 +70,10 @@
   }
   
   // 顶栏
-  .d2-theme-header {
+  .ma-theme-header {
     // 顶栏菜单空间不足时显示的滚动控件
-    .d2-theme-header-menu {
-      .d2-theme-header-menu__prev, .d2-theme-header-menu__next {
+    .ma-theme-header-menu {
+      .ma-theme-header-menu__prev, .ma-theme-header-menu__next {
         color: $theme-header-item-color;
         background: $theme-header-item-background-color;
         &:hover {
@@ -151,7 +151,7 @@
       }
     }
     // 顶栏右侧
-    .d2-header-right {
+    .ma-header-right {
       .btn-text {
         color: $theme-header-item-color;
         &.can-hover {
@@ -164,11 +164,11 @@
     }
   }
   // [布局] 顶栏下面
-  .d2-theme-container {
+  .ma-theme-container {
     // 侧边栏
-    .d2-theme-container-aside {
+    .ma-theme-container-aside {
       // 菜单为空的时候显示的信息
-      .d2-layout-header-aside-menu-empty {
+      .ma-layout-header-aside-menu-empty {
         background: $theme-aside-menu-empty-background-color;
         i {
           color: $theme-aside-menu-empty-icon-color;
@@ -243,11 +243,11 @@
         }
       }
     }
-    .d2-theme-container-main {
+    .ma-theme-container-main {
       // 主体部分分为多页面控制器 和主体
-      .d2-theme-container-main-header {
+      .ma-theme-container-main-header {
         // 多页面控制器
-        .d2-multiple-page-control {
+        .ma-multiple-page-control {
           .el-tabs__header.is-top {
             border-bottom-color: $theme-multiple-page-control-border-color;
           }
@@ -284,7 +284,7 @@
           }
         }
         // 多页控制器的关闭控制
-        .d2-multiple-page-control-btn {
+        .ma-multiple-page-control-btn {
           .el-dropdown {
             .el-button-group {
               .el-button {
@@ -295,55 +295,55 @@
         }
       }
       // 主体
-      .d2-theme-container-main-body {
+      .ma-theme-container-main-body {
         // 布局组件
         .container-component {
           // [组件]
-          // d2-container-full 填充型
-          .d2-container-full {
+          // ma-container-full 填充型
+          .ma-container-full {
             border: $theme-container-border-outer;
             border-top: none;
             border-bottom: none;
-            .d2-container-full__header {
+            .ma-container-full__header {
               border-bottom: $theme-container-border-inner;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-full__body {
+            .ma-container-full__body {
               background: $theme-container-background-color;
             }
-            .d2-container-full__footer {
+            .ma-container-full__footer {
               border-top: $theme-container-border-inner;
               background: $theme-container-header-footer-background-color;
             }
           }
           // [组件]
-          // d2-container-full-bs 填充型 滚动优化
-          .d2-container-full-bs {
+          // ma-container-full-bs 填充型 滚动优化
+          .ma-container-full-bs {
             border: $theme-container-border-outer;
             border-top: none;
             border-bottom: none;
-            .d2-container-full-bs__header {
+            .ma-container-full-bs__header {
               border-bottom: $theme-container-border-inner;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-full-bs__body {
+            .ma-container-full-bs__body {
               background: $theme-container-background-color;
             }
-            .d2-container-full-bs__footer {
+            .ma-container-full-bs__footer {
               border-top: $theme-container-border-inner;
               background: $theme-container-header-footer-background-color;
             }
           }
           // [组件]
-          // d2-container-ghost 隐形布局组件
-          .d2-container-ghost {
-            .d2-container-ghost__header {
+          // ma-container-ghost 隐形布局组件
+          .ma-container-ghost {
+            .ma-container-ghost__header {
               border-bottom: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-ghost__footer {
+            .ma-container-ghost__footer {
               border-top: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
@@ -351,15 +351,15 @@
             }
           }
           // [组件]
-          // d2-container-ghost-bs 隐形布局组件 滚动优化
-          .d2-container-ghost-bs {
-            .d2-container-ghost-bs__header {
+          // ma-container-ghost-bs 隐形布局组件 滚动优化
+          .ma-container-ghost-bs {
+            .ma-container-ghost-bs__header {
               border-bottom: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-ghost-bs__footer {
+            .ma-container-ghost-bs__footer {
               border-top: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
@@ -367,23 +367,23 @@
             }
           }
           // [组件]
-          // d2-container-card 卡片型
-          .d2-container-card {
-            .d2-container-card__header {
+          // ma-container-card 卡片型
+          .ma-container-card {
+            .ma-container-card__header {
               border-bottom: $theme-container-border-inner;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-card__body {
-              .d2-container-card__body-card {
+            .ma-container-card__body {
+              .ma-container-card__body-card {
                 background: $theme-container-background-color;
                 border-left: $theme-container-border-outer;
                 border-right: $theme-container-border-outer;
                 border-bottom: $theme-container-border-outer;
               }
             }
-            .d2-container-card__footer {
+            .ma-container-card__footer {
               border-top: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
@@ -391,23 +391,23 @@
             }
           }
           // [组件]
-          // d2-container-card-bs 卡片型 滚动优化
-          .d2-container-card-bs {
-            .d2-container-card-bs__header {
+          // ma-container-card-bs 卡片型 滚动优化
+          .ma-container-card-bs {
+            .ma-container-card-bs__header {
               border-bottom: $theme-container-border-inner;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;
               background: $theme-container-header-footer-background-color;
             }
-            .d2-container-card-bs__body {
-              .d2-container-card-bs__body-card {
+            .ma-container-card-bs__body {
+              .ma-container-card-bs__body-card {
                 background: $theme-container-background-color;
                 border-left: $theme-container-border-outer;
                 border-right: $theme-container-border-outer;
                 border-bottom: $theme-container-border-outer;
               }
             }
-            .d2-container-card-bs__footer {
+            .ma-container-card-bs__footer {
               border-top: $theme-container-border-outer;
               border-left: $theme-container-border-outer;
               border-right: $theme-container-border-outer;

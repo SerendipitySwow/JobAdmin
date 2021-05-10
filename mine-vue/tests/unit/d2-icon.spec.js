@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2Icon from '@/components/d2-icon/index.vue'
+import maIcon from '@/components/ma-icon/index.vue'
 
-describe('d2-icon', () => {
+describe('ma-icon', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2Icon)
+    const wrapper = mount(maIcon)
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.isVueInstance()).toBeTruthy()
@@ -12,7 +12,7 @@ describe('d2-icon', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2Icon)
+    const wrapper = mount(maIcon)
 
     expect(wrapper.is('.fa')).toBeTruthy()
     expect(wrapper.contains('.fa-font-awesome')).toBeTruthy()
@@ -20,7 +20,7 @@ describe('d2-icon', () => {
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2Icon, {
+    const wrapper = mount(maIcon, {
       propsData: {
         name: 'font-awesome'
       }

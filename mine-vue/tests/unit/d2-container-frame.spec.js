@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import D2ContainerFrame from '@/components/d2-container-frame/index.vue'
+import maContainerFrame from '@/components/ma-container-frame/index.vue'
 
-describe('d2-container-frame', () => {
+describe('ma-container-frame', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ContainerFrame, {
-      stubs: ['d2-container']
+    const wrapper = mount(maContainerFrame, {
+      stubs: ['ma-container']
     })
 
     expect(wrapper.exists()).toBeTruthy()
@@ -14,22 +14,22 @@ describe('d2-container-frame', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2ContainerFrame, {
-      stubs: ['d2-container']
+    const wrapper = mount(maContainerFrame, {
+      stubs: ['ma-container']
     })
 
-    expect(wrapper.contains('.d2-container-frame')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-frame')).toBeTruthy()
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ContainerFrame, {
-      stubs: ['d2-container'],
+    const wrapper = mount(maContainerFrame, {
+      stubs: ['ma-container'],
       propsData: {
-        src: 'https://d2.pub/zh/doc/d2-admin'
+        src: 'https://ma.pub/zh/doc/ma-admin'
       }
     })
 
-    expect(wrapper.props().src).toEqual('https://d2.pub/zh/doc/d2-admin')
+    expect(wrapper.props().src).toEqual('https://ma.pub/zh/doc/ma-admin')
   })
 })

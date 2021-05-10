@@ -1,5 +1,5 @@
 <template>
-  <d2-container class="page">
+  <ma-container class="page">
     <div class="ma-public-container">
       <div class="ma-menu-card" v-for="item in menuData" :key="item.title" :name="item.title">
         <el-divider content-position="left">
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-  </d2-container>
+  </ma-container>
 </template>
 <script>
 import { mapState } from 'vuex'

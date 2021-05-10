@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import D2ModuleIndexBanner from '@/components/d2-module-index-banner/index.vue'
+import maModuleIndexBanner from '@/components/ma-module-index-banner/index.vue'
 
-describe('d2-module-index-banner', () => {
+describe('ma-module-index-banner', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ModuleIndexBanner, {
-      stubs: ['d2-icon']
+    const wrapper = mount(maModuleIndexBanner, {
+      stubs: ['ma-icon']
     })
 
     expect(wrapper.exists()).toBeTruthy()
@@ -14,8 +14,8 @@ describe('d2-module-index-banner', () => {
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ModuleIndexBanner, {
-      stubs: ['d2-icon'],
+    const wrapper = mount(maModuleIndexBanner, {
+      stubs: ['ma-icon'],
       propsData: {
         title: 'title',
         subTitle: 'subTitle',

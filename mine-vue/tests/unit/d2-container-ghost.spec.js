@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2ContainerGhost from '@/components/d2-container/components/d2-container-ghost.vue'
+import maContainerGhost from '@/components/ma-container/components/ma-container-ghost.vue'
 
-describe('d2-container-ghost', () => {
+describe('ma-container-ghost', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ContainerGhost)
+    const wrapper = mount(maContainerGhost)
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.isVueInstance()).toBeTruthy()
@@ -12,7 +12,7 @@ describe('d2-container-ghost', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2ContainerGhost, {
+    const wrapper = mount(maContainerGhost, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',
@@ -20,15 +20,15 @@ describe('d2-container-ghost', () => {
       }
     })
 
-    expect(wrapper.is('.d2-container-ghost')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-ghost__header')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-ghost__body')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-ghost__footer')).toBeTruthy()
+    expect(wrapper.is('.ma-container-ghost')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-ghost__header')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-ghost__body')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-ghost__footer')).toBeTruthy()
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ContainerGhost, {
+    const wrapper = mount(maContainerGhost, {
       propsData: {
         scrollDelay: 30
       }
@@ -39,7 +39,7 @@ describe('d2-container-ghost', () => {
 
   // 渲染slot
   it('has one or more slots', () => {
-    const wrapper = mount(D2ContainerGhost, {
+    const wrapper = mount(maContainerGhost, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',

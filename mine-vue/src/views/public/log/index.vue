@@ -1,5 +1,5 @@
 <template>
-  <d2-container>
+  <ma-container>
     <el-table
       :data="log"
       size="mini"
@@ -51,7 +51,7 @@
             type="primary"
             size="mini"
             @click="handleShowMore(scope.row)">
-            <d2-icon name="eye"/>
+            <ma-icon name="eye"/>
           </el-button>
         </template>
       </el-table-column>
@@ -62,10 +62,10 @@
       size="mini"
       :loading="uploading"
       @click="handleUpload">
-      <d2-icon name="cloud-upload"/>
+      <ma-icon name="cloud-upload"/>
       Upload {{log.length}} log data
     </el-button>
-  </d2-container>
+  </ma-container>
 </template>
 
 <script>

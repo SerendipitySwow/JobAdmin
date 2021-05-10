@@ -1,9 +1,9 @@
 <template>
-  <el-dropdown size="small" class="d2-mr">
+  <el-dropdown size="small" class="ma-mr">
     <span class="btn-text">{{info.name ? `你好 ${info.name}` : '未登录'}}</span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item @click.native="logOff">
-        <d2-icon name="power-off" class="d2-mr-5"/>
+        <ma-icon name="power-off" class="ma-mr-5"/>
         注销
       </el-dropdown-item>
     </el-dropdown-menu>

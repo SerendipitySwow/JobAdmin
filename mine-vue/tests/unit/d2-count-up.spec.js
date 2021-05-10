@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2CountUp from '@/components/d2-count-up/index.vue'
+import maCountUp from '@/components/ma-count-up/index.vue'
 
-describe('d2-count-up', () => {
+describe('ma-count-up', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2CountUp, {
+    const wrapper = mount(maCountUp, {
       propsData: {
         end: 100
       }
@@ -16,7 +16,7 @@ describe('d2-count-up', () => {
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2CountUp, {
+    const wrapper = mount(maCountUp, {
       propsData: {
         start: 0,
         end: 100,
@@ -35,7 +35,7 @@ describe('d2-count-up', () => {
 
   // 开始数字，1秒后结束数字
   it('start number is 1, 1s later, end number is 99', (done) => {
-    const wrapper = mount(D2CountUp, {
+    const wrapper = mount(maCountUp, {
       propsData: {
         start: 1,
         end: 99,
@@ -53,7 +53,7 @@ describe('d2-count-up', () => {
 
   // 小数位数
   it('start number is 1.00, 1s later, end number is 99.00', (done) => {
-    const wrapper = mount(D2CountUp, {
+    const wrapper = mount(maCountUp, {
       propsData: {
         start: 1,
         end: 99,

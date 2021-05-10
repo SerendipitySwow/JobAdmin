@@ -1,11 +1,11 @@
 <template>
   <el-dropdown placement="bottom" size="small" @command="handleChange">
-    <el-button class="d2-mr btn-text can-hover" type="text">
-      <d2-icon name="font" style="font-size: 16px;"/>
+    <el-button class="ma-mr btn-text can-hover" type="text">
+      <ma-icon name="font" style="font-size: 16px;"/>
     </el-button>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item v-for="item in options" :key="item.value" :command="item.value">
-        <d2-icon :name="iconName(item.value)" class="d2-mr-5"/>{{item.label}}
+        <ma-icon :name="iconName(item.value)" class="ma-mr-5"/>{{item.label}}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -14,7 +14,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  name: 'd2-header-size',
+  name: 'ma-header-size',
   data () {
     return {
       options: [

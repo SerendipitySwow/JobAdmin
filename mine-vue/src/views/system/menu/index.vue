@@ -1,7 +1,7 @@
 <template>
-  <d2-container>
+  <ma-container>
     asdasdasd
-  </d2-container>
+  </ma-container>
 </template>
 <script>
 import { getMenuTree } from '@/api/system/menu'

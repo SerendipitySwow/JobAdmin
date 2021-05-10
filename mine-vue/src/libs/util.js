@@ -26,10 +26,10 @@ util.open = function (url) {
   var a = document.createElement('a')
   a.setAttribute('href', url)
   a.setAttribute('target', '_blank')
-  a.setAttribute('id', 'd2admin-link-temp')
+  a.setAttribute('id', 'mine-admin-link-temp')
   document.body.appendChild(a)
   a.click()
-  document.body.removeChild(document.getElementById('d2admin-link-temp'))
+  document.body.removeChild(document.getElementById('mine-admin-link-temp'))
 }
 
 /**
@@ -40,7 +40,7 @@ util.supplementPath = function (menu) {
   return menu.map(e => {
     return {
       ...e,
-      path: e.path || uniqueId('d2-menu-empty-'),
+      path: e.path || uniqueId('ma-menu-empty-'),
       title: e.meta.title,
       icon: e.meta.icon,
       ...e.children ? {

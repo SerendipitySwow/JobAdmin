@@ -38,8 +38,8 @@ export default {
       },
       {
         title: '经典',
-        name: 'd2',
-        preview: 'image/theme/d2/preview@2x.png'
+        name: 'mine-admin',
+        preview: 'image/theme/mine-admin/preview@2x.png'
       },
       {
         title: 'Element',

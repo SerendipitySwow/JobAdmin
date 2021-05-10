@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import D2LinkBtn from '@/components/d2-link-btn/index.vue'
+import maLinkBtn from '@/components/ma-link-btn/index.vue'
 
-describe('d2-link-btn', () => {
+describe('ma-link-btn', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2LinkBtn, {
-      stubs: ['el-button-group', 'el-button', 'd2-icon']
+    const wrapper = mount(maLinkBtn, {
+      stubs: ['el-button-group', 'el-button', 'ma-icon']
     })
 
     expect(wrapper.exists()).toBeTruthy()
@@ -14,8 +14,8 @@ describe('d2-link-btn', () => {
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2LinkBtn, {
-      stubs: ['el-button-group', 'el-button', 'd2-icon'],
+    const wrapper = mount(maLinkBtn, {
+      stubs: ['el-button-group', 'el-button', 'ma-icon'],
       propsData: {
         title: 'title',
         icon: 'icon',

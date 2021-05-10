@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2ContainerFullBs from '@/components/d2-container/components/d2-container-full-bs.vue'
+import maContainerFullBs from '@/components/ma-container/components/ma-container-full-bs.vue'
 
-describe('d2-container-full-bs', () => {
+describe('ma-container-full-bs', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ContainerFullBs)
+    const wrapper = mount(maContainerFullBs)
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.isVueInstance()).toBeTruthy()
@@ -12,7 +12,7 @@ describe('d2-container-full-bs', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2ContainerFullBs, {
+    const wrapper = mount(maContainerFullBs, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',
@@ -20,16 +20,16 @@ describe('d2-container-full-bs', () => {
       }
     })
 
-    expect(wrapper.is('.d2-container-full-bs')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-full-bs__header')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-full-bs__body')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-full-bs__body-wrapper-inner')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-full-bs__footer')).toBeTruthy()
+    expect(wrapper.is('.ma-container-full-bs')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-full-bs__header')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-full-bs__body')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-full-bs__body-wrapper-inner')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-full-bs__footer')).toBeTruthy()
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ContainerFullBs, {
+    const wrapper = mount(maContainerFullBs, {
       propsData: {
         betterScrollOptions: {}
       }
@@ -40,7 +40,7 @@ describe('d2-container-full-bs', () => {
 
   // 渲染slot
   it('has one or more slots', () => {
-    const wrapper = mount(D2ContainerFullBs, {
+    const wrapper = mount(maContainerFullBs, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',

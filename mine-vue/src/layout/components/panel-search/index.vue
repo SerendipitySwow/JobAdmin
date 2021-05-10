@@ -1,7 +1,7 @@
 <template>
   <div class="panel-search" flex="dir:top">
     <div class="panel-search__input-group" flex-box="0" flex="dir:top main:center cross:center" @click.self="handlePanelClick">
-      <d2-icon-svg class="panel-search__logo" name="d2-admin-text"/>
+      <ma-icon-svg class="panel-search__logo" name="ma-admin-text"/>
       <el-autocomplete
         class="panel-search__input"
         ref="input"
@@ -13,7 +13,7 @@
         :clearable="true"
         @keydown.esc.native="handleEsc"
         @select="handleSelect">
-        <d2-panel-search-item slot-scope="{ item }" :item="item"/>
+        <ma-panel-search-item slot-scope="{ item }" :item="item"/>
       </el-autocomplete>
       <div class="panel-search__tip">
         您可以使用快捷键
@@ -26,7 +26,7 @@
     <div v-if="resultsList.length > 0" class="panel-search__results-group" flex-box="1">
       <el-card shadow="never">
         <div class="panel-search__results-group-inner">
-          <d2-panel-search-item
+          <ma-panel-search-item
             v-for="(item, index) in resultsList"
             :key="index"
             :item="item"
@@ -47,7 +47,7 @@ export default {
     mixin
   ],
   components: {
-    'd2-panel-search-item': () => import('./components/panel-search-item/index.vue')
+    'ma-panel-search-item': () => import('./components/panel-search-item/index.vue')
   },
   data () {
     return {

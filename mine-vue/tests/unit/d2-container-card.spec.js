@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import D2ContainerCard from '@/components/d2-container/components/d2-container-card.vue'
+import maContainerCard from '@/components/ma-container/components/ma-container-card.vue'
 
-describe('d2-container-card', () => {
+describe('ma-container-card', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2ContainerCard)
+    const wrapper = mount(maContainerCard)
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.isVueInstance()).toBeTruthy()
@@ -12,7 +12,7 @@ describe('d2-container-card', () => {
 
   // 包含特定类名
   it('contains specific classnames', () => {
-    const wrapper = mount(D2ContainerCard, {
+    const wrapper = mount(maContainerCard, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',
@@ -20,16 +20,16 @@ describe('d2-container-card', () => {
       }
     })
 
-    expect(wrapper.is('.d2-container-card')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card__header')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card__body')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card__body-card')).toBeTruthy()
-    expect(wrapper.contains('.d2-container-card__footer')).toBeTruthy()
+    expect(wrapper.is('.ma-container-card')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card__header')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card__body')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card__body-card')).toBeTruthy()
+    expect(wrapper.contains('.ma-container-card__footer')).toBeTruthy()
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2ContainerCard, {
+    const wrapper = mount(maContainerCard, {
       propsData: {
         scrollDelay: 30
       }
@@ -40,7 +40,7 @@ describe('d2-container-card', () => {
 
   // 渲染slot
   it('has one or more slots', () => {
-    const wrapper = mount(D2ContainerCard, {
+    const wrapper = mount(maContainerCard, {
       slots: {
         default: '<div>body</div>',
         header: '<div>header</div>',

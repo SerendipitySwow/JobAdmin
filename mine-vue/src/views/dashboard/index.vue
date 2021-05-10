@@ -1,7 +1,7 @@
 <template>
-  <d2-container class="page">
+  <ma-container class="page">
     asdf
-  </d2-container>
+  </ma-container>
 </template>
 
 <script>

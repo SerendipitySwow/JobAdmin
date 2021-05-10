@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import D2Source from '@/components/d2-container/components/d2-source.vue'
+import maSource from '@/components/ma-container/components/ma-source.vue'
 
-describe('d2-source', () => {
+describe('ma-source', () => {
   // 存在且是Vue组件实例
   it('is a vue instance', () => {
-    const wrapper = mount(D2Source, {
-      stubs: ['d2-icon']
+    const wrapper = mount(maSource, {
+      stubs: ['ma-icon']
     })
 
     expect(wrapper.exists()).toBeTruthy()
@@ -14,21 +14,21 @@ describe('d2-source', () => {
 
   // 包含特定类名
   it('contains specific classnames', (done) => {
-    const wrapper = mount(D2Source, {
-      stubs: ['d2-icon']
+    const wrapper = mount(maSource, {
+      stubs: ['ma-icon']
     })
 
-    expect(wrapper.is('.d2-source')).toBeTruthy()
+    expect(wrapper.is('.ma-source')).toBeTruthy()
     setTimeout(() => {
-      expect(wrapper.contains('.d2-source--active')).toBeTruthy()
+      expect(wrapper.contains('.ma-source--active')).toBeTruthy()
       done()
     }, 600)
   })
 
   // props
   it('has props', () => {
-    const wrapper = mount(D2Source, {
-      stubs: ['d2-icon'],
+    const wrapper = mount(maSource, {
+      stubs: ['ma-icon'],
       propsData: {
         filename: ''
       }
