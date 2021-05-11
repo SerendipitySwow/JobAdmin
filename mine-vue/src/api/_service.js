@@ -11,26 +11,18 @@ import store from '@/store'
  * @param {Error} error 错误对象
  */
 function handleError (error) {
-  // 添加到日志
-  store.dispatch('store/log/push', {
-    message: '数据请求异常',
-    type: 'danger',
-    meta: {
-      error
-    }
-  })
-  // 打印到控制台
-  if (process.env.NODE_ENV === 'development') {
-    util.log.danger('>>>>>> Error >>>>>>')
-    console.log(error)
-  }
-
   // 显示提示
   Notification.error({
     message: error.message,
     title: '错误',
     duration: 5 * 1000
   })
+
+  // 检查是否需要跳转登录页
+  const status = get(error, 'response.status')
+  if (status === 401) {
+    store.dispatch('store/user/cancellation', { root: true })
+  }
 }
 
 /**

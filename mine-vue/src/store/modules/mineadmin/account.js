@@ -29,6 +29,7 @@ export default {
             commit('store/permission/setUserInfo', response.data.user, { root: true })
             commit('store/permission/setRoles', response.data.roles, { root: true })
             commit('store/permission/setRouters', response.data.routers, { root: true })
+            commit('store/permission/setCodes', response.data.codes, { root: true })
             commit('store/permission/setQuick', util.supplementPath(response.data.quickMenu), { root: true })
             resolve()
           }

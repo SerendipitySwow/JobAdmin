@@ -8,7 +8,8 @@ export default {
     routers: [],
     roles: [],
     permissions: [],
-    quick: []
+    quick: [],
+    codes: []
   },
   mutations: {
     setUserInfo: (state, userinfo) => {
@@ -25,6 +26,9 @@ export default {
     },
     setQuick: (state, quick) => {
       state.quick = quick
+    },
+    setCodes: (state, codes) => {
+      state.codes = codes
     }
   },
   actions: {
