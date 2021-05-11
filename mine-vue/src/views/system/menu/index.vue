@@ -3,7 +3,7 @@
     <template slot="header">Header</template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus">默认按钮</el-button>
+        <el-button size="small" icon="el-icon-plus" @click="$refs.menuForm.create(null)">新增菜单</el-button>
       </el-col>
       <table-right-toolbar @toggleData="switchDataType" @refreshTable="getList"></table-right-toolbar>
     </el-row>
@@ -40,37 +40,44 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini"
+          <el-button size="small"
             type="text"
             icon="el-icon-edit"
-            @click="scope.row"
+            @click="$refs.menuForm.update(scope.row)"
           >修改</el-button>
           <el-button
-            size="mini"
+            size="small"
             type="text"
+            @click="$refs.menuForm.create(scope.row)"
             icon="el-icon-plus"
           >新增</el-button>
           <el-button
-            size="mini"
+            size="small"
             type="text"
             icon="el-icon-delete"
           >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <menu-form ref="menuForm" :menuTree="menuTree"  @closeDialog="handleClose"></menu-form>
   </ma-container>
 </template>
 <script>
 import { getMenuTree, getRecycle } from '@/api/system/menu'
+import MenuForm from './form'
 export default {
   name: 'system-menu-index',
+  components: {
+    MenuForm
+  },
   data () {
     return {
       // 是否显示回收站数据
       showRecycle: false,
       // 遮罩层
       loading: true,
-      menuTree: []
+      // 数据
+      menuTree: [],
     }
   },
   created () {
@@ -78,6 +85,7 @@ export default {
   },
   methods: {
     getList () {
+      this.loading = true
       if (!this.showRecycle) {
         getMenuTree().then(res => {
           this.menuTree = res.data
@@ -89,6 +97,9 @@ export default {
           this.loading = false
         })
       }
+    },
+    handleClose (e) {
+      e && this.getList()
     },
     switchDataType () {
       this.showRecycle = !this.showRecycle
