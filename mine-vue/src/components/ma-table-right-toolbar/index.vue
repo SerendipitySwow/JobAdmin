@@ -51,5 +51,7 @@ export default {
 <style lang="scss" scoped>
 .table-right-toolbar {
   float: right;
+  margin-bottom: 10px;
+  margin-right: 5px;
 }
 </style>
