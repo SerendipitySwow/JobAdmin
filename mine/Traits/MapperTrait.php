@@ -221,24 +221,6 @@ trait MapperTrait
     }
 
     /**
-     * 初始化查询构造器
-     * @return Builder
-     */
-    protected function initQueryBuilder(): Builder
-    {
-        $this->query = $this->model::query();
-        return $this->query;
-    }
-
-    /**
-     * @return Builder|null
-     */
-    public function getQuery(): ?Builder
-    {
-        return $this->query;
-    }
-
-    /**
      * @return MineModel
      */
     public function getModel(): MineModel
