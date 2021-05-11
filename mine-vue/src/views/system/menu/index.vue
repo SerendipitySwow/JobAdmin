@@ -77,7 +77,7 @@ export default {
       // 遮罩层
       loading: true,
       // 数据
-      menuTree: [],
+      menuTree: []
     }
   },
   created () {

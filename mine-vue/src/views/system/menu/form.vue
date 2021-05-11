@@ -1,6 +1,6 @@
 <template>
-  <el-dialog 
-    :title="title" 
+  <el-dialog
+    :title="title"
     :visible.sync="showForm"
     :before-close="handleClose"
     >
@@ -14,7 +14,6 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上级菜单">
-        
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -37,7 +36,6 @@ export default {
       },
       record: null,
       rules: {
-        
       }
     }
   },
