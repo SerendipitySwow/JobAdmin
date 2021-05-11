@@ -215,12 +215,14 @@ class SystemUserService extends AbstractService
         if ($loginUser->isSuperAdmin()) {
             $data['roles'] = ['super_admin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
+            $data['codes'] = ['*'];
             $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu();
         } else {
             $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
             $ids = $this->filterMenuIds($roles);
             $data['roles'] = $user->roles()->pluck('code')->toArray();
             $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($ids);
+            $data['codes'] = $this->sysMenuService->mapper->getMenuCode($ids);
             $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu($ids);
         }
         $data['quickMenu'] = [];

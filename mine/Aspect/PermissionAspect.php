@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Mine\Aspect;
 
+use App\System\Service\SystemMenuService;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
@@ -51,15 +52,12 @@ class PermissionAspect extends AbstractAspect
         if ($this->request->getLoginUser()->isSuperAdmin()) {
             return $proceedingJoinPoint->process();
         }
-        $routers = $this->service->getInfo()['routers'];
-        $pathInfo = $this->request->path();
-        foreach ($routers as $router) {
-            if ($router['route'] === $pathInfo) {
-                // 进一步检查
-                // TODO...
-                return $proceedingJoinPoint->process();
-            }
+        $codes = $this->service->getInfo()['codes'];
+        $pathInfo = $this->request->getPathInfo();
+        $menu = make(SystemMenuService::class)->mapper->findMenuByRoute($pathInfo);
+        if (empty($menu) || !in_array($menu['code'], $codes)) {
+            throw new NoPermissionException(__('system.no_permission') . ' -> ['. $pathInfo.']');
         }
-        throw new NoPermissionException(__('system.no_permission') . ' -> ['. $pathInfo.']');
+        return $proceedingJoinPoint->process();
     }
 }

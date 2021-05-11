@@ -76,6 +76,6 @@ class OperationMiddleware implements MiddlewareInterface
         $request = $this->container->get(MineRequest::class);
         $service = $this->container->get(SystemMenuService::class);
         list($module, $controller, $action) = explode('/', substr($request->getServerParams()['path_info'], 1));
-        return $service->findNameByCode(sprintf('%s:%s:%s', $module, $controller, $action));
+        return $service->findNameByCode(sprintf('%s-%s-%s', $module, $controller, $action));
     }
 }

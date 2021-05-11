@@ -76,6 +76,16 @@ class SystemMenuMapper extends AbstractMapper
     }
 
     /**
+     * 查询菜单code
+     * @param array|null $ids
+     * @return array
+     */
+    public function getMenuCode(array $ids = null)
+    {
+        return $this->model::query()->whereIn('id', $ids)->pluck('code')->toArray();
+    }
+
+    /**
      * 通过 code 查询菜单名称
      * @param string $code
      * @return string
@@ -83,5 +93,15 @@ class SystemMenuMapper extends AbstractMapper
     public function findNameByCode(string $code): ?string
     {
         return $this->model::query()->where('code', $code)->value('name');
+    }
+
+    /**
+     * 通过 route 查询菜单
+     * @param string $route
+     * @return array|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     */
+    public function findMenuByRoute(string $route)
+    {
+        return $this->model::query()->where('route', $route)->first();
     }
 }
