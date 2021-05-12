@@ -31,13 +31,19 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="80">
         <template slot-scope="scope">
-          {{ scope.row.status === '0' ? '正常' : '停用' }}
+          {{ scope.row.status === '0' ? '启用' : '停用' }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="small" type="text" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
-          <el-button size="small" type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
+          <div v-if="showRecycle">
+            <el-button size="small" type="text" icon="el-icon-refresh-left" @click="handleRecovery(scope.row)">恢复</el-button>
+            <el-button size="small" type="text" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+          </div>
+          <div v-else>
+            <el-button size="small" type="text" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
+            <el-button size="small" type="text" icon="el-icon-delete" @click="handleRecycle(scope.row.id)">移到回收站</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -90,8 +96,8 @@ export default {
       this.showRecycle = !this.showRecycle
       this.getList()
     },
-    // 删除菜单
-    handleDelete (id) {
+    // 移到回收站
+    handleRecycle (id) {
       this.$confirm('此操作会将数据移到回收站！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -102,6 +108,10 @@ export default {
           message: '操作成功!'
         })
       })
+    },
+    // 真实删除数据
+    handleRealDelete (id) {
+
     }
   }
 }

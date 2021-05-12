@@ -73,14 +73,15 @@ class SystemMenuService extends AbstractService
         $pid = $data['parent_id'] ?? 0;
         // 顶层菜单
         if ($pid === 0) {
+            $data['level'] = $data['parent_id'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
             $data['parent_id'] = array_pop($pid);
             $data['level'] = implode(',', $pid);
             $menu = $this->mapper->read($data['parent_id']);
-            if ($data['type'] == SystemMenu::MENUS_LIST || $data['type'] == SystemMenu::BUTTON) {
+            if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
                 $code = explode('-', $menu['code']);
-                (count($code) > 1) && array_pop($code);
+                (count($code) > 0) && array_pop($code);
                 $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
             } else {
                 $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);

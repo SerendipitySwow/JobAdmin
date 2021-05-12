@@ -118,19 +118,24 @@ export default {
   },
   methods: {
     // 新增菜单
-    create (record) {
-      console.log(record)
+    create () {
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增菜单'
+      this.$nextTick(() => {
+        this.$refs.form.resetFields()
+      })
     },
     // 更新菜单
     update (record) {
       this.saveType = 'update'
       this.title = '编辑菜单：' + record.name
       this.showForm = true
-      // 填充form数据
-      this.setFormData(record)
+      this.$nextTick(() => {
+        this.$refs.form.resetFields()
+        // 填充form数据
+        this.setFormData(record)
+      })
     },
     // 关闭处理方法
     handleClose () {
@@ -146,9 +151,12 @@ export default {
     submitForm () {
       this.$refs.form.validate(valid => {
         if (valid) {
+          console.log(this.form)
+          return;
           if (this.saveType === 'create') {
             // 新增数据
             save(this.form).then(res => {
+              this.$message({ type: 'success', message: res.message })
               this.resetForm()
             })
           } else {

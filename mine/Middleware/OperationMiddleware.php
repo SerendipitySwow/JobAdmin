@@ -69,13 +69,14 @@ class OperationMiddleware implements MiddlewareInterface
     }
 
     /**
-     *
+     * 获取菜单名称
      */
-    protected function getOperationMenuName()
+    protected function getOperationMenuName(): string
     {
         $request = $this->container->get(MineRequest::class);
         $service = $this->container->get(SystemMenuService::class);
         list($module, $controller, $action) = explode('/', substr($request->getServerParams()['path_info'], 1));
+        echo sprintf('%s-%s-%s', $module, $controller, $action);
         return $service->findNameByCode(sprintf('%s-%s-%s', $module, $controller, $action));
     }
 }

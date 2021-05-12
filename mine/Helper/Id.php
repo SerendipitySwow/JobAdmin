@@ -3,13 +3,13 @@ namespace Mine\Helper;
 
 class Id
 {
-    const twepoch =  1234567000000;
+    const twepoch =  1620750646000;
 
     //机器标识占的位数
     const workerIdBits = 10;
 
     //毫秒内自增数点的位数
-    const sequenceBits = 12;
+    const sequenceBits = 1;
 
     protected $workId = 0;
 
