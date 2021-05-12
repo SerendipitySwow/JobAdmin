@@ -11,7 +11,7 @@ use Mine\MineModel;
  * @property string $level 组级集合
  * @property string $name 菜单名称
  * @property string $code 菜单标识代码
- * @property string $icon 菜单名称
+ * @property string $icon 菜单图标
  * @property string $route 路由地址
  * @property string $component 组件路径
  * @property string $is_out 是否外链, (0是 1否)

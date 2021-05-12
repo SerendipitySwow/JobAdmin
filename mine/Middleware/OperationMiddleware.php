@@ -31,27 +31,25 @@ class OperationMiddleware implements MiddlewareInterface
         $evDispatcher = $this->container->get(EventDispatcherInterface::class);
         $mineRequest = $this->container->get(MineRequest::class);
 
-        if ($request->getServerParams()['path_info'] === '/favicon.ico') {
-            return $handler->handle($request);
-        }
-
         try {
             $mineRequest->getLoginUser()->check();
+            $response = $handler->handle($request);
             $pathInfo = substr($request->getServerParams()['path_info'], 1);
             if (count(explode('/', $pathInfo)) > 2) {
-                $evDispatcher->dispatch(new Operation($this->getRequestInfo()));
+                $evDispatcher->dispatch(new Operation($this->getRequestInfo($response)));
             }
-            return $handler->handle($request);
+            return $response;
         } catch (\Exception $e) {
             return $handler->handle($request);
         }
     }
 
     /**
+     * @param ResponseInterface $response
      * @return array
      * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
-    protected function getRequestInfo(): array
+    protected function getRequestInfo(ResponseInterface $response): array
     {
         $request = $this->container->get(MineRequest::class);
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -64,7 +62,9 @@ class OperationMiddleware implements MiddlewareInterface
             'ip' => $request->ip(),
             'username' => $request->getUsername(),
             'ip_location' => Str::ipToRegion($request->ip()),
-            'service_name' => $this->getOperationMenuName()
+            'service_name' => $this->getOperationMenuName(),
+            'response_code' => $response->getStatusCode(),
+            'response_data' => $response->getBody()->getContents(),
         ];
     }
 

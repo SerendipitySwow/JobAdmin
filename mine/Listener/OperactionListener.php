@@ -20,6 +20,8 @@ class OperactionListener implements ListenerInterface
 {
     protected $container;
 
+    protected $ignoreRouter = ['/login', '/getInfo', '/favicon.ico', '/system/captcha'];
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -44,10 +46,11 @@ class OperactionListener implements ListenerInterface
     public function process(object $event)
     {
         $requestInfo = $event->getRequsetInfo();
-        $service = $this->container->get(SystemOperLogService::class);
-        $request = $this->container->get(MineRequest::class);
-        $requestInfo['created_by'] = $request->getId();
-        $requestInfo['data'] = json_encode($requestInfo['data']);
-        $service->save($requestInfo);
+        if (!in_array($requestInfo['router'], $this->ignoreRouter)) {
+            $service = $this->container->get(SystemOperLogService::class);
+            $requestInfo['request_data'] = json_encode($requestInfo['request_data']);
+            $requestInfo['response_data'] = json_encode($requestInfo['response_data']);
+            $service->save($requestInfo);
+        }
     }
 }

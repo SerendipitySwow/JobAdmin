@@ -4,6 +4,7 @@ namespace App\System\Service;
 
 
 use App\System\Mapper\SystemMenuMapper;
+use App\System\Model\SystemMenu;
 use Mine\Abstracts\AbstractService;
 
 class SystemMenuService extends AbstractService
@@ -41,6 +42,15 @@ class SystemMenuService extends AbstractService
     }
 
     /**
+     * 获取前端选择树
+     * @return array
+     */
+    public function getSelectTree(): array
+    {
+        return $this->mapper->getSelectTree();
+    }
+
+    /**
      * @param string $code
      * @return string
      */
@@ -51,5 +61,31 @@ class SystemMenuService extends AbstractService
         }
         $name = $this->mapper->findNameByCode($code);
         return $name ? $name : __('system.undefined_menu');
+    }
+
+    /**
+     * 新增菜单
+     * @param array $data
+     * @return int
+     */
+    public function save(array $data): int
+    {
+        $pid = $data['parent_id'] ?? 0;
+        // 顶层菜单
+        if ($pid === 0) {
+            $data['type'] = SystemMenu::TYPE_CLASSIFY;
+        } else {
+            $data['parent_id'] = array_pop($pid);
+            $data['level'] = implode(',', $pid);
+            $menu = $this->mapper->read($data['parent_id']);
+            if ($data['type'] == SystemMenu::MENUS_LIST || $data['type'] == SystemMenu::BUTTON) {
+                $code = explode('-', $menu['code']);
+                (count($code) > 1) && array_pop($code);
+                $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
+            } else {
+                $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
+            }
+        }
+        return $this->mapper->save($data);
     }
 }

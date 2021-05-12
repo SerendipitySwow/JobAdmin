@@ -19,9 +19,9 @@ class CreateSystemMenuTable extends Migration
             $table->addColumn('string', 'level', ['length' => 500, 'comment' => '组级集合']);
             $table->addColumn('string', 'name', ['length' => 50, 'comment' => '菜单名称']);
             $table->addColumn('string', 'code', ['length' => 100, 'comment' => '菜单标识代码']);
-            $table->addColumn('string', 'icon', ['length' => 50, 'comment' => '菜单名称']);
-            $table->addColumn('string', 'route', ['length' => 200, 'comment' => '路由地址']);
-            $table->addColumn('string', 'component', ['length' => 255, 'comment' => '组件路径']);
+            $table->addColumn('string', 'icon', ['length' => 50, 'comment' => '菜单图标'])->nullable();
+            $table->addColumn('string', 'route', ['length' => 200, 'comment' => '路由地址'])->nullable();
+            $table->addColumn('string', 'component', ['length' => 255, 'comment' => '组件路径'])->nullable();
             $table->addColumn('char', 'is_out', ['length' => 1, 'default' => '1', 'comment' => '是否外链, (0是 1否)']);
             $table->addColumn('char', 'is_cache', ['length' => 1, 'default' => '0', 'comment' => '是否缓存, (0是 1否)']);
             $table->addColumn('char', 'is_quick', ['length' => 1, 'default' => '1', 'comment' => '是否快捷菜单, (0是 1否)']);

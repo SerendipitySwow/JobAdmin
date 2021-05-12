@@ -21,7 +21,9 @@ class CreateSystemOperLogTable extends Migration
             $table->addColumn('string', 'service_name', ['length' => 30, 'comment' => '业务名称']);
             $table->addColumn('ipAddress', 'ip', ['comment' => '请求IP地址'])->nullable();
             $table->addColumn('string', 'ip_location', ['length' => 255, 'comment' => 'IP所属地'])->nullable();
-            $table->addColumn('text', 'data', ['comment' => '请求数据'])->nullable();
+            $table->addColumn('text', 'request_data', ['comment' => '请求数据'])->nullable();
+            $table->addColumn('string', 'response_code', ['length' => 5, 'comment' => '响应状态码'])->nullable();
+            $table->addColumn('text', 'response_data', ['comment' => '响应数据'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
