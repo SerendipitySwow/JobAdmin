@@ -7,15 +7,11 @@
       </el-col>
       <table-right-toolbar @toggleData="switchDataType" @refreshTable="getList"></table-right-toolbar>
     </el-row>
-    <el-table
-    v-loading="loading"
-    :data="menuTree"
-    row-key="id"
-    :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+    <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="name" label="菜单名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="icon" label="图标" align="center" width="100">
         <template slot-scope="scope">
-          <ma-icon :name="scope.row.icon"/>
+          <ma-icon :name="scope.row.icon" />
         </template>
       </el-table-column>
       <el-table-column prop="sort" label="排序" width="80"></el-table-column>
@@ -40,26 +36,12 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="small"
-            type="text"
-            icon="el-icon-edit"
-            @click="$refs.menuForm.update(scope.row)"
-          >修改</el-button>
-          <el-button
-            size="small"
-            type="text"
-            @click="$refs.menuForm.create(scope.row)"
-            icon="el-icon-plus"
-          >新增</el-button>
-          <el-button
-            size="small"
-            type="text"
-            icon="el-icon-delete"
-          >删除</el-button>
+          <el-button size="small" type="text" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
+          <el-button size="small" type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <menu-form ref="menuForm" :menuTree="menuTree"  @closeDialog="handleClose"></menu-form>
+    <menu-form ref="menuForm" :menuTree="menuTree" @closeDialog="handleClose"></menu-form>
   </ma-container>
 </template>
 <script>
@@ -84,6 +66,7 @@ export default {
     this.getList()
   },
   methods: {
+    // 获取数据
     getList () {
       this.loading = true
       if (!this.showRecycle) {
@@ -98,12 +81,27 @@ export default {
         })
       }
     },
+    // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
     },
+    // 切换回收站数据方法
     switchDataType () {
       this.showRecycle = !this.showRecycle
       this.getList()
+    },
+    // 删除菜单
+    handleDelete (id) {
+      this.$confirm('此操作会将数据移到回收站！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '操作成功!'
+        })
+      })
     }
   }
 }

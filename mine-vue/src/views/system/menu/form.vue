@@ -1,10 +1,5 @@
 <template>
-  <el-dialog
-    :title="title"
-    :visible.sync="showForm"
-    :before-close="handleClose"
-    width="35%"
-    >
+  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="35%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="form.type" size="small">
@@ -15,7 +10,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上级菜单" prop="parent_id">
-        <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }" ></el-cascader>
+        <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
       </el-form-item>
       <el-row>
         <el-col :span="12">
@@ -23,7 +18,7 @@
             <el-input v-model="form.name" size="small" placeholder="请输入菜单名称"></el-input>
           </el-form-item>
           <el-form-item label="图标" prop="icon" v-if="form.type !== 'B'">
-            <ma-icon-select v-model="form.icon" size="small" :user-input="true"/>
+            <ma-icon-select v-model="form.icon" size="small" :user-input="true" />
           </el-form-item>
           <el-form-item label="排序" prop="sort">
             <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
@@ -80,17 +75,24 @@ export default {
   },
   data () {
     return {
+      // 显示标题
       title: '新增菜单',
+      // 显示form窗口
       showForm: false,
+      // 菜单选择器数据
       selectTree: [],
+      // 要修改的记录
       record: null,
+      // 弹窗类型
       saveType: 'create',
+      // 表单数据
       form: {
         type: 'T',
         parent_id: null,
         name: null,
         code: '',
         route: '',
+        icon: '',
         component: '',
         status: '0',
         sort: 0,
@@ -99,6 +101,7 @@ export default {
         is_quick: '1',
         is_cache: '0'
       },
+      // 表单验证规则
       rules: {
         name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
         code: [{ required: true, message: '请输入菜单代码', trigger: 'blur' }],
@@ -107,6 +110,7 @@ export default {
       }
     }
   },
+  // 创建生命周期
   created () {
     getSelectTree().then(res => {
       this.selectTree = res.data
@@ -125,6 +129,8 @@ export default {
       this.saveType = 'update'
       this.title = '编辑菜单：' + record.name
       this.showForm = true
+      // 填充form数据
+      this.setFormData(record)
     },
     // 关闭处理方法
     handleClose () {
@@ -141,10 +147,12 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.saveType === 'create') {
+            // 新增数据
             save(this.form).then(res => {
               this.resetForm()
             })
           } else {
+            // 更新数据
           }
         } else {
           return false
@@ -156,12 +164,20 @@ export default {
       this.$emit('closeDialog', true)
       this.showForm = false
       this.$refs.form.resetFields()
+    },
+    // 填充form数据
+    setFormData (record) {
+      for (const item in this.form) {
+        if (typeof record[item] !== 'undefined') {
+          this.form[item] = record[item]
+        }
+      }
     }
   }
 }
 </script>
 <style scoped>
 /deep/ .el-form-item__content .el-input-group {
-  vertical-align:middle;
+  vertical-align: middle;
 }
 </style>

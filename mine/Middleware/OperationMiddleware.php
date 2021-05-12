@@ -54,7 +54,6 @@ class OperationMiddleware implements MiddlewareInterface
         $request = $this->container->get(MineRequest::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         return [
-            'data' => $request->all(),
             'time' => date('Y-m-d H:i:s', $request->getServerParams()['request_time']),
             'method' => $request->getServerParams()['request_method'],
             'router' => $request->getServerParams()['path_info'],
@@ -63,6 +62,7 @@ class OperationMiddleware implements MiddlewareInterface
             'username' => $request->getUsername(),
             'ip_location' => Str::ipToRegion($request->ip()),
             'service_name' => $this->getOperationMenuName(),
+            'request_data' => $request->all(),
             'response_code' => $response->getStatusCode(),
             'response_data' => $response->getBody()->getContents(),
         ];
