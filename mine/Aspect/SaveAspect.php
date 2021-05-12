@@ -6,7 +6,6 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
-use Mine\Mine;
 use Mine\MineModel;
 use Mine\MineRequest;
 
