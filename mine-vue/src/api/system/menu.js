@@ -25,13 +25,25 @@ export function getRecycle (params = {}) {
 }
 
 /**
+ * 获取菜单选择树
+ * @returns
+ */
+export function getSelectTree () {
+  return request({
+    url: 'system/menu/selectTree',
+    method: 'get'
+  })
+}
+
+/**
  * 添加菜单
  * @returns
  */
 export function save (params = {}) {
   return request({
     url: 'system/menu/save',
-    method: 'post'
+    method: 'post',
+    data: params
   })
 }
 

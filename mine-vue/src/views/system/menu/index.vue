@@ -3,7 +3,7 @@
     <template slot="header">Header</template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" @click="$refs.menuForm.create(null)">新增菜单</el-button>
+        <el-button size="small" icon="el-icon-plus" @click="$refs.menuForm.create()">新增菜单</el-button>
       </el-col>
       <table-right-toolbar @toggleData="switchDataType" @refreshTable="getList"></table-right-toolbar>
     </el-row>

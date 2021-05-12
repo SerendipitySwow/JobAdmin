@@ -6,6 +6,7 @@ import router from './router'
 import store from '@/store/index'
 import './permission'
 import TableRightToolbar from '@/components/ma-table-right-toolbar'
+import '@/assets/style/mine-admin.css'
 
 // 核心插件
 Vue.use(mineadmin)
