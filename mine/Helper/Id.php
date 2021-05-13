@@ -3,82 +3,86 @@ namespace Mine\Helper;
 
 class Id
 {
-    const twepoch =  1620750646000;
+    const TWEPOCH = 1620750646000; // 时间起始标记点，作为基准，一般取系统的最近时间（一旦确定不能变动）
 
-    //机器标识占的位数
-    const workerIdBits = 10;
+    const WORKER_ID_BITS     = 1; // 机器标识位数
+    const DATACENTER_ID_BITS = 1; // 数据中心标识位数
+    const SEQUENCE_BITS      = 2; // 毫秒内自增位
 
-    //毫秒内自增数点的位数
-    const sequenceBits = 1;
+    private $workerId; // 工作机器ID
+    private $datacenterId; // 数据中心ID
+    private $sequence; // 毫秒内序列
 
-    protected $workId = 0;
+    private $maxWorkerId     = -1 ^ (-1 << self::WORKER_ID_BITS); // 机器ID最大值
+    private $maxDatacenterId = -1 ^ (-1 << self::DATACENTER_ID_BITS); // 数据中心ID最大值
 
-    //要用静态变量
-    static $lastTimestamp = -1;
+    private $workerIdShift      = self::SEQUENCE_BITS; // 机器ID偏左移位数
+    private $datacenterIdShift  = self::SEQUENCE_BITS + self::WORKER_ID_BITS; // 数据中心ID左移位数
+    private $timestampLeftShift = self::SEQUENCE_BITS + self::WORKER_ID_BITS + self::DATACENTER_ID_BITS; // 时间毫秒左移位数
+    private $sequenceMask       = -1 ^ (-1 << self::SEQUENCE_BITS); // 生成序列的掩码
 
-    static $sequence = 0;
+    private $lastTimestamp = -1; // 上次生产id时间戳
 
-
-    function __construct($workId = 1){
-        //机器ID范围判断
-        $maxWorkerId = -1 ^ (-1 << self::workerIdBits);
-        if($workId > $maxWorkerId || $workId< 0){
-            throw new Exception("workerId can't be greater than ".$this->maxWorkerId." or less than 0");
+    public function __construct($workerId = 1, $datacenterId = 1, $sequence = 0)
+    {
+        if ($workerId > $this->maxWorkerId || $workerId < 0) {
+            throw new Exception("worker Id can't be greater than {$this->maxWorkerId} or less than 0");
         }
-        //赋值
-        $this->workId = $workId;
+
+        if ($datacenterId > $this->maxDatacenterId || $datacenterId < 0) {
+            throw new Exception("datacenter Id can't be greater than {$this->maxDatacenterId} or less than 0");
+        }
+
+        $this->workerId     = $workerId;
+        $this->datacenterId = $datacenterId;
+        $this->sequence     = $sequence;
     }
 
-    /**
-     * 生成一个ID
-     * @return int
-     */
-    public function getId(): int
+    public function getId()
     {
         $timestamp = $this->timeGen();
-        $lastTimestamp = self::$lastTimestamp;
-        //判断时钟是否正常
-        if ($timestamp < $lastTimestamp) {
-            throw new Exception("Clock moved backwards.  Refusing to generate id for %d milliseconds", ($lastTimestamp - $timestamp));
+
+        if ($timestamp < $this->lastTimestamp) {
+            $diffTimestamp = $this->lastTimestamp - $timestamp;
+            throw new Exception("Clock moved backwards.  Refusing to generate id for {$diffTimestamp} milliseconds");
         }
-        //生成唯一序列
-        if ($lastTimestamp == $timestamp) {
-            $sequenceMask = -1 ^ (-1 << self::sequenceBits);
-            self::$sequence = (self::$sequence + 1) & $sequenceMask;
-            if (self::$sequence == 0) {
-                $timestamp = $this->tilNextMillis($lastTimestamp);
+
+        if ($this->lastTimestamp == $timestamp) {
+            $this->sequence = ($this->sequence + 1) & $this->sequenceMask;
+
+            if (0 == $this->sequence) {
+                $timestamp = $this->tilNextMillis($this->lastTimestamp);
             }
         } else {
-            self::$sequence = 0;
+            $this->sequence = 0;
         }
-        self::$lastTimestamp = $timestamp;
-        //
-        //时间毫秒/数据中心ID/机器ID,要左移的位数
-        $timestampLeftShift = self::sequenceBits + self::workerIdBits;
-        $workerIdShift = self::sequenceBits;
-        //组合3段数据返回: 时间戳.工作机器.序列
-        return (($timestamp - self::twepoch) << $timestampLeftShift) | ($this->workId << $workerIdShift) | self::$sequence;
+
+        $this->lastTimestamp = $timestamp;
+
+        return (($timestamp - self::TWEPOCH) << $this->timestampLeftShift) |
+            ($this->datacenterId << $this->datacenterIdShift) |
+            ($this->workerId << $this->workerIdShift) |
+            $this->sequence;
     }
 
-    /**
-     * @return float
-     */
-    protected function timeGen(): float
-    {
-        return (float)sprintf("%.0f", microtime(true) * 1000);
-    }
-
-    /**
-     * @param $lastTimestamp
-     * @return float
-     */
-    protected function tilNextMillis($lastTimestamp): float
+    protected function tilNextMillis($lastTimestamp)
     {
         $timestamp = $this->timeGen();
         while ($timestamp <= $lastTimestamp) {
             $timestamp = $this->timeGen();
         }
+
         return $timestamp;
     }
 
+    protected function timeGen()
+    {
+        return floor(microtime(true) * 1000);
+    }
+
+    // 左移 <<
+    protected function leftShift($a, $b)
+    {
+        return bcmul($a, bcpow(2, $b));
+    }
 }
