@@ -59,6 +59,28 @@ export function deletes (ids) {
 }
 
 /**
+ * 恢复数据
+ * @returns
+ */
+export function recoverys (ids) {
+  return request({
+    url: 'system/menu/recovery/' + ids,
+    method: 'put'
+  })
+}
+
+/**
+ * 真实删除
+ * @returns
+ */
+export function realDeletes (ids) {
+  return request({
+    url: 'system/menu/realDelete/' + ids,
+    method: 'delete'
+  })
+}
+
+/**
  * 更新数据
  * @returns
  */

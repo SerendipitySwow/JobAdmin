@@ -41,6 +41,12 @@ export default {
         const accessedRoutes = filterAsyncRouter(state.routers)
         const menu = util.supplementPath(accessedRoutes)
         menu.unshift({ title: '首页', path: '/', name: 'dashboard', icon: 'home' })
+        accessedRoutes.push({
+          path: '*',
+          name: '404',
+          hidden: true,
+          component: (resolve) => require(['@/views/public/error/404'], resolve)
+        })
         commit('store/menu/headerSet', menu, { root: true })
         commit('store/page/init', menu, { root: true })
         commit('store/search/init', menu, { root: true })
@@ -54,9 +60,6 @@ export default {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter (asyncRouterMap) {
   return asyncRouterMap.filter(route => {
-    if (route.name === 'Dashboard') {
-      route.redirect = { name: 'dashboard/index' }
-    }
     if (route.type === 'T') {
       route.component = mainLayout
     } else if (route.type === 'C') {

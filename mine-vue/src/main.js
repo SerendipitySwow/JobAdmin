@@ -11,7 +11,7 @@ import '@/assets/style/mine-admin.css'
 // 核心插件
 Vue.use(mineadmin)
 
-// 全局挂在组件
+// 全局挂载组件
 Vue.component('TableRightToolbar', TableRightToolbar)
 
 new Vue({
@@ -38,9 +38,9 @@ new Vue({
     '$route.matched': {
       handler (matched) {
         if (matched.length > 0) {
-          const _side = this.$store.state.store.menu.header.filter(menu => menu.path === matched[0].path)
+          const _side = this.$store.getters.menus.filter(menu => menu.path === matched[0].path)
           if (matched[0].name === 'dashboard') {
-            this.$store.commit('store/menu/asideSet', this.$store.state.store.permission.quick)
+            this.$store.commit('store/menu/asideSet', this.$store.getters.quick)
           } else {
             this.$store.commit('store/menu/asideSet', _side.length > 0 ? _side[0].children : [])
           }

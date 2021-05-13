@@ -42,7 +42,7 @@
           </div>
           <div v-else>
             <el-button size="small" type="text" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" icon="el-icon-delete" @click="handleRecycle(scope.row.id)">移到回收站</el-button>
+            <el-button size="small" type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>
@@ -51,7 +51,7 @@
   </ma-container>
 </template>
 <script>
-import { getMenuTree, getRecycle } from '@/api/system/menu'
+import { getMenuTree, getRecycle, deletes } from '@/api/system/menu'
 import MenuForm from './form'
 export default {
   name: 'system-menu-index',
@@ -97,15 +97,14 @@ export default {
       this.getList()
     },
     // 移到回收站
-    handleRecycle (id) {
+    handleDelete (id) {
       this.$confirm('此操作会将数据移到回收站！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '操作成功!'
+        deletes(id).then(res => {
+          this.$message({ type: 'success', message: res.message })
         })
       })
     },
