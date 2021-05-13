@@ -81,9 +81,7 @@ class SystemMenuService extends AbstractService
             $menu = $this->mapper->read($data['parent_id']);
             if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
                 $code = explode('-', $menu['code']);
-                if (count($code) > 1) {
-                    array_pop($code);
-                }
+                (count($code) > 1) && array_pop($code);
                 $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
             } else {
                 $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
