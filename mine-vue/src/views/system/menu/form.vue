@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="35%">
+  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="50%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="form.type" size="small">
