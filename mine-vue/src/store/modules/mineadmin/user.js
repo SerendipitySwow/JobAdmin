@@ -1,5 +1,4 @@
 import util from '@/libs/util'
-import router from '@/router'
 
 export default {
   namespaced: true,
@@ -16,12 +15,13 @@ export default {
       util.cookies.remove('token')
       util.cookies.remove('uuid')
       // 跳转路由
-      router.push({ name: 'login' })
       dispatch('store/user/set', { name: '' }, { root: true })
-      commit('store/permission/setRouters', {}, { root: true })
-      commit('store/permission/setQuick', {}, { root: true })
-      commit('store/menu/headerSet', {}, { root: true })
-      commit('store/page/init', {}, { root: true })
+      commit('store/permission/setRouters', [], { root: true })
+      commit('store/permission/setQuick', [], { root: true })
+      commit('store/permission/setRoles', [], { root: true })
+      commit('store/menu/headerSet', [], { root: true })
+      commit('store/page/init', [], { root: true })
+      location.reload()
     },
     /**
      * @description 设置用户数据

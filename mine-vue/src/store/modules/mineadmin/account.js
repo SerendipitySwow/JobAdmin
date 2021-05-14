@@ -15,7 +15,6 @@ export default {
     async login ({ commit, dispatch }, { username = '', password = '', code = '' } = {}) {
       await Login({ username, password, code }).then(res => {
         util.cookies.set('token', res.data.token)
-        dispatch('userinfo')
       })
     },
     async userinfo ({ commit, dispatch }) {
