@@ -3,7 +3,7 @@
     <template slot="header">Header</template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" @click="$refs.menuForm.create()">新增菜单</el-button>
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
       </el-col>
       <table-right-toolbar @toggleData="switchDataType" @refreshTable="getList"></table-right-toolbar>
     </el-row>
@@ -37,12 +37,12 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" icon="el-icon-refresh-left" @click="handleRecovery(scope.row)">恢复</el-button>
-            <el-button size="small" type="text" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:menu:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row)">恢复</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:menu:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:menu:update']" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:menu:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>

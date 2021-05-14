@@ -12,9 +12,10 @@ export default {
      * @param {Object} payload password {String} 密码
      * @param {Object} payload route {Object} 登录成功后定向的路由对象 任何 vue-router 支持的格式
      */
-    async login ({ commit }, { username = '', password = '', code = '' } = {}) {
+    async login ({ commit, dispatch }, { username = '', password = '', code = '' } = {}) {
       await Login({ username, password, code }).then(res => {
         util.cookies.set('token', res.data.token)
+        dispatch('userinfo')
       })
     },
     async userinfo ({ commit, dispatch }) {

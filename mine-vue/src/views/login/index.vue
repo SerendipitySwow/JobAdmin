@@ -139,7 +139,7 @@ export default {
             password: this.formLogin.password,
             code: this.formLogin.code
           }).then(() => {
-            this.$router.replace(this.$route.query.redirect || '/')
+            this.$router.push(this.$route.query.redirect || '/')
             this.$notify({
               title: '提示',
               message: '登录成功',
