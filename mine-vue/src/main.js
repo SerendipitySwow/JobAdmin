@@ -4,12 +4,13 @@ import App from './App'
 import mineadmin from '@/plugin/mineadmin'
 import router from './router'
 import store from '@/store/index'
-import './permission'
+import permission from '@/directive/permission/index'
 import TableRightToolbar from '@/components/ma-table-right-toolbar'
+import './permission'
 import '@/assets/style/mine-admin.css'
 
-// 核心插件
 Vue.use(mineadmin)
+Vue.use(permission)
 
 // 全局挂载组件
 Vue.component('TableRightToolbar', TableRightToolbar)
