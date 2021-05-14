@@ -68,4 +68,40 @@ class RoleController extends MineController
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
+
+    /**
+     * 单个或批量删除数据到回收站
+     * @DeleteMapping("delete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function delete(String $ids): ResponseInterface
+    {
+        return $this->service->delete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量真实删除数据 （清空回收站）
+     * @DeleteMapping("realDelete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function realDelete(String $ids): ResponseInterface
+    {
+        return $this->service->realDelete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量恢复在回收站的数据
+     * @PutMapping("recovery/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function recovery(String $ids): ResponseInterface
+    {
+        return $this->service->recovery($ids) ? $this->success() : $this->error();
+    }
 }

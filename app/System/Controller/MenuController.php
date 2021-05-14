@@ -6,8 +6,10 @@ use App\System\Request\Menu\SystemMenuCreateRequest;
 use App\System\Service\SystemMenuService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
@@ -59,8 +61,57 @@ class MenuController extends MineController
     }
 
     /**
+     * 更新菜单
+     * @PutMapping("update/{id}")
+     * @Permission
+     * @param int $id
+     * @param SystemMenuCreateRequest $request
+     * @return ResponseInterface
+     */
+    public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
+    {
+        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量删除用户到回收站
+     * @DeleteMapping("delete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function delete(String $ids): ResponseInterface
+    {
+        return $this->service->delete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量真实删除用户 （清空回收站）
+     * @DeleteMapping("realDelete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function realDelete(String $ids): ResponseInterface
+    {
+        return $this->service->realDelete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量恢复在回收站的用户
+     * @PutMapping("recovery/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function recovery(String $ids): ResponseInterface
+    {
+        return $this->service->recovery($ids) ? $this->success() : $this->error();
+    }
+
+    /**
      * 从回收站获取菜单树
-     * @GetMapping("getRecycle")
+     * @GetMapping("recycleTree")
      * @Permission
      */
     public function getRecycle():ResponseInterface

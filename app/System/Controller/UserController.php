@@ -15,7 +15,6 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
-use Mine\Traits\ControllerTrait;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -26,7 +25,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class UserController extends MineController
 {
-    use ControllerTrait;
     /**
      * @Inject
      * @var SystemUserService
@@ -56,6 +54,18 @@ class UserController extends MineController
     }
 
     /**
+     * 获取一个用户信息
+     * @GetMapping("read/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function read(int $id): ResponseInterface
+    {
+        return $this->success($this->service->read($id));
+    }
+
+    /**
      * 更新一个用户信息
      * @PutMapping("update/{id}")
      * @param int $id
@@ -66,5 +76,41 @@ class UserController extends MineController
     public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量删除用户到回收站
+     * @DeleteMapping("delete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function delete(String $ids): ResponseInterface
+    {
+        return $this->service->delete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量真实删除用户 （清空回收站）
+     * @DeleteMapping("realDelete/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function realDelete(String $ids): ResponseInterface
+    {
+        return $this->service->realDelete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量恢复在回收站的用户
+     * @PutMapping("recovery/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function recovery(String $ids): ResponseInterface
+    {
+        return $this->service->recovery($ids) ? $this->success() : $this->error();
     }
 }
