@@ -5,9 +5,9 @@ class Id
 {
     const TWEPOCH = 1620750646000; // 时间起始标记点，作为基准，一般取系统的最近时间（一旦确定不能变动）
 
-    const WORKER_ID_BITS     = 1; // 机器标识位数
-    const DATACENTER_ID_BITS = 1; // 数据中心标识位数
-    const SEQUENCE_BITS      = 2; // 毫秒内自增位
+    const WORKER_ID_BITS     = 2; // 机器标识位数
+    const DATACENTER_ID_BITS = 2; // 数据中心标识位数
+    const SEQUENCE_BITS      = 5; // 毫秒内自增位
 
     private $workerId; // 工作机器ID
     private $datacenterId; // 数据中心ID
@@ -26,11 +26,11 @@ class Id
     public function __construct($workerId = 1, $datacenterId = 1, $sequence = 0)
     {
         if ($workerId > $this->maxWorkerId || $workerId < 0) {
-            throw new Exception("worker Id can't be greater than {$this->maxWorkerId} or less than 0");
+            throw new \Exception("worker Id can't be greater than {$this->maxWorkerId} or less than 0");
         }
 
         if ($datacenterId > $this->maxDatacenterId || $datacenterId < 0) {
-            throw new Exception("datacenter Id can't be greater than {$this->maxDatacenterId} or less than 0");
+            throw new \Exception("datacenter Id can't be greater than {$this->maxDatacenterId} or less than 0");
         }
 
         $this->workerId     = $workerId;
@@ -44,7 +44,7 @@ class Id
 
         if ($timestamp < $this->lastTimestamp) {
             $diffTimestamp = $this->lastTimestamp - $timestamp;
-            throw new Exception("Clock moved backwards.  Refusing to generate id for {$diffTimestamp} milliseconds");
+            throw new \Exception("Clock moved backwards.  Refusing to generate id for {$diffTimestamp} milliseconds");
         }
 
         if ($this->lastTimestamp == $timestamp) {

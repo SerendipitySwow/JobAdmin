@@ -43,7 +43,7 @@ class UserController extends MineController
 
     /**
      * 新增一个用户
-     * @PostMapping("create")
+     * @PostMapping("save")
      * @param SystemUserCreateRequest $request
      * @return ResponseInterface
      * @Permission()

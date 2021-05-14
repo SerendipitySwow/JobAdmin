@@ -1,7 +1,7 @@
 <template>
   <div class="table-right-toolbar">
     <el-row>
-      <el-tooltip class="item" effect="dark" :content="showRecycle ? '显示正常数据' : '显示回收站数据'" placement="top">
+      <el-tooltip class="item" effect="dark" v-if="recycleCode" v-hasPermission="[recycleCode]" :content="showRecycle ? '显示正常数据' : '显示回收站数据'" placement="top">
         <el-button size="small" :type="dataType" circle icon="el-icon-delete" @click="toggleData()" />
       </el-tooltip>
       <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索栏' : '显示搜索栏'" placement="top">
@@ -20,9 +20,13 @@
 export default {
   name: 'table-right-toolbar',
   props: {
+    recycleCode: {
+      type: String,
+      default: ''
+    },
     showSearch: {
       type: Boolean,
-      default: true
+      default: false
     },
     columns: {
       type: Array
