@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemUser;
+use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Mine\Abstracts\AbstractMapper;
 
@@ -110,5 +111,22 @@ class SystemUserMapper extends AbstractMapper
         $user->postList = $user->posts()->get();
         $user->roleList = $user->roles()->get();
         return $user;
+    }
+
+    /**
+     * 搜索处理器
+     */
+    public function handleSearchs(Builder $query, array $params)
+    {
+        if (isset($params['dept_id'])) {
+            $query = $query->where('dept_id', $params['dept_id']);
+        }
+        if (isset($params['username'])) {
+            $query = $query->where('username', 'like', '%'.$params['username'].'%');
+        }
+        if (isset($params['status'])) {
+            $query = $query->where('status', $params['status']);
+        }
+        return $query;
     }
 }

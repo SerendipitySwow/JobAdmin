@@ -19,7 +19,6 @@ use Mine\Exception\UserBanException;
 use Mine\Helper\LoginUser;
 use Mine\Helper\MineCaptcha;
 use Mine\MineCollection;
-use Mine\MineModelService;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -119,7 +118,7 @@ class SystemUserService extends AbstractService
                 return false;
             }
         } catch (InvalidArgumentException $e) {
-            throw new Exception;
+            throw new \Exception;
         }
     }
 
@@ -275,46 +274,6 @@ class SystemUserService extends AbstractService
             }
             return $this->mapper->save($data);
         }
-    }
-
-    /**
-     * 单个或批量软删除用户
-     * @param String $ids
-     * @return bool
-     */
-    public function delete(String $ids): bool
-    {
-        return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
-    }
-
-    /**
-     * 真实删除用户（清空回收站）
-     * @param String $ids
-     * @return bool
-     */
-    public function realDelete(String $ids): bool
-    {
-        return empty($ids) ? false : $this->mapper->realDelete(explode(',', $ids));
-    }
-
-    /**
-     * 批量恢复软删除的用户
-     * @param String $ids
-     * @return bool
-     */
-    public function recovery(String $ids): bool
-    {
-        return empty($ids) ? false : $this->mapper->recovery(explode(',', $ids));
-    }
-
-    /**
-     * 获取用户信息
-     * @param int $id
-     * @return SystemUser
-     */
-    public function read(int $id): SystemUser
-    {
-        return $this->mapper->read($id);
     }
 
     /**

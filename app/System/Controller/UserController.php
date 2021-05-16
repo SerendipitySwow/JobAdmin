@@ -38,7 +38,7 @@ class UserController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList());
+        return $this->success($this->service->getPageList($this->request->all()));
     }
 
     /**

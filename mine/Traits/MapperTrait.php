@@ -68,7 +68,7 @@ trait MapperTrait
      * @param array|null $params
      * @return Builder
      */
-    protected function listQuerySetting(?array $params = null): Builder
+    public function listQuerySetting(?array $params = null): Builder
     {
         $query = (($params['recycle'] ?? false) === true) ? $this->model::onlyTrashed() : $this->model::query();
 
@@ -84,6 +84,16 @@ trait MapperTrait
             $query = $query->whereRaw($params['query_raw']);
         }
 
+        $query = $this->handleSearchs($query, $params);
+
+        return $query;
+    }
+
+    /**
+     * 搜索处理器
+     */
+    public function handleSearchs(Builder $query, array $params)
+    {
         return $query;
     }
 
