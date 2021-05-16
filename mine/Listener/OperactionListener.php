@@ -20,7 +20,7 @@ class OperactionListener implements ListenerInterface
 {
     protected $container;
 
-    protected $ignoreRouter = ['/login', '/getInfo', '/favicon.ico', '/system/captcha'];
+    protected $ignoreRouter = ['/login', '/getInfo', '/system/captcha'];
 
     public function __construct(ContainerInterface $container)
     {

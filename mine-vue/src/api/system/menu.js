@@ -84,9 +84,10 @@ export function realDeletes (ids) {
  * 更新数据
  * @returns
  */
-export function update (id) {
+export function update (id, params = {}) {
   return request({
     url: 'system/menu/update/' + id,
-    method: 'put'
+    method: 'put',
+    data: params
   })
 }

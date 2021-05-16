@@ -94,10 +94,10 @@ class MenuController extends MineController
      */
     public function realDelete(String $ids): ResponseInterface
     {
-        $menus = $this->service->realDelete($ids);
+        $menus = $this->service->realDel($ids);
         return is_null($menus) ? 
-        $this->success() : 
-        $this->success(__('exists_children_ctu', ['names' => explode(',', $menus)]));
+        $this->success() :
+        $this->success(sprintf('删除成功，%s',  __('system.exists_children_ctu', ['names' => implode(',', $menus)])));
     }
 
     /**

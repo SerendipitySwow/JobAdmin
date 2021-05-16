@@ -115,8 +115,11 @@ class SystemUserMapper extends AbstractMapper
 
     /**
      * 搜索处理器
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
      */
-    public function handleSearchs(Builder $query, array $params)
+    public function handleSearch(Builder $query, array $params): Builder
     {
         if (isset($params['dept_id'])) {
             $query = $query->where('dept_id', $params['dept_id']);

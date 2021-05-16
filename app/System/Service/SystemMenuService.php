@@ -92,6 +92,9 @@ class SystemMenuService extends AbstractService
 
     /**
      * 更新菜单
+     * @param int $id
+     * @param array $data
+     * @return bool
      */
     public function update(int $id, array $data): bool
     {
@@ -101,13 +104,18 @@ class SystemMenuService extends AbstractService
             $data['level'] = $data['parent_id'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
-            $data['parent_id'] = array_pop($data['parent_id']);
-            $data['level'] = implode(',', $pid);
+            if (is_array($data['parent_id'])) {
+                $data['parent_id'] = array_pop($data['parent_id']);
+                $data['level'] = implode(',', $pid);
+            } else {
+                $data['level'] = $data['parent_id'];
+            }
             $menu = $this->mapper->read($data['parent_id']);
             if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
                 $code = explode('-', $menu['code']);
                 (count($code) > 1) && array_pop($code);
-                $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
+                $curCode = explode('-', $data['code']);
+                $data['code'] = sprintf('%s-%s', implode('-', $code), array_pop($curCode));
             } else {
                 $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
             }
@@ -117,8 +125,10 @@ class SystemMenuService extends AbstractService
 
     /**
      * 真实删除菜单
+     * @param string $ids
+     * @return array
      */
-    public function realDelete(string $ids): ?array
+    public function realDel(string $ids): ?array
     {
         $ids = explode(',', $ids);
         // 跳过的菜单
@@ -135,6 +145,8 @@ class SystemMenuService extends AbstractService
 
     /**
      * 检查子菜单是否存在
+     * @param int $id
+     * @return bool
      */
     public function checkChildrenExists(int $id): bool
     {

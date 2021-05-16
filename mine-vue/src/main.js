@@ -15,6 +15,15 @@ Vue.use(permission)
 // 全局挂载组件
 Vue.component('TableRightToolbar', TableRightToolbar)
 
+// 全局挂载方法
+Vue.prototype.success = function (msg) {
+  this.$message({ showClose: true, message: msg, type: 'success' })
+}
+
+Vue.prototype.error = function (msg) {
+  this.$message({ showClose: true, message: msg, type: 'error' })
+}
+
 new Vue({
   store,
   i18n,

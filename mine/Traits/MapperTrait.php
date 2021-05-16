@@ -1,6 +1,5 @@
 <?php
 
-declare (strict_types = 1);
 namespace Mine\Traits;
 
 use Hyperf\Database\Model\Builder;
@@ -73,7 +72,7 @@ trait MapperTrait
         $query = (($params['recycle'] ?? false) === true) ? $this->model::onlyTrashed() : $this->model::query();
 
         if ($params['select'] ?? false) {
-            $query = $query->select($this->filterAttributes($params['select']));
+            $query = $query->select($this->filterQueryAttributes($params['select']));
         }
 
         if ($params['order_by'] ?? false) {
@@ -84,26 +83,29 @@ trait MapperTrait
             $query = $query->whereRaw($params['query_raw']);
         }
 
-        $query = $this->handleSearchs($query, $params);
+        $query = $this->handleSearch($query, $params);
 
         return $query;
     }
 
     /**
      * 搜索处理器
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
      */
-    public function handleSearchs(Builder $query, array $params)
+    public function handleSearch(Builder $query, array $params): Builder
     {
         return $query;
     }
 
     /**
-     * 过滤属性
+     * 过滤查询字段不存在的属性
      * @param array $fields
      * @param bool $removePk
      * @return array
      */
-    protected function filterAttributes(array $fields, bool $removePk = false): array
+    protected function filterQueryAttributes(array $fields, bool $removePk = false): array
     {
         $model = new $this->model;
         $attrs = $model->getFillable();
@@ -122,13 +124,35 @@ trait MapperTrait
     }
 
     /**
+     * 过滤新增或写入不存在的字段
+     * @param array $data
+     * @param bool $removePk
+     * @return array
+     */
+    protected function filterExecuteAttributes(array $data, bool $removePk = false): array
+    {
+        $model = new $this->model;
+        $attrs = $model->getFillable();
+        foreach ($data as $name => $val) {
+            if (!in_array($name, $attrs)) {
+                unset($data[$name]);
+            }
+        }
+        if ($removePk && isset($data[$model->getKeyName()])) {
+            unset($data[$model->getKeyName()]);
+        }
+        $model = null;
+        return $data;
+    }
+
+    /**
      * 新增数据
      * @param array $data
      * @return int
      */
-    public function save(array $data)
+    public function save(array $data): int
     {
-        $model = $this->model::create($data);
+        $model = $this->model::create($this->filterExecuteAttributes($data));
         return $model->{$model->getKeyName()};
     }
 
@@ -137,7 +161,7 @@ trait MapperTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id)
+    public function read(int $id): MineModel
     {
         return $this->model::find($id);
     }
@@ -148,7 +172,7 @@ trait MapperTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id)
+    public function readByRecycle(int $id): MineModel
     {
         return $this->model::withTrashed()->find($id);
     }
@@ -158,7 +182,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function delete(array $ids)
+    public function delete(array $ids): bool
     {
         $this->model::destroy($ids);
         return true;
@@ -168,24 +192,14 @@ trait MapperTrait
      * 更新一条数据
      * @param int $id
      * @param array $data
-     * @return boolm
+     * @return bool
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): bool
     {
-        $this->filterPk($data);
-        return $this->model->where((new $this->model)->getKeyName(), $id)->update($data);
-    }
-
-    /**
-     * 过滤主键
-     */
-    public function filterPk(&$data)
-    {
-        $model = new $this->model;
-        if (isset($data[$model->getKeyName()])) {
-            unset($data[$model->getKeyName()]);
-        }
-        $model = null;
+        print_r($this->filterExecuteAttributes($data, true));
+        return $this->model::where((new $this->model)->getKeyName(), $id)->update(
+            $this->filterExecuteAttributes($data, true)
+        );
     }
 
     /**
@@ -193,7 +207,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function realDelete(array $ids)
+    public function realDelete(array $ids): bool
     {
         foreach ($ids as $id) {
             $model = $this->model::withTrashed()->find($id);
@@ -207,7 +221,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function recovery(array $ids)
+    public function recovery(array $ids): bool
     {
         $this->model::withTrashed()->whereIn((new $this->model)->getKeyName(), $ids)->restore();
         return true;
@@ -219,7 +233,7 @@ trait MapperTrait
      * @param string $field
      * @return bool
      */
-    public function disable(array $ids, string $field = 'status')
+    public function disable(array $ids, string $field = 'status'): bool
     {
         $this->model::query()->whereIn((new $this->model)->getKeyName(), $ids)->update([$field => $this->model::DISABLE]);
         return true;
@@ -231,7 +245,7 @@ trait MapperTrait
      * @param string $field
      * @return bool
      */
-    public function enable(array $ids, string $field = 'status')
+    public function enable(array $ids, string $field = 'status'): bool
     {
         $this->model::query()->whereIn((new $this->model)->getKeyName(), $ids)->update([$field => $this->model::ENABLE]);
         return true;

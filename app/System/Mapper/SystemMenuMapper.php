@@ -3,6 +3,7 @@ declare (strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemMenu;
+use Hyperf\Database\Model\Model;
 use Mine\Abstracts\AbstractMapper;
 
 class SystemMenuMapper extends AbstractMapper
@@ -93,7 +94,7 @@ class SystemMenuMapper extends AbstractMapper
      * @param array|null $ids
      * @return array
      */
-    public function getMenuCode(array $ids = null)
+    public function getMenuCode(array $ids = null): array
     {
         return $this->model::query()->whereIn('id', $ids)->pluck('code')->toArray();
     }
@@ -126,7 +127,7 @@ class SystemMenuMapper extends AbstractMapper
     /**
      * 通过 route 查询菜单
      * @param string $route
-     * @return array|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
+     * @return null|Model|object|static
      */
     public function findMenuByRoute(string $route)
     {
@@ -140,11 +141,15 @@ class SystemMenuMapper extends AbstractMapper
      */
     public function getMenuName(array $ids = null): array
     {
-        return $this->model::query()->whereIn('id', $ids)->pluck('name')->toArray();
+        return $this->model::withTrashed()->whereIn('id', $ids)->pluck('name')->toArray();
     }
 
-    public function checkChildrenExists(int $id)
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function checkChildrenExists(int $id): bool
     {
-        return $this->model->where('parent_id', $id)->exists();
+        return $this->model::withTrashed()->where('parent_id', $id)->exists();
     }
 }

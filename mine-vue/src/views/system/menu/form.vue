@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="50%">
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="110px">
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="form.type" size="small">
           <el-radio-button label="T" name="type">分类</el-radio-button>
@@ -35,6 +35,15 @@
               <el-radio label="1">停用</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="生成按钮菜单" prop="restful" v-if="form.type === 'M' && saveType === 'create'">
+            <el-radio-group v-model="form.restful" style="margin-right: 10px;">
+              <el-radio label="0">生成</el-radio>
+              <el-radio label="1">不生成</el-radio>
+            </el-radio-group>
+            <el-tooltip class="item" effect="dark" content="生成RESTful路由按钮菜单，即：save、update、delete、read 以及回收站相关按钮菜单" placement="top">
+              <ma-icon name="question-circle" />
+            </el-tooltip>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="菜单代码" prop="code">
@@ -68,7 +77,7 @@
   </el-dialog>
 </template>
 <script>
-import { getSelectTree, save } from '@/api/system/menu'
+import { getSelectTree, save, update } from '@/api/system/menu'
 export default {
   props: {
     menuTree: Array
@@ -87,6 +96,7 @@ export default {
       saveType: 'create',
       // 表单数据
       form: {
+        id: null,
         type: 'T',
         parent_id: null,
         name: null,
@@ -99,7 +109,8 @@ export default {
         is_out: '1',
         is_hidden: '1',
         is_quick: '1',
-        is_cache: '0'
+        is_cache: '0',
+        restful: '0'
       },
       // 表单验证规则
       rules: {
@@ -154,11 +165,15 @@ export default {
           if (this.saveType === 'create') {
             // 新增数据
             save(this.form).then(res => {
-              this.$message({ type: 'success', message: res.message })
+              this.success(res.message)
               this.resetForm()
             })
           } else {
             // 更新数据
+            update(this.form.id, this.form).then(res => {
+              this.success(res.message)
+              this.resetForm()
+            })
           }
         } else {
           return false

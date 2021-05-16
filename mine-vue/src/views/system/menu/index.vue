@@ -37,7 +37,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:menu:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row)">恢复</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:menu:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
             <el-button size="small" type="text" v-hasPermission="['system:menu:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
@@ -51,7 +51,7 @@
   </ma-container>
 </template>
 <script>
-import { getMenuTree, getRecycle, deletes } from '@/api/system/menu'
+import { getMenuTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/menu'
 import MenuForm from './form'
 export default {
   name: 'system-menu-index',
@@ -104,13 +104,30 @@ export default {
         type: 'warning'
       }).then(() => {
         deletes(id).then(res => {
-          this.$message({ type: 'success', message: res.message })
+          this.success(res.message)
+          this.getList()
         })
       })
     },
     // 真实删除数据
     handleRealDelete (id) {
-
+      this.$confirm('此操作会将数据物理删除', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        realDeletes(id).then(res => {
+          this.success(res.message)
+          this.getList()
+        })
+      })
+    },
+    // 恢复数据
+    handleRecovery (id) {
+      recoverys(id).then(res => {
+        this.success(res.message)
+        this.getList()
+      })
     }
   }
 }

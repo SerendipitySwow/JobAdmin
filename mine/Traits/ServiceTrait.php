@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mine\Traits;
-
 
 use Mine\Abstracts\AbstractMapper;
 use Mine\MineModel;
@@ -19,7 +17,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getList(?array $params = null)
+    public function getList(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -33,7 +31,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getListByRecycle(?array $params = null)
+    public function getListByRecycle(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -47,7 +45,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getPageList(?array $params = null)
+    public function getPageList(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -60,7 +58,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getPageListByRecycle(?array $params = null)
+    public function getPageListByRecycle(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -74,7 +72,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getTreeList(?array $params = null)
+    public function getTreeList(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -88,7 +86,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getTreeListByRecycle(?array $params = null)
+    public function getTreeListByRecycle(?array $params = null): array
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -102,7 +100,7 @@ trait ServiceTrait
      * @param array $data
      * @return int
      */
-    public function save(array $data)
+    public function save(array $data): int
     {
         return $this->mapper->save($data);
     }
@@ -112,7 +110,7 @@ trait ServiceTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id)
+    public function read(int $id): MineModel
     {
         return $this->mapper->read($id);
     }
@@ -123,7 +121,7 @@ trait ServiceTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id)
+    public function readByRecycle(int $id): MineModel
     {
         return $this->mapper->readByRecycle($id);
     }
@@ -133,7 +131,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function delete(String $ids)
+    public function delete(String $ids): bool
     {
         return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
     }
@@ -144,7 +142,7 @@ trait ServiceTrait
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data)
+    public function update(int $id, array $data): bool
     {
         return $this->mapper->update($id, $data);
     }
@@ -154,7 +152,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function realDelete(string $ids)
+    public function realDelete(string $ids): bool
     {
         return empty($ids) ? false : $this->realDelete(explode(',', $ids));
     }
@@ -164,7 +162,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function recovery(string $ids)
+    public function recovery(string $ids): bool
     {
         return empty($ids) ? false : $this->mapper->recovery(explode(',', $ids));
     }
@@ -175,7 +173,7 @@ trait ServiceTrait
      * @param string $field
      * @return bool
      */
-    public function disable(string $ids, string $field = 'status')
+    public function disable(string $ids, string $field = 'status'): bool
     {
         return empty($ids) ? false : $this->disable(explode(',', $ids), $field);
     }
@@ -186,7 +184,7 @@ trait ServiceTrait
      * @param string $field
      * @return bool
      */
-    public function enable(string $ids, string $field = 'status')
+    public function enable(string $ids, string $field = 'status'): bool
     {
         return empty($ids) ? false : $this->enable(explode(',', $ids), $field);
     }

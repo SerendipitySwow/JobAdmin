@@ -31,6 +31,10 @@ class OperationMiddleware implements MiddlewareInterface
         $evDispatcher = $this->container->get(EventDispatcherInterface::class);
         $mineRequest = $this->container->get(MineRequest::class);
 
+        if ($request->getServerParams()['path_info'] === '/favicon.ico') {
+            return $handler->handle($request);
+        }
+
         try {
             $mineRequest->getLoginUser()->check();
             $response = $handler->handle($request);
