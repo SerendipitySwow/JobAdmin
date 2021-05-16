@@ -109,6 +109,21 @@ class SystemMenuMapper extends AbstractMapper
     }
 
     /**
+     * 单个或批量真实删除数据
+     * @param array $ids
+     * @return bool
+     */
+    public function realDelete(array $ids): bool
+    {
+        foreach ($ids as $id) {
+            $model = $this->model::withTrashed()->find($id);
+            $model->roles()->detach();
+            $model->forceDelete();
+        }
+        return true;
+    }
+
+    /**
      * 通过 route 查询菜单
      * @param string $route
      * @return array|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Model|object
@@ -116,5 +131,20 @@ class SystemMenuMapper extends AbstractMapper
     public function findMenuByRoute(string $route)
     {
         return $this->model::query()->where('route', $route)->first();
+    }
+
+    /**
+     * 查询菜单code
+     * @param array|null $ids
+     * @return array
+     */
+    public function getMenuName(array $ids = null): array
+    {
+        return $this->model::query()->whereIn('id', $ids)->pluck('name')->toArray();
+    }
+
+    public function checkChildrenExists(int $id)
+    {
+        return $this->model->where('parent_id', $id)->exists();
     }
 }

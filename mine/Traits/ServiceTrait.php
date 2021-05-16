@@ -19,7 +19,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getList(?array $params = null): array
+    public function getList(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -33,7 +33,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getListByRecycle(?array $params = null): array
+    public function getListByRecycle(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -47,7 +47,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getPageList(?array $params = null): array
+    public function getPageList(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -60,7 +60,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getPageListByRecycle(?array $params = null): array
+    public function getPageListByRecycle(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -74,7 +74,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getTreeList(?array $params = null): array
+    public function getTreeList(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -88,7 +88,7 @@ trait ServiceTrait
      * @param array|null $params
      * @return array
      */
-    public function getTreeListByRecycle(?array $params = null): array
+    public function getTreeListByRecycle(?array $params = null)
     {
         if ($params['select'] ?? null) {
             $params['select'] = explode(',', $params['select']);
@@ -102,7 +102,7 @@ trait ServiceTrait
      * @param array $data
      * @return int
      */
-    public function save(array $data): int
+    public function save(array $data)
     {
         return $this->mapper->save($data);
     }
@@ -112,7 +112,7 @@ trait ServiceTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id): MineModel
+    public function read(int $id)
     {
         return $this->mapper->read($id);
     }
@@ -123,7 +123,7 @@ trait ServiceTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id): MineModel
+    public function readByRecycle(int $id)
     {
         return $this->mapper->readByRecycle($id);
     }
@@ -133,7 +133,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function delete(String $ids): bool
+    public function delete(String $ids)
     {
         return empty($ids) ? false : $this->mapper->delete(explode(',', $ids));
     }
@@ -144,7 +144,7 @@ trait ServiceTrait
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data): bool
+    public function update(int $id, array $data)
     {
         return $this->mapper->update($id, $data);
     }
@@ -154,7 +154,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function realDelete(string $ids): bool
+    public function realDelete(string $ids)
     {
         return empty($ids) ? false : $this->realDelete(explode(',', $ids));
     }
@@ -164,7 +164,7 @@ trait ServiceTrait
      * @param string $ids
      * @return bool
      */
-    public function recovery(string $ids): bool
+    public function recovery(string $ids)
     {
         return empty($ids) ? false : $this->mapper->recovery(explode(',', $ids));
     }
@@ -175,7 +175,7 @@ trait ServiceTrait
      * @param string $field
      * @return bool
      */
-    public function disable(string $ids, string $field = 'status'): bool
+    public function disable(string $ids, string $field = 'status')
     {
         return empty($ids) ? false : $this->disable(explode(',', $ids), $field);
     }
@@ -186,7 +186,7 @@ trait ServiceTrait
      * @param string $field
      * @return bool
      */
-    public function enable(string $ids, string $field = 'status'): bool
+    public function enable(string $ids, string $field = 'status')
     {
         return empty($ids) ? false : $this->enable(explode(',', $ids), $field);
     }

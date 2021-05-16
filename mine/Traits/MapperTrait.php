@@ -14,11 +14,6 @@ trait MapperTrait
     public $model;
 
     /**
-     * @var Builder
-     */
-    public $query = null;
-
-    /**
      * 获取列表数据
      * @param array|null $params
      * @return array
@@ -121,7 +116,7 @@ trait MapperTrait
      * @param array $data
      * @return int
      */
-    public function save(array $data): int
+    public function save(array $data)
     {
         $model = $this->model::create($data);
         return $model->{$model->getKeyName()};
@@ -132,7 +127,7 @@ trait MapperTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id): MineModel
+    public function read(int $id)
     {
         return $this->model::find($id);
     }
@@ -143,7 +138,7 @@ trait MapperTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id): MineModel
+    public function readByRecycle(int $id)
     {
         return $this->model::withTrashed()->find($id);
     }
@@ -153,7 +148,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function delete(array $ids): bool
+    public function delete(array $ids)
     {
         $this->model::destroy($ids);
         return true;
@@ -163,12 +158,24 @@ trait MapperTrait
      * 更新一条数据
      * @param int $id
      * @param array $data
-     * @return bool
+     * @return boolm
      */
-    public function update(int $id, array $data): bool
+    public function update(int $id, array $data)
     {
-        $this->model->where((new $this->model)->getKeyName(), $id)->update($data);
-        return true;
+        $this->filterPk($data);
+        return $this->model->where((new $this->model)->getKeyName(), $id)->update($data);
+    }
+
+    /**
+     * 过滤主键
+     */
+    public function filterPk(&$data)
+    {
+        $model = new $this->model;
+        if (isset($data[$model->getKeyName()])) {
+            unset($data[$model->getKeyName()]);
+        }
+        $model = null;
     }
 
     /**
@@ -176,7 +183,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function realDelete(array $ids): bool
+    public function realDelete(array $ids)
     {
         foreach ($ids as $id) {
             $model = $this->model::withTrashed()->find($id);
@@ -190,7 +197,7 @@ trait MapperTrait
      * @param array $ids
      * @return bool
      */
-    public function recovery(array $ids): bool
+    public function recovery(array $ids)
     {
         $this->model::withTrashed()->whereIn((new $this->model)->getKeyName(), $ids)->restore();
         return true;
@@ -202,7 +209,7 @@ trait MapperTrait
      * @param string $field
      * @return bool
      */
-    public function disable(array $ids, string $field = 'status'): bool
+    public function disable(array $ids, string $field = 'status')
     {
         $this->model::query()->whereIn((new $this->model)->getKeyName(), $ids)->update([$field => $this->model::DISABLE]);
         return true;
@@ -214,7 +221,7 @@ trait MapperTrait
      * @param string $field
      * @return bool
      */
-    public function enable(array $ids, string $field = 'status'): bool
+    public function enable(array $ids, string $field = 'status')
     {
         $this->model::query()->whereIn((new $this->model)->getKeyName(), $ids)->update([$field => $this->model::ENABLE]);
         return true;
@@ -226,13 +233,5 @@ trait MapperTrait
     public function getModel(): MineModel
     {
         return $this->model;
-    }
-
-    /**
-     * 清空查询构造器
-     */
-    public function clearQuery()
-    {
-        $this->query = null;
     }
 }

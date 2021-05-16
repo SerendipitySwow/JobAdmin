@@ -74,7 +74,7 @@ class MenuController extends MineController
     }
 
     /**
-     * 单个或批量删除用户到回收站
+     * 单个或批量删除菜单到回收站
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -86,7 +86,7 @@ class MenuController extends MineController
     }
 
     /**
-     * 单个或批量真实删除用户 （清空回收站）
+     * 单个或批量真实删除菜单 （清空回收站）
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -94,11 +94,14 @@ class MenuController extends MineController
      */
     public function realDelete(String $ids): ResponseInterface
     {
-        return $this->service->realDelete($ids) ? $this->success() : $this->error();
+        $menus = $this->service->realDelete($ids);
+        return is_null($menus) ? 
+        $this->success() : 
+        $this->success(__('exists_children_ctu', ['names' => explode(',', $menus)]));
     }
 
     /**
-     * 单个或批量恢复在回收站的用户
+     * 单个或批量恢复在回收站的菜单
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
