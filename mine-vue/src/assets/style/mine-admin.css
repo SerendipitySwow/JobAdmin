@@ -4,3 +4,6 @@
 .el-form-item__label {
     font-weight: 600;
 }
+.ma-inline-form-item {
+    margin-bottom: 0;
+}

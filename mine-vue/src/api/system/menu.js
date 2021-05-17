@@ -8,7 +8,7 @@ export function getMenuTree (params = {}) {
   return request({
     url: 'system/menu/index',
     method: 'get',
-    data: params
+    params
   })
 }
 
@@ -20,7 +20,7 @@ export function getRecycle (params = {}) {
   return request({
     url: 'system/menu/recycleTree',
     method: 'get',
-    data: params
+    params
   })
 }
 

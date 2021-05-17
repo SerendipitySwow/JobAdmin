@@ -1,6 +1,22 @@
 <template>
   <ma-container style="padding-top:0">
-    <template slot="header">Header</template>
+    <template slot="header">
+      <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
+        <el-form-item label="菜单名称" class="ma-inline-form-item" prop="name">
+          <el-input size="small" v-model="queryParams.name" placeholder="请输入菜单名称"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" class="ma-inline-form-item" prop="status">
+          <el-select size="small" v-model="queryParams.status" placeholder="菜单状态">
+            <el-option label="启用" value="0">启用</el-option>
+            <el-option label="停用" value="1">停用</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item class="ma-inline-form-item">
+          <el-button size="small" type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
+          <el-button size="small" type="default" @click="resetSearch" icon="el-icon-refresh">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </template>
     <el-row :gutter="10">
       <el-col :span="1">
         <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
@@ -65,7 +81,12 @@ export default {
       // 遮罩层
       loading: true,
       // 数据
-      menuTree: []
+      menuTree: [],
+      // 搜索
+      queryParams: {
+        name: undefined,
+        status: undefined
+      }
     }
   },
   created () {
@@ -76,12 +97,12 @@ export default {
     getList () {
       this.loading = true
       if (!this.showRecycle) {
-        getMenuTree().then(res => {
+        getMenuTree(this.queryParams).then(res => {
           this.menuTree = res.data
           this.loading = false
         })
       } else {
-        getRecycle().then(res => {
+        getRecycle(this.queryParams).then(res => {
           this.menuTree = res.data
           this.loading = false
         })
@@ -128,6 +149,15 @@ export default {
         this.success(res.message)
         this.getList()
       })
+    },
+    // 搜索
+    handleSearch () {
+      this.getList()
+    },
+    // 重置搜索
+    resetSearch () {
+      this.$refs.queryParams.resetFields()
+      this.handleSearch()
     }
   }
 }
