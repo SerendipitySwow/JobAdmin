@@ -24,10 +24,6 @@ export default {
       type: String,
       default: ''
     },
-    showSearch: {
-      type: Boolean,
-      default: false
-    },
     columns: {
       type: Array
     }
@@ -35,7 +31,8 @@ export default {
   data () {
     return {
       dataType: null,
-      showRecycle: false
+      showRecycle: false,
+      showSearch: true
     }
   },
   created () {
@@ -48,6 +45,10 @@ export default {
       this.showRecycle = !this.showRecycle
       this.dataType = this.showRecycle ? 'primary' : ''
       this.$emit('toggleData')
+    },
+    toggleSearch () {
+      this.showSearch = !this.showSearch
+      this.$emit('toggleSearch')
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <ma-container style="padding-top:0">
-    <template slot="header">
+    <template slot="header" v-if="showSearch">
       <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
         <el-form-item label="菜单名称" class="ma-inline-form-item" prop="name">
           <el-input size="small" v-model="queryParams.name" placeholder="请输入菜单名称"></el-input>
@@ -21,7 +21,12 @@
       <el-col :span="1">
         <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
       </el-col>
-      <table-right-toolbar @toggleData="switchDataType" recycleCode="system-menu-save" @refreshTable="getList"></table-right-toolbar>
+      <table-right-toolbar
+        recycleCode="system-menu-save"
+        @toggleData="switchDataType"
+        @refreshTable="getList"
+        @toggleSearch="switchShowSearch"
+        ></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="name" label="菜单名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
@@ -78,6 +83,8 @@ export default {
     return {
       // 是否显示回收站数据
       showRecycle: false,
+      // 是否显示搜索
+      showSearch: true,
       // 遮罩层
       loading: true,
       // 数据
@@ -116,6 +123,10 @@ export default {
     switchDataType () {
       this.showRecycle = !this.showRecycle
       this.getList()
+    },
+    // 显隐搜索
+    switchShowSearch () {
+      this.showSearch = !this.showSearch
     },
     // 移到回收站
     handleDelete (id) {
