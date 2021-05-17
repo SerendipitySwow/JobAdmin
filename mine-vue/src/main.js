@@ -49,7 +49,7 @@ new Vue({
       handler (matched) {
         if (matched.length > 0) {
           const _side = this.$store.getters.menus.filter(menu => menu.path === matched[0].path)
-          if (matched[0].name === 'dashboard') {
+          if (matched[0].path === '') {
             this.$store.commit('store/menu/asideSet', this.$store.getters.quick)
           } else {
             this.$store.commit('store/menu/asideSet', _side.length > 0 ? _side[0].children : [])
