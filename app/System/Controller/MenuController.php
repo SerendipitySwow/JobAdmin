@@ -36,7 +36,7 @@ class MenuController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getTreeList());
+        return $this->success($this->service->getTreeList($this->request->all()));
     }
 
     /**
