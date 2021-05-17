@@ -3,6 +3,7 @@ declare (strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemMenu;
+use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Model;
 use Mine\Abstracts\AbstractMapper;
 
@@ -152,4 +153,20 @@ class SystemMenuMapper extends AbstractMapper
     {
         return $this->model::withTrashed()->where('parent_id', $id)->exists();
     }
+
+    /**
+     * 搜索处理器
+     * @return Builder
+     */
+    public function handleSearch(Builder $query, array $params): Builder
+    {
+        if (isset($params['status'])) {
+            $query->where('status', $params['status']);
+        }
+        if (isset($params['name'])) {
+            $query->where('name', 'like', '%'.$params['name'].'%');
+        }
+        return $query;
+    }
+
 }

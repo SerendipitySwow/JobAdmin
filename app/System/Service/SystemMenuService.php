@@ -87,7 +87,14 @@ class SystemMenuService extends AbstractService
                 $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
             }
         }
-        return $this->mapper->save($data);
+
+        $id = $this->mapper->save($data);
+
+        // 生成RESTful按钮菜单
+        if ($data['type'] == SystemMenu::MENUS_LIST && $data['restful'] == '0') {
+            // TODO...
+        }
+        return $id;
     }
 
     /**
