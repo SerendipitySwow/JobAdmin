@@ -122,13 +122,13 @@ class SystemUserMapper extends AbstractMapper
     public function handleSearch(Builder $query, array $params): Builder
     {
         if (isset($params['dept_id'])) {
-            $query = $query->where('dept_id', $params['dept_id']);
+            $query->where('dept_id', $params['dept_id']);
         }
         if (isset($params['username'])) {
-            $query = $query->where('username', 'like', '%'.$params['username'].'%');
+            $query->where('username', 'like', '%'.$params['username'].'%');
         }
         if (isset($params['status'])) {
-            $query = $query->where('status', $params['status']);
+            $query->where('status', $params['status']);
         }
         return $query;
     }
