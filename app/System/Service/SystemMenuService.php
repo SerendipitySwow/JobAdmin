@@ -29,7 +29,8 @@ class SystemMenuService extends AbstractService
      */
     public function getTreeList(?array $params = null): array
     {
-        return parent::getTreeList(['order_by' => 'sort', 'order_type' => 'desc']);
+        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], is_null($params) ? [] : $params);
+        return parent::getTreeList($params);
     }
 
     /**
