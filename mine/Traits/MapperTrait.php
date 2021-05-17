@@ -72,20 +72,18 @@ trait MapperTrait
         $query = (($params['recycle'] ?? false) === true) ? $this->model::onlyTrashed() : $this->model::query();
 
         if ($params['select'] ?? false) {
-            $query = $query->select($this->filterQueryAttributes($params['select']));
+            $query->select($this->filterQueryAttributes($params['select']));
         }
 
         if ($params['order_by'] ?? false) {
-            $query = $query->orderBy($params['order_by'], $params['order_type'] ?? 'asc');
+            $query->orderBy($params['order_by'], $params['order_type'] ?? 'asc');
         }
 
         if ($params['query_raw'] ?? false) {
-            $query = $query->whereRaw($params['query_raw']);
+            $query->whereRaw($params['query_raw']);
         }
 
-        $query = $this->handleSearch($query, $params);
-
-        return $query;
+        return $this->handleSearch($query, $params);
     }
 
     /**
@@ -127,9 +125,8 @@ trait MapperTrait
      * 过滤新增或写入不存在的字段
      * @param array $data
      * @param bool $removePk
-     * @return array
      */
-    protected function filterExecuteAttributes(array $data, bool $removePk = false): array
+    protected function filterExecuteAttributes(array &$data, bool $removePk = false): void
     {
         $model = new $this->model;
         $attrs = $model->getFillable();
@@ -142,7 +139,6 @@ trait MapperTrait
             unset($data[$model->getKeyName()]);
         }
         $model = null;
-        return $data;
     }
 
     /**
@@ -152,7 +148,8 @@ trait MapperTrait
      */
     public function save(array $data): int
     {
-        $model = $this->model::create($this->filterExecuteAttributes($data));
+        $this->filterExecuteAttributes($data);
+        $model = $this->model::create($data);
         return $model->{$model->getKeyName()};
     }
 
@@ -196,10 +193,8 @@ trait MapperTrait
      */
     public function update(int $id, array $data): bool
     {
-        print_r($this->filterExecuteAttributes($data, true));
-        return $this->model::where((new $this->model)->getKeyName(), $id)->update(
-            $this->filterExecuteAttributes($data, true)
-        );
+        $this->filterExecuteAttributes($data, true);
+        return $this->model::where((new $this->model)->getKeyName(), $id)->update($data);
     }
 
     /**
