@@ -56,8 +56,10 @@ trait MapperTrait
         string $children='children'
     ): array
     {
+        $params['_mainAdmin_tree'] = true;
+        $params['_mainAdmin_tree_pid'] = $parentField;
         $data = $this->listQuerySetting($params)->get();
-        return $data->toTree([], ($data[0]->{$id}) ?? 0, $id, $parentField, $children);
+        return $data->toTree([], $data[0]->{$parentField} ?? 0, $id, $parentField, $children);
     }
 
     /**
@@ -71,6 +73,11 @@ trait MapperTrait
 
         if ($params['select'] ?? false) {
             $query->select($this->filterQueryAttributes($params['select']));
+        }
+
+        // 对树型数据强行加个排序
+        if (isset($params['_mainAdmin_tree'])) {
+            $query->orderBy($params['_mainAdmin_tree_pid']);
         }
 
         if ($params['order_by'] ?? false) {
