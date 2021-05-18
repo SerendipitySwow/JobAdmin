@@ -7,5 +7,5 @@ return [
     'username_exists' => '用户名已存在',
     'undefined_menu' => '未定义菜单',
     'rolecode_exists' => '角色代码已存在',
-    'exists_children_ctu' => '以下包含子项，已跳过 [:names]',
+    'exists_children_ctu' => '删除成功。[:names]等包含子项，已跳过 ',
 ];

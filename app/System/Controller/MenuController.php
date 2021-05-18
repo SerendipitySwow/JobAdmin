@@ -97,7 +97,7 @@ class MenuController extends MineController
         $menus = $this->service->realDel($ids);
         return is_null($menus) ? 
         $this->success() :
-        $this->success(sprintf('删除成功，%s',  __('system.exists_children_ctu', ['names' => implode(',', $menus)])));
+        $this->success(__('system.exists_children_ctu', ['names' => implode(',', $menus)]));
     }
 
     /**
