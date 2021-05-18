@@ -1,10 +1,12 @@
 <?php
 
-namespace App\System\Request\Menu;
+
+namespace App\System\Request\Dept;
+
 
 use Hyperf\Validation\Request\FormRequest;
 
-class SystemMenuCreateRequest extends FormRequest
+class SystemDeptCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
