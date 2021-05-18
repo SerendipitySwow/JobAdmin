@@ -40,6 +40,16 @@ class MenuController extends MineController
     }
 
     /**
+     * 从回收站获取菜单树
+     * @GetMapping("recycleTree")
+     * @Permission
+     */
+    public function recycleTree():ResponseInterface
+    {
+        return $this->success($this->service->getTreeListByRecycle($this->request->all()));
+    }
+
+    /**
      * 前端选择树（不需要权限）
      * @GetMapping("selectTree")
      */
@@ -110,15 +120,5 @@ class MenuController extends MineController
     public function recovery(String $ids): ResponseInterface
     {
         return $this->service->recovery($ids) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 从回收站获取菜单树
-     * @GetMapping("recycleTree")
-     * @Permission
-     */
-    public function getRecycle():ResponseInterface
-    {
-        return $this->success($this->service->getTreeListByRecycle());
     }
 }

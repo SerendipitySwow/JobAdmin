@@ -44,7 +44,6 @@ trait MapperTrait
     /**
      * 获取树列表
      * @param array|null $params
-     * @param int $parentId
      * @param string $id
      * @param string $parentField
      * @param string $children
@@ -52,14 +51,13 @@ trait MapperTrait
      */
     public function getTreeList(
         ?array $params = null,
-        int $parentId = 0,
         string $id = 'id',
         string $parentField = 'parent_id',
         string $children='children'
     ): array
     {
-        return $this->listQuerySetting($params)->get()
-            ->toTree([], $parentId, $id, $parentField, $children);
+        $data = $this->listQuerySetting($params)->get();
+        return $data->toTree([], ($data[0]->{$id}) ?? 0, $id, $parentField, $children);
     }
 
     /**

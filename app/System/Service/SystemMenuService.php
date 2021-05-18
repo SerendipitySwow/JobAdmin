@@ -39,7 +39,8 @@ class SystemMenuService extends AbstractService
      */
     public function getTreeListByRecycle(?array $params = null): array
     {
-        return parent::getTreeListByRecycle(['order_by' => 'sort', 'order_type' => 'desc']);
+        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
+        return parent::getTreeListByRecycle($params);
     }
 
     /**
