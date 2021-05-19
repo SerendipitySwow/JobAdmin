@@ -4,7 +4,7 @@ import { request } from '@/api/_service.js'
  * 获取部门树
  * @returns
  */
-export function getMenuTree (params = {}) {
+export function getDeptTree (params = {}) {
   return request({
     url: 'system/dept/index',
     method: 'get',

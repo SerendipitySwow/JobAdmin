@@ -19,11 +19,11 @@
     </template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增部门</el-button>
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:dept:save']" @click="$refs.deptForm.create()">新增部门</el-button>
       </el-col>
-      <table-right-toolbar recycleCode="system-menu-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+      <table-right-toolbar recycleCode="system-dept-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+    <el-table v-loading="loading" :data="deptTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="name" label="部门名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="sort" label="排序" width="80"></el-table-column>
       <el-table-column prop="leader" label="部门负责人"></el-table-column>
@@ -36,21 +36,21 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:menu:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:menu:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:dept:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:dept:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" v-hasPermission="['system:menu:update']" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:menu:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:dept:update']" icon="el-icon-edit" @click="$refs.deptForm.update(scope.row)">修改</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:dept:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
-    <dept-form ref="menuForm" :deptTree="menuTree" @closeDialog="handleClose"></dept-form>
+    <dept-form ref="deptForm" :deptTree="deptTree" @closeDialog="handleClose"></dept-form>
   </ma-container>
 </template>
 <script>
-import { getMenuTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/dept'
+import { getDeptTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/dept'
 import DeptForm from './form'
 export default {
   name: 'system-dept-index',
@@ -66,7 +66,7 @@ export default {
       // 遮罩层
       loading: true,
       // 数据
-      menuTree: [],
+      deptTree: [],
       // 搜索
       queryParams: {
         name: undefined,
@@ -82,13 +82,13 @@ export default {
     getList () {
       this.loading = true
       if (!this.showRecycle) {
-        getMenuTree(this.queryParams).then(res => {
-          this.menuTree = res.data
+        getDeptTree(this.queryParams).then(res => {
+          this.deptTree = res.data
           this.loading = false
         })
       } else {
         getRecycle(this.queryParams).then(res => {
-          this.menuTree = res.data
+          this.deptTree = res.data
           this.loading = false
         })
       }

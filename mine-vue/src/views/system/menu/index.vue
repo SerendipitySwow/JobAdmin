@@ -21,12 +21,7 @@
       <el-col :span="1">
         <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
       </el-col>
-      <table-right-toolbar
-        recycleCode="system-menu-save"
-        @toggleData="switchDataType"
-        @refreshTable="getList"
-        @toggleSearch="switchShowSearch"
-        ></table-right-toolbar>
+      <table-right-toolbar recycleCode="system-menu-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="name" label="菜单名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
