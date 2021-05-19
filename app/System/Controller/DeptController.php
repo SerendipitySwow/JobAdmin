@@ -5,10 +5,15 @@ namespace App\System\Controller;
 
 
 use App\System\Request\Menu\SystemMenuCreateRequest;
-use App\System\Service\SystemPostService;
+use App\System\Service\SystemDeptService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\DeleteMapping;
+use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\HttpServer\Annotation\PostMapping;
+use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -22,7 +27,7 @@ class DeptController extends MineController
 {
     /**
      * @Inject
-     * @var SystemPostService
+     * @var SystemDeptService
      */
     protected $service;
 

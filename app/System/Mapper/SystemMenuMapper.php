@@ -156,6 +156,8 @@ class SystemMenuMapper extends AbstractMapper
 
     /**
      * 搜索处理器
+     * @param Builder $query
+     * @param array $params
      * @return Builder
      */
     public function handleSearch(Builder $query, array $params): Builder
@@ -168,5 +170,4 @@ class SystemMenuMapper extends AbstractMapper
         }
         return $query;
     }
-
 }
