@@ -5,6 +5,7 @@ namespace App\System\Service;
 
 
 use App\System\Mapper\SystemDeptMapper;
+use App\System\Model\SystemMenu;
 use Mine\Abstracts\AbstractService;
 
 class SystemDeptService extends AbstractService
@@ -20,12 +21,63 @@ class SystemDeptService extends AbstractService
     }
 
     /**
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeList(?array $params = null): array
+    {
+        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
+        return parent::getTreeList($params);
+    }
+
+    /**
      * 获取前端选择树
      * @return array
      */
     public function getSelectTree(): array
     {
         return $this->mapper->getSelectTree();
+    }
+
+    /**
+     * 新增部门
+     * @param array $data
+     * @return int
+     */
+    public function save(array $data): int
+    {
+        $pid = $data['parent_id'] ?? 0;
+
+        if ($pid === 0) {
+            $data['level'] = $data['parent_id'] = '0';
+        } else {
+            array_unshift($pid, '0');
+            $data['parent_id'] = array_pop($data['parent_id']);
+            $data['level'] = implode(',', $pid);
+        }
+
+        return $this->mapper->save($data);
+    }
+
+    /**
+     * 更新部门
+     * @param int $id
+     * @param array $data
+     * @return bool
+     */
+    public function update(int $id, array $data): bool
+    {
+        $pid = $data['parent_id'] ?? 0;
+
+        if ($pid === 0) {
+            $data['level'] = $data['parent_id'] = '0';
+        } else {
+            array_unshift($pid, '0');
+            $data['parent_id'] = array_pop($data['parent_id']);
+            $data['level'] = implode(',', $pid);
+        }
+
+        return $this->mapper->update($id, $data);
     }
 
     /**

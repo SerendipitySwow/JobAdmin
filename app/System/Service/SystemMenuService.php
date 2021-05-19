@@ -78,6 +78,7 @@ class SystemMenuService extends AbstractService
             $data['level'] = $data['parent_id'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
+            array_unshift($pid, '0');
             $data['parent_id'] = array_pop($data['parent_id']);
             $data['level'] = implode(',', $pid);
             $menu = $this->mapper->read((int) $data['parent_id']);
@@ -116,6 +117,7 @@ class SystemMenuService extends AbstractService
             ['name' => '真实删除', 'code' => 'realDelete']
         ];
 
+        array_shift($parent_id);
         foreach ($btns as $btn) {
             $this->save(
                 array_merge(
@@ -144,9 +146,10 @@ class SystemMenuService extends AbstractService
         } else {
             if (is_array($data['parent_id'])) {
                 $data['parent_id'] = array_pop($data['parent_id']);
+                array_unshift($pid, '0');
                 $data['level'] = implode(',', $pid);
             } else {
-                $data['level'] = $data['parent_id'];
+                $data['level'] = '0,' . $data['parent_id'];
             }
             $menu = $this->mapper->read((int) $data['parent_id']);
             if ($data['type'] != SystemMenu::TYPE_CLASSIFY && $data['type'] != SystemMenu::BUTTON) {

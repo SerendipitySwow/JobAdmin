@@ -5,63 +5,23 @@
         <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
       </el-form-item>
       <el-form-item label="部门名称" prop="name">
-          <el-input v-model="form.name" size="small" placeholder="请输入部门名称"></el-input>
-        </el-form-item>
-      <el-row>
-        <el-col :span="12">
-
-          <el-form-item label="图标" prop="icon" v-if="form.type !== 'B'">
-            <ma-icon-select v-model="form.icon" size="small" :user-input="true" />
-          </el-form-item>
-          <el-form-item label="排序" prop="sort">
-            <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
-          </el-form-item>
-          <el-form-item label="是否外链" prop="is_out" v-if="form.type !== 'B' && form.type !== 'T' && form.type !== 'C'">
-            <el-radio-group v-model="form.is_out">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
-            <el-radio-group v-model="form.status">
-              <el-radio label="0">启用</el-radio>
-              <el-radio label="1">停用</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="生成按钮部门" prop="restful" v-if="form.type === 'M' && saveType === 'create'">
-            <el-radio-group v-model="form.restful" style="margin-right: 10px;">
-              <el-radio label="0">生成</el-radio>
-              <el-radio label="1">不生成</el-radio>
-            </el-radio-group>
-            <el-tooltip class="item" effect="dark" content="生成RESTful路由按钮部门，即：save、update、delete、read 以及回收站相关按钮部门" placement="top">
-              <ma-icon name="question-circle" />
-            </el-tooltip>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="部门代码" prop="code">
-            <el-input v-model="form.code" size="small" placeholder="请输入部门代码"></el-input>
-          </el-form-item>
-          <el-form-item label="路由" prop="route" v-if="form.type !== 'B'">
-            <el-input v-model="form.route" size="small" placeholder="请输入路由"></el-input>
-          </el-form-item>
-          <el-form-item label="组件路径" prop="component" v-if="form.type !== 'B' && form.type !== 'T' && form.type !== 'C'">
-            <el-input v-model="form.component" size="small" placeholder="请输入组件路径"></el-input>
-          </el-form-item>
-          <el-form-item label="隐藏" prop="is_hidden" v-if="form.type !== 'B'">
-            <el-radio-group v-model="form.is_hidden">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="快捷部门" v-if="form.type === 'M'" prop="is_quick">
-            <el-radio-group v-model="form.is_quick">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
+        <el-input v-model="form.name" size="small" placeholder="请输入部门名称"></el-input>
+      </el-form-item>
+      <el-form-item label="负责人" prop="leader">
+        <el-input v-model="form.leader" size="small" placeholder="请输入部门负责人"></el-input>
+      </el-form-item>
+      <el-form-item label="联系电话" prop="phone">
+        <el-input v-model="form.phone" size="small" placeholder="请输入负责人电话"></el-input>
+      </el-form-item>
+      <el-form-item label="排序" prop="sort">
+        <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
+      </el-form-item>
+      <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
+        <el-radio-group v-model="form.status">
+          <el-radio label="0">启用</el-radio>
+          <el-radio label="1">停用</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
@@ -90,27 +50,16 @@ export default {
       // 表单数据
       form: {
         id: null,
-        type: 'T',
         parent_id: null,
         name: null,
-        code: '',
-        route: '',
-        icon: '',
-        component: '',
+        leader: '',
+        phone: '',
         status: '0',
-        sort: 0,
-        is_out: '1',
-        is_hidden: '1',
-        is_quick: '1',
-        is_cache: '0',
-        restful: '0'
+        sort: 0
       },
       // 表单验证规则
       rules: {
-        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入部门代码', trigger: 'blur' }],
-        route: [{ required: true, message: '请输入路由', trigger: 'blur' }],
-        component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }]
       }
     }
   },
