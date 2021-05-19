@@ -2,11 +2,11 @@
   <ma-container>
     <template slot="header" v-if="showSearch">
       <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
-        <el-form-item label="菜单名称" class="ma-inline-form-item" prop="name">
-          <el-input size="small" v-model="queryParams.name" placeholder="请输入菜单名称"></el-input>
+        <el-form-item label="部门名称" class="ma-inline-form-item" prop="name">
+          <el-input size="small" v-model="queryParams.name" placeholder="请输入部门名称"></el-input>
         </el-form-item>
         <el-form-item label="状态" class="ma-inline-form-item" prop="status">
-          <el-select size="small" v-model="queryParams.status" placeholder="菜单状态">
+          <el-select size="small" v-model="queryParams.status" placeholder="部门状态">
             <el-option label="启用" value="0">启用</el-option>
             <el-option label="停用" value="1">停用</el-option>
           </el-select>
@@ -19,7 +19,7 @@
     </template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增部门</el-button>
       </el-col>
       <table-right-toolbar
         recycleCode="system-menu-save"
@@ -29,14 +29,14 @@
         ></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column prop="name" label="菜单名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="name" label="部门名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="icon" label="图标" align="center" width="100">
         <template slot-scope="scope">
           <ma-icon :name="scope.row.icon" />
         </template>
       </el-table-column>
       <el-table-column prop="sort" label="排序" width="80"></el-table-column>
-      <el-table-column prop="code" label="菜单代码"></el-table-column>
+      <el-table-column prop="code" label="部门代码"></el-table-column>
       <el-table-column prop="component" label="组件路径">
         <template slot-scope="scope">
           {{ scope.row.component ? scope.row.component : '-' }}
@@ -46,7 +46,7 @@
         <template slot-scope="scope">
           <el-tag v-if="scope.row.type === 'T'">分类</el-tag>
           <el-tag type="danger" v-if="scope.row.type === 'C'">目录</el-tag>
-          <el-tag type="warning" v-if="scope.row.type === 'M'">菜单</el-tag>
+          <el-tag type="warning" v-if="scope.row.type === 'M'">部门</el-tag>
           <el-tag type="success" v-if="scope.row.type === 'B'">按钮</el-tag>
         </template>
       </el-table-column>

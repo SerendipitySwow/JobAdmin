@@ -1,22 +1,15 @@
 <template>
-  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="50%">
-    <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-      <el-form-item label="菜单类型" prop="type">
-        <el-radio-group v-model="form.type" size="small">
-          <el-radio-button label="T" name="type">分类</el-radio-button>
-          <el-radio-button label="C" name="type">目录</el-radio-button>
-          <el-radio-button label="M" name="type">菜单</el-radio-button>
-          <el-radio-button label="B" name="type">按钮</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="上级菜单" prop="parent_id">
+  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
+    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form-item label="上级部门" prop="parent_id">
         <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
       </el-form-item>
+      <el-form-item label="部门名称" prop="name">
+          <el-input v-model="form.name" size="small" placeholder="请输入部门名称"></el-input>
+        </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="菜单名称" prop="name">
-            <el-input v-model="form.name" size="small" placeholder="请输入菜单名称"></el-input>
-          </el-form-item>
+
           <el-form-item label="图标" prop="icon" v-if="form.type !== 'B'">
             <ma-icon-select v-model="form.icon" size="small" :user-input="true" />
           </el-form-item>
@@ -35,19 +28,19 @@
               <el-radio label="1">停用</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="生成按钮菜单" prop="restful" v-if="form.type === 'M' && saveType === 'create'">
+          <el-form-item label="生成按钮部门" prop="restful" v-if="form.type === 'M' && saveType === 'create'">
             <el-radio-group v-model="form.restful" style="margin-right: 10px;">
               <el-radio label="0">生成</el-radio>
               <el-radio label="1">不生成</el-radio>
             </el-radio-group>
-            <el-tooltip class="item" effect="dark" content="生成RESTful路由按钮菜单，即：save、update、delete、read 以及回收站相关按钮菜单" placement="top">
+            <el-tooltip class="item" effect="dark" content="生成RESTful路由按钮部门，即：save、update、delete、read 以及回收站相关按钮部门" placement="top">
               <ma-icon name="question-circle" />
             </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="菜单代码" prop="code">
-            <el-input v-model="form.code" size="small" placeholder="请输入菜单代码"></el-input>
+          <el-form-item label="部门代码" prop="code">
+            <el-input v-model="form.code" size="small" placeholder="请输入部门代码"></el-input>
           </el-form-item>
           <el-form-item label="路由" prop="route" v-if="form.type !== 'B'">
             <el-input v-model="form.route" size="small" placeholder="请输入路由"></el-input>
@@ -61,7 +54,7 @@
               <el-radio label="1">否</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="快捷菜单" v-if="form.type === 'M'" prop="is_quick">
+          <el-form-item label="快捷部门" v-if="form.type === 'M'" prop="is_quick">
             <el-radio-group v-model="form.is_quick">
               <el-radio label="0">是</el-radio>
               <el-radio label="1">否</el-radio>
@@ -77,7 +70,7 @@
   </el-dialog>
 </template>
 <script>
-import { getSelectTree, save, update } from '@/api/system/menu'
+import { getSelectTree, save, update } from '@/api/system/dept'
 export default {
   props: {
     deptTree: Array
@@ -85,10 +78,10 @@ export default {
   data () {
     return {
       // 显示标题
-      title: '新增菜单',
+      title: '新增部门',
       // 显示form窗口
       showForm: false,
-      // 菜单选择器数据
+      // 部门选择器数据
       selectTree: [],
       // 要修改的记录
       record: null,
@@ -114,8 +107,8 @@ export default {
       },
       // 表单验证规则
       rules: {
-        name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入菜单代码', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入部门代码', trigger: 'blur' }],
         route: [{ required: true, message: '请输入路由', trigger: 'blur' }],
         component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }]
       }
@@ -128,19 +121,19 @@ export default {
     })
   },
   methods: {
-    // 新增菜单
+    // 新增部门
     create () {
       this.showForm = true
       this.saveType = 'create'
-      this.title = '新增菜单'
+      this.title = '新增部门'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
       })
     },
-    // 更新菜单
+    // 更新部门
     update (record) {
       this.saveType = 'update'
-      this.title = '编辑菜单：' + record.name
+      this.title = '编辑部门：' + record.name
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
