@@ -26,6 +26,7 @@
         <el-tree
           class="filter-tree"
           :data="deptTree"
+          :props="defaultProps"
           default-expand-all
           :filter-node-method="filterDeptNode"
           style="margin-top: 20px"
@@ -95,7 +96,11 @@ export default {
       // 部门过滤
       filterDept: '',
       // 部门数据
-      deptTree: []
+      deptTree: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
     }
   },
   created () {
