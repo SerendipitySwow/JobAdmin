@@ -80,3 +80,15 @@ export function update (id, params = {}) {
     data: params
   })
 }
+
+/**
+ * 更改用户状态
+ * @returns
+ */
+export function changeUserStatus (params = {}) {
+  return request({
+    url: 'system/user/changeUserStatus',
+    method: 'put',
+    data: params
+  })
+}

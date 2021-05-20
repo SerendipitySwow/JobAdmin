@@ -2,14 +2,24 @@
   <ma-container>
     <template slot="header" v-if="showSearch">
       <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
-        <el-form-item label="用户名称" class="ma-inline-form-item" prop="name">
-          <el-input size="small" v-model="queryParams.name" placeholder="请输入用户名称"></el-input>
+        <el-form-item label="用户名称" class="ma-inline-form-item" prop="username">
+          <el-input size="small" v-model="queryParams.username" placeholder="请输入用户名称"></el-input>
         </el-form-item>
         <el-form-item label="状态" class="ma-inline-form-item" prop="status">
           <el-select size="small" v-model="queryParams.status" placeholder="用户状态">
             <el-option label="启用" value="0">启用</el-option>
             <el-option label="停用" value="1">停用</el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="创建时间" class="ma-inline-form-item">
+          <el-date-picker
+            size="small"
+            v-model="value1"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item class="ma-inline-form-item">
           <el-button size="small" type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
@@ -28,8 +38,10 @@
           :data="deptTree"
           :props="defaultProps"
           default-expand-all
+          :expand-on-click-node="false"
           :filter-node-method="filterDeptNode"
-          style="margin-top: 20px"
+          @node-click="handleDeptSwitch"
+          style="margin-top: 10px"
           ref="tree">
         </el-tree>
       </el-col>
@@ -45,10 +57,24 @@
         </el-row>
         <el-table v-loading="loading" :data="userData" row-key="id">
           <el-table-column prop="username" label="用户名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="email" label="邮箱">
+          </el-table-column>
+          <el-table-column prop="user_type" label="用户类型">
+            <template slot-scope="scope">
+              {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
+            </template>
+          </el-table-column>
           <el-table-column prop="status" label="状态" width="80">
             <template slot-scope="scope">
-              {{ scope.row.status === '0' ? '启用' : '停用' }}
+              <el-switch
+                v-model="scope.row.status"
+                @change="handleStatus(scope.row)"
+                active-value="0"
+                inactive-value="1">
+              </el-switch>
             </template>
+          </el-table-column>
+          <el-table-column prop="created_at" label="创建时间" width="180">
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -71,7 +97,7 @@
 </template>
 <script>
 import { getSelectTree } from '@/api/system/dept'
-import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes } from '@/api/system/user'
+import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus } from '@/api/system/user'
 import userForm from './form'
 export default {
   name: 'system-user-index',
@@ -90,7 +116,7 @@ export default {
       userData: [],
       // 搜索
       queryParams: {
-        name: undefined,
+        username: undefined,
         status: undefined
       },
       // 部门过滤
@@ -107,6 +133,7 @@ export default {
     this.getList()
     getSelectTree().then(res => {
       this.deptTree = res.data
+      this.deptTree.unshift({ id: undefined, label: '所有部门' })
     })
   },
   watch: {
@@ -121,6 +148,7 @@ export default {
       if (!this.showRecycle) {
         getPageList(this.queryParams).then(res => {
           this.userData = res.data.items
+          console.log(this.userData)
           this.loading = false
         })
       } else {
@@ -130,6 +158,12 @@ export default {
         })
       }
     },
+    // 点击部门节点
+    handleDeptSwitch (data) {
+      this.queryParams.dept_id = data.id
+      this.getList()
+    },
+    // 过滤部门节点
     filterDeptNode (value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
@@ -137,6 +171,23 @@ export default {
     // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
+    },
+    // 用户状态更改
+    handleStatus (row) {
+      console.log(row.status)
+      const status = row.status === '0' ? '0' : '1'
+      const text = row.status === '0' ? '启用' : '停用'
+      this.$confirm(`确认要${text} ${row.username} 用户吗？`, '提示', {
+        type: 'warning',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        changeUserStatus({ id: row.id, status }).then(res => {
+          this.success(text + '成功')
+        })
+      }).catch(() => {
+        row.status = row.status === '0' ? '1' : '0'
+      })
     },
     // 切换回收站数据方法
     switchDataType () {

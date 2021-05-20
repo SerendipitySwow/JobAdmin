@@ -86,6 +86,7 @@ export default {
       menuTree: [],
       // 搜索
       queryParams: {
+        dept_id: undefined,
         name: undefined,
         status: undefined
       }
