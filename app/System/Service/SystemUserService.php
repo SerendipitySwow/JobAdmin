@@ -296,4 +296,20 @@ class SystemUserService extends AbstractService
         }
         return $this->mapper->update($id, $data);
     }
+
+    /**
+     * 修改用户状态
+     */
+    public function changeUserStatus(int $id, string $value)
+    {
+        if ($value === '0') {
+            $this->mapper->enable([$id]);
+            return true;
+        } else if ($value === '1') {
+            $this->mapper->disable([$id]);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Controller;
 
 use App\System\Request\User\SystemUserCreateRequest;
+use App\System\Request\User\SystemUserStatusRequest;
 use App\System\Request\User\SystemUserUpdateRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
@@ -122,5 +123,16 @@ class UserController extends MineController
     public function recovery(String $ids): ResponseInterface
     {
         return $this->service->recovery($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 更改用户状态
+     * @PutMapping("changeUserStatus")
+     */
+    public function changeUserStatus(SystemUserStatusRequest $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+        return $this->success($this->service->changeUserStatus((int) $id, (string) $status));
     }
 }
