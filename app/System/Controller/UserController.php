@@ -132,7 +132,7 @@ class UserController extends MineController
     public function changeUserStatus(SystemUserStatusRequest $request)
     {
         $id = $request->input('id');
-        $status = $request->input('status');
+        $status = $request->input('status'W);
         return $this->success($this->service->changeUserStatus((int) $id, (string) $status));
     }
 }
