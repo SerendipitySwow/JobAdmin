@@ -63,7 +63,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <menu-form ref="menuForm" :menuTree="menuTree" @closeDialog="handleClose"></menu-form>
+    <menu-form ref="menuForm" @closeDialog="handleClose"></menu-form>
   </ma-container>
 </template>
 <script>

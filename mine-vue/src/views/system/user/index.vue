@@ -19,40 +19,31 @@
     </template>
     <el-row :gutter="20">
       <el-col :span="4">
-        <div class="grid-content bg-purple">1</div>
+        <el-input
+          placeholder="请输入部门名称"
+          v-model="filterDept" size="small">
+        </el-input>
+        <el-tree
+          class="filter-tree"
+          :data="deptTree"
+          default-expand-all
+          :filter-node-method="filterDeptNode"
+          style="margin-top: 20px"
+          ref="tree">
+        </el-tree>
       </el-col>
       <el-col :span="20">
         <el-row :gutter="10">
           <el-col :span="1.5">
-            <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增</el-button>
-            <el-button size="small" icon="el-icon-delete" v-hasPermission="['system:menu:import']" @click="$refs.menuForm.create()">删除</el-button>
-            <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:menu:import']" @click="$refs.menuForm.create()">导入</el-button>
-            <el-button size="small" icon="el-icon-download" v-hasPermission="['system:menu:export']" @click="$refs.menuForm.create()">导出</el-button>
+            <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:user:save']" @click="$refs.userForm.create()">新增</el-button>
+            <el-button size="small" icon="el-icon-delete" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">删除</el-button>
+            <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">导入</el-button>
+            <el-button size="small" icon="el-icon-download" v-hasPermission="['system:user:export']" @click="$refs.userForm.create()">导出</el-button>
           </el-col>
-          <table-right-toolbar recycleCode="system-menu-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+          <table-right-toolbar recycleCode="system-user-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
         </el-row>
-        <el-table v-loading="loading" :data="menuTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-          <el-table-column prop="name" label="用户名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="icon" label="图标" align="center" width="100">
-            <template slot-scope="scope">
-              <ma-icon :name="scope.row.icon" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="sort" label="排序" width="80"></el-table-column>
-          <el-table-column prop="code" label="用户代码"></el-table-column>
-          <el-table-column prop="component" label="组件路径">
-            <template slot-scope="scope">
-              {{ scope.row.component ? scope.row.component : '-' }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="type" label="类型">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.type === 'T'">分类</el-tag>
-              <el-tag type="danger" v-if="scope.row.type === 'C'">目录</el-tag>
-              <el-tag type="warning" v-if="scope.row.type === 'M'">用户</el-tag>
-              <el-tag type="success" v-if="scope.row.type === 'B'">按钮</el-tag>
-            </template>
-          </el-table-column>
+        <el-table v-loading="loading" :data="userData" row-key="id">
+          <el-table-column prop="username" label="用户名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="status" label="状态" width="80">
             <template slot-scope="scope">
               {{ scope.row.status === '0' ? '启用' : '停用' }}
@@ -61,29 +52,30 @@
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <div v-if="showRecycle">
-                <el-button size="small" type="text" v-hasPermission="['system:menu:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-                <el-button size="small" type="text" v-hasPermission="['system:menu:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+                <el-button size="small" type="text" v-hasPermission="['system:user:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
+                <el-button size="small" type="text" v-hasPermission="['system:user:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
               </div>
               <div v-else>
-                <el-button size="small" type="text" v-hasPermission="['system:menu:update']" icon="el-icon-edit" @click="$refs.menuForm.update(scope.row)">修改</el-button>
-                <el-button size="small" type="text" v-hasPermission="['system:menu:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+                <el-button size="small" type="text" v-hasPermission="['system:user:update']" icon="el-icon-edit" @click="$refs.userForm.update(scope.row)">修改</el-button>
+                <el-button size="small" type="text" v-hasPermission="['system:user:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
-    <menu-form ref="menuForm" :menuTree="menuTree" @closeDialog="handleClose"></menu-form>
+    <user-form ref="userForm" @closeDialog="handleClose"></user-form>
     <template slot="footer">footer</template>
   </ma-container>
 </template>
 <script>
-import { getMenuTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/menu'
-import MenuForm from './form'
+import { getSelectTree } from '@/api/system/dept'
+import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes } from '@/api/system/user'
+import userForm from './form'
 export default {
-  name: 'system-menu-index',
+  name: 'system-user-index',
   components: {
-    MenuForm
+    userForm
   },
   data () {
     return {
@@ -94,32 +86,48 @@ export default {
       // 遮罩层
       loading: true,
       // 数据
-      menuTree: [],
+      userData: [],
       // 搜索
       queryParams: {
         name: undefined,
         status: undefined
-      }
+      },
+      // 部门过滤
+      filterDept: '',
+      // 部门数据
+      deptTree: []
     }
   },
   created () {
     this.getList()
+    getSelectTree().then(res => {
+      this.deptTree = res.data
+    })
+  },
+  watch: {
+    filterDept (val) {
+      this.$refs.tree.filter(val)
+    }
   },
   methods: {
     // 获取数据
     getList () {
       this.loading = true
       if (!this.showRecycle) {
-        getMenuTree(this.queryParams).then(res => {
-          this.menuTree = res.data
+        getPageList(this.queryParams).then(res => {
+          this.userData = res.data.items
           this.loading = false
         })
       } else {
-        getRecycle(this.queryParams).then(res => {
-          this.menuTree = res.data
+        getPageListByRecycle(this.queryParams).then(res => {
+          this.userData = res.data.items
           this.loading = false
         })
       }
+    },
+    filterDeptNode (value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     },
     // form组件关闭调用方法
     handleClose (e) {

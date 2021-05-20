@@ -46,7 +46,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <dept-form ref="deptForm" :deptTree="deptTree" @closeDialog="handleClose"></dept-form>
+    <dept-form ref="deptForm" @closeDialog="handleClose"></dept-form>
   </ma-container>
 </template>
 <script>

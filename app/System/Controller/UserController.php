@@ -42,6 +42,16 @@ class UserController extends MineController
     }
 
     /**
+     * @GetMapping("recycle")
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function recycle(): ResponseInterface
+    {
+        return $this->success($this->service->getListByRecycle($this->request->all()));
+    }
+
+    /**
      * 新增一个用户
      * @PostMapping("save")
      * @param SystemUserCreateRequest $request

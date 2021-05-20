@@ -32,9 +32,6 @@
 <script>
 import { getSelectTree, save, update } from '@/api/system/dept'
 export default {
-  props: {
-    deptTree: Array
-  },
   data () {
     return {
       // 显示标题

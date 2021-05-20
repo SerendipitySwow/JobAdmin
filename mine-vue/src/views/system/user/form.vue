@@ -79,9 +79,6 @@
 <script>
 import { getSelectTree, save, update } from '@/api/system/menu'
 export default {
-  props: {
-    menuTree: Array
-  },
   data () {
     return {
       // 显示标题
