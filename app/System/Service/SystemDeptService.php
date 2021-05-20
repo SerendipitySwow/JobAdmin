@@ -72,9 +72,10 @@ class SystemDeptService extends AbstractService
         if ($pid === 0) {
             $data['level'] = $data['parent_id'] = '0';
         } else {
+            $pid = implode(',', $pid);
             array_unshift($pid, '0');
             $data['parent_id'] = array_pop($data['parent_id']);
-            $data['level'] = implode(',', $pid);
+            $data['level'] = $pid;
         }
 
         return $this->mapper->update($id, $data);
