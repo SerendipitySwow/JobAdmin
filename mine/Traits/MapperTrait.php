@@ -31,11 +31,11 @@ trait MapperTrait
     public function getPageList(?array $params, string $pageName = 'page'): array
     {
         $paginate = $this->listQuerySetting($params)->paginate(
-            $params['page_size'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
+            $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
         );
         return [
             'items' => $paginate->items(),
-            'page_info' => [
+            'pageInfo' => [
                 'total' => $paginate->total(),
                 'currentPage' => $paginate->currentPage(),
                 'totalPage' => ceil($paginate->total() / ($params['pageSize'] ?? $this->model::PAGE_SIZE))
