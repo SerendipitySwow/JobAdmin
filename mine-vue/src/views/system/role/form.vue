@@ -135,6 +135,7 @@ export default {
       this.title = '新增菜单'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
+        this.form.id = null
       })
     },
     // 更新菜单

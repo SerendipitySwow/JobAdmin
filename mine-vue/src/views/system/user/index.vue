@@ -56,6 +56,10 @@
           <table-right-toolbar recycleCode="system-user-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
         </el-row>
         <el-table v-loading="loading" :data="userData" row-key="id">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
           <el-table-column prop="username" label="用户名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="email" label="邮箱">
           </el-table-column>
@@ -64,7 +68,7 @@
               {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="80">
+          <el-table-column prop="status" label="状态" width="125">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"

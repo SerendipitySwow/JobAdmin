@@ -52,8 +52,8 @@ class SystemDeptService extends AbstractService
             $data['level'] = $data['parent_id'] = '0';
         } else {
             array_unshift($pid, '0');
-            $data['parent_id'] = array_pop($data['parent_id']);
             $data['level'] = implode(',', $pid);
+            $data['parent_id'] = array_pop($pid);
         }
 
         return $this->mapper->save($data);
@@ -74,8 +74,8 @@ class SystemDeptService extends AbstractService
         } else {
             $pid = explode(',', (string) $pid);
             array_unshift($pid, '0');
-            $data['parent_id'] = array_pop($data['parent_id']);
-            $data['level'] = $pid;
+            $data['level'] = implode(',', $pid);
+            $data['parent_id'] = array_pop($pid);
         }
 
         return $this->mapper->update($id, $data);
