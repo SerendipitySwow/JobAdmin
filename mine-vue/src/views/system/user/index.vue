@@ -12,14 +12,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间" class="ma-inline-form-item">
-          <el-date-picker
+          <!-- <el-date-picker
             size="small"
             v-model="value1"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
-          </el-date-picker>
+          </el-date-picker> -->
         </el-form-item>
         <el-form-item class="ma-inline-form-item">
           <el-button size="small" type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
@@ -60,15 +60,15 @@
             type="selection"
             width="55">
           </el-table-column>
-          <el-table-column prop="username" label="用户名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="username" label="用户名称" fixed width="120" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="email" label="邮箱">
           </el-table-column>
-          <el-table-column prop="user_type" label="用户类型">
+          <el-table-column prop="user_type" label="用户类型" width="100">
             <template slot-scope="scope">
               {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="125">
+          <el-table-column prop="status" label="状态" width="100">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -78,7 +78,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="created_at" label="创建时间" width="180">
+          <el-table-column prop="created_at" label="创建时间" width="160">
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -96,7 +96,17 @@
       </el-col>
     </el-row>
     <user-form ref="userForm" @closeDialog="handleClose"></user-form>
-    <template slot="footer">footer</template>
+    <template slot="footer">
+      <el-pagination
+        @size-change="getList"
+        @current-change="getList"
+        layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[10, 20, 30, 50]"
+        :current-page.sync="queryParams.page"
+        :page-size.sync="queryParams.pageSize"
+        :total="pageInfo.total">
+      </el-pagination>
+    </template>
   </ma-container>
 </template>
 <script>
@@ -118,10 +128,14 @@ export default {
       loading: true,
       // 数据
       userData: [],
+      // 分页数据
+      pageInfo: { total: 0 },
       // 搜索
       queryParams: {
         username: undefined,
-        status: undefined
+        status: undefined,
+        pageSize: 10,
+        page: 1
       },
       // 部门过滤
       filterDept: '',
@@ -152,12 +166,13 @@ export default {
       if (!this.showRecycle) {
         getPageList(this.queryParams).then(res => {
           this.userData = res.data.items
-          console.log(this.userData)
+          this.pageInfo = res.data.pageInfo
           this.loading = false
         })
       } else {
         getPageListByRecycle(this.queryParams).then(res => {
           this.userData = res.data.items
+          this.pageInfo = res.data.pageInfo
           this.loading = false
         })
       }
