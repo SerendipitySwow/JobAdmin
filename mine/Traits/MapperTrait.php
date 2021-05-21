@@ -34,10 +34,12 @@ trait MapperTrait
             $params['page_size'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
         );
         return [
-            'total' => $paginate->total(),
-            'current_page' => $paginate->currentPage(),
-            'total_page' => ceil($paginate->total() / ($params['page_size'] ?? $this->model::PAGE_SIZE)),
-            'items' => $paginate->items()
+            'items' => $paginate->items(),
+            'page_info' => [
+                'total' => $paginate->total(),
+                'current_page' => $paginate->currentPage(),
+                'total_page' => ceil($paginate->total() / ($params['page_size'] ?? $this->model::PAGE_SIZE))
+            ]
         ];
     }
 
