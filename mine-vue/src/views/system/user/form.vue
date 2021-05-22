@@ -1,74 +1,46 @@
 <template>
-  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="50%">
-    <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-      <el-form-item label="菜单类型" prop="type">
-        <el-radio-group v-model="form.type" size="small">
-          <el-radio-button label="T" name="type">分类</el-radio-button>
-          <el-radio-button label="C" name="type">目录</el-radio-button>
-          <el-radio-button label="M" name="type">菜单</el-radio-button>
-          <el-radio-button label="B" name="type">按钮</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="上级菜单" prop="parent_id">
-        <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
-      </el-form-item>
+  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="800px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="90px">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="菜单名称" prop="name">
-            <el-input v-model="form.name" size="small" placeholder="请输入菜单名称"></el-input>
+          <el-form-item label="用户名称" prop="username">
+            <el-input v-model="form.username" size="small" placeholder="请输入用户名称"></el-input>
           </el-form-item>
-          <el-form-item label="图标" prop="icon" v-if="form.type !== 'B'">
-            <ma-icon-select v-model="form.icon" size="small" :user-input="true" />
+          <el-form-item label="用户密码" prop="password">
+            <el-input v-model="form.password" size="small" placeholder="请输入用户密码" show-password></el-input>
           </el-form-item>
-          <el-form-item label="排序" prop="sort">
-            <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
+          <el-form-item label="角色" prop="role_ids">
+            <el-select v-model="form.role_ids" size="small" style="width:100%" multiple placeholder="请选择用户角色">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="是否外链" prop="is_out" v-if="form.type !== 'B' && form.type !== 'T' && form.type !== 'C'">
-            <el-radio-group v-model="form.is_out">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
+          <el-form-item label="岗位" prop="post_ids">
+            <el-select v-model="form.post_ids" size="small" style="width:100%" multiple placeholder="请选择用户岗位">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="所属部门" prop="dept_id">
+            <el-cascader v-model="form.dept_id" size="small" clearable style="width:100%" :options="deptTree" :props="{ checkStrictly: true }"></el-cascader>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="form.email" size="small" placeholder="请输入邮箱"></el-input>
+          </el-form-item>
+          <el-form-item label="状态" prop="status">
             <el-radio-group v-model="form.status">
               <el-radio label="0">启用</el-radio>
               <el-radio label="1">停用</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="生成按钮菜单" prop="restful" v-if="form.type === 'M' && saveType === 'create'">
-            <el-radio-group v-model="form.restful" style="margin-right: 10px;">
-              <el-radio label="0">生成</el-radio>
-              <el-radio label="1">不生成</el-radio>
-            </el-radio-group>
-            <el-tooltip class="item" effect="dark" content="生成RESTful路由按钮菜单，即：save、update、delete、read 以及回收站相关按钮菜单" placement="top">
-              <ma-icon name="question-circle" />
-            </el-tooltip>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="菜单代码" prop="code">
-            <el-input v-model="form.code" size="small" placeholder="请输入菜单代码"></el-input>
-          </el-form-item>
-          <el-form-item label="路由" prop="route" v-if="form.type !== 'B'">
-            <el-input v-model="form.route" size="small" placeholder="请输入路由"></el-input>
-          </el-form-item>
-          <el-form-item label="组件路径" prop="component" v-if="form.type !== 'B' && form.type !== 'T' && form.type !== 'C'">
-            <el-input v-model="form.component" size="small" placeholder="请输入组件路径"></el-input>
-          </el-form-item>
-          <el-form-item label="隐藏" prop="is_hidden" v-if="form.type !== 'B'">
-            <el-radio-group v-model="form.is_hidden">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="快捷菜单" v-if="form.type === 'M'" prop="is_quick">
-            <el-radio-group v-model="form.is_quick">
-              <el-radio label="0">是</el-radio>
-              <el-radio label="1">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
         </el-col>
       </el-row>
+      <el-form-item label="备注" prop="remark">
+        <el-input type="textarea" :rows="3" placeholder="用户备注信息" v-model="form.remark">
+        </el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
@@ -77,16 +49,17 @@
   </el-dialog>
 </template>
 <script>
-import { getSelectTree, save, update } from '@/api/system/menu'
+import { getSelectTree } from '@/api/system/dept'
+import { save, update } from '@/api/system/user'
 export default {
   data () {
     return {
       // 显示标题
-      title: '新增菜单',
+      title: '新增用户',
       // 显示form窗口
       showForm: false,
-      // 菜单选择器数据
-      selectTree: [],
+      // 用户选择器数据
+      deptTree: [],
       // 要修改的记录
       record: null,
       // 弹窗类型
@@ -94,51 +67,44 @@ export default {
       // 表单数据
       form: {
         id: null,
-        type: 'T',
-        parent_id: null,
-        name: null,
-        code: '',
-        route: '',
-        icon: '',
-        component: '',
+        username: '',
+        password: '123456',
+        dept_id: null,
+        role_ids: '',
+        post_ids: '',
+        email: '',
         status: '0',
-        sort: 0,
-        is_out: '1',
-        is_hidden: '1',
-        is_quick: '1',
-        is_cache: '0',
-        restful: '0'
+        remark: ''
       },
       // 表单验证规则
       rules: {
-        name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入菜单代码', trigger: 'blur' }],
-        route: [{ required: true, message: '请输入路由', trigger: 'blur' }],
-        component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }]
+        username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入用户密码', trigger: 'blur' }],
+        role_ids: [{ required: true, message: '请选择角色', trigger: 'blur' }]
       }
     }
   },
   // 创建生命周期
   created () {
     getSelectTree().then(res => {
-      this.selectTree = res.data
+      this.deptTree = res.data
     })
   },
   methods: {
-    // 新增菜单
+    // 新增用户
     create () {
       this.showForm = true
       this.saveType = 'create'
-      this.title = '新增菜单'
+      this.title = '新增用户'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
       })
     },
-    // 更新菜单
+    // 更新用户
     update (record) {
       this.saveType = 'update'
-      this.title = '编辑菜单：' + record.name
+      this.title = '编辑用户：' + record.name
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
