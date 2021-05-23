@@ -299,8 +299,11 @@ class SystemUserService extends AbstractService
 
     /**
      * 修改用户状态
+     * @param int $id
+     * @param string $value
+     * @return bool
      */
-    public function changeUserStatus(int $id, string $value)
+    public function changeUserStatus(int $id, string $value): bool
     {
         if ($value === '0') {
             $this->mapper->enable([$id]);

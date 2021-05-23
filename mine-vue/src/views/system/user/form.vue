@@ -6,7 +6,7 @@
           <el-form-item label="用户名称" prop="username">
             <el-input v-model="form.username" size="small" placeholder="请输入用户名称"></el-input>
           </el-form-item>
-          <el-form-item label="用户密码" prop="password">
+          <el-form-item label="用户密码" prop="password" v-if="saveType === 'create'">
             <el-input v-model="form.password" size="small" placeholder="请输入用户密码" show-password></el-input>
           </el-form-item>
           <el-form-item label="角色" prop="role_ids">
@@ -104,7 +104,7 @@ export default {
     // 更新用户
     update (record) {
       this.saveType = 'update'
-      this.title = '编辑用户：' + record.name
+      this.title = '编辑用户'
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
