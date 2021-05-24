@@ -175,7 +175,7 @@ trait ServiceTrait
      */
     public function disable(string $ids, string $field = 'status'): bool
     {
-        return empty($ids) ? false : $this->disable(explode(',', $ids), $field);
+        return empty($ids) ? false : $this->mapper->disable(explode(',', $ids), $field);
     }
 
     /**
@@ -186,6 +186,6 @@ trait ServiceTrait
      */
     public function enable(string $ids, string $field = 'status'): bool
     {
-        return empty($ids) ? false : $this->enable(explode(',', $ids), $field);
+        return empty($ids) ? false : $this->mapper->enable(explode(',', $ids), $field);
     }
 }
