@@ -38,7 +38,7 @@
         </el-col>
       </el-row>
       <el-form-item label="备注" prop="remark">
-        <el-input type="textarea" :rows="3" placeholder="用户备注信息" v-model="form.remark">
+        <el-input type="textarea" size="small" :rows="3" placeholder="用户备注信息" v-model="form.remark">
         </el-input>
       </el-form-item>
     </el-form>
@@ -99,6 +99,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
+        this.form.password = '123456'
       })
     },
     // 更新用户

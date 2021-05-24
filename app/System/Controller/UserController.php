@@ -49,7 +49,7 @@ class UserController extends MineController
      */
     public function recycle(): ResponseInterface
     {
-        return $this->success($this->service->getListByRecycle($this->request->all()));
+        return $this->success($this->service->getPageListByRecycle($this->request->all()));
     }
 
     /**
