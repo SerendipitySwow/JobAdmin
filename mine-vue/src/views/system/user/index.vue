@@ -29,36 +29,23 @@
     </template>
     <el-row :gutter="20">
       <el-col :span="4">
-        <el-input
-          placeholder="请输入部门名称"
-          v-model="filterDept" size="small">
+        <el-input placeholder="请输入部门名称" v-model="filterDept" size="small">
         </el-input>
-        <el-tree
-          class="filter-tree"
-          :data="deptTree"
-          :props="defaultProps"
-          default-expand-all
-          :expand-on-click-node="false"
-          :filter-node-method="filterDeptNode"
-          @node-click="handleDeptSwitch"
-          style="margin-top: 10px"
-          ref="tree">
+        <el-tree class="filter-tree" :data="deptTree" :props="defaultProps" default-expand-all :expand-on-click-node="false" :filter-node-method="filterDeptNode" @node-click="handleDeptSwitch" style="margin-top: 10px" ref="tree">
         </el-tree>
       </el-col>
       <el-col :span="20">
         <el-row :gutter="10">
           <el-col :span="1.5">
             <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:user:save']" @click="$refs.userForm.create()">新增</el-button>
-            <el-button size="small" icon="el-icon-delete" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">删除</el-button>
+            <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:user:import']" @click="handleDeletes">删除</el-button>
             <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">导入</el-button>
             <el-button size="small" icon="el-icon-download" v-hasPermission="['system:user:export']" @click="$refs.userForm.create()">导出</el-button>
           </el-col>
           <table-right-toolbar recycleCode="system-user-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
         </el-row>
-        <el-table v-loading="loading" :data="userData" row-key="id">
-          <el-table-column
-            type="selection"
-            width="55">
+        <el-table v-loading="loading" :data="userData" row-key="id" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="username" label="用户名称" fixed width="120" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="email" label="邮箱">
@@ -70,11 +57,7 @@
           </el-table-column>
           <el-table-column prop="status" label="状态" width="100">
             <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.status"
-                @change="handleStatus(scope.row)"
-                active-value="0"
-                inactive-value="1">
+              <el-switch v-model="scope.row.status" @change="handleStatus(scope.row)" active-value="0" inactive-value="1">
               </el-switch>
             </template>
           </el-table-column>
@@ -98,14 +81,7 @@
     </el-row>
     <user-form ref="userForm" @closeDialog="handleClose"></user-form>
     <template slot="footer">
-      <el-pagination
-        @size-change="getList"
-        @current-change="getList"
-        layout="total, sizes, prev, pager, next, jumper"
-        :page-sizes="[10, 20, 30, 50]"
-        :current-page.sync="queryParams.page"
-        :page-size.sync="queryParams.pageSize"
-        :total="pageInfo.total">
+      <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
       </el-pagination>
     </template>
   </ma-container>
@@ -142,6 +118,10 @@ export default {
       filterDept: '',
       // 部门数据
       deptTree: [],
+      // 多选
+      ids: null,
+      // 按钮禁用
+      btnIsDisabed: true,
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -192,9 +172,22 @@ export default {
     handleClose (e) {
       e && this.getList()
     },
+    // 多选
+    handleSelectionChange (items) {
+      if (items.length > 0) {
+        const ids = []
+        items.forEach(item => {
+          ids.push(item.id)
+          this.btnIsDisabed = false
+          this.ids = ids.join(',')
+        })
+      } else {
+        this.btnIsDisabed = true
+        this.ids = null
+      }
+    },
     // 用户状态更改
     handleStatus (row) {
-      console.log(row.status)
       const status = row.status === '0' ? '0' : '1'
       const text = row.status === '0' ? '启用' : '停用'
       this.$confirm(`确认要${text} ${row.username} 用户吗？`, '提示', {
@@ -217,6 +210,10 @@ export default {
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
+    },
+    // 批量删除
+    handleDeletes () {
+      this.handleDelete(this.ids)
     },
     // 移到回收站
     handleDelete (id) {

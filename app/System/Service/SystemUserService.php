@@ -315,4 +315,14 @@ class SystemUserService extends AbstractService
             return false;
         }
     }
+
+    /**
+     * 初始化用户密码
+     * @param int $id
+     * @return bool
+     */
+    public function initUserPassword(int $id): bool
+    {
+        return $this->mapper->initUserPassword($id, $password = '123456') > 0;
+    }
 }

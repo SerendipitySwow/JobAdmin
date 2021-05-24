@@ -128,11 +128,24 @@ class UserController extends MineController
     /**
      * 更改用户状态
      * @PutMapping("changeUserStatus")
+     * @param SystemUserStatusRequest $request
+     * @return ResponseInterface
      */
-    public function changeUserStatus(SystemUserStatusRequest $request)
+    public function changeUserStatus(SystemUserStatusRequest $request): ResponseInterface
     {
         $id = $request->input('id');
         $status = $request->input('status');
         return $this->success($this->service->changeUserStatus((int) $id, (string) $status));
+    }
+
+    /**
+     * 初始化用户密码
+     * @PutMapping("initUserPassword/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     */
+    public function initUserPassword(int $id): ResponseInterface
+    {
+        return $this->service->initUserPassword($id) ? $this->success() : $this->error();
     }
 }

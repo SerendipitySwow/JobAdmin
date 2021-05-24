@@ -85,10 +85,8 @@ export default {
     }
   },
   // 创建生命周期
-  created () {
-    getSelectTree().then(res => {
-      this.deptTree = res.data
-    })
+  mounted () {
+    this.initData()
   },
   methods: {
     // 新增用户
@@ -96,6 +94,7 @@ export default {
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增用户'
+
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
@@ -111,6 +110,11 @@ export default {
         this.$refs.form.resetFields()
         // 填充form数据
         this.setFormData(record)
+      })
+    },
+    initData () {
+      getSelectTree().then(res => {
+        this.deptTree = res.data
       })
     },
     // 关闭处理方法
