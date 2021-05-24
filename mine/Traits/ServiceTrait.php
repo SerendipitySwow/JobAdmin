@@ -154,7 +154,7 @@ trait ServiceTrait
      */
     public function realDelete(string $ids): bool
     {
-        return empty($ids) ? false : $this->realDelete(explode(',', $ids));
+        return empty($ids) ? false : $this->mapper->realDelete(explode(',', $ids));
     }
 
     /**
