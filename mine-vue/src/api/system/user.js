@@ -92,3 +92,14 @@ export function changeUserStatus (params = {}) {
     data: params
   })
 }
+
+/**
+ * 初始化用户密码
+ * @returns
+ */
+export function initUserPassword (id) {
+  return request({
+    url: 'system/user/initUserPassword/' + id,
+    method: 'put'
+  })
+}

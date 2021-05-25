@@ -88,7 +88,7 @@
 </template>
 <script>
 import { getSelectTree } from '@/api/system/dept'
-import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus } from '@/api/system/user'
+import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus, initPassword } from '@/api/system/user'
 import userForm from './form'
 export default {
   name: 'system-user-index',
@@ -246,6 +246,18 @@ export default {
       recoverys(id).then(res => {
         this.success(res.message)
         this.getList()
+      })
+    },
+    // 初始化用户密码
+    handleInitPassword (id) {
+      this.$confirm('确定要将用户密码设置为：123456', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        initUserPassword(id).then(res => {
+          this.success(res.message)
+        })
       })
     },
     // 搜索
