@@ -323,6 +323,6 @@ class SystemUserService extends AbstractService
      */
     public function initUserPassword(int $id): bool
     {
-        return $this->mapper->initUserPassword($id, $password = '123456') > 0;
+        return $this->mapper->initUserPassword($id, $password = '123456');
     }
 }

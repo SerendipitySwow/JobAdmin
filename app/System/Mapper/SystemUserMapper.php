@@ -137,10 +137,12 @@ class SystemUserMapper extends AbstractMapper
      * 初始化用户密码
      * @param int $id
      * @param string $password
-     * @return int
+     * @return bool
      */
-    public function initUserPassword(int $id, string $password): int
+    public function initUserPassword(int $id, string $password): bool
     {
-        return $this->model::query()->where('id', $id)->update(['password' => $password]);
+        $model = $this->model::find($id);
+        $model->password = $password;
+        return $model->save();
     }
 }
