@@ -34,7 +34,7 @@ class RoleController extends MineController
     protected $service;
 
     /**
-     * 获取角色列表
+     * 获取角色分页列表
      * @GetMapping("index")
      * @Permission
      * @return ResponseInterface
@@ -42,6 +42,17 @@ class RoleController extends MineController
     public function index(): ResponseInterface
     {
         return $this->success($this->service->getPageList());
+    }
+
+    /**
+     * 获取角色列表
+     * @GetMapping("list")
+     * @Permission
+     * @return ResponseInterface
+     */
+    public function list(): ResponseInterface
+    {
+        return $this->success($this->service->getList());
     }
 
     /**

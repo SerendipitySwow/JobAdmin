@@ -30,7 +30,7 @@ class PostController extends MineController
     protected $service;
 
     /**
-     * 获取列表数据
+     * 获取列表分页数据
      * @GetMapping("index")
      * @return ResponseInterface
      * @Permission
@@ -38,6 +38,17 @@ class PostController extends MineController
     public function index(): ResponseInterface
     {
         return $this->success($this->service->getPageList());
+    }
+
+    /**
+     * 获取列表数据
+     * @GetMapping("list")
+     * @return ResponseInterface
+     * @Permission
+     */
+    public function list(): ResponseInterface
+    {
+        return $this->success($this->service->getList());
     }
 
     /**

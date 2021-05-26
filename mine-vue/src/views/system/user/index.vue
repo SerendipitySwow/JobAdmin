@@ -213,7 +213,7 @@ export default {
     },
     // 批量删除
     handleDeletes () {
-      this.handleDelete(this.ids)
+      this.showRecycle ? this.handleRealDelete(this.ids) : this.handleDelete(this.ids)
     },
     // 移到回收站
     handleDelete (id) {
