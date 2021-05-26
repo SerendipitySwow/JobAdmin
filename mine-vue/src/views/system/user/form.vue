@@ -50,6 +50,8 @@
 </template>
 <script>
 import { getSelectTree } from '@/api/system/dept'
+import { getRoleList } from '@/api/system/role'
+import { getPostList } from '@/api/system/post'
 import { save, update } from '@/api/system/user'
 export default {
   data () {
@@ -60,6 +62,10 @@ export default {
       showForm: false,
       // 用户选择器数据
       deptTree: [],
+      // 岗位列表
+      postData: [],
+      // 角色列表
+      roleData: [],
       // 要修改的记录
       record: null,
       // 弹窗类型
@@ -115,6 +121,12 @@ export default {
     initData () {
       getSelectTree().then(res => {
         this.deptTree = res.data
+      })
+      getRoleList().then(res => {
+        this.roleData = res.data
+      })
+      getPostList().then(res => {
+        this.postData = res.data
       })
     },
     // 关闭处理方法
