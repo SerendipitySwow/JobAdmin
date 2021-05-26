@@ -140,13 +140,12 @@ class UserController extends MineController
 
     /**
      * 初始化用户密码
-     * @PutMapping("initUserPassword")
+     * @PutMapping("initUserPassword/{id}")
+     * @param int $id
      * @return ResponseInterface
      */
-    public function initUserPassword(): ResponseInterface
+    public function initUserPassword(int $id): ResponseInterface
     {
-        return $this->service->initUserPassword(
-            (int) $this->request->input('id', 0)
-        ) ? $this->success() : $this->error();
+        return $this->service->initUserPassword($id) ? $this->success() : $this->error();
     }
 }

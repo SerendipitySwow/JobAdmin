@@ -141,6 +141,6 @@ class SystemUserMapper extends AbstractMapper
      */
     public function initUserPassword(int $id, string $password): int
     {
-        return $this->model::query()->where('id', $id)->update(['password', $password]);
+        return $this->model::query()->where('id', $id)->update(['password' => $password]);
     }
 }
