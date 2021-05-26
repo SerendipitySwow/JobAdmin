@@ -144,7 +144,7 @@ class UserController extends MineController
      * @param int $id
      * @return ResponseInterface
      */
-    public function initUserPassword(int $id): ResponseInterface
+    public function initUserPassword(String $id): ResponseInterface
     {
         return $this->service->initUserPassword($id) ? $this->success() : $this->error();
     }

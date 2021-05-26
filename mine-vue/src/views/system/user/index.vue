@@ -88,7 +88,7 @@
 </template>
 <script>
 import { getSelectTree } from '@/api/system/dept'
-import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus, initPassword } from '@/api/system/user'
+import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus, initUserPassword } from '@/api/system/user'
 import userForm from './form'
 export default {
   name: 'system-user-index',
