@@ -12,10 +12,10 @@ class SystemPostMapper extends AbstractMapper
     /**
      * @var SystemPost
      */
-    public $mapper;
+    public $model;
 
     public function assignModel()
     {
-        $this->mapper = SystemPost::class;
+        $this->model = SystemPost::class;
     }
 }
