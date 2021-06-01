@@ -10,13 +10,13 @@
             <el-input v-model="form.password" size="small" placeholder="请输入用户密码" show-password></el-input>
           </el-form-item>
           <el-form-item label="角色" prop="role_ids">
-            <el-select v-model="form.role_ids" size="small" style="width:100%" multiple placeholder="请选择用户角色">
+            <el-select v-model="form.role_ids" size="small" clearable style="width:100%" multiple placeholder="请选择用户角色">
               <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="岗位" prop="post_ids">
-            <el-select v-model="form.post_ids" size="small" style="width:100%" multiple placeholder="请选择用户岗位">
+            <el-select v-model="form.post_ids" size="small" clearable style="width:100%" multiple placeholder="请选择用户岗位">
               <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
@@ -86,7 +86,8 @@ export default {
       rules: {
         username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
         password: [{ required: true, message: '请输入用户密码', trigger: 'blur' }],
-        role_ids: [{ required: true, message: '请选择角色', trigger: 'blur' }]
+        role_ids: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+        email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]
       }
     }
   },
@@ -114,6 +115,7 @@ export default {
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
+        console.log(record)
         // 填充form数据
         this.setFormData(record)
       })
@@ -124,7 +126,6 @@ export default {
       })
       getRoleList().then(res => {
         this.roleData = res.data
-        console.log(this.roleData)
       })
       getPostList().then(res => {
         this.postData = res.data
