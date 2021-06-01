@@ -263,15 +263,7 @@ class SystemUserService extends AbstractService
         if ($this->mapper->existsByUsername($data['username'])) {
             throw new NormalStatusException(__('system.username_exists'));
         } else {
-            if (!is_array($data['role_ids'])) {
-                $data['role_ids'] = explode(',', $data['role_ids']);
-            }
-            if (($key = array_search(env('ADMIN_ROLE'), $data['role_ids'])) !== false) {
-                unset($data['role_ids'][$key]);
-            }
-            if (!empty($data['post_ids']) && !is_array($data['post_ids'])) {
-                $data['post_ids'] = explode(',', $data['post_ids']);
-            }
+            $this->handleData($data);
             return $this->mapper->save($data);
         }
     }
@@ -285,6 +277,16 @@ class SystemUserService extends AbstractService
      */
     public function update(int $id, array $data): bool
     {
+        $this->handleData($data);
+        return $this->mapper->update($id, $data);
+    }
+
+    /**
+     * 处理提交数据
+     * @param $data
+     */
+    protected function handleData(&$data)
+    {
         if (!is_array($data['role_ids'])) {
             $data['role_ids'] = explode(',', $data['role_ids']);
         }
@@ -294,7 +296,9 @@ class SystemUserService extends AbstractService
         if (!empty($data['post_ids']) && !is_array($data['post_ids'])) {
             $data['post_ids'] = explode(',', $data['post_ids']);
         }
-        return $this->mapper->update($id, $data);
+        if (is_array($data['dept_id'])) {
+            $data['dept_id'] = array_pop($data['dept_id']);
+        }
     }
 
     /**

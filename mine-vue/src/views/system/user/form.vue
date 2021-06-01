@@ -11,13 +11,13 @@
           </el-form-item>
           <el-form-item label="角色" prop="role_ids">
             <el-select v-model="form.role_ids" size="small" style="width:100%" multiple placeholder="请选择用户角色">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="岗位" prop="post_ids">
             <el-select v-model="form.post_ids" size="small" style="width:100%" multiple placeholder="请选择用户岗位">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -124,6 +124,7 @@ export default {
       })
       getRoleList().then(res => {
         this.roleData = res.data
+        console.log(this.roleData)
       })
       getPostList().then(res => {
         this.postData = res.data
@@ -178,8 +179,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-/deep/ .el-form-item__content .el-input-group {
-  vertical-align: middle;
-}
-</style>

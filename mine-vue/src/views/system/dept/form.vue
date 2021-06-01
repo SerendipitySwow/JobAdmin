@@ -137,8 +137,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-/deep/ .el-form-item__content .el-input-group {
-  vertical-align: middle;
-}
-</style>
