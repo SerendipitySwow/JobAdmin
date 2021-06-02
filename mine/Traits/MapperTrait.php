@@ -201,7 +201,7 @@ trait MapperTrait
     public function update(int $id, array $data): bool
     {
         $this->filterExecuteAttributes($data, true);
-        return $this->model::where((new $this->model)->getKeyName(), $id)->update($data);
+        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data);
     }
 
     /**

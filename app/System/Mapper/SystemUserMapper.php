@@ -63,9 +63,12 @@ class SystemUserMapper extends AbstractMapper
      */
     public function save(array $data): int
     {
+        $role_ids = $data['role_ids'] ?? [];
+        $post_ids = $data['post_ids'] ?? [];
+        $this->filterExecuteAttributes($data, true);
         $user = $this->model::create($data);
-        $user->roles()->sync($data['role_ids'], false);
-        empty($data['post_ids']) || $user->posts()->sync($data['post_ids'], false);
+        $user->roles()->sync($role_ids, false);
+        $user->posts()->sync($post_ids, false);
         return $user->id;
     }
 
@@ -77,10 +80,19 @@ class SystemUserMapper extends AbstractMapper
      */
     public function update(int $id, array $data): bool
     {
+        $role_ids = $data['role_ids'] ?? [];
+        $post_ids = $data['post_ids'] ?? [];
+        $this->filterExecuteAttributes($data, true);
+        if (isset($data['password'])) {
+            unset($data['password']);
+        }
+        echo $id;
+        print_r($data);
+        print_r($role_ids);
         $this->model::query()->where('id', $id)->update($data);
         $user = $this->model::find($id);
-        $user->roles()->sync($data['role_ids']);
-        empty($data['post_ids']) || $user->posts()->sync($data['post_ids']);
+        $user->roles()->sync($role_ids);
+        $user->posts()->sync($post_ids);
         return true;
     }
 

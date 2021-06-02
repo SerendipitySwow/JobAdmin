@@ -105,6 +105,7 @@ class SystemUserService extends AbstractService
      * 检查用户提交的验证码
      * @param String $code
      * @return bool
+     * @throws \Exception
      */
     public function checkCaptcha(String $code): bool
     {
