@@ -26,8 +26,8 @@ class SystemDeptSeeder extends Seeder
                 'phone' => '1688888888'
             ]
         );
-        Db::table('system_user')->update(
-            ['id' => env('SUPER_ADMIN', 1), 'dept_id' => $id]
-        );
+        Db::table('system_user')
+            ->where('id', env('SUPER_ADMIN', 1))
+            ->update(['dept_id' => $id]);
     }
 }
