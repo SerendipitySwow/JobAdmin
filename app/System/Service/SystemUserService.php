@@ -5,6 +5,7 @@ namespace App\System\Service;
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Cache\Annotation\Cacheable;
+use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
@@ -198,10 +199,9 @@ class SystemUserService extends AbstractService
         return $this->getCacheInfo($this->request->getLoginUser(), SystemUser::find((int) $this->request->getId()));
     }
 
-    //@Cacheable(prefix="loginInfo", value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     *
+     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -264,29 +264,30 @@ class SystemUserService extends AbstractService
         if ($this->mapper->existsByUsername($data['username'])) {
             throw new NormalStatusException(__('system.username_exists'));
         } else {
-            $this->handleData($data);
-            return $this->mapper->save($data);
+            return $this->mapper->save($this->handleData($data));
         }
     }
 
     /**
      * 更新用户信息
-     * @Cacheable(prefix="loginInfo", value="userId_#{id}")
+     * @CacheEvict(prefix="loginInfo", value="userId_#{id}")
      * @param int $id
      * @param array $data
      * @return bool
      */
     public function update(int $id, array $data): bool
     {
-        $this->handleData($data);
-        return $this->mapper->update($id, $data);
+        if (isset($data['username'])) unset($data['username']);
+        if (isset($data['password'])) unset($data['password']);
+        return $this->mapper->update($id, $this->handleData($data));
     }
 
     /**
      * 处理提交数据
      * @param $data
+     * @return array
      */
-    protected function handleData(&$data)
+    protected function handleData($data): array
     {
         if (!is_array($data['role_ids'])) {
             $data['role_ids'] = explode(',', $data['role_ids']);
@@ -300,6 +301,7 @@ class SystemUserService extends AbstractService
         if (is_array($data['dept_id'])) {
             $data['dept_id'] = array_pop($data['dept_id']);
         }
+        return $data;
     }
 
     /**

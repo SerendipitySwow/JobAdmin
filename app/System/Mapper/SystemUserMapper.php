@@ -83,16 +83,10 @@ class SystemUserMapper extends AbstractMapper
         $role_ids = $data['role_ids'] ?? [];
         $post_ids = $data['post_ids'] ?? [];
         $this->filterExecuteAttributes($data, true);
-        if (isset($data['password'])) {
-            unset($data['password']);
-        }
-        echo $id;
-        print_r($data);
-        print_r($role_ids);
         $this->model::query()->where('id', $id)->update($data);
         $user = $this->model::find($id);
-        $user->roles()->sync($role_ids);
-        $user->posts()->sync($post_ids);
+        !empty($role_ids) && $user->roles()->sync($role_ids);
+        !empty($post_ids) && $user->posts()->sync($post_ids);
         return true;
     }
 
@@ -120,8 +114,8 @@ class SystemUserMapper extends AbstractMapper
     public function read(int $id): SystemUser
     {
         $user = $this->model::find($id);
-        $user->postList = $user->posts()->get();
-        $user->roleList = $user->roles()->get();
+        $user->setAttribute('roleList', $user->roles()->get() ?: []);
+        $user->setAttribute('postList', $user->posts()->get() ?: []);
         return $user;
     }
 

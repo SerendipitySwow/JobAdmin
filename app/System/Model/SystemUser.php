@@ -9,6 +9,8 @@ use Mine\MineModel;
  * @property int $id 用户ID，主键
  * @property string $username 用户名
  * @property string $user_type 用户类型：(100系统用户)
+ * @property string $nickname 用户昵称
+ * @property string $phone 手机
  * @property string $email 用户邮箱
  * @property string $avatar 用户头像
  * @property int $dept_id 部门ID
@@ -22,8 +24,9 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemPost[] $posts 
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemRole[] $roles 
  * @property-write mixed $password 密码
- * @method static withTrashed()
  */
 class SystemUser extends MineModel
 {
@@ -42,15 +45,13 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'username', 'password', 'user_type', 'email', 'avatar', 'dept_id', 'remember_token', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'dept_id', 'remember_token', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-    public $postList;
-    public $roleList;
     /**
      * 通过中间表关联角色
      * @return \Hyperf\Database\Model\Relations\BelongsToMany

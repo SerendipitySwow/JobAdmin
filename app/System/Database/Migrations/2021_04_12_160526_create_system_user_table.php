@@ -18,6 +18,8 @@ class CreateSystemUserTable extends Migration
             $table->addColumn('string', 'username', ['length' => 20, 'comment' => '用户名']);
             $table->addColumn('string', 'password', ['length' => 100, 'comment' => '密码']);
             $table->addColumn('string', 'user_type', ['length' => 3, 'comment' => '用户类型：(100系统用户)', 'default' => '100'])->nullable();
+            $table->addColumn('string', 'nickname', ['length' => 30, 'comment' => '用户昵称'])->nullable();
+            $table->addColumn('string', 'phone', ['length' => 11, 'comment' => '手机'])->nullable();
             $table->addColumn('string', 'email', ['length' => 50, 'comment' => '用户邮箱'])->nullable();
             $table->addColumn('string', 'avatar', ['length' => 100, 'comment' => '用户头像'])->nullable();
             $table->addColumn('bigInteger', 'dept_id', ['unsigned' => true, 'comment' => '部门ID'])->nullable();

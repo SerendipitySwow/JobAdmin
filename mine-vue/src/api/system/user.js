@@ -25,6 +25,17 @@ export function getPageListByRecycle (params = {}) {
 }
 
 /**
+ * 读取一个用户
+ * @returns
+ */
+export function read (id) {
+  return request({
+    url: 'system/user/read/' + id,
+    method: 'get'
+  })
+}
+
+/**
  * 添加用户
  * @returns
  */

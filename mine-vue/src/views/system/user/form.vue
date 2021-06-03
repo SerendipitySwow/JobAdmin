@@ -3,8 +3,8 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="90px">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="用户名称" prop="username">
-            <el-input v-model="form.username" size="small" placeholder="请输入用户名称"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="form.username" size="small" :disabled="isDisabled" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="用户密码" prop="password" v-if="saveType === 'create'">
             <el-input v-model="form.password" size="small" placeholder="请输入用户密码" show-password></el-input>
@@ -14,6 +14,9 @@
               <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="手机" prop="phone" >
+            <el-input v-model="form.phone" size="small" placeholder="请输入手机"></el-input>
           </el-form-item>
           <el-form-item label="岗位" prop="post_ids">
             <el-select v-model="form.post_ids" size="small" clearable style="width:100%" multiple placeholder="请选择用户岗位">
@@ -25,6 +28,9 @@
         <el-col :span="12">
           <el-form-item label="所属部门" prop="dept_id">
             <el-cascader v-model="form.dept_id" size="small" clearable style="width:100%" :options="deptTree" :props="{ checkStrictly: true }"></el-cascader>
+          </el-form-item>
+          <el-form-item label="用户昵称" prop="nickname" >
+            <el-input v-model="form.nickname" size="small" placeholder="请输入用户昵称"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="form.email" size="small" placeholder="请输入邮箱"></el-input>
@@ -52,7 +58,7 @@
 import { getSelectTree } from '@/api/system/dept'
 import { getRoleList } from '@/api/system/role'
 import { getPostList } from '@/api/system/post'
-import { save, update } from '@/api/system/user'
+import { save, update, read } from '@/api/system/user'
 export default {
   data () {
     return {
@@ -60,6 +66,8 @@ export default {
       title: '新增用户',
       // 显示form窗口
       showForm: false,
+      // 是否禁用
+      isDisabled: false,
       // 用户选择器数据
       deptTree: [],
       // 岗位列表
@@ -74,6 +82,8 @@ export default {
       form: {
         id: null,
         username: '',
+        nickname: '',
+        phone: '',
         password: '123456',
         dept_id: null,
         role_ids: '',
@@ -84,10 +94,12 @@ export default {
       },
       // 表单验证规则
       rules: {
-        username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
         password: [{ required: true, message: '请输入用户密码', trigger: 'blur' }],
         role_ids: [{ required: true, message: '请选择角色', trigger: 'blur' }],
-        email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]
+        email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+        phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: ['blur'] }]
       }
     }
   },
@@ -101,10 +113,10 @@ export default {
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增用户'
-
+      this.isDisabled = false
       this.$nextTick(() => {
         this.$refs.form.resetFields()
-        this.form.id = null
+        this.form.id = this.form.username = null
         this.form.password = '123456'
       })
     },
@@ -113,11 +125,20 @@ export default {
       this.saveType = 'update'
       this.title = '编辑用户'
       this.showForm = true
+      this.isDisabled = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
-        console.log(record)
-        // 填充form数据
         this.setFormData(record)
+        read(record.id).then(res => {
+          this.form.role_ids = res.data.roleList.map(item => {
+            return item.id
+          })
+          this.form.post_ids = res.data.postList.map(item => {
+            return item.id
+          })
+          // 填充form数据
+          this.setFormData(res.data)
+        })
       })
     },
     initData () {

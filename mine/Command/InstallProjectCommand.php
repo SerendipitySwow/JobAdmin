@@ -259,6 +259,9 @@ class InstallProjectCommand extends MineCommand
         $modules = $mine->getModuleInfo();
         foreach ($modules as $name => $info) {
             $this->call('mine:migrate-run', ['name' => $name]);
+            if ($name === 'System') {
+                $this->initUserData();
+            }
             $this->call('mine:seeder-run',  ['name' => $name]);
             $this->line($this->getGreenText(sprintf('"%s" module install successfully', $name)));
         }
@@ -269,12 +272,18 @@ class InstallProjectCommand extends MineCommand
         $this->line(PHP_EOL . ' MineAdmin set others items...' . PHP_EOL, 'comment');
         // 生成jwt
         $this->call('gen:jwt-secret');
+    }
+
+    protected function initUserData()
+    {
         // 创建超级管理员
         Db::table("system_user")->insert([
             'id' => env('SUPER_ADMIN', 1),
-            'username' => 'admin',
+            'username' => 'superAdmin',
             'password' => password_hash('admin123', PASSWORD_DEFAULT),
             'user_type' => '100',
+            'nickname' => '创始人',
+            'email' => 'admin@adminmine.com',
             'created_by' => 0,
             'updated_by' => 0,
             'status' => 0,
@@ -285,7 +294,7 @@ class InstallProjectCommand extends MineCommand
         Db::table('system_role')->insert([
             'id' => env('ADMIN_ROLE', 1),
             'name' => '超级管理员（创始人）',
-            'code' => 'admin',
+            'code' => 'superAdmin',
             'data_scope' => 0,
             'sort' => 0,
             'created_by' => env('SUPER_ADMIN', 0),
@@ -293,7 +302,11 @@ class InstallProjectCommand extends MineCommand
             'status' => 0,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
-            'remark' => '系统内置角色，不可删除',
+            'remark' => '系统内置角色，不可删除'
+        ]);
+        Db::table('system_user_role')->insert([
+            'user_id' => env('SUPER_ADMIN', 1),
+            'role_id' => env('ADMIN_ROLE', 1)
         ]);
     }
 
@@ -308,7 +321,7 @@ class InstallProjectCommand extends MineCommand
         }
         $this->line(PHP_EOL . sprintf('%s
 MineAdmin Version: %s
-default username: admin
+default username: superAdmin
 default password: admin123', $this->getInfo(), Mine::getVersion()), 'comment');
     }
 
