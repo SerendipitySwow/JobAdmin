@@ -17,7 +17,14 @@ class SystemDeptSeeder extends Seeder
     {
         $id = (new Id())->getId();
         Db::table('system_dept')->insert(
-            ['id' => $id, 'name' => '曼艺科技', 'leader' => '曼艺', 'phone' => '1688888888']
+            [
+                'id' => $id,
+                'parent_id' => 0,
+                'level' => '0',
+                'name' => '曼艺科技',
+                'leader' => '曼艺',
+                'phone' => '1688888888'
+            ]
         );
         Db::table('system_user')->update(
             ['id' => env('SUPER_ADMIN', 1), 'dept_id' => $id]

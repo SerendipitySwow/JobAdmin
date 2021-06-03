@@ -18,8 +18,8 @@ class CreateSystemDeptTable extends Migration
             $table->addColumn('bigInteger', 'parent_id', ['unsigned' => true, 'comment' => '父ID']);
             $table->addColumn('string', 'level', ['length' => 500, 'comment' => '组级集合']);
             $table->addColumn('string', 'name', ['length' => 30, 'comment' => '部门名称']);
-            $table->addColumn('string', 'leader', ['length' => 20, 'comment' => '负责人']);
-            $table->addColumn('string', 'phone', ['length' => 11, 'comment' => '联系电话']);
+            $table->addColumn('string', 'leader', ['length' => 20, 'comment' => '负责人'])->nullable();
+            $table->addColumn('string', 'phone', ['length' => 11, 'comment' => '联系电话'])->nullable();
             $table->addColumn('char', 'status', ['length' => 1, 'default' => '0', 'comment' => '状态 (0正常 1停用)'])->nullable();
             $table->addColumn('tinyInteger', 'sort', ['unsigned' => true, 'default' => 0, 'comment' => '排序'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
