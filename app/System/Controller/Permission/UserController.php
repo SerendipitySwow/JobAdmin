@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace App\System\Controller;
+namespace App\System\Controller\Permission;
 
 use App\System\Request\User\SystemUserCreateRequest;
 use App\System\Request\User\SystemUserStatusRequest;

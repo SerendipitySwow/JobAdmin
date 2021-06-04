@@ -1,9 +1,10 @@
 <?php
 
 declare(strict_types = 1);
-namespace App\System\Controller;
+namespace App\System\Controller\Permission;
 
-use App\System\Service\SystemPostService;
+use App\System\Request\Role\SystemRoleCreateRequest;
+use App\System\Service\SystemRoleService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -13,27 +14,30 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
+use Mine\Traits\ControllerTrait;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class PostController
+ * Class RoleController
  * @package App\System\Controller
- * @Controller(prefix="system/post")
+ * @Controller(prefix="system/role")
  * @Auth
  */
-class PostController extends MineController
+class RoleController extends MineController
 {
+    use ControllerTrait;
+
     /**
      * @Inject
-     * @var SystemPostService
+     * @var SystemRoleService
      */
     protected $service;
 
     /**
-     * 获取列表分页数据
+     * 获取角色分页列表
      * @GetMapping("index")
-     * @return ResponseInterface
      * @Permission
+     * @return ResponseInterface
      */
     public function index(): ResponseInterface
     {
@@ -41,10 +45,10 @@ class PostController extends MineController
     }
 
     /**
-     * 获取列表数据
+     * 获取角色列表
      * @GetMapping("list")
-     * @return ResponseInterface
      * @Permission
+     * @return ResponseInterface
      */
     public function list(): ResponseInterface
     {
@@ -52,38 +56,28 @@ class PostController extends MineController
     }
 
     /**
-     * 保存数据
+     * 新增角色
      * @PostMapping("save")
+     * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
      * @Permission
      */
-    public function save(): ResponseInterface
+    public function save(SystemRoleCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->service->save($this->request->all())]);
+        return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
-     * 获取一条数据信息
-     * @GetMapping("read/{id}")
-     * @param int $id
-     * @return ResponseInterface
-     * @Permission()
-     */
-    public function read(int $id): ResponseInterface
-    {
-        return $this->success($this->service->read($id));
-    }
-
-    /**
-     * 更新数据
+     * 更新角色
      * @PutMapping("update/{id}")
      * @param int $id
+     * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
      * @Permission
      */
-    public function update(int $id)
+    public function update(int $id, SystemRoleCreateRequest $request): ResponseInterface
     {
-        return $this->service->update($id, $this->request->all()) ? $this->success() : $this->error();
+        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**

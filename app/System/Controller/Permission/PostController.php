@@ -1,11 +1,9 @@
 <?php
 
 declare(strict_types = 1);
-namespace App\System\Controller;
+namespace App\System\Controller\Permission;
 
-
-use App\System\Request\Menu\SystemMenuCreateRequest;
-use App\System\Service\SystemDeptService;
+use App\System\Service\SystemPostService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -18,75 +16,78 @@ use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class DeptController
+ * Class PostController
  * @package App\System\Controller
- * @Controller(prefix="system/dept")
+ * @Controller(prefix="system/post")
  * @Auth
  */
-class DeptController extends MineController
+class PostController extends MineController
 {
     /**
      * @Inject
-     * @var SystemDeptService
+     * @var SystemPostService
      */
     protected $service;
 
     /**
-     * 获取部门树
+     * 获取列表分页数据
      * @GetMapping("index")
+     * @return ResponseInterface
      * @Permission
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getTreeList($this->request->all()));
+        return $this->success($this->service->getPageList());
     }
 
     /**
-     * 从回收站获取部门树
-     * @GetMapping("recycleTree")
+     * 获取列表数据
+     * @GetMapping("list")
+     * @return ResponseInterface
      * @Permission
      */
-    public function recycleTree():ResponseInterface
+    public function list(): ResponseInterface
     {
-        return $this->success($this->service->getTreeListByRecycle($this->request->all()));
+        return $this->success($this->service->getList());
     }
 
     /**
-     * 前端选择树（不需要权限）
-     * @GetMapping("selectTree")
-     */
-    public function selectTree(): ResponseInterface
-    {
-        return $this->success($this->service->getSelectTree());
-    }
-
-    /**
-     * 新增部门
+     * 保存数据
      * @PostMapping("save")
-     * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
      * @Permission
      */
-    public function save(SystemMenuCreateRequest $request): ResponseInterface
+    public function save(): ResponseInterface
     {
-        return $this->success(['id' => $this->service->save($request->all())]);
+        return $this->success(['id' => $this->service->save($this->request->all())]);
     }
 
     /**
-     * 更新部门
-     * @PutMapping("update/{id}")
-     * @Permission
+     * 获取一条数据信息
+     * @GetMapping("read/{id}")
      * @param int $id
-     * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
+     * @Permission()
      */
-    public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
+    public function read(int $id): ResponseInterface
     {
-        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
+        return $this->success($this->service->read($id));
     }
 
     /**
-     * 单个或批量删除部门到回收站
+     * 更新数据
+     * @PutMapping("update/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     * @Permission
+     */
+    public function update(int $id)
+    {
+        return $this->service->update($id, $this->request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 单个或批量删除数据到回收站
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -98,7 +99,7 @@ class DeptController extends MineController
     }
 
     /**
-     * 单个或批量真实删除部门 （清空回收站）
+     * 单个或批量真实删除数据 （清空回收站）
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -106,14 +107,11 @@ class DeptController extends MineController
      */
     public function realDelete(String $ids): ResponseInterface
     {
-        $menus = $this->service->realDel($ids);
-        return is_null($menus) ?
-            $this->success() :
-            $this->success(__('system.exists_children_ctu', ['names' => implode(',', $menus)]));
+        return $this->service->realDelete($ids) ? $this->success() : $this->error();
     }
 
     /**
-     * 单个或批量恢复在回收站的部门
+     * 单个或批量恢复在回收站的数据
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace App\System\Controller;
+namespace App\System\Controller\Permission;
 
 use App\System\Request\Menu\SystemMenuCreateRequest;
 use App\System\Service\SystemMenuService;

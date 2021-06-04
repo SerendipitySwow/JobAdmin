@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types = 1);
-namespace App\System\Controller;
+namespace App\System\Controller\Permission;
 
-use App\System\Request\Role\SystemRoleCreateRequest;
-use App\System\Service\SystemRoleService;
+
+use App\System\Request\Menu\SystemMenuCreateRequest;
+use App\System\Service\SystemDeptService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -14,74 +15,78 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
-use Mine\Traits\ControllerTrait;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class RoleController
+ * Class DeptController
  * @package App\System\Controller
- * @Controller(prefix="system/role")
+ * @Controller(prefix="system/dept")
  * @Auth
  */
-class RoleController extends MineController
+class DeptController extends MineController
 {
-    use ControllerTrait;
-
     /**
      * @Inject
-     * @var SystemRoleService
+     * @var SystemDeptService
      */
     protected $service;
 
     /**
-     * 获取角色分页列表
+     * 获取部门树
      * @GetMapping("index")
      * @Permission
-     * @return ResponseInterface
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList());
+        return $this->success($this->service->getTreeList($this->request->all()));
     }
 
     /**
-     * 获取角色列表
-     * @GetMapping("list")
+     * 从回收站获取部门树
+     * @GetMapping("recycleTree")
      * @Permission
-     * @return ResponseInterface
      */
-    public function list(): ResponseInterface
+    public function recycleTree():ResponseInterface
     {
-        return $this->success($this->service->getList());
+        return $this->success($this->service->getTreeListByRecycle($this->request->all()));
     }
 
     /**
-     * 新增角色
+     * 前端选择树（不需要权限）
+     * @GetMapping("selectTree")
+     */
+    public function selectTree(): ResponseInterface
+    {
+        return $this->success($this->service->getSelectTree());
+    }
+
+    /**
+     * 新增部门
      * @PostMapping("save")
-     * @param SystemRoleCreateRequest $request
+     * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
      * @Permission
      */
-    public function save(SystemRoleCreateRequest $request): ResponseInterface
+    public function save(SystemMenuCreateRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
-     * 更新角色
+     * 更新部门
      * @PutMapping("update/{id}")
-     * @param int $id
-     * @param SystemRoleCreateRequest $request
-     * @return ResponseInterface
      * @Permission
+     * @param int $id
+     * @param SystemMenuCreateRequest $request
+     * @return ResponseInterface
      */
-    public function update(int $id, SystemRoleCreateRequest $request): ResponseInterface
+    public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**
-     * 单个或批量删除数据到回收站
+     * 单个或批量删除部门到回收站
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -93,7 +98,7 @@ class RoleController extends MineController
     }
 
     /**
-     * 单个或批量真实删除数据 （清空回收站）
+     * 单个或批量真实删除部门 （清空回收站）
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
@@ -101,11 +106,14 @@ class RoleController extends MineController
      */
     public function realDelete(String $ids): ResponseInterface
     {
-        return $this->service->realDelete($ids) ? $this->success() : $this->error();
+        $menus = $this->service->realDel($ids);
+        return is_null($menus) ?
+            $this->success() :
+            $this->success(__('system.exists_children_ctu', ['names' => implode(',', $menus)]));
     }
 
     /**
-     * 单个或批量恢复在回收站的数据
+     * 单个或批量恢复在回收站的部门
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
