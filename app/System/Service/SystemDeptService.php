@@ -72,7 +72,6 @@ class SystemDeptService extends AbstractService
         if ($pid === 0) {
             $data['level'] = $data['parent_id'] = '0';
         } else {
-            $pid = explode(',', $pid);
             array_unshift($pid, '0');
             $data['level'] = implode(',', $pid);
             $data['parent_id'] = array_pop($pid);
