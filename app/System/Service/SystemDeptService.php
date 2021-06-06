@@ -46,17 +46,7 @@ class SystemDeptService extends AbstractService
      */
     public function save(array $data): int
     {
-        $pid = $data['parent_id'] ?? 0;
-
-        if ($pid === 0) {
-            $data['level'] = $data['parent_id'] = '0';
-        } else {
-            array_unshift($pid, '0');
-            $data['level'] = implode(',', $pid);
-            $data['parent_id'] = array_pop($pid);
-        }
-
-        return $this->mapper->save($data);
+        return $this->mapper->save($this->handleData($data));
     }
 
     /**
@@ -66,6 +56,16 @@ class SystemDeptService extends AbstractService
      * @return bool
      */
     public function update(int $id, array $data): bool
+    {
+        return $this->mapper->update($id, $this->handleData($data));
+    }
+
+    /**
+     * 处理数据
+     * @param $data
+     * @return array
+     */
+    protected function handleData($data): array
     {
         $pid = $data['parent_id'] ?? 0;
 
@@ -77,7 +77,7 @@ class SystemDeptService extends AbstractService
             $data['parent_id'] = array_pop($pid);
         }
 
-        return $this->mapper->update($id, $data);
+        return $data;
     }
 
     /**

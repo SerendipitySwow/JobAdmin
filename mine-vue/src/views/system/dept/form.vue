@@ -76,11 +76,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
+        this.form.parent_id = null
       })
     },
     // 更新部门
     update (record) {
       this.saveType = 'update'
+      this.record = record
       this.title = '编辑部门：' + record.name
       this.showForm = true
       this.$nextTick(() => {
@@ -111,6 +113,20 @@ export default {
             })
           } else {
             // 更新数据
+            if (this.form.parent_id !== null && typeof this.form.parent_id !== 'number') {
+              const id = this.form.parent_id.pop()
+              if (id === this.record.id) {
+                this.error('上级部门不能选择本部门')
+                this.form.parent_id.push(id)
+                return false
+              } else {
+                this.form.parent_id.push(id)
+              }
+            } else if (typeof this.form.parent_id === 'number') {
+              const id = this.form.parent_id
+              this.form.parent_id = []
+              this.form.parent_id.push(id)
+            }
             update(this.form.id, this.form).then(res => {
               this.success(res.message)
               this.resetForm()

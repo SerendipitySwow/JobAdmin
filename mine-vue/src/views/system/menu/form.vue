@@ -138,6 +138,7 @@ export default {
     // 更新菜单
     update (record) {
       this.saveType = 'update'
+      this.record = record
       this.title = '编辑菜单：' + record.name
       this.showForm = true
       this.$nextTick(() => {
@@ -168,6 +169,20 @@ export default {
             })
           } else {
             // 更新数据
+            if (this.form.parent_id !== null && typeof this.form.parent_id !== 'number') {
+              const id = this.form.parent_id.pop()
+              if (id === this.record.id) {
+                this.error('上级菜单不能选择本菜单')
+                this.form.parent_id.push(id)
+                return false
+              } else {
+                this.form.parent_id.push(id)
+              }
+            } else if (typeof this.form.parent_id === 'number') {
+              const id = this.form.parent_id
+              this.form.parent_id = []
+              this.form.parent_id.push(id)
+            }
             update(this.form.id, this.form).then(res => {
               this.success(res.message)
               this.resetForm()
