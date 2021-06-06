@@ -37,7 +37,17 @@ class PostController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList());
+        return $this->success($this->service->getPageList($this->request->all()));
+    }
+
+    /**
+     * @GetMapping("recycle")
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function recycle(): ResponseInterface
+    {
+        return $this->success($this->service->getPageListByRecycle($this->request->all()));
     }
 
     /**
