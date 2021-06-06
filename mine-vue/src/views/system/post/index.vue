@@ -22,43 +22,43 @@
     </template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:dept:save']" @click="$refs.deptForm.create()">新增部门</el-button>
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:post:save']" @click="$refs.postForm.create()">新增岗位</el-button>
       </el-col>
-      <table-right-toolbar recycleCode="system-dept-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+      <table-right-toolbar recycleCode="system-post-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="dataList" row-key="id">
-      <el-table-column prop="name" label="部门名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="sort" label="排序" width="80"></el-table-column>
-      <el-table-column prop="leader" label="部门负责人"></el-table-column>
-      <el-table-column prop="phone" label="负责人电话"></el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="name" label="岗位名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="code" label="岗位代码"></el-table-column>
+      <el-table-column prop="sort" label="排序" ></el-table-column>
+      <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           {{ scope.row.status === '0' ? '启用' : '停用' }}
         </template>
       </el-table-column>
+      <el-table-column prop="created_at" label="创建时间" ></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:dept:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:post:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:post:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:update']" icon="el-icon-edit" @click="$refs.deptForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:post:update']" icon="el-icon-edit" @click="$refs.postForm.update(scope.row)">修改</el-button>
+            <el-button size="small" type="text" v-hasPermission="['system:post:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
-    <dept-form ref="deptForm" @closeDialog="handleClose"></dept-form>
+    <post-form ref="postForm" @closeDialog="handleClose"></post-form>
   </ma-container>
 </template>
 <script>
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/post'
-import DeptForm from './form'
+import PostForm from './form'
 export default {
-  name: 'system-dept-index',
+  name: 'system-post-index',
   components: {
-    DeptForm
+    PostForm
   },
   data () {
     return {
@@ -87,12 +87,12 @@ export default {
       this.loading = true
       if (!this.showRecycle) {
         getPageList(this.queryParams).then(res => {
-          this.dataList = res.data
+          this.dataList = res.data.items
           this.loading = false
         })
       } else {
         getPageListByRecycle(this.queryParams).then(res => {
-          this.dataList = res.data
+          this.dataList = res.data.items
           this.loading = false
         })
       }

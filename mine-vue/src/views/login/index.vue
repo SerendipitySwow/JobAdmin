@@ -86,8 +86,8 @@ export default {
       captchaImg: null,
       // 表单
       formLogin: {
-        username: null,
-        password: null,
+        username: 'superAdmin',
+        password: 'admin123',
         code: null
       },
       // 表单校验

@@ -1,17 +1,11 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="上级部门" prop="parent_id">
-        <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
+      <el-form-item label="岗位名称" prop="name">
+        <el-input v-model="form.name" size="small" placeholder="请输入岗位名称"></el-input>
       </el-form-item>
-      <el-form-item label="部门名称" prop="name">
-        <el-input v-model="form.name" size="small" placeholder="请输入部门名称"></el-input>
-      </el-form-item>
-      <el-form-item label="负责人" prop="leader">
-        <el-input v-model="form.leader" size="small" placeholder="请输入部门负责人"></el-input>
-      </el-form-item>
-      <el-form-item label="联系电话" prop="phone">
-        <el-input v-model="form.phone" size="small" placeholder="请输入负责人电话"></el-input>
+      <el-form-item label="代码" prop="code">
+        <el-input v-model="form.code" size="small" placeholder="请输入岗位代码"></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
@@ -22,6 +16,10 @@
           <el-radio label="1">停用</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="备注" prop="remark">
+        <el-input type="textarea" size="small" :rows="3" placeholder="备注信息" v-model="form.remark">
+        </el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
@@ -30,15 +28,15 @@
   </el-dialog>
 </template>
 <script>
-import { getSelectTree, save, update } from '@/api/system/dept'
+import { save, update } from '@/api/system/post'
 export default {
   data () {
     return {
       // 显示标题
-      title: '新增部门',
+      title: '新增岗位',
       // 显示form窗口
       showForm: false,
-      // 部门选择器数据
+      // 岗位选择器数据
       selectTree: [],
       // 要修改的记录
       record: null,
@@ -47,43 +45,36 @@ export default {
       // 表单数据
       form: {
         id: null,
-        parent_id: null,
         name: null,
-        leader: '',
-        phone: '',
+        code: null,
         status: '0',
-        sort: 0
+        sort: 0,
+        remark: null
       },
       // 表单验证规则
       rules: {
-        name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }],
-        phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: ['blur'] }]
+        name: [{ required: true, message: '请输入岗位名称', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入岗位代码', trigger: 'blur' }]
       }
     }
   },
-  // 创建生命周期
-  created () {
-    getSelectTree().then(res => {
-      this.selectTree = res.data
-    })
-  },
   methods: {
-    // 新增部门
+    // 新增岗位
     create () {
       this.showForm = true
       this.saveType = 'create'
-      this.title = '新增部门'
+      this.title = '新增岗位'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
         this.form.parent_id = null
       })
     },
-    // 更新部门
+    // 更新岗位
     update (record) {
       this.saveType = 'update'
       this.record = record
-      this.title = '编辑部门：' + record.name
+      this.title = '编辑岗位：' + record.name
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
@@ -116,7 +107,7 @@ export default {
             if (this.form.parent_id !== null && typeof this.form.parent_id !== 'number') {
               const id = this.form.parent_id.pop()
               if (id === this.record.id) {
-                this.error('上级部门不能选择本部门')
+                this.error('上级岗位不能选择本岗位')
                 this.form.parent_id.push(id)
                 return false
               } else {

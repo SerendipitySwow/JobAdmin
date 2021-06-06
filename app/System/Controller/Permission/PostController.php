@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 namespace App\System\Controller\Permission;
 
+use App\System\Request\Post\SystemPostCreateRequest;
 use App\System\Service\SystemPostService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -67,9 +68,9 @@ class PostController extends MineController
      * @return ResponseInterface
      * @Permission
      */
-    public function save(): ResponseInterface
+    public function save(SystemPostCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->service->save($this->request->all())]);
+        return $this->success(['id' => $this->service->save($request->all())]);
     }
 
     /**
@@ -91,9 +92,9 @@ class PostController extends MineController
      * @return ResponseInterface
      * @Permission
      */
-    public function update(int $id)
+    public function update(int $id, SystemPostCreateRequest $request): ResponseInterface
     {
-        return $this->service->update($id, $this->request->all()) ? $this->success() : $this->error();
+        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
 
     /**
