@@ -22,7 +22,7 @@
         <div class="ma-header-right" flex-box="0">
           <!-- 如果你只想在开发环境显示这个按钮请添加 v-if="$env === 'development'" -->
           <ma-header-search @click="handleSearchClick"/>
-          <ma-header-log v-if="$env === 'development'"/>
+          <!-- <ma-header-log v-if="$env === 'development'"/> -->
           <ma-header-fullscreen/>
           <ma-header-theme/>
           <ma-header-size/>
@@ -84,7 +84,7 @@ import maHeaderSearch from './components/header-search'
 import maHeaderSize from './components/header-size'
 import maHeaderTheme from './components/header-theme'
 import maHeaderUser from './components/header-user'
-import maHeaderLog from './components/header-log'
+// import maHeaderLog from './components/header-log'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import mixinSearch from './mixins/search'
 export default {
@@ -100,8 +100,8 @@ export default {
     maHeaderSearch,
     maHeaderSize,
     maHeaderTheme,
-    maHeaderUser,
-    maHeaderLog
+    maHeaderUser
+    // maHeaderLog
   },
   data () {
     return {

@@ -86,7 +86,7 @@ class SystemUserMapper extends AbstractMapper
         $this->model::query()->where('id', $id)->update($data);
         $user = $this->model::find($id);
         !empty($role_ids) && $user->roles()->sync($role_ids);
-        !empty($post_ids) && $user->posts()->sync($post_ids);
+        $user->posts()->sync($post_ids);
         return true;
     }
 
