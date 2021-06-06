@@ -12,14 +12,17 @@
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间" class="ma-inline-form-item">
-          <!-- <el-date-picker
+          <el-date-picker
             size="small"
-            v-model="value1"
             type="daterange"
+            v-model="dateRange"
             range-separator="至"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            @change="handleDateChange"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
-          </el-date-picker> -->
+          </el-date-picker>
         </el-form-item>
         <el-form-item class="ma-inline-form-item">
           <el-button size="small" type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
@@ -107,10 +110,14 @@ export default {
       userData: [],
       // 分页数据
       pageInfo: { total: 0 },
+      // 选择时间范围
+      dateRange: null,
       // 搜索
       queryParams: {
         username: undefined,
         status: undefined,
+        maxDate: undefined,
+        minDate: undefined,
         pageSize: 10,
         page: 1
       },
@@ -171,6 +178,13 @@ export default {
     // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
+    },
+    // 选择时间事件
+    handleDateChange (values) {
+      if (values !== null) {
+        this.queryParams.minDate = values[0]
+        this.queryParams.maxDate = values[1]
+      }
     },
     // 多选
     handleSelectionChange (items) {
@@ -267,6 +281,8 @@ export default {
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()
+      this.dateRange = null
+      this.queryParams.minDate = this.queryParams.maxDate = undefined
       this.handleSearch()
     }
   }
