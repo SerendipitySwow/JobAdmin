@@ -136,6 +136,12 @@ class SystemUserMapper extends AbstractMapper
         if (isset($params['status'])) {
             $query->where('status', $params['status']);
         }
+        if (isset($params['minDate']) && isset($params['maxDate'])) {
+            $query->whereBetween(
+                'created_at',
+                [$params['minDate'] . '00:00:00', $params['maxDate'] . '23:59:59']
+            );
+        }
         return $query;
     }
 
