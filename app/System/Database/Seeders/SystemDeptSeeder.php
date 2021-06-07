@@ -12,6 +12,7 @@ class SystemDeptSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws Exception
      */
     public function run()
     {
@@ -23,7 +24,10 @@ class SystemDeptSeeder extends Seeder
                 'level' => '0',
                 'name' => '曼艺科技',
                 'leader' => '曼艺',
-                'phone' => '1688888888'
+                'phone' => '16888888888',
+                'created_by' => env('SUPER_ADMIN', 1),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]
         );
         Db::table('system_user')
