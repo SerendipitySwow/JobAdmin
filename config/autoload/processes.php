@@ -10,6 +10,5 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 return [
-    Hyperf\Crontab\Process\CrontabDispatcherProcess::class,
-//    Mine\Crontab\MineCrontab::class,
+    Hyperf\Crontab\Process\CrontabDispatcherProcess::class
 ];
