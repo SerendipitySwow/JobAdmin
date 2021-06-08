@@ -126,4 +126,17 @@ class RoleController extends MineController
     {
         return $this->service->recovery($ids) ? $this->success() : $this->error();
     }
+
+    /**
+     * 更改角色状态
+     * @PutMapping("changeRoleStatus")
+     * @param SystemRoleStatusRequest $request
+     * @return ResponseInterface
+     */
+    public function changeRoleStatus(SystemRoleStatusRequest $request): ResponseInterface
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+        return $this->success($this->service->changeRoleStatus((int) $id, (string) $status));
+    }
 }
