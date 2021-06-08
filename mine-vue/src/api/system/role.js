@@ -103,3 +103,15 @@ export function update (id, params = {}) {
     data: params
   })
 }
+
+/**
+ * 更改角色状态
+ * @returns
+ */
+export function changeRoleStatus (params = {}) {
+  return request({
+    url: 'system/user/changeRoleStatus',
+    method: 'put',
+    data: params
+  })
+}
