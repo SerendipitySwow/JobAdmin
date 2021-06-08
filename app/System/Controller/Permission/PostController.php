@@ -89,6 +89,7 @@ class PostController extends MineController
      * 更新数据
      * @PutMapping("update/{id}")
      * @param int $id
+     * @param SystemPostCreateRequest $request
      * @return ResponseInterface
      * @Permission
      */
