@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 namespace App\System\Controller\Permission;
 
+use App\System\Request\Role\SystemRoleStatusRequest;
 use App\System\Request\Role\SystemRoleCreateRequest;
 use App\System\Service\SystemRoleService;
 use Hyperf\Di\Annotation\Inject;

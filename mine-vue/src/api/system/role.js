@@ -110,7 +110,7 @@ export function update (id, params = {}) {
  */
 export function changeRoleStatus (params = {}) {
   return request({
-    url: 'system/user/changeRoleStatus',
+    url: 'system/role/changeRoleStatus',
     method: 'put',
     data: params
   })
