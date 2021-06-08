@@ -29,7 +29,7 @@ class MineCrontab
 
     public function execute()
     {
-        $times = $this->parser->parse("* * * * * *", time());
+        $times = $this->parser->parse("*/1 * * * *", time());
         if ($times) {
             foreach ($times as $time) {
                 if (time() >= $time->getTimestamp()) {
