@@ -74,7 +74,7 @@ export default {
     update (record) {
       this.saveType = 'update'
       this.record = record
-      this.title = '编辑岗位：' + record.name
+      this.title = '编辑岗位'
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
@@ -103,21 +103,6 @@ export default {
               this.resetForm()
             })
           } else {
-            // 更新数据
-            if (this.form.parent_id !== null && typeof this.form.parent_id !== 'number') {
-              const id = this.form.parent_id.pop()
-              if (id === this.record.id) {
-                this.error('上级岗位不能选择本岗位')
-                this.form.parent_id.push(id)
-                return false
-              } else {
-                this.form.parent_id.push(id)
-              }
-            } else if (typeof this.form.parent_id === 'number') {
-              const id = this.form.parent_id
-              this.form.parent_id = []
-              this.form.parent_id.push(id)
-            }
             update(this.form.id, this.form).then(res => {
               this.success(res.message)
               this.resetForm()

@@ -20,13 +20,16 @@
         </el-form-item>
       </el-form>
     </template>
-    <el-row :gutter="10">
-      <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:post:save']" @click="$refs.postForm.create()">新增岗位</el-button>
+    <el-row :gutter="20">
+      <el-col :span="1.5">
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:post:save']" @click="$refs.postForm.create()">新增</el-button>
+        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:post:import']" @click="handleDeletes">删除</el-button>
       </el-col>
       <table-right-toolbar recycleCode="system-post-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="dataList" row-key="id">
+    <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
+          </el-table-column>
       <el-table-column prop="name" label="岗位名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="code" label="岗位代码"></el-table-column>
       <el-table-column prop="sort" label="排序" ></el-table-column>
@@ -50,6 +53,10 @@
       </el-table-column>
     </el-table>
     <post-form ref="postForm" @closeDialog="handleClose"></post-form>
+    <template slot="footer">
+      <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
+      </el-pagination>
+    </template>
   </ma-container>
 </template>
 <script>
@@ -70,11 +77,17 @@ export default {
       dataList: null,
       // 遮罩层
       loading: true,
+      // 分页数据
+      pageInfo: { total: 0 },
+      // 按钮禁用
+      btnIsDisabed: true,
       // 搜索
       queryParams: {
         name: undefined,
         code: undefined,
-        status: undefined
+        status: undefined,
+        pageSize: 10,
+        page: 1
       }
     }
   },
@@ -88,11 +101,13 @@ export default {
       if (!this.showRecycle) {
         getPageList(this.queryParams).then(res => {
           this.dataList = res.data.items
+          this.pageInfo = res.data.pageInfo
           this.loading = false
         })
       } else {
         getPageListByRecycle(this.queryParams).then(res => {
           this.dataList = res.data.items
+          this.pageInfo = res.data.pageInfo
           this.loading = false
         })
       }
@@ -135,6 +150,24 @@ export default {
           this.getList()
         })
       })
+    },
+    // 多选
+    handleSelectionChange (items) {
+      if (items.length > 0) {
+        const ids = []
+        items.forEach(item => {
+          ids.push(item.id)
+          this.btnIsDisabed = false
+          this.ids = ids.join(',')
+        })
+      } else {
+        this.btnIsDisabed = true
+        this.ids = null
+      }
+    },
+    // 批量删除
+    handleDeletes () {
+      this.showRecycle ? this.handleRealDelete(this.ids) : this.handleDelete(this.ids)
     },
     // 恢复数据
     handleRecovery (id) {

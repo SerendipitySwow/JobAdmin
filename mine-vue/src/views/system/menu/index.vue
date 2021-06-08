@@ -19,7 +19,7 @@
     </template>
     <el-row :gutter="10">
       <el-col :span="1">
-        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增菜单</el-button>
+        <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:menu:save']" @click="$refs.menuForm.create()">新增</el-button>
       </el-col>
       <table-right-toolbar recycleCode="system-menu-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>

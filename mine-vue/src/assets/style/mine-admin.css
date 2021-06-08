@@ -19,6 +19,6 @@
 	padding-right: 0;
 	width: inherit;
 }
-.el-table .el-table_1_column_1>.cell:nth-child(1) {
-    padding-left: 15px;
+.el-table__header .el-table-column--selection>.cell:nth-child(1) {
+    padding-left: 15px !important;
 }

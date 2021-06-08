@@ -41,7 +41,7 @@
         <el-row :gutter="10">
           <el-col :span="1.5">
             <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:user:save']" @click="$refs.userForm.create()">新增</el-button>
-            <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:user:import']" @click="handleDeletes">删除</el-button>
+            <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:user:delete']" @click="handleDeletes">删除</el-button>
             <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">导入</el-button>
             <el-button size="small" icon="el-icon-download" v-hasPermission="['system:user:export']" @click="$refs.userForm.create()">导出</el-button>
           </el-col>

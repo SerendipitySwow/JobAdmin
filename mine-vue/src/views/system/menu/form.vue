@@ -139,7 +139,7 @@ export default {
     update (record) {
       this.saveType = 'update'
       this.record = record
-      this.title = '编辑菜单：' + record.name
+      this.title = '编辑菜单'
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()

@@ -83,7 +83,7 @@ export default {
     update (record) {
       this.saveType = 'update'
       this.record = record
-      this.title = '编辑部门：' + record.name
+      this.title = '编辑部门'
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
