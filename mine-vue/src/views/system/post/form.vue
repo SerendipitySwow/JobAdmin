@@ -67,7 +67,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
-        this.form.parent_id = null
       })
     },
     // 更新岗位

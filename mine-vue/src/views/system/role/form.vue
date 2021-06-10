@@ -1,11 +1,11 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="岗位名称" prop="name">
-        <el-input v-model="form.name" size="small" placeholder="请输入岗位名称"></el-input>
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="form.name" size="small" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="代码" prop="code">
-        <el-input v-model="form.code" size="small" placeholder="请输入岗位代码"></el-input>
+        <el-input v-model="form.code" size="small" placeholder="请输入角色代码"></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
@@ -28,15 +28,15 @@
   </el-dialog>
 </template>
 <script>
-import { save, update } from '@/api/system/post'
+import { save, update } from '@/api/system/role'
 export default {
   data () {
     return {
       // 显示标题
-      title: '新增岗位',
+      title: '新增角色',
       // 显示form窗口
       showForm: false,
-      // 岗位选择器数据
+      // 角色选择器数据
       selectTree: [],
       // 要修改的记录
       record: null,
@@ -53,28 +53,27 @@ export default {
       },
       // 表单验证规则
       rules: {
-        name: [{ required: true, message: '请输入岗位名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入岗位代码', trigger: 'blur' }]
+        name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入角色代码', trigger: 'blur' }]
       }
     }
   },
   methods: {
-    // 新增岗位
+    // 新增角色
     create () {
       this.showForm = true
       this.saveType = 'create'
-      this.title = '新增岗位'
+      this.title = '新增角色'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
-        this.form.parent_id = null
       })
     },
-    // 更新岗位
+    // 更新角色
     update (record) {
       this.saveType = 'update'
       this.record = record
-      this.title = '编辑岗位'
+      this.title = '编辑角色'
       this.showForm = true
       this.$nextTick(() => {
         this.$refs.form.resetFields()
