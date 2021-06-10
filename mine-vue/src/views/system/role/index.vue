@@ -30,7 +30,7 @@
     <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
           </el-table-column>
-      <el-table-column prop="name" label="角色名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="name" label="角色名称" fixed width="200" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="code" label="角色代码"></el-table-column>
       <el-table-column prop="sort" label="排序" ></el-table-column>
       <el-table-column prop="status" label="状态">
@@ -43,13 +43,14 @@
       <el-table-column label="操作" align="center" width="280">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:role:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:role:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button type="text" v-hasPermission="['system:role:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
+            <el-button type="text" v-hasPermission="['system:role:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" v-hasPermission="['system:role:update']" icon="el-icon-edit" @click="$refs.roleForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:role:update']" icon="el-icon-mouse" @click="$refs.dataForm.update(scope.row)">数据权限</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:role:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button type="text" v-hasPermission="['system:role:update']" @click="$refs.roleForm.update(scope.row)">修改</el-button>
+            <el-button type="text" v-hasPermission="['system:role:menuPermi']" @click="$refs.dataForm.update(scope.row)">菜单权限</el-button>
+            <el-button type="text" v-hasPermission="['system:role:dataPermi']" @click="$refs.dataForm.update(scope.row)">数据权限</el-button>
+            <el-button type="text" v-hasPermission="['system:role:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>

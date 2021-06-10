@@ -50,32 +50,32 @@
         <el-table v-loading="loading" :data="userData" row-key="id" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
-          <el-table-column prop="username" label="用户名称" fixed width="120" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="username" label="用户名称" fixed width="200" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="email" label="邮箱">
           </el-table-column>
-          <el-table-column prop="user_type" label="用户类型" width="100">
+          <el-table-column prop="user_type" label="用户类型" >
             <template slot-scope="scope">
               {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="100">
+          <el-table-column prop="status" label="状态" >
             <template slot-scope="scope">
               <el-switch v-model="scope.row.status" @change="handleStatus(scope.row)" active-value="0" inactive-value="1">
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="created_at" label="创建时间" width="160">
+          <el-table-column prop="created_at" label="创建时间">
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <div v-if="showRecycle">
-                <el-button size="small" type="text" v-hasPermission="['system:user:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-                <el-button size="small" type="text" v-hasPermission="['system:user:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+                <el-button type="text" v-hasPermission="['system:user:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
+                <el-button type="text" v-hasPermission="['system:user:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
               </div>
               <div v-else>
-                <el-button size="small" type="text" v-hasPermission="['system:user:update']" icon="el-icon-edit" @click="$refs.userForm.update(scope.row)">修改</el-button>
-                <el-button size="small" type="text" v-hasPermission="['system:user:initPassword']" icon="el-icon-key" @click="handleInitPassword(scope.row.id)">初始密码</el-button>
-                <el-button size="small" type="text" v-if="scope.row.username !== 'superAdmin'" v-hasPermission="['system:user:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+                <el-button type="text" v-hasPermission="['system:user:update']" @click="$refs.userForm.update(scope.row)">修改</el-button>
+                <el-button type="text" v-hasPermission="['system:user:initPassword']" @click="handleInitPassword(scope.row.id)">初始密码</el-button>
+                <el-button type="text" v-if="scope.row.username !== 'superAdmin'" v-hasPermission="['system:user:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
               </div>
             </template>
           </el-table-column>

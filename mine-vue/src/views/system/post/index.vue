@@ -42,12 +42,12 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:post:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:post:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button type="text" v-hasPermission="['system:post:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
+            <el-button type="text" v-hasPermission="['system:post:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" v-hasPermission="['system:post:update']" icon="el-icon-edit" @click="$refs.postForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:post:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button type="text" v-hasPermission="['system:post:update']" @click="$refs.postForm.update(scope.row)">修改</el-button>
+            <el-button type="text" v-hasPermission="['system:post:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>

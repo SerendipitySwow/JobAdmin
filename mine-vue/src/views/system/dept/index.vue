@@ -25,10 +25,10 @@
     </el-row>
     <el-table v-loading="loading" :data="deptTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="name" label="部门名称" fixed width="240" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="sort" label="排序" width="80"></el-table-column>
+      <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="leader" label="部门负责人"></el-table-column>
       <el-table-column prop="phone" label="负责人电话"></el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
+      <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           {{ scope.row.status === '0' ? '启用' : '停用' }}
         </template>
@@ -36,12 +36,12 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <div v-if="showRecycle">
-            <el-button size="small" type="text" v-hasPermission="['system:dept:recovery']" icon="el-icon-refresh-left" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:realDelete']" icon="el-icon-delete" @click="handleRealDelete(scope.row.id)">删除</el-button>
+            <el-button type="text" v-hasPermission="['system:dept:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
+            <el-button type="text" v-hasPermission="['system:dept:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:update']" icon="el-icon-edit" @click="$refs.deptForm.update(scope.row)">修改</el-button>
-            <el-button size="small" type="text" v-hasPermission="['system:dept:delete']" icon="el-icon-delete" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button type="text" v-hasPermission="['system:dept:update']" @click="$refs.deptForm.update(scope.row)">修改</el-button>
+            <el-button type="text" v-hasPermission="['system:dept:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
           </div>
         </template>
       </el-table-column>
