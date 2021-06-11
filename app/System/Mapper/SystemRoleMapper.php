@@ -63,12 +63,12 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function save(array $data): int
     {
-        $menuIds = $data['menu_ids'] ?? [];
-        $deptIds = $data['dept_ids'] ?? [];
+//        $menuIds = $data['menu_ids'] ?? [];
+//        $deptIds = $data['dept_ids'] ?? [];
         $this->filterExecuteAttributes($data);
         $role = $this->model::create($data);
-        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
-        empty($deptIds) || $role->depts()->sync($deptIds, false);
+//        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
+//        empty($deptIds) || $role->depts()->sync($deptIds, false);
         return $role->id;
     }
 
@@ -80,17 +80,15 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function update(int $id, array $data): bool
     {
-        // 如果修改创始人
-        if ($id == env('ADMIN_ROLE')) {
-            // todo...
-        }
         $menuIds = $data['menu_ids'] ?? [];
         $deptIds = $data['dept_ids'] ?? [];
         $this->filterExecuteAttributes($data);
         $this->model::query()->where('id', $id)->update($data);
-        $role = $this->model::find($id);
-        empty($menuIds) || $role->menus()->sync(array_unique($menuIds));
-        empty($deptIds) || $role->depts()->sync($deptIds);
+        if ($id != env('ADMIN_ROLE')) {
+            $role = $this->model::find($id);
+            $role->menus()->sync(array_unique($menuIds));
+            $role->depts()->sync($deptIds);
+        }
         return true;
     }
 
