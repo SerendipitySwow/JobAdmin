@@ -63,12 +63,12 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function save(array $data): int
     {
-//        $menuIds = $data['menu_ids'] ?? [];
-//        $deptIds = $data['dept_ids'] ?? [];
+        $menuIds = $data['menu_ids'] ?? [];
+        $deptIds = $data['dept_ids'] ?? [];
         $this->filterExecuteAttributes($data);
         $role = $this->model::create($data);
-//        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
-//        empty($deptIds) || $role->depts()->sync($deptIds, false);
+        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
+        empty($deptIds) || $role->depts()->sync($deptIds, false);
         return $role->id;
     }
 
