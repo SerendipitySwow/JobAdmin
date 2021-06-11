@@ -74,7 +74,7 @@ export default {
       // 是否显示搜索
       showSearch: true,
       // 数据
-      dataList: null,
+      dataList: [],
       // 遮罩层
       loading: true,
       // 分页数据

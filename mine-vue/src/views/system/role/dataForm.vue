@@ -35,7 +35,7 @@
   </el-dialog>
 </template>
 <script>
-import { update, getMenuByRole } from '@/api/system/role'
+import { update, getDeptByRole } from '@/api/system/role'
 import { getSelectTree } from '@/api/system/dept'
 export default {
   data () {
@@ -76,7 +76,7 @@ export default {
       this.showForm = true
       await this.getTreeList()
       this.$nextTick(() => {
-        this.getMenuByRoleId(record.id)
+        this.getDeptByRoleId(record.id)
         this.$refs.form.resetFields()
         this.setFormData(record)
       })
@@ -87,11 +87,11 @@ export default {
         this.dataList = res.data
       })
     },
-    // 获取该角色拥有的菜单ID
-    getMenuByRoleId (id) {
-      getMenuByRole(id).then(res => {
-        if (res.data[0] && res.data[0].menus) {
-          res.data[0].menus.forEach(item => {
+    // 获取该角色拥有的部门ID
+    getDeptByRoleId (id) {
+      getDeptByRole(id).then(res => {
+        if (res.data[0] && res.data[0].depts) {
+          res.data[0].depts.forEach(item => {
             this.$refs.tree.setChecked(item.id, true, false)
           })
         }
@@ -136,7 +136,9 @@ export default {
     submitForm () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.form.dept_ids = this.getTreeSelectNodes()
+          if (this.form.data_scope === '1') {
+            this.form.dept_ids = this.getTreeSelectNodes()
+          }
           update(this.form.id, this.form).then(res => {
             this.success(res.message)
             this.resetForm()

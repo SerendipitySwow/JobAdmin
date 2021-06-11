@@ -36,6 +36,17 @@ export function getMenuByRole (id) {
 }
 
 /**
+ * 通过角色获取部门
+ * @returns
+ */
+export function getDeptByRole (id) {
+  return request({
+    url: 'system/role/getDeptByRole/' + id,
+    method: 'get'
+  })
+}
+
+/**
  * 从回收站获取角色
  * @returns
  */
