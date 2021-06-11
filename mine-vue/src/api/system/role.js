@@ -25,6 +25,17 @@ export function getRoleList (params = {}) {
 }
 
 /**
+ * 通过角色获取菜单
+ * @returns
+ */
+export function getMenuByRole (id) {
+  return request({
+    url: 'system/role/getMenuByRole/' + id,
+    method: 'get'
+  })
+}
+
+/**
  * 从回收站获取角色
  * @returns
  */

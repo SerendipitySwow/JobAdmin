@@ -47,19 +47,49 @@
             <el-button type="text" v-hasPermission="['system:role:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
           </div>
           <div v-else>
-            <el-button type="text" v-hasPermission="['system:role:update']" @click="$refs.roleForm.update(scope.row)">修改</el-button>
-            <el-button type="text" v-hasPermission="['system:role:menuPermi']" @click="$refs.menuForm.load(scope.row)">菜单权限</el-button>
-            <el-button type="text" v-hasPermission="['system:role:dataPermi']" @click="$refs.dataForm.load(scope.row)">数据权限</el-button>
-            <el-button type="text" v-hasPermission="['system:role:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+            <el-button
+              type="text"
+              v-hasPermission="['system:role:update']"
+              @click="$refs.roleForm.update(scope.row)"
+            >修改</el-button>
+
+            <el-button
+             type="text"
+             v-if="scope.row.code !== 'superAdmin'"
+             v-hasPermission="['system:role:menuPermi']"
+             @click="$refs.menuForm.load(scope.row)"
+            >菜单权限</el-button>
+
+            <el-button
+              type="text"
+              v-if="scope.row.code !== 'superAdmin'"
+              v-hasPermission="['system:role:dataPermi']"
+              @click="$refs.dataForm.load(scope.row)"
+            >数据权限</el-button>
+
+            <el-button
+              v-if="scope.row.code !== 'superAdmin'"
+              type="text"
+              v-hasPermission="['system:role:delete']"
+              @click="handleDelete(scope.row.id)"
+            >移到回收站</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
     <role-form ref="roleForm" @closeDialog="handleClose"></role-form>
     <menu-form ref="menuForm" @closeDialog="handleClose"></menu-form>
+    <data-form ref="dataForm" @closeDialog="handleClose"></data-form>
     <template slot="footer">
-      <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
-      </el-pagination>
+      <el-pagination
+        @size-change="getList"
+        @current-change="getList"
+        layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[10, 20, 30, 50]"
+        :current-page.sync="queryParams.page"
+        :page-size.sync="queryParams.pageSize"
+        :total="pageInfo.total"
+      ></el-pagination>
     </template>
   </ma-container>
 </template>
@@ -67,11 +97,13 @@
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes, changeRoleStatus } from '@/api/system/role'
 import RoleForm from './form'
 import MenuForm from './menuForm'
+import DataForm from './dataForm'
 export default {
   name: 'system-role-index',
   components: {
     RoleForm,
-    MenuForm
+    MenuForm,
+    DataForm
   },
   data () {
     return {

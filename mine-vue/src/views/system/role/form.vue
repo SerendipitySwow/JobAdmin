@@ -5,7 +5,7 @@
         <el-input v-model="form.name" size="small" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="代码" prop="code">
-        <el-input v-model="form.code" size="small" placeholder="请输入角色代码"></el-input>
+        <el-input v-model="form.code" size="small" :disabled="form.code === 'superAdmin'" placeholder="请输入角色代码"></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
@@ -36,8 +36,6 @@ export default {
       title: '新增角色',
       // 显示form窗口
       showForm: false,
-      // 角色选择器数据
-      selectTree: [],
       // 要修改的记录
       record: null,
       // 弹窗类型
