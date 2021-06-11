@@ -55,6 +55,17 @@ class RoleController extends MineController
         return $this->success($this->service->getPageListByRecycle($this->request->all()));
     }
 
+    /**
+     * 通过角色获取菜单
+     * @GetMapping("getMenuByRole/{id}")
+     * @Permission
+     * @param int $id
+     * @return ResponseInterface
+     */
+    public function getMenuByRole(int $id): ResponseInterface
+    {
+        return $this->success($this->service->getMenuByRole($id));
+    }
 
     /**
      * 获取角色列表

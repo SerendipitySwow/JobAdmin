@@ -49,9 +49,12 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function save(array $data): int
     {
+        $menuIds = $data['menu_ids'] ?? [];
+        $deptIds = $data['dept_ids'] ?? [];
+        $this->filterExecuteAttributes($data);
         $role = $this->model::create($data);
-        empty($data['menu_ids']) || $role->menus()->sync(array_unique($data['menu_ids']), false);
-        empty($data['dept_ids']) || $role->depts()->sync($data['dept_ids'], false);
+        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
+        empty($deptIds) || $role->depts()->sync($deptIds, false);
         return $role->id;
     }
 
@@ -63,10 +66,32 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function update(int $id, array $data): bool
     {
+        // 如果修改创始人
+        if ($id == env('ADMIN_ROLE')) {
+            // todo...
+        }
+        $menuIds = $data['menu_ids'] ?? [];
+        $deptIds = $data['dept_ids'] ?? [];
+        $this->filterExecuteAttributes($data);
         $this->model::query()->where('id', $id)->update($data);
         $role = $this->model::find($id);
-        empty($data['menu_ids']) || $role->menus()->sync(array_unique($data['menu_ids']));
-        empty($data['dept_ids']) || $role->depts()->sync($data['dept_ids']);
+        empty($menuIds) || $role->menus()->sync(array_unique($menuIds));
+        empty($deptIds) || $role->depts()->sync($deptIds);
+        return true;
+    }
+
+    /**
+     * 单个或批量软删除数据
+     * @param array $ids
+     * @return bool
+     */
+    public function delete(array $ids): bool
+    {
+        $adminId = env('ADMIN_ROLE');
+        if (in_array($adminId, $ids)) {
+            unset($ids[array_search($adminId)]);
+        }
+        $this->model::destroy($ids);
         return true;
     }
 
@@ -78,6 +103,9 @@ class SystemRoleMapper extends AbstractMapper
     public function realDelete(array $ids): bool
     {
         foreach ($ids as $id) {
+            if ($id == env('ADMIN_ROLE')) {
+                continue;
+            }
             $role = $this->model::withTrashed()->find($id);
             // 删除关联菜单
             $role->menus()->detach();

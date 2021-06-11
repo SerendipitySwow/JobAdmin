@@ -9,6 +9,4 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
  * @Annotation
  * @Target({"CLASS","METHOD"})
  */
-class Auth extends AbstractAnnotation
-{
-}
+class Auth extends AbstractAnnotation{}
