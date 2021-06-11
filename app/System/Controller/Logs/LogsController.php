@@ -13,11 +13,11 @@ use Mine\MineController;
 
 /**
  * 日志控制器
- * Class SystemLogsController
+ * Class LogsController
  * @package App\System\Controller\Logs
  * @Controller(prefix="system/logs")
  */
-class SystemLogsController extends MineController
+class LogsController extends MineController
 {
     /**
      * 登录日志服务
