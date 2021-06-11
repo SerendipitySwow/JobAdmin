@@ -33,6 +33,20 @@ class SystemRoleMapper extends AbstractMapper
     }
 
     /**
+     * 通过角色ID列表获取部门ID
+     * @param array $ids
+     * @return array
+     */
+    public function getDeptIdsByRoleIds(array $ids): array
+    {
+        if (empty($ids)) return [];
+
+        return $this->model::query()->whereIn('id', $ids)->with(['depts' => function($query) {
+            $query->select('id')->where('status', $this->model::ENABLE)->orderBy('sort', 'desc');
+        }])->get(['id'])->toArray();
+    }
+
+    /**
      * 检查角色code是否已存在
      * @param string $code
      * @return bool

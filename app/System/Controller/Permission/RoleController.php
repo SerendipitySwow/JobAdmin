@@ -68,6 +68,18 @@ class RoleController extends MineController
     }
 
     /**
+     * 通过角色获取部门
+     * @GetMapping("getDeptByRole/{id}")
+     * @Permission
+     * @param int $id
+     * @return ResponseInterface
+     */
+    public function getDeptByRole(int $id): ResponseInterface
+    {
+        return $this->success($this->service->getDeptByRole($id));
+    }
+
+    /**
      * 获取角色列表
      * @GetMapping("list")
      * @Permission

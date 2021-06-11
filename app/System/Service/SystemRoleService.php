@@ -36,6 +36,16 @@ class SystemRoleService extends AbstractService
     }
 
     /**
+     * 通过角色获取部门
+     * @param int $id
+     * @return array
+     */
+    public function getDeptByRole(int $id): array
+    {
+        return $this->mapper->getDeptIdsByRoleIds(['ids' => $id]);
+    }
+
+    /**
      * 更新角色信息
      * @param int $id
      * @param array $data
