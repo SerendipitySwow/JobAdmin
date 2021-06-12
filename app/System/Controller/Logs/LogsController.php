@@ -7,6 +7,7 @@ use App\System\Service\SystemLoginLogService;
 use App\System\Service\SystemOperLogService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Annotation\Permission;
 use Mine\MineController;
@@ -51,5 +52,25 @@ class LogsController extends MineController
     public function getOperLogPageList(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success($this->operLogService->getPageList($this->request->all()));
+    }
+
+    /**
+     * 删除操作日志
+     * @DeleteMapping("realDeleteOperLog/{ids}")
+     * @Permission
+     */
+    public function realDeleteOperLog(String $ids): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->operLogService->realDelete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 删除登录日志
+     * @DeleteMapping("realDeleteLoginLog/{ids}")
+     * @Permission
+     */
+    public function realDeleteLoginLog(String $ids): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->loginLogService->realDelete($ids) ? $this->success() : $this->error();
     }
 }
