@@ -70,7 +70,7 @@
   </ma-container>
 </template>
 <script>
-import { getPageList, realDeletes } from '@/api/system/loginLog'
+import { getPageList, deletes } from '@/api/system/loginLog'
 export default {
   name: 'system-loginlog-index',
   data () {
@@ -95,6 +95,8 @@ export default {
         ip: undefined,
         maxDate: undefined,
         minDate: undefined,
+        order_by: 'login_time',
+        order_type: 'desc',
         pageSize: 10,
         page: 1
       }
@@ -131,7 +133,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        realDeletes(id).then(res => {
+        deletes(id).then(res => {
           this.success(res.message)
           this.getList()
         })

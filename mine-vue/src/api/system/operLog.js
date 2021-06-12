@@ -13,12 +13,12 @@ export function getPageList (params = {}) {
 }
 
 /**
- * 真实删除
+ * 删除
  * @returns
  */
-export function realDeletes (ids) {
+export function deletes (ids) {
   return request({
-    url: 'system/log/realDeleteOperLog/' + ids,
+    url: 'system/logs/deleteOperLog/' + ids,
     method: 'delete'
   })
 }

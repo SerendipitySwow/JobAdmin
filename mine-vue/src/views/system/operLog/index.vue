@@ -57,7 +57,7 @@
   </ma-container>
 </template>
 <script>
-import { getPageList, realDeletes } from '@/api/system/operLog'
+import { getPageList, deletes } from '@/api/system/operLog'
 export default {
   name: 'system-loginlog-index',
   data () {
@@ -80,6 +80,8 @@ export default {
         service_name: undefined,
         maxDate: undefined,
         minDate: undefined,
+        order_by: 'created_at',
+        order_type: 'desc',
         pageSize: 10,
         page: 1
       }
@@ -116,7 +118,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        realDeletes(id).then(res => {
+        deletes(id).then(res => {
           this.success(res.message)
           this.getList()
         })

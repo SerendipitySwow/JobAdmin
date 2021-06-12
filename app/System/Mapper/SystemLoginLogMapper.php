@@ -44,7 +44,7 @@ class SystemLoginLogMapper extends AbstractMapper
         }
         if (isset($params['minDate']) && isset($params['maxDate'])) {
             $query->whereBetween(
-                'created_at',
+                'login_time',
                 [$params['minDate'] . ' 00:00:00', $params['maxDate'] . ' 23:59:59']
             );
         }
