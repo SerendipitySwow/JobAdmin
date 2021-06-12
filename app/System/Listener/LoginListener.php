@@ -48,7 +48,7 @@ class LoginListener implements ListenerInterface
             'ip_location' => Str::ipToRegion($ip),
             'os' => $this->os($agent),
             'browser' => $this->browser($agent),
-            'status' => $event->loginStatus,
+            'status' => !$event->loginStatus,
             'message' => $event->message,
             'login_time' => date('Y-m-d H:i:s')
         ]);
