@@ -56,21 +56,21 @@ class LogsController extends MineController
 
     /**
      * 删除操作日志
-     * @DeleteMapping("realDeleteOperLog/{ids}")
+     * @DeleteMapping("deleteOperLog/{ids}")
      * @Permission
      */
-    public function realDeleteOperLog(String $ids): \Psr\Http\Message\ResponseInterface
+    public function deleteOperLog(String $ids): \Psr\Http\Message\ResponseInterface
     {
-        return $this->operLogService->realDelete($ids) ? $this->success() : $this->error();
+        return $this->operLogService->delete($ids) ? $this->success() : $this->error();
     }
 
     /**
      * 删除登录日志
-     * @DeleteMapping("realDeleteLoginLog/{ids}")
+     * @DeleteMapping("deleteLoginLog/{ids}")
      * @Permission
      */
-    public function realDeleteLoginLog(String $ids): \Psr\Http\Message\ResponseInterface
+    public function deleteLoginLog(String $ids): \Psr\Http\Message\ResponseInterface
     {
-        return $this->loginLogService->realDelete($ids) ? $this->success() : $this->error();
+        return $this->loginLogService->delete($ids) ? $this->success() : $this->error();
     }
 }
