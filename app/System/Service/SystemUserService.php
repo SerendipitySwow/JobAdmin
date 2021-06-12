@@ -137,6 +137,7 @@ class SystemUserService extends AbstractService
             $userLoginAfter = new UserLoginAfter($userinfo);
             if (!$this->checkCaptcha($data['code'])) {
                 $userLoginAfter->message = __('jwt.code_error');
+                $userLoginAfter->loginStatus = false;
                 $this->evDispatcher->dispatch($userLoginAfter);
                 throw new CaptchaException;
             }
