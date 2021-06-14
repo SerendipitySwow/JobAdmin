@@ -4,16 +4,16 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSystemConfigTable extends Migration
+class CreateSettingCrontabTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('system_config', function (Blueprint $table) {
+        Schema::create('setting_crontab', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('参数配置信息表');
+            $table->comment('定时任务信息表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
@@ -30,6 +30,6 @@ class CreateSystemConfigTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_config');
+        Schema::dropIfExists('system_task');
     }
 }

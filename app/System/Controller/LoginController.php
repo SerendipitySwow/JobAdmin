@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
-use App\System\Request\SystemUserRequest;
 use App\System\Request\User\SystemUserLoginRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
