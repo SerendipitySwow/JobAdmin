@@ -56,7 +56,7 @@ class SystemUserService extends AbstractService
     protected $sysMenuService;
 
     /**
-     * @var sysRoleService
+     * @var SystemRoleService
      */
     protected $sysRoleService;
 
@@ -91,7 +91,7 @@ class SystemUserService extends AbstractService
      * @throws \Exception
      * @noinspection PhpFullyQualifiedNameUsageInspection
      */
-    public function genCaptcha(): array
+    public function getCaptcha(): array
     {
         $cache = $this->container->get(CacheInterface::class);
         $captcha = new MineCaptcha();

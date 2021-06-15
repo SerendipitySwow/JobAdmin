@@ -35,7 +35,7 @@ class LoginController extends MineController
      */
     public function captcha(): ResponseInterface
     {
-        return $this->success($this->systemUserService->genCaptcha());
+        return $this->success($this->systemUserService->getCaptcha());
     }
 
     /**
