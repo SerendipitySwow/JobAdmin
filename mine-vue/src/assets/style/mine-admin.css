@@ -29,3 +29,14 @@
     border: 1px solid #e5e6e7;
     border-radius:4px;
 }
+.el-card.ma-card {
+    border: 1px solid #dfe6ec !important;
+}
+.ma-card {
+    margin-top: 10px; 
+}
+.ma-card .el-card__header {
+    background: #f8fafe !important;
+    padding: 12px 17px;
+    border-bottom: 1px solid #dfe6ec !important;
+}
