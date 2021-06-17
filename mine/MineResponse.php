@@ -16,13 +16,15 @@ class MineResponse extends Response
     /**
      * @param string|null $message
      * @param array | object $data
+     * @param int $code
      * @return ResponseInterface
      */
-    public function success(string $message = null, $data = []): ResponseInterface
+    public function success(string $message = null, $data = [], $code = 200): ResponseInterface
     {
         $format = [
             'success' => true,
             'message' => $message ?: '请求成功',
+            'code'    => $code,
             'data'    => &$data,
         ];
         $format = $this->toJson($format);
@@ -42,6 +44,7 @@ class MineResponse extends Response
     {
         $format = [
             'success' => false,
+            'code'    => $code,
             'message' => $message ?: '请求失败',
         ];
 
@@ -52,7 +55,6 @@ class MineResponse extends Response
         $format = $this->toJson($format);
         return $this->getResponse()
             ->withHeader('Server', 'MineAdmin')
-            ->withStatus($code)
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
             ->withBody(new SwooleStream($format));
     }

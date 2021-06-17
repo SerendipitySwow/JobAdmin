@@ -42,6 +42,7 @@ class AppExceptionHandler extends ExceptionHandler
         $this->logger->error(sprintf('%s[%s] in %s', $throwable->getMessage(), $throwable->getLine(), $throwable->getFile()));
         $format = [
             'success' => false,
+            'code'    => 500,
             'message' => $throwable->getMessage()
         ];
         return $response->withHeader('Server', 'MineAdmin')

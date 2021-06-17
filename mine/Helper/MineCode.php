@@ -15,4 +15,6 @@ class MineCode
     public const NO_USER = 1010;            // 用户不存在
     public const PASSWORD_ERROR = 1011;     // 密码错误
     public const USER_BAN = 1012;           // 用户被禁
+
+    public const METHOD_NOT_ALLOW = 2000;   // 地址使用了不允许的访问方法
 }

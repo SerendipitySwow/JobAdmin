@@ -23,7 +23,7 @@ class TokenExceptionHandler extends ExceptionHandler
         $format = [
             'success' => false,
             'message' => $throwable->getMessage(),
-            'error_number' => MineCode::TOKEN_EXPIRED,
+            'code'    => MineCode::TOKEN_EXPIRED,
         ];
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')

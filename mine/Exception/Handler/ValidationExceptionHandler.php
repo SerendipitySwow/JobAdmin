@@ -22,11 +22,11 @@ class ValidationExceptionHandler extends ExceptionHandler
         $format = [
             'success' => false,
             'message' => $body,
-            'error_number' => MineCode::VALIDATE_FAILED,
+            'code'    => MineCode::VALIDATE_FAILED,
         ];
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
-            ->withStatus(500)->withBody(new SwooleStream(Json::encode($format)));
+            ->withStatus(200)->withBody(new SwooleStream(Json::encode($format)));
     }
 
     public function isValid(Throwable $throwable): bool

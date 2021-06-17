@@ -23,7 +23,7 @@ class NoPermissionExceptionHandler extends ExceptionHandler
         $format = [
             'success' => false,
             'message' => $throwable->getMessage(),
-            'error_number' => MineCode::NO_PERMISSION,
+            'code'    => MineCode::NO_PERMISSION,
         ];
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')

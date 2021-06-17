@@ -23,11 +23,12 @@ class MethodNotAllowExceptionHandler extends ExceptionHandler
         $this->stopPropagation();
         $format = [
             'success' => false,
+            'code'    => MineCode::METHOD_NOT_ALLOW,
             'message' => $throwable->getMessage()
         ];
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
-            ->withStatus(500)->withBody(new SwooleStream(Json::encode($format)));
+            ->withBody(new SwooleStream(Json::encode($format)));
     }
 
     public function isValid(Throwable $throwable): bool

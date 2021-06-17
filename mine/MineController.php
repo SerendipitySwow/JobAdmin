@@ -54,16 +54,17 @@ abstract class MineController
     /**
      * @param string | array $msgOrData
      * @param array $data
+     * @param int $code
      * @return ResponseInterface
      */
-    public function success($msgOrData = '', $data = []): ResponseInterface
+    public function success($msgOrData = '', $data = [], $code = 200): ResponseInterface
     {
         if (is_string($msgOrData) || is_null($msgOrData)) {
-            return $this->response->success($msgOrData);
+            return $this->response->success($msgOrData, $data, $code);
         } else if (is_array($msgOrData) || is_object($msgOrData)) {
-            return $this->response->success(null, $msgOrData);
+            return $this->response->success(null, $msgOrData, $code);
         } else {
-            return $this->response->success(null, $data);
+            return $this->response->success(null, $data, $code);
         }
     }
 

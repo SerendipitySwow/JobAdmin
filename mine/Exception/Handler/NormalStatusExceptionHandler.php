@@ -25,11 +25,11 @@ class NormalStatusExceptionHandler extends ExceptionHandler
             'message' => $throwable->getMessage(),
         ];
         if ($throwable->getCode() != 200 && $throwable->getCode() != 0) {
-            $format['error_number'] = $throwable->getCode();
+            $format['code'] = $throwable->getCode();
         }
         return $response->withHeader('Server', 'MineAdmin')
             ->withAddedHeader('content-type', 'application/json; charset=utf-8')
-            ->withStatus(200)->withBody(new SwooleStream(Json::encode($format)));
+            ->withBody(new SwooleStream(Json::encode($format)));
     }
 
     public function isValid(Throwable $throwable): bool
