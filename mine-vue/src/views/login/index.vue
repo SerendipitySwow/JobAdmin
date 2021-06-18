@@ -69,7 +69,7 @@
         </div>
         <div class="page-login--content-footer">
           <p class="page-login--content-footer-copyright">
-            Copyright © 2021-2022 mineadmin.cn All Rights Reserved.
+            Copyright © 2021-2022 mineadmin.com All Rights Reserved.
           </p>
         </div>
       </div>
