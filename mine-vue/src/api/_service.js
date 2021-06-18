@@ -43,9 +43,9 @@ function createService () {
   service.interceptors.response.use(
     response => {
       // 有 code 判断为项目接口请求
-      if (response.status === 200 && response.data.success) {
+      if (response.status === 200) {
         return response.data
-      } else if (response.status === 200 && !response.data.success) {
+      } else if (response.status === 200 && (!response.data.success || response.data.code !== 200)) {
         Notification.warning(
           { message: response.data.message, title: '提示', duration: 5 * 1000 }
         )
