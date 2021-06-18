@@ -1,7 +1,7 @@
 <template>
   <div class="panel-search" flex="dir:top">
     <div class="panel-search__input-group" flex-box="0" flex="dir:top main:center cross:center" @click.self="handlePanelClick">
-      <ma-icon-svg class="panel-search__logo" name="ma-admin-text"/>
+      <img class="panel-search__logo" name="ma-admin-text" :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/all.png`" />
       <el-autocomplete
         class="panel-search__input"
         ref="input"
@@ -40,7 +40,7 @@
 
 <script>
 import Fuse from 'fuse.js'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import mixin from '../mixin/menu'
 export default {
   mixins: [
@@ -56,6 +56,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('store', {
+      themeActiveSetting: 'theme/activeSetting'
+    }),
     ...mapState('store/search', [
       'hotkey',
       'pool'
@@ -166,7 +169,6 @@ export default {
   .panel-search__input-group {
     height: 240px;
     .panel-search__logo {
-      width: 80px;
       height: 80px;
       margin-bottom: 20px;
     }

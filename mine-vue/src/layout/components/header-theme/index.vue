@@ -16,6 +16,7 @@
     <el-dialog
       title="主题"
       width="600px"
+      class="dialog"
       :visible.sync="dialogVisible"
       :append-to-body="true">
       <ma-theme-list style="margin-top: -25px;"/>
@@ -36,3 +37,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+/deep/ .el-dialog .el-dialog__body {
+  padding: 30px !important;
+}
+</style>

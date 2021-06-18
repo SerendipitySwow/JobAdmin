@@ -1,6 +1,9 @@
 <template>
   <ma-container class="page">
-    asdf
+    <template slot="header">
+      版本号：{{$version}}
+      最后构建时间：{{$buildTime}}
+    </template>
   </ma-container>
 </template>
 
