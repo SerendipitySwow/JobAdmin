@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace App\System\Model;
+namespace App\Setting\Model;
 
 use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
@@ -14,7 +14,7 @@ use Mine\MineModel;
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
  */
-class SystemTask extends MineModel
+class SettingCrontabLog extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
@@ -23,7 +23,7 @@ class SystemTask extends MineModel
      *
      * @var string
      */
-    protected $table = 'system_task';
+    protected $table = 'setting_crontab_log';
     /**
      * The attributes that are mass assignable.
      *
