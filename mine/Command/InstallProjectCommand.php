@@ -258,7 +258,7 @@ class InstallProjectCommand extends MineCommand
         $mine = make(Mine::class);
         $modules = $mine->getModuleInfo();
         foreach ($modules as $name => $info) {
-            $this->call('mine:migrate-run', ['name' => $name]);
+            $this->call('mine:migrate-run', ['name' => $name, 'force' => 'true']);
             if ($name === 'System') {
                 $this->initUserData();
             }
