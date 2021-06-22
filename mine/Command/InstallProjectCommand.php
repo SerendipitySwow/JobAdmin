@@ -258,11 +258,11 @@ class InstallProjectCommand extends MineCommand
         $mine = make(Mine::class);
         $modules = $mine->getModuleInfo();
         foreach ($modules as $name => $info) {
-            $this->call('mine:migrate-run', ['name' => $name, 'force' => 'true']);
+            $this->call('mine:migrate-run', ['name' => $name, '--force' => 'true']);
             if ($name === 'System') {
                 $this->initUserData();
             }
-            $this->call('mine:seeder-run',  ['name' => $name]);
+            $this->call('mine:seeder-run',  ['name' => $name, '--force' => 'true']);
             $this->line($this->getGreenText(sprintf('"%s" module install successfully', $name)));
         }
     }
@@ -276,6 +276,11 @@ class InstallProjectCommand extends MineCommand
 
     protected function initUserData()
     {
+        // 清理数据
+        Db::table('system_user')->truncate();
+        Db::table('system_role')->truncate();
+        Db::table('system_user_role')->truncate();
+
         // 创建超级管理员
         Db::table("system_user")->insert([
             'id' => env('SUPER_ADMIN', 1),
