@@ -27,8 +27,9 @@
         "hyperf/crontab": "^2.1",
         "hyperf/database": "2.1.*",
         "hyperf/db-connection": "2.1.*",
+        "hyperf/filesystem": "^2.1",
         "hyperf/framework": "2.1.*",
-        "hyperf/guzzle": "2.1.*",
+        "hyperf/guzzle": "^2.1",
         "hyperf/http-server": "2.1.*",
         "hyperf/logger": "2.1.*",
         "hyperf/memory": "2.1.*",
@@ -38,6 +39,9 @@
         "hyperf/translation": "2.1.*",
         "hyperf/validation": "2.1.*",
         "lifei6671/php-captcha": "^0.1.1",
+        "overtrue/flysystem-cos": "^3.0",
+        "overtrue/flysystem-qiniu": "^1.0",
+        "xxtime/flysystem-aliyun-oss": "^1.5",
         "zoujingli/ip2region": "^1.0"
     },
     "require-dev": {
