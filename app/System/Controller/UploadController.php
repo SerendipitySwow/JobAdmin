@@ -55,7 +55,7 @@ class UploadController
     }
 
     /**
-     * @GetMapping("getFileUrl")
+     * @GetMapping("getFileInfo")
      */
     public function getFileInfo()
     {
