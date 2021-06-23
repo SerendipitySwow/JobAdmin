@@ -39,7 +39,7 @@ class UploadController
     }
 
     /**
-     * @GetMapping("download/{id}")
+     * @GetMapping("download")
      */
     public function download()
     {
@@ -47,7 +47,7 @@ class UploadController
     }
 
     /**
-     * @GetMapping("getFileUrl/{id}")
+     * @GetMapping("getFileUrl")
      */
     public function getFileUrl()
     {
@@ -55,7 +55,7 @@ class UploadController
     }
 
     /**
-     * @GetMapping("getFileUrl/{id}")
+     * @GetMapping("getFileUrl")
      */
     public function getFileInfo()
     {
