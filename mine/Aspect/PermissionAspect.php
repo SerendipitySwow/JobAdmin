@@ -11,6 +11,7 @@ use Hyperf\Di\Exception\Exception;
 use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Permission;
 use Mine\Exception\NoPermissionException;
+use Mine\Helper\LoginUser;
 use Mine\MineRequest;
 
 /**
@@ -35,10 +36,22 @@ class PermissionAspect extends AbstractAspect
      */
     protected $request;
 
-    public function __construct(SystemUserService $service, MineRequest $request)
+    /**
+     * @var LoginUser
+     */
+    protected $loginUser;
+
+    /**
+     * PermissionAspect constructor.
+     * @param SystemUserService $service
+     * @param MineRequest $request
+     * @param LoginUser $loginUser
+     */
+    public function __construct(SystemUserService $service, MineRequest $request, LoginUser $loginUser)
     {
         $this->service = $service;
         $this->request = $request;
+        $this->loginUser = $loginUser;
     }
 
     /**
@@ -49,7 +62,7 @@ class PermissionAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        if ($this->request->getLoginUser()->isSuperAdmin()) {
+        if ($this->loginUser->isSuperAdmin()) {
             return $proceedingJoinPoint->process();
         }
         $codes = $this->service->getInfo()['codes'];

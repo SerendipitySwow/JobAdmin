@@ -12,7 +12,7 @@ use Hyperf\Di\Annotation\Inject;
 use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Abstracts\AbstractService;
 use Mine\Event\UserLoginAfter;
-use Mine\Event\UserLogout;
+use Mine\Event\UploadAfter;
 use Mine\Event\UserLoginBefore;
 use Mine\Exception\CaptchaException;
 use Mine\Exception\NormalStatusException;
@@ -44,6 +44,12 @@ class SystemUserService extends AbstractService
      * @var MineRequest
      */
     protected $request;
+
+    /**
+     * @Inject
+     * @var LoginUser
+     */
+    protected $loginUser;
 
     /**
      * @var ContainerInterface
@@ -149,7 +155,7 @@ class SystemUserService extends AbstractService
                 ) {
                     $userLoginAfter->message = __('jwt.login_success');
                     $this->evDispatcher->dispatch($userLoginAfter);
-                    return $this->request->getLoginUser()->getToken($userLoginAfter->userinfo);
+                    return $this->loginUser->getToken($userLoginAfter->userinfo);
                 } else {
                     $userLoginAfter->loginStatus = false;
                     $userLoginAfter->message = __('jwt.user_ban');
@@ -185,9 +191,9 @@ class SystemUserService extends AbstractService
      */
     public function logout()
     {
-        $this->evDispatcher->dispatch(new UserLogout($this->request->getUserInfo()));
-        $this->request->getLoginUser()->getJwt()->invalidate();
-        $this->request->getLoginUser()->getJwt()->unsetToken();
+        $this->evDispatcher->dispatch(new UploadAfter($this->loginUser->getUserInfo()));
+        $this->loginUser->getJwt()->invalidate();
+        $this->loginUser->getJwt()->unsetToken();
     }
 
     /**
@@ -197,7 +203,7 @@ class SystemUserService extends AbstractService
      */
     public function getInfo(): array
     {
-        return $this->getCacheInfo($this->request->getLoginUser(), SystemUser::find((int) $this->request->getId()));
+        return $this->getCacheInfo($this->loginUser, SystemUser::find((int) $this->loginUser->getId()));
     }
 
     /**

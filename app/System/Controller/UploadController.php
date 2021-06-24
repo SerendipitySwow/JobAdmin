@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\System\Service\SystemUploadFileService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
@@ -18,41 +19,37 @@ use Mine\MineController;
 class UploadController extends MineController
 {
     /**
-     * @inject
-     * @var FilesystemFactory
+     * @Inject
+     * @var SystemUploadFileService
      */
-    protected $factory;
+    protected $service;
 
     /**
+     * 上传文件
      * @PostMapping("uploadFile")
+     * @throws \Exception
      */
-    public function uploadFile()
+    public function uploadFile(): \Psr\Http\Message\ResponseInterface
     {
-        return '123';
+        $path = $this->request->input('path', null);
+        $result = $this->service->upload($this->request->file('image'), ['path' => $path]);
+        return $result ? $this->success() : $this->error();
     }
 
     /**
+     * 上传图片
      * @PostMapping("uploadImage")
      * @throws \League\Flysystem\FileExistsException
      */
-    public function uploadImage()
+    public function uploadImage(): \Psr\Http\Message\ResponseInterface
     {
-        $image = $this->request->file('image');
-        $local = $this->factory->get('local');
-        $ok = $local->write('aaa1.jpg', $image->getStream()->getContents());
-        print_r($ok);
-        return $this->success($ok);
+        $path = $this->request->input('path', null);
+        $result = $this->service->upload($this->request->file('image'), ['path' => $path]);
+        return $result ? $this->success() : $this->error();
     }
 
     /**
-     * @PostMapping("uploadVideo")
-     */
-    public function uploadVideo()
-    {
-
-    }
-
-    /**
+     * 下载文件
      * @GetMapping("download")
      */
     public function download()
@@ -61,6 +58,7 @@ class UploadController extends MineController
     }
 
     /**
+     * 获取文件url
      * @GetMapping("getFileUrl")
      */
     public function getFileUrl()
@@ -69,9 +67,10 @@ class UploadController extends MineController
     }
 
     /**
-     * @GetMapping("getFileInfo")
+     * 输出图片
+     * @GetMapping("outPutImage")
      */
-    public function getFileInfo()
+    public function outPutImage()
     {
 
     }

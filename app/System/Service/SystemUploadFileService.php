@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemUploadFileMapper;
+use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpMessage\Upload\UploadedFile;
 use Mine\Abstracts\AbstractService;
+use Mine\MineUpload;
 
 /**
  * 文件上传业务
@@ -18,28 +21,23 @@ class SystemUploadFileService extends AbstractService
      */
     public $mapper;
 
-    public function __construct(SystemUploadFileMapper $mapper)
+    /**
+     * @var MineUpload
+     */
+    public $mineUpload;
+
+    public function __construct(SystemUploadFileMapper $mapper, MineUpload $mineUpload)
     {
         $this->mapper = $mapper;
+        $this->mineUpload = $mineUpload;
     }
 
     /**
-     * 获取存储方式
+     * 上传文件
+     * @throws \League\Flysystem\FileExistsException
      */
-    public function getStorageMode()
+    public function upload(UploadedFile $uploadedFile, array $config = []): int
     {
-
+        return $this->save($this->mineUpload->upload($uploadedFile, $config));
     }
-
-    /**
-     * 获取存储配置
-     */
-    public function getStorageConfig()
-    {
-
-    }
-
-    /**
-     * 获取
-     */
 }

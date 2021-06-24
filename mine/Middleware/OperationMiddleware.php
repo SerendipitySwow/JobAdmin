@@ -4,6 +4,7 @@ namespace Mine\Middleware;
 
 
 use App\System\Service\SystemMenuService;
+use Mine\Helper\LoginUser;
 use Mine\Helper\Str;
 use Mine\MineRequest;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -29,14 +30,13 @@ class OperationMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $evDispatcher = $this->container->get(EventDispatcherInterface::class);
-        $mineRequest = $this->container->get(MineRequest::class);
 
         if ($request->getServerParams()['path_info'] === '/favicon.ico') {
             return $handler->handle($request);
         }
 
         try {
-            $mineRequest->getLoginUser()->check();
+            $this->container->get(LoginUser::class)->check();
             $response = $handler->handle($request);
             $pathInfo = substr($request->getServerParams()['path_info'], 1);
             if (count(explode('/', $pathInfo)) > 2) {
@@ -56,6 +56,7 @@ class OperationMiddleware implements MiddlewareInterface
     protected function getRequestInfo(ResponseInterface $response): array
     {
         $request = $this->container->get(MineRequest::class);
+        $loginUser = $this->container->get(LoginUser::class);
         /** @noinspection PhpUnhandledExceptionInspection */
         return [
             'time' => date('Y-m-d H:i:s', $request->getServerParams()['request_time']),
@@ -63,7 +64,7 @@ class OperationMiddleware implements MiddlewareInterface
             'router' => $request->getServerParams()['path_info'],
             'protocol' => $request->getServerParams()['server_protocol'],
             'ip' => $request->ip(),
-            'username' => $request->getUsername(),
+            'username' => $loginUser->getUsername(),
             'ip_location' => Str::ipToRegion($request->ip()),
             'service_name' => $this->getOperationMenuName(),
             'request_data' => $request->all(),

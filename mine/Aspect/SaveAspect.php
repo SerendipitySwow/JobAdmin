@@ -6,8 +6,8 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
+use Mine\Helper\LoginUser;
 use Mine\MineModel;
-use Mine\MineRequest;
 
 /**
  * Class GenIdAspect
@@ -21,13 +21,13 @@ class SaveAspect extends AbstractAspect
     ];
 
     /**
-     * @var MineRequest
+     * @var LoginUser
      */
-    protected $request;
+    protected $loginUser;
 
-    public function __construct(MineRequest $request)
+    public function __construct(LoginUser $loginUser)
     {
-        $this->request = $request;
+        $this->loginUser = $loginUser;
     }
 
     /**
@@ -40,9 +40,13 @@ class SaveAspect extends AbstractAspect
     {
         $instance = $proceedingJoinPoint->getInstance();
         // 设置创建人
-        if ($instance instanceof MineModel && in_array('created_by', $instance->getFillable())) {
-            $instance->created_by = $this->request->getId();
-        }
+        try {
+            $this->loginUser->check();
+            if ($instance instanceof MineModel && in_array('created_by', $instance->getFillable())) {
+                $instance->created_by = $this->loginUser->getId();
+            }
+        } catch (\Exception $e) {}
+
         // 生成ID
         if ($instance instanceof MineModel &&
             !$instance->incrementing &&
