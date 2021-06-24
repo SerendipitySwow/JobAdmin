@@ -5,7 +5,6 @@ namespace App\System\Model;
 
 use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
-
 /**
  * @property int $id 主键
  * @property string $name 岗位名称
@@ -18,6 +17,7 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Mine\MineCollection|\App\System\Model\SystemUser[] $users 
  */
 class SystemPost extends MineModel
 {
@@ -41,7 +41,6 @@ class SystemPost extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 通过中间表获取用户
      */

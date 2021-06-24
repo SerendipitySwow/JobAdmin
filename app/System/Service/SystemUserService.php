@@ -202,7 +202,7 @@ class SystemUserService extends AbstractService
 
     /**
      * 获取缓存用户信息
-     * @Cacheable(prefix="loginInfo", value="userId_#{user.id}")
+     * @Cacheable(prefix="login_info", value="userId_#{user.id}")
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -271,7 +271,7 @@ class SystemUserService extends AbstractService
 
     /**
      * 更新用户信息
-     * @CacheEvict(prefix="loginInfo", value="userId_#{id}")
+     * @CacheEvict(prefix="login_info", value="userId_#{id}")
      * @param int $id
      * @param array $data
      * @return bool

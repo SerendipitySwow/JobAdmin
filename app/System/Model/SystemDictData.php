@@ -14,7 +14,7 @@ use Mine\MineModel;
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
  */
-class SystemDictDatum extends MineModel
+class SystemDictData extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
