@@ -40,3 +40,15 @@
     padding: 12px 17px;
     border-bottom: 1px solid #dfe6ec !important;
 }
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
