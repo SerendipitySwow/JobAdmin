@@ -23,4 +23,18 @@ class SystemDictDataService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    public function getList(?array $params = null): array
+    {
+        if (!isset($params['code'])) {
+            return [];
+        }
+        $args = [
+            'select' => 'label, value',
+            'status' => '0',
+            'order_by' => 'sort',
+            'order_type' => 'desc'
+        ];
+        return parent::getList(array_merge($args, $params));
+    }
 }

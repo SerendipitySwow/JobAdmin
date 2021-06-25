@@ -43,6 +43,16 @@ class DictDataController extends MineController
     }
 
     /**
+     * @GetMapping("list")
+     * @return ResponseInterface
+     * @Permission()
+     */
+    public function list(): ResponseInterface
+    {
+        return $this->success($this->service->getList($this->request->all()));
+    }
+
+    /**
      * @GetMapping("recycle")
      * @return ResponseInterface
      * @Permission()

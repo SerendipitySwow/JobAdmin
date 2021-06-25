@@ -1,6 +1,18 @@
 import { request } from '@/api/_service.js'
 
 /**
+ * 快捷查询字典
+ * @param {*} params
+ * @returns
+ */
+export function getDicts (code) {
+  return request({
+    url: 'system/dictData/list?code=' + code,
+    method: 'get'
+  })
+}
+
+/**
  * 获取字典数据分页列表
  * @returns
  */

@@ -51,21 +51,19 @@
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column prop="username" label="用户名称" fixed width="200" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="email" label="邮箱">
-          </el-table-column>
-          <el-table-column prop="user_type" label="用户类型" >
+          <el-table-column prop="email" label="邮箱" width="190" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="user_type" label="用户类型" width="120" >
             <template slot-scope="scope">
               {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态" >
+          <el-table-column prop="status" label="状态" width="120">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.status" @change="handleStatus(scope.row)" active-value="0" inactive-value="1">
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="created_at" label="创建时间">
-          </el-table-column>
+          <el-table-column prop="created_at" label="创建时间" width="170"></el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <div v-if="showRecycle">

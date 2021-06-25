@@ -41,14 +41,20 @@
     border-bottom: 1px solid #dfe6ec !important;
 }
 
-.mt-10 {
-    margin-top: 10px;
-}
-
 .text-right{
     text-align: right;
 }
 
+.mt-10 {
+    margin-top: 10px;
+}
 .mt-20 {
     margin-top: 20px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+.mb-20 {
+    margin-bottom: 20px;
 }

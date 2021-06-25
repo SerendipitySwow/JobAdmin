@@ -20,8 +20,8 @@ class DictTypeCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:30',
-            'code' => 'required|min:3|max:100',
+            'name' => 'required',
+            'code' => 'required',
         ];
     }
 }

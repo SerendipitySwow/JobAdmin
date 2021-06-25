@@ -38,11 +38,11 @@
       </el-table-column>
       <el-table-column prop="username" label="操作用户"></el-table-column>
       <el-table-column prop="service_name" label="业务名称"></el-table-column>
-      <el-table-column prop="router" label="路由"></el-table-column>
+      <el-table-column prop="router" label="路由" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="ip" label="IP"></el-table-column>
       <el-table-column prop="ip_location" label="登录地点"></el-table-column>
-      <el-table-column prop="request_data" label="请求数据"></el-table-column>
-      <el-table-column prop="response_code" label="状态码"></el-table-column>
+      <el-table-column prop="request_data" label="请求数据" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="response_code" label="状态码" width="100"></el-table-column>
       <el-table-column prop="created_at" label="操作时间" width="160" ></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">

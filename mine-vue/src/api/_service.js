@@ -13,7 +13,7 @@ import store from '@/store'
 function handleError (error) {
   // 显示提示
   Notification.error({
-    message: error.message,
+    message: '服务器错误',
     title: '错误',
     duration: 5 * 1000
   })
