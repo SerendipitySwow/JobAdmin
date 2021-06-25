@@ -30,23 +30,14 @@ class SystemDictDataMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        if (isset($params['ip'])) {
-            $query->where('ip', $params['ip']);
+        if (isset($params['code'])) {
+            $query->where('code', 'like', '%'.$params['code'].'%');
         }
-        if (isset($params['username'])) {
-            $query->where('username', 'like', '%'.$params['username'].'%');
+        if (isset($params['name'])) {
+            $query->where('name', 'like', '%'.$params['name'].'%');
         }
         if (isset($params['status'])) {
             $query->where('status', $params['status']);
-        }
-        if (isset($params['method'])) {
-            $query->where('method', $params['method']);
-        }
-        if (isset($params['minDate']) && isset($params['maxDate'])) {
-            $query->whereBetween(
-                'login_time',
-                [$params['minDate'] . ' 00:00:00', $params['maxDate'] . ' 23:59:59']
-            );
         }
         return $query;
     }

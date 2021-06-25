@@ -3,8 +3,8 @@
 declare(strict_types=1);
 namespace App\System\Controller\DataCenter;
 
-use App\System\Request\DictType\DictTypeCreateRequest;
-use App\System\Service\SystemDictTypeService;
+use App\System\Request\DictData\DictDataCreateRequest;
+use App\System\Service\SystemDictDataService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -20,15 +20,15 @@ use Psr\Http\Message\ResponseInterface;
  * 字典类型控制器
  * Class LogsController
  * @package App\System\Controller\DataCenter
- * @Controller(prefix="system/dictType")
+ * @Controller(prefix="system/dictData")
  * @Auth
  */
-class DictTypeController extends MineController
+class DictDataController extends MineController
 {
     /**
-     * 字典类型服务
+     * 字典数据服务
      * @Inject
-     * @var SystemDictTypeService
+     * @var SystemDictDataService
      */
     protected $service;
 
@@ -55,11 +55,11 @@ class DictTypeController extends MineController
     /**
      * 新增字典类型
      * @PostMapping("save")
-     * @param DictTypeCreateRequest $request
+     * @param DictDataCreateRequest $request
      * @return ResponseInterface
      * @Permission()
      */
-    public function save(DictTypeCreateRequest $request): ResponseInterface
+    public function save(DictDataCreateRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->all())]);
     }
@@ -80,11 +80,11 @@ class DictTypeController extends MineController
      * 更新一个字典类型
      * @PutMapping("update/{id}")
      * @param int $id
-     * @param DictTypeCreateRequest $request
+     * @param DictDataCreateRequest $request
      * @return ResponseInterface
      * @Permission()
      */
-    public function update(int $id, DictTypeCreateRequest $request): ResponseInterface
+    public function update(int $id, DictDataCreateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
