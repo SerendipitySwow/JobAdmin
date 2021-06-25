@@ -54,7 +54,7 @@ class UploadController extends MineController
      */
     public function download()
     {
-
+        print_r($this->request->getHeader('X-scheme'));
     }
 
     /**

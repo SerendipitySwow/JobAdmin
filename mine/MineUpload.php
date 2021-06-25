@@ -9,6 +9,7 @@ use Hyperf\Filesystem\FilesystemFactory;
 use Mine\Helper\Id;
 use Hyperf\HttpMessage\Upload\UploadedFile;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Container\ContainerInterface;
 
 class MineUpload
 {
@@ -23,6 +24,20 @@ class MineUpload
      * @var EventDispatcherInterface
      */
     protected $evDispatcher;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * MineUpload constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * 上传文件
@@ -81,7 +96,7 @@ class MineUpload
     {
         $mode = $this->getStorageMode();
         if ($mode == 'local') {
-            return 'http://' . env('HOST', '127.0.0.1') . '/' . $path . '/' . $filename;
+            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1') . '/' . $path . '/' . $filename;
         } else if ($mode == 'qiniu') {
             //todo
             return '';
@@ -143,6 +158,11 @@ class MineUpload
                 break;
         }
         return $mapping;
+    }
+
+    protected function getProtocol(): string
+    {
+        return $this->container->get(MineRequest::class)->getScheme();
     }
 
     protected function getSizeInfo(int $size): string

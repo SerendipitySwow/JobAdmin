@@ -35,5 +35,14 @@ class MineRequest extends Request
 
         return $ip;
     }
+
+    /**
+     * 获取协议架构
+     * @return string
+     */
+    public function getScheme(): string
+    {
+        return $this->getHeader('X-scheme')[0] ?? 'http://';
+    }
 }
 
