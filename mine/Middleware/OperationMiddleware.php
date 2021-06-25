@@ -35,6 +35,10 @@ class OperationMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
+        if ($request->getMethod() == 'GET') {
+            return $handler->handle($request);
+        }
+
         try {
             $this->container->get(LoginUser::class)->check();
             $response = $handler->handle($request);

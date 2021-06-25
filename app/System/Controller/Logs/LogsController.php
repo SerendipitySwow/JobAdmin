@@ -9,6 +9,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
+use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 
@@ -17,6 +18,7 @@ use Mine\MineController;
  * Class LogsController
  * @package App\System\Controller\Logs
  * @Controller(prefix="system/logs")
+ * @Auth
  */
 class LogsController extends MineController
 {
@@ -58,6 +60,8 @@ class LogsController extends MineController
      * 删除操作日志
      * @DeleteMapping("deleteOperLog/{ids}")
      * @Permission
+     * @param String $ids
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function deleteOperLog(String $ids): \Psr\Http\Message\ResponseInterface
     {
@@ -68,6 +72,8 @@ class LogsController extends MineController
      * 删除登录日志
      * @DeleteMapping("deleteLoginLog/{ids}")
      * @Permission
+     * @param String $ids
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function deleteLoginLog(String $ids): \Psr\Http\Message\ResponseInterface
     {

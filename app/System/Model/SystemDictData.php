@@ -7,6 +7,12 @@ use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
 /**
  * @property int $id 主键
+ * @property int $type_id 字典类型ID
+ * @property string $label 字典标签
+ * @property string $value 字典值
+ * @property string $code 字典标示
+ * @property int $sort 排序
+ * @property string $status 状态 (0正常 1停用)
  * @property int $created_by 创建者
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
@@ -29,11 +35,11 @@ class SystemDictData extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'type_id', 'label', 'value', 'code', 'sort', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+    protected $casts = ['id' => 'integer', 'type_id' => 'integer', 'sort' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
 }

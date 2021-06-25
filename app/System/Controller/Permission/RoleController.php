@@ -26,8 +26,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class RoleController extends MineController
 {
-    use ControllerTrait;
-
     /**
      * @Inject
      * @var SystemRoleService
