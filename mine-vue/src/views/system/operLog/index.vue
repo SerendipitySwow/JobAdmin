@@ -41,12 +41,11 @@
       <el-table-column prop="router" label="路由" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="ip" label="IP"></el-table-column>
       <el-table-column prop="ip_location" label="登录地点"></el-table-column>
-      <el-table-column prop="request_data" label="请求数据" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="response_code" label="状态码" width="100"></el-table-column>
       <el-table-column prop="created_at" label="操作时间" width="160" ></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="text" @click="handleRecovery(scope.row.id)">详细</el-button>
+          <el-button type="text" @click="showDetail(scope.row)">详细</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,6 +53,25 @@
       <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
       </el-pagination>
     </template>
+
+    <el-dialog
+      title="操作日志详细"
+      :visible.sync="dialogVisible"
+      width="500"
+      :before-close="handleClose"
+    >
+      <el-tabs value="request">
+        <el-tab-pane label="请求参数" name="request">
+          <ma-highlight :code="record.request_data"/>
+        </el-tab-pane>
+        <el-tab-pane label="返回结果" name="response">
+          <ma-highlight :code="record.response_data"/>
+        </el-tab-pane>
+      </el-tabs>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false" size="small">确 定</el-button>
+      </span>
+    </el-dialog>
   </ma-container>
 </template>
 <script>
@@ -74,6 +92,10 @@ export default {
       btnIsDisabed: true,
       // 时间范围
       dateRange: null,
+      // modal
+      dialogVisible: false,
+      // 当前详细数据
+      record: {},
       // 搜索
       queryParams: {
         username: undefined,
@@ -106,6 +128,15 @@ export default {
         this.queryParams.minDate = values[0]
         this.queryParams.maxDate = values[1]
       }
+    },
+    // 显示详细
+    showDetail (record) {
+      this.record = record
+      console.log(this.record.response_data)
+      this.dialogVisible = true
+    },
+    handleClose () {
+      this.dialogVisible = false
     },
     // 显隐搜索
     switchShowSearch () {

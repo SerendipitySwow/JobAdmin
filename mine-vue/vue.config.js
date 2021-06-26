@@ -80,7 +80,7 @@ keys(pages).forEach(name => {
 
 module.exports = {
   publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
-  lintOnSave: true,
+  lintOnSave: false,
   devServer: {
     host: '0.0.0.0',
     port: port,

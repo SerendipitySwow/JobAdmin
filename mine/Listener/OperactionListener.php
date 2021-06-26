@@ -48,8 +48,8 @@ class OperactionListener implements ListenerInterface
         $requestInfo = $event->getRequsetInfo();
         if (!in_array($requestInfo['router'], $this->ignoreRouter)) {
             $service = $this->container->get(SystemOperLogService::class);
-            $requestInfo['request_data'] = json_encode($requestInfo['request_data']);
-            $requestInfo['response_data'] = json_encode($requestInfo['response_data']);
+            $requestInfo['request_data'] = json_encode($requestInfo['request_data'], JSON_UNESCAPED_UNICODE);
+//            $requestInfo['response_data'] = $requestInfo['response_data'];
             $service->save($requestInfo);
         }
     }

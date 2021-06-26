@@ -41,6 +41,13 @@
     border-bottom: 1px solid #dfe6ec !important;
 }
 
+.ma-highlight {
+    padding: 20px !important;
+    font-family: Consolas;
+    font-size: 12px;
+    line-height: 18px;
+}
+
 .text-right{
     text-align: right;
 }

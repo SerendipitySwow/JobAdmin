@@ -197,7 +197,7 @@ export default {
       },
       queryDataParams: {
         type_id: null,
-        name: undefined,
+        label: undefined,
         value: undefined,
         pageSize: 10,
         page: 1
