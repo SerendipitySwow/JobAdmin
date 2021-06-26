@@ -39,4 +39,13 @@ class SystemDictType extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 关联字典数据表
+     * @return \Hyperf\Database\Model\Relations\HasMany
+     */
+    public function dictData(): \Hyperf\Database\Model\Relations\HasMany
+    {
+        return $this->hasMany(SystemDictData::class, 'type_id', 'id');
+    }
 }

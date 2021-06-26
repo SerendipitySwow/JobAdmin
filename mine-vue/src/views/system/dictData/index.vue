@@ -85,10 +85,10 @@
           <el-row :gutter="10" v-if="showDataSearch" class="mb-20">
             <el-form :inline="true" ref="queryDataParams" :model="queryDataParams" label-width="80px">
               <el-form-item label="字典名称" class="ma-inline-form-item" prop="label">
-                <el-input size="small" v-model="queryDataParams.label" placeholder="请输入字典数据名称"></el-input>
+                <el-input size="small" v-model="queryDataParams.label" placeholder="请输入字典名称"></el-input>
               </el-form-item>
               <el-form-item label="字典值" class="ma-inline-form-item" prop="value">
-                <el-input size="small" v-model="queryDataParams.value" placeholder="请输入字典数据标识"></el-input>
+                <el-input size="small" v-model="queryDataParams.value" placeholder="请输入字典值"></el-input>
               </el-form-item>
               <el-form-item class="ma-inline-form-item">
                 <el-button size="small" type="primary" @click="handleDataSearch" icon="el-icon-search">搜索</el-button>
@@ -291,6 +291,7 @@ export default {
           deletesDictType(id).then(res => {
             this.success(res.message)
             this.getTypeList()
+            this.getDataList()
           })
         } else {
           deletesDictData(id).then(res => {
@@ -311,6 +312,7 @@ export default {
           realDeletesDictType(id).then(res => {
             this.success(res.message)
             this.getTypeList()
+            this.getDataList()
           })
         } else {
           realDeletesDictData(id).then(res => {

@@ -37,7 +37,7 @@ class SystemDictDataMapper extends AbstractMapper
             $query->where('code', $params['code']);
         }
         if (isset($params['value'])) {
-            $query->where('code', 'like', '%'.$params['value'].'%');
+            $query->where('value', 'like', '%'.$params['value'].'%');
         }
         if (isset($params['label'])) {
             $query->where('label', 'like', '%'.$params['label'].'%');
