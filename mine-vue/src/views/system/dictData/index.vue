@@ -32,18 +32,11 @@
           </el-row>
           <!-- 字典类型工具栏end -->
           <!-- 字典类型表格start -->
-          <el-table
-            v-loading="typeLoading"
-            :data="typeList"
-            @row-click="handleClickRow"
-            row-key="id"
-            @selection-change="handleSelectionTypeChange"
-            :highlight-current-row="true"
-          >
+          <el-table v-loading="typeLoading" :data="typeList" @row-click="handleClickRow" row-key="id" @selection-change="handleSelectionTypeChange" :highlight-current-row="true">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="name" label="类型名称" fixed width="150" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column prop="code" label="类型标识"></el-table-column>
-            <el-table-column prop="status" label="状态" width="80" >
+            <el-table-column prop="status" label="状态" width="80">
               <template slot-scope="scope">
                 {{ scope.row.status == '0' ? '正常' : '停用' }}
               </template>
@@ -64,14 +57,7 @@
           </el-table>
           <!-- 字典类型表格end -->
           <el-row :gutter="10" class="mt-20 text-right">
-            <el-pagination
-              @size-change="getTypeList"
-              @current-change="getTypeList"
-              layout="total, sizes, prev, pager, next, jumper"
-              :page-sizes="[10, 20, 30, 50]"
-              :current-page.sync="queryTypeParams.page"
-              :page-size.sync="queryTypeParams.pageSize"
-              :total="typePageInfo.total">
+            <el-pagination @size-change="getTypeList" @current-change="getTypeList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryTypeParams.page" :page-size.sync="queryTypeParams.pageSize" :total="typePageInfo.total">
             </el-pagination>
           </el-row>
         </el-card>
@@ -110,8 +96,8 @@
           <el-table v-loading="dataLoading" :data="dataList" row-key="id" @selection-change="handleSelectionDataChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="label" label="字典名称" fixed width="150" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column prop="value" label="字典值" ></el-table-column>
-            <el-table-column prop="status" label="状态" width="80" >
+            <el-table-column prop="value" label="字典值"></el-table-column>
+            <el-table-column prop="status" label="状态" width="80">
               <template slot-scope="scope">
                 {{ scope.row.status == '0' ? '正常' : '停用' }}
               </template>
@@ -132,14 +118,7 @@
           </el-table>
           <!-- 字典数据表格end -->
           <el-row :gutter="10" class="mt-20 text-right">
-            <el-pagination
-              @size-change="getDataList"
-              @current-change="getDataList"
-              layout="total, sizes, prev, pager, next, jumper"
-              :page-sizes="[10, 20, 30, 50]"
-              :current-page.sync="queryDataParams.page"
-              :page-size.sync="queryDataParams.pageSize"
-              :total="dataPageInfo.total">
+            <el-pagination @size-change="getDataList" @current-change="getDataList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryDataParams.page" :page-size.sync="queryDataParams.pageSize" :total="dataPageInfo.total">
             </el-pagination>
           </el-row>
         </el-card>
@@ -207,9 +186,6 @@ export default {
   },
   created () {
     this.getTypeList()
-    this.getDicts('mysql_type').then(res => {
-      console.log(res)
-    })
   },
   methods: {
     // 获取类型数据

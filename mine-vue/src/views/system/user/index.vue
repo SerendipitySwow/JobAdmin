@@ -12,16 +12,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间" class="ma-inline-form-item">
-          <el-date-picker
-            size="small"
-            type="daterange"
-            v-model="dateRange"
-            range-separator="至"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            @change="handleDateChange"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+          <el-date-picker size="small" type="daterange" v-model="dateRange" range-separator="至" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="handleDateChange" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item class="ma-inline-form-item">
@@ -52,7 +43,7 @@
           </el-table-column>
           <el-table-column prop="username" label="用户名称" fixed width="200" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="email" label="邮箱" width="190" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="user_type" label="用户类型" width="120" >
+          <el-table-column prop="user_type" label="用户类型" width="120">
             <template slot-scope="scope">
               {{ scope.row.user_type === '100' ? '系统用户' : '其他' }}
             </template>
