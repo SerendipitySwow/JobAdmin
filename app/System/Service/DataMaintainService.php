@@ -7,8 +7,6 @@ namespace App\System\Service;
 use Hyperf\Database\Model\Collection;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
-use Hyperf\Paginator\Paginator;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class DataMaintainService
 {
