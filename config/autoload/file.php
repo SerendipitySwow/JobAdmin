@@ -18,10 +18,11 @@ return [
         ],
         'oss' => [
             'driver' => \Hyperf\Filesystem\Adapter\AliyunOssAdapterFactory::class,
-            'accessId' => env('OSS_ACCESS_ID', ''),
-            'accessSecret' => env('OSS_ACCESS_SECRET', ''),
-            'bucket' => env('OSS_BUCKET', ''),
-            'endpoint' => env('OSS_ENDPOINT', ''),
+            'accessId' => '',
+            'accessSecret' => '',
+            'bucket' => '',
+            'endpoint' => '',
+            'domain' => '',
             // 'timeout'        => 3600,
             // 'connectTimeout' => 10,
             // 'isCName'        => false,
@@ -29,19 +30,20 @@ return [
         ],
         'qiniu' => [
             'driver' => \Hyperf\Filesystem\Adapter\QiniuAdapterFactory::class,
-            'accessKey' => env('QINIU_ACCESS_KEY', 'ncfBN6uavcpS9AMAEVKxSm0Y2KJJtzbMGEdcnHxl'),
-            'secretKey' => env('QINIU_SECRET_KEY', 'ZHHLMk-__mXuZmWNcAtV92HhA9ZB_a_ddC5ZVN2y'),
-            'bucket' => env('QINIU_BUCKET', 'spaceisxmo'),
-            'domain' => env('QINBIU_DOMAIN', 'qv5c9jni9.hb-bkt.clouddn.com'),
+            'accessKey' => 'ncfBN6uavcpS9AMAEVKxSm0Y2KJJtzbMGEdcnHxl',
+            'secretKey' => 'ZHHLMk-__mXuZmWNcAtV92HhA9ZB_a_ddC5ZVN2y',
+            'bucket' => 'spaceisxmo',
+            'domain' => 'qv5c9jni9.hb-bkt.clouddn.com',
         ],
         'cos' => [
             'driver' => \Hyperf\Filesystem\Adapter\CosAdapterFactory::class,
-            'region' => env('COS_REGION', ''),
+            'region' => '',
+            'domain' => '',
             // overtrue/flysystem-cos ^2.0 配置如下
             'credentials' => [
-                'appId' => env('COS_APPID', ''),
-                'secretId' => env('COS_SECRET_ID', ''),
-                'secretKey' => env('COS_SECRET_KEY', ''),
+                'appId' => '',
+                'secretId' => '',
+                'secretKey' => '',
             ],
             // overtrue/flysystem-cos ^3.0 配置如下
             // 'app_id' => env('COS_APPID'),
@@ -49,7 +51,7 @@ return [
             // 'secret_key' => env('COS_SECRET_KEY'),
             // 可选，如果 bucket 为私有访问请打开此项
             // 'signed_url' => false,
-            'bucket' => env('COS_BUCKET'),
+            'bucket' => '',
             'read_from_cdn' => false,
             // 'timeout'         => 60,
             // 'connect_timeout' => 60,

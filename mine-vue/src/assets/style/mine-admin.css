@@ -48,8 +48,22 @@
     line-height: 18px;
 }
 
+.input-w-500 {
+    width: 500px;
+}
+
+.tips {
+    font-size: 12px;
+    line-height: 12px;
+    color: #888;
+}
+
 .text-right{
     text-align: right;
+}
+
+.font-bold {
+    font-weight: bold;
 }
 
 .mt-10 {

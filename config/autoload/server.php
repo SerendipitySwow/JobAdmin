@@ -29,6 +29,7 @@ return [
         ],
     ],
     'settings' => [
+        'package_max_length' => 10 * 1024 * 1024,
         'document_root' => BASE_PATH . '/uploadfile',
         'enable_static_handler' => true,
         Constant::OPTION_ENABLE_COROUTINE => true,
