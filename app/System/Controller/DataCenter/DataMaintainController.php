@@ -8,6 +8,7 @@ use App\System\Service\DataMaintainService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
@@ -17,6 +18,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class DataMaintainController
  * @package App\System\Controller\DataCenter
  * @Controller(prefix="system/dataMaintain")
+ * @Auth
  */
 class DataMaintainController extends MineController
 {
@@ -29,9 +31,42 @@ class DataMaintainController extends MineController
     /**
      * @GetMapping("index")
      * @return ResponseInterface
+     * @Permission
      */
     public function index(): ResponseInterface
     {
         return $this->success($this->service->getPageList($this->request->all()));
+    }
+
+    /**
+     * @GetMapping("columnList")
+     * @return ResponseInterface
+     * @Permission
+     */
+    public function columnList(): ResponseInterface
+    {
+        return $this->success($this->service->getColumnList($this->request->input('table', null)));
+    }
+
+    /**
+ * 优化表
+ * @PostMapping("optimize")
+ * @Permission
+ */
+    public function optimize(): ResponseInterface
+    {
+        $tables = $this->request->input('tables', []);
+        return $this->success($this->service->optimize($tables));
+    }
+
+    /**
+     * 清理表碎片
+     * @PostMapping("fragment")
+     * @Permission
+     */
+    public function fragment(): ResponseInterface
+    {
+        $tables = $this->request->input('tables', []);
+        return $this->success($this->service->fragment($tables));
     }
 }
