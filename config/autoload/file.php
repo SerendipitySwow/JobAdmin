@@ -23,9 +23,9 @@ return [
             'bucket' => '',
             'endpoint' => '',
             'domain' => '',
+            'isCName' => false,
             // 'timeout'        => 3600,
             // 'connectTimeout' => 10,
-            // 'isCName'        => false,
             // 'token'          => '',
         ],
         'qiniu' => [

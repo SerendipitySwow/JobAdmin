@@ -65,8 +65,8 @@ class MineUpload
         $path = $config['path'] ?? date('Ymd');
         $filename = $this->getNewName() . '.' . $uploadedFile->getExtension();
 
-        if (! $filesystem->write($path . '/' . $filename, $uploadedFile->getStream()->getContents())) {
-            throw new \HttpException($uploadedFile->getError(), 500);
+        if (! $filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
+            throw new \RuntimeException($uploadedFile->getError(), 500);
         }
 
         $fileInfo = [
@@ -87,6 +87,16 @@ class MineUpload
     }
 
     /**
+     * 获取目录内容
+     * @param string $path
+     * @return array
+     */
+    public function listContents(string $path = ''): array
+    {
+        return $this->factory->get($this->getStorageMode())->listContents($path);
+    }
+
+    /**
      * 组装url
      * @param string $path
      * @param $filename
@@ -96,14 +106,16 @@ class MineUpload
     {
         $mode = $this->getStorageMode();
         if ($mode == 'local') {
-            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1') . '/' . $path . '/' . $filename;
-        } else if ($mode == 'qiniu') {
+            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1:9501') . '/' . $path . '/' . $filename;
+        }
+        if ($mode == 'qiniu') {
+            return 'http://' . config('file.storage.qiniu.domain') . '/' . $path . '/' . $filename;
+        }
+        if ($mode == 'oss') {
             //todo
             return '';
-        } else if ($mode == 'oss') {
-            //todo
-            return '';
-        } else if ($mode == 'cos') {
+        }
+        if ($mode == 'cos') {
             //todo
             return '';
         }
@@ -115,15 +127,7 @@ class MineUpload
      */
     public function getStorageMode(): string
     {
-        return 'local';
-    }
-
-    /**
-     * 获取存储配置
-     */
-    public function getStorageConfig()
-    {
-
+        return config('file.default', 'local');
     }
 
     /**

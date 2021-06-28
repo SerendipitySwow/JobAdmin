@@ -29,9 +29,10 @@ return [
         ],
     ],
     'settings' => [
-        'package_max_length' => 10 * 1024 * 1024,
-        'document_root' => BASE_PATH . '/uploadfile',
-        'enable_static_handler' => true,
+        // 对外部可以直接访问的目录地址，建议使用nginx反向代理访问
+        Constant::OPTION_DOCUMENT_ROOT => BASE_PATH . '/uploadfile',
+        // 开启外部可以访问
+        Constant::OPTION_ENABLE_STATIC_HANDLER => true,
         Constant::OPTION_ENABLE_COROUTINE => true,
         Constant::OPTION_WORKER_NUM => swoole_cpu_num(),
         Constant::OPTION_PID_FILE => BASE_PATH . '/runtime/hyperf.pid',
@@ -41,6 +42,8 @@ return [
         Constant::OPTION_MAX_REQUEST => 100000,
         Constant::OPTION_SOCKET_BUFFER_SIZE => 2 * 1024 * 1024,
         Constant::OPTION_BUFFER_OUTPUT_SIZE => 2 * 1024 * 1024,
+        // 上传最大为4M
+        Constant::OPTION_PACKAGE_MAX_LENGTH => 4 * 1024 * 1024
     ],
     'callbacks' => [
         Event::ON_WORKER_START => [Hyperf\Framework\Bootstrap\WorkerStartCallback::class, 'onWorkerStart'],

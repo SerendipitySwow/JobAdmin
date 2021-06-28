@@ -17,6 +17,12 @@ use Mine\MineUpload;
 class SystemUploadFileService extends AbstractService
 {
     /**
+     * @Inject
+     * @var \Hyperf\Contract\ConfigInterface
+     */
+    public $config;
+
+    /**
      * @var SystemUploadFileMapper
      */
     public $mapper;
