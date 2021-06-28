@@ -57,6 +57,7 @@ class LoginUser
     {
         try {
             if (! $this->jwt->getToken()) {
+                echo '123';
                 throw new JwtException;
             }
             return $this->jwt->check($getPayload);
@@ -67,6 +68,7 @@ class LoginUser
             if ($e instanceof JwtException) {
                 throw new TokenException(__('jwt.no_login'));
             }
+            echo 'ccc';
             throw new TokenException(__('jwt.no_token'));
         }
     }

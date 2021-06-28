@@ -23,6 +23,7 @@ return [
             'bucket' => '',
             'endpoint' => '',
             'domain' => '',
+            'schema' => 'http://',
             'isCName' => false,
             // 'timeout'        => 3600,
             // 'connectTimeout' => 10,
@@ -34,11 +35,13 @@ return [
             'secretKey' => 'ZHHLMk-__mXuZmWNcAtV92HhA9ZB_a_ddC5ZVN2y',
             'bucket' => 'spaceisxmo',
             'domain' => 'qv5c9jni9.hb-bkt.clouddn.com',
+            'schema' => 'http://',
         ],
         'cos' => [
             'driver' => \Hyperf\Filesystem\Adapter\CosAdapterFactory::class,
             'region' => '',
             'domain' => '',
+            'schema' => 'http://',
             // overtrue/flysystem-cos ^2.0 配置如下
             'credentials' => [
                 'appId' => '',

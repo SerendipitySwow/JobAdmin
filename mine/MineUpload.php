@@ -31,12 +31,19 @@ class MineUpload
     protected $container;
 
     /**
+     * 存储配置信息
+     * @var mixed
+     */
+    protected $config;
+
+    /**
      * MineUpload constructor.
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->config = config('file.storage');
     }
 
     /**
@@ -99,25 +106,31 @@ class MineUpload
     /**
      * 组装url
      * @param string $path
-     * @param $filename
+     * @param string $filename
      * @return string
      */
-    protected function assembleUrl(string $path, $filename): string
+    protected function assembleUrl(string $path, string $filename): string
     {
+        $realpath =  '/'. $path . '/' . $filename;
         $mode = $this->getStorageMode();
         if ($mode == 'local') {
-            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1:9501') . '/' . $path . '/' . $filename;
+            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1:9501').$realpath;
         }
         if ($mode == 'qiniu') {
-            return 'http://' . config('file.storage.qiniu.domain') . '/' . $path . '/' . $filename;
+            $qiniu = $this->config['qiniu'];
+            return $qiniu['schema'].$qiniu['domain'].$realpath;
         }
         if ($mode == 'oss') {
-            //todo
-            return '';
+            $oss = $this->config['oss'];
+            if ($oss['isCName'] === false) {
+                return $oss['schema'].$oss['bucket'].'/'.$oss['endpoint'].$realpath;
+            } else {
+                return $oss['schema'].$oss['domain'].$realpath;
+            }
         }
         if ($mode == 'cos') {
-            //todo
-            return '';
+            $cos = $this->config['oss'];
+            return $cos['schema'].$cos['domain'].$realpath;
         }
         return '';
     }

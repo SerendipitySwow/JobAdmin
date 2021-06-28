@@ -2,10 +2,20 @@
   <ma-container class="page">
     <div class="ma-public-container">
       <div class="ma-menu-card" v-for="item in menuData" :key="item.title" :name="item.title">
-        <el-divider content-position="left">
+        <el-divider content-position="left" v-if="item.type !== 'M'">
           <i :class="`fa fa-${item.icon}`" class="ma-c-icon"/><span class="ma-c-title">{{item.title}}</span>
         </el-divider>
-        <div v-if="!item.children">暂无操作菜单</div>
+        <div v-if="!item.children && item.type === 'M'">
+          <el-row :gutter="12">
+            <el-col :span="4" class="ma-public-col">
+              <el-card shadow="hover" class="ma-public-card" @click.native="goto(item.path)">
+                  <i :class="`fa fa-${item.icon}`" class="ma-c-icon"/>
+                  <span class="ma-c-title">{{item.title}}</span>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
+        <div v-if="!item.children && item.type !== 'M'">暂无操作菜单</div>
         <div v-else>
           <el-row :gutter="12">
             <el-col :span="4" class="ma-public-col" v-for="child in item.children" :key="child.title">

@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 107.148.247.10
+ Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 50733
- Source Host           : 107.148.247.10:3306
+ Source Server Version : 50726
+ Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 50733
+ Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 13/05/2021 22:35:21
+ Date: 28/06/2021 22:25:39
 */
 
 SET NAMES utf8mb4;
@@ -54,9 +54,7 @@ INSERT INTO `system_menu` VALUES (3, 2, '0,2,', '权限管理', 'system-permissi
 INSERT INTO `system_menu` VALUES (4, 3, '0,2,3,', '菜单管理', 'system-menu-index', 'bars', '/system/menu/index', 'system/menu/index', '1', '0', '0', '1', 'M', '0', 0, NULL, NULL, '2021-05-01 20:21:39', '2021-05-01 20:21:44', NULL, NULL);
 INSERT INTO `system_menu` VALUES (5, 4, '0,2,3,4', '新增菜单', 'system-menu-create', '', '', '', '1', '0', '1', '1', 'B', '0', 0, NULL, NULL, '2021-05-01 20:24:10', '2021-05-01 20:24:13', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2546417356, 0, '0', '设置', 'setting', 'cog', '/setting', '', '1', '0', '1', '1', 'T', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:43:17', '2021-05-13 20:43:17', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2547982140, 2546417356, '', '系统配置', 'setting-config', 'cogs', '/setting/config', '', '1', '0', '1', '1', 'C', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:44:54', '2021-05-13 20:44:54', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2550341996, 2547982140, '2546417356', '参数配置', 'setting-args-index', 'gavel', '/setting/args/index', 'setting/args/index', '1', '0', '1', '1', 'M', '0', 1, 1618857937017507840, NULL, '2021-05-13 20:47:22', '2021-05-13 20:47:22', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2551573580, 2547982140, '2546417356', '上传配置', 'setting-upload-index', 'cloud-upload', '/setting/upload/index', 'setting/upload/index', '1', '0', '1', '1', 'M', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:48:39', '2021-05-13 20:48:39', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2550341996, 2546417356, '0,2546417356', '系统配置', 'setting-index', 'gavel', '/setting/config/index', 'setting/config/index', '1', '0', '1', '1', 'M', '0', 1, 1618857937017507840, NULL, '2021-05-13 20:47:22', '2021-06-28 22:15:32', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2554077676, 2546417356, '', '工具', 'setting-tools', 'rocket', '/setting/tools', '', '1', '0', '1', '1', 'C', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:51:15', '2021-05-13 20:51:15', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2554922252, 2554077676, '2546417356', '代码生成器', 'setting-code-index', 'code', '/setting/code/index', 'setting/code/index', '1', '0', '1', '1', 'M', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:52:08', '2021-05-13 20:52:08', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2561673564, 2554077676, '2546417356', '数据表设计', 'setting-table-index', 'paint-brush', '/setting/table/index', 'setting/table/index', '1', '0', '1', '1', 'M', '0', 0, 1618857937017507840, NULL, '2021-05-13 20:59:10', '2021-05-13 20:59:10', NULL, NULL);

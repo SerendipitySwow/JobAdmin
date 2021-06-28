@@ -21,7 +21,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class LoginController extends MineController
 {
-
     /**
      * @Inject
      * @var SystemUserService
