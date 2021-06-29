@@ -159,6 +159,6 @@ class RoleController extends MineController
     {
         $id = $request->input('id');
         $status = $request->input('status');
-        return $this->success($this->service->changeRoleStatus((int) $id, (string) $status));
+        return $this->success($this->service->changeStatus((int) $id, (string) $status));
     }
 }

@@ -71,23 +71,4 @@ class SystemRoleService extends AbstractService
         }
         return $data;
     }
-
-    /**
-     * 修改角色状态
-     * @param int $id
-     * @param string $value
-     * @return bool
-     */
-    public function changeRoleStatus(int $id, string $value): bool
-    {
-        if ($value === '0') {
-            $this->mapper->enable([$id]);
-            return true;
-        } else if ($value === '1') {
-            $this->mapper->disable([$id]);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
