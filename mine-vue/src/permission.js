@@ -1,5 +1,6 @@
 import router from './router'
 import { Notification } from 'element-ui'
+import { request } from '@/api/_service.js'
 
 // 进度条
 import NProgress from 'nprogress'
@@ -7,6 +8,7 @@ import 'nprogress/nprogress.css'
 
 import store from '@/store/index'
 import util from '@/libs/util.js'
+import { locale } from 'core-js'
 
 const whiteList = ['login']
 const defaultRoutePath = '/dashboard'
@@ -34,12 +36,15 @@ router.beforeEach(async (to, from, next) => {
             next({ ...to, replace: true })
           })
         }).catch(() => {
-          Notification.error({
-            message: '请求用户信息失败，请重试',
-            title: '错误',
-            duration: 5 * 1000
+          // 尝试刷新token
+          request({ url: 'system/refresh', method: 'post' }).then((result) => {
+            console.log(result)
+            if (result.code === 401) {
+              store.dispatch('store/user/cancellation', { root: true })
+            } else {
+              util.cookies.set('token', result.data.token)
+            }
           })
-          store.dispatch('store/user/cancellation', { root: true })
           NProgress.done()
         })
       } else {

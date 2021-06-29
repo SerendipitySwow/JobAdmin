@@ -50,16 +50,16 @@ class LoginUser
 
     /**
      * 对用户身份验证
-     * @param bool $getPayload
      * @return bool|null
+     * @throws \HyperfExt\Jwt\Exceptions\TokenBlacklistedException
      */
-    public function check(bool $getPayload = false): ?bool
+    public function check(): ?bool
     {
         try {
-            if (! $this->jwt->getToken()) {
+            if ($this->jwt->getToken() !== null) {
                 throw new JwtException;
             }
-            return $this->jwt->check($getPayload);
+            return true;
         } catch (\Exception $e) {
             if ($e instanceof TokenInvalidException) {
                 throw new TokenException(__('jwt.validate_fail'));
@@ -142,12 +142,13 @@ class LoginUser
     }
 
     /**
+     * @param bool $ignoreExpired
      * @return array
      * @throws JwtException
      */
-    public function getUserInfo(): array
+    public function getUserInfo(bool $ignoreExpired = false): array
     {
-        return $this->jwt->getPayload()->getClaims()->toPlainArray();
+        return $this->jwt->getPayload($ignoreExpired)->getClaims()->toPlainArray();
     }
 
     /**
@@ -158,5 +159,22 @@ class LoginUser
     public function getToken(array $user): string
     {
         return $this->jwt->fromUser(new UserJwtSubject($user));
+    }
+
+    /**
+     * 刷新token
+     * @param bool $forceForever
+     * @return string
+     * @throws JwtException
+     * @throws \HyperfExt\Jwt\Exceptions\TokenBlacklistedException
+     */
+    public function refresh(bool $forceForever = false): string
+    {
+        $this->jwt->setToken(
+            $token =$this->jwt->getManager()->refresh(
+                $this->jwt->getToken(), $forceForever, $this->getUserInfo(true)
+            )->get()
+        );
+        return $token;
     }
 }
