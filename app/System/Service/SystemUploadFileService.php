@@ -33,11 +33,6 @@ class SystemUploadFileService extends AbstractService
      */
     public $mineUpload;
 
-    /**
-     * @Inject
-     * @var EventDispatcherInterface
-     */
-    protected $evDispatcher;
 
     public function __construct(SystemUploadFileMapper $mapper, MineUpload $mineUpload)
     {
@@ -52,17 +47,5 @@ class SystemUploadFileService extends AbstractService
     public function upload(UploadedFile $uploadedFile, array $config = []): int
     {
         return $this->save($this->mineUpload->upload($uploadedFile, $config));
-    }
-
-    /**
-     * 真实删除文件
-     * @param string $ids
-     * @return bool
-     */
-    public function realDelete(string $ids): bool
-    {
-        $event = new \Mine\Event\realDeleteUploadfile($ids);
-        $this->evDispatcher->dispatch($event);
-        return $event->getConfirm() ? parent::realDelete($ids) : false;
     }
 }

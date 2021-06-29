@@ -23,7 +23,7 @@ use Mine\MineModel;
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
  */
-class SystemUploadfile extends MineModel
+class SystemUploadFile extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;

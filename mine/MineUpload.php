@@ -6,6 +6,7 @@ namespace Mine;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Filesystem\FilesystemFactory;
+use League\Flysystem\Filesystem;
 use Mine\Helper\Id;
 use Hyperf\HttpMessage\Upload\UploadedFile;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -18,6 +19,11 @@ class MineUpload
      * @var FilesystemFactory
      */
     protected $factory;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
 
     /**
      * @Inject
@@ -44,6 +50,16 @@ class MineUpload
     {
         $this->container = $container;
         $this->config = config('file.storage');
+        $this->filesystem = $this->factory->get($this->getStorageMode());
+    }
+
+    /**
+     * 获取文件操作处理系统
+     * @return Filesystem
+     */
+    public function getFileSystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 
     /**
@@ -68,11 +84,10 @@ class MineUpload
      */
     protected function handleUpload(UploadedFile $uploadedFile, array $config): array
     {
-        $filesystem = $this->factory->get($this->getStorageMode());
         $path = $config['path'] ?? date('Ymd');
         $filename = $this->getNewName() . '.' . $uploadedFile->getExtension();
 
-        if (! $filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
+        if (! $this->filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
             throw new \RuntimeException($uploadedFile->getError(), 500);
         }
 

@@ -3,9 +3,13 @@ declare(strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemLoginLog;
-use App\System\Model\SystemUploadfile;
+use App\System\Model\SystemUploadFile;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractMapper;
+use Mine\MineUpload;
+use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class SystemUserMapper
@@ -18,9 +22,22 @@ class SystemUploadFileMapper extends AbstractMapper
      */
     public $model;
 
+    /**
+     * @Inject
+     * @var EventDispatcherInterface
+     */
+    protected $evDispatcher;
+
+    /**
+     * @Inject
+     * @var ContainerInterface
+     */
+    protected $container;
+
+
     public function assignModel()
     {
-        $this->model = SystemUploadfile::class;
+        $this->model = SystemUploadFile::class;
     }
 
     /**
@@ -44,5 +61,21 @@ class SystemUploadFileMapper extends AbstractMapper
             );
         }
         return $query;
+    }
+
+    public function realDelete(array $ids): bool
+    {
+        foreach ($ids as $id) {
+            $model = $this->model::withTrashed()->find($id);
+            $event = new \Mine\Event\RealDeleteUploadFile(
+                $model, $this->container->get(MineUpload::class)->getFileSystem()
+            );
+            $this->evDispatcher->dispatch($event);
+            if ($event->getConfirm()) {
+                $model->forceDelete();
+            }
+        }
+        unset($event);
+        return true;
     }
 }

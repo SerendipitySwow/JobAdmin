@@ -20,8 +20,8 @@ class UploadFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:30',
-            'code' => 'required|min:3|max:100',
+            'file' => 'required|mimes:txt,doc,docx,xls,xlsx,ppt,pptx,rar,zip,7z,gz,pdf,wps,md',
+            'path' => 'min:2|max:20',
         ];
     }
 }

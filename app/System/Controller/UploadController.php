@@ -3,6 +3,8 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\System\Request\Upload\UploadFileRequest;
+use App\System\Request\Upload\UploadImageRequest;
 use App\System\Service\SystemUploadFileService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -29,11 +31,16 @@ class UploadController extends MineController
      * @PostMapping("uploadFile")
      * @throws \Exception
      */
-    public function uploadFile(): \Psr\Http\Message\ResponseInterface
+    public function uploadFile(UploadFileRequest $request): \Psr\Http\Message\ResponseInterface
     {
-        $path = $this->request->input('path', null);
-        $result = $this->service->upload($this->request->file('image'), ['path' => $path]);
-        return $result ? $this->success() : $this->error();
+        if ($request->validated() && $request->file('file')->isValid()) {
+            $result = $this->service->upload(
+                $request->file('file'), ['path' => $request->input('path', null)]
+            );
+            return $result ? $this->success() : $this->error();
+        } else {
+            return $this->error('文件上传验证不通过');
+        }
     }
 
     /**
@@ -41,11 +48,16 @@ class UploadController extends MineController
      * @PostMapping("uploadImage")
      * @throws \League\Flysystem\FileExistsException
      */
-    public function uploadImage(): \Psr\Http\Message\ResponseInterface
+    public function uploadImage(UploadImageRequest $request): \Psr\Http\Message\ResponseInterface
     {
-        $path = $this->request->input('path', null);
-        $result = $this->service->upload($this->request->file('image'), ['path' => $path]);
-        return $result ? $this->success() : $this->error();
+        if ($request->validated() && $request->file('image')->isValid()) {
+            $result = $this->service->upload(
+                $request->file('image'), ['path' => $request->input('path', null)]
+            );
+            return $result ? $this->success() : $this->error();
+        } else {
+            return $this->error('图片上传验证不通过');
+        }
     }
 
     /**

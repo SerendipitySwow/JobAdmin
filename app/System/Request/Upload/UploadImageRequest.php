@@ -20,8 +20,8 @@ class UploadImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:30',
-            'code' => 'required|min:3|max:100',
+            'image' => 'required|image',
+            'path' => 'min:2|max:20',
         ];
     }
 }
