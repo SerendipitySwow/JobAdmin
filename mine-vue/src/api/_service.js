@@ -11,17 +11,27 @@ import store from '@/store'
  * @param {Error} error 错误对象
  */
 function handleError (error) {
-  // 显示提示
-  Notification.error({
-    message: '服务器错误',
-    title: '错误',
-    duration: 5 * 1000
-  })
-
   // 检查是否需要跳转登录页
   const status = get(error, 'response.status')
   if (status === 401) {
-    store.dispatch('store/user/cancellation', { root: true })
+    // 尝试刷新token
+    createRequest({
+      url: 'system/refresh',
+      method: 'post'
+    }).then((result) => {
+      if (result.code === 401) {
+        store.dispatch('store/user/cancellation', { root: true })
+      } else {
+        util.cookies.set('token', result.data.token)
+      }
+    })
+  } else {
+    // 显示提示
+    Notification.error({
+      message: '服务器错误',
+      title: '错误',
+      duration: 5 * 1000
+    })
   }
 }
 

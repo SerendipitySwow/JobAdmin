@@ -23,7 +23,7 @@ class UserJwtSubject implements JwtSubjectInterface
      */
     public function getJwtIdentifier(): int
     {
-        return $this->userData['id'] ?? -1;
+        return (int) ($this->userData['id'] ?? -1);
     }
 
     /**

@@ -10,7 +10,10 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use HyperfExt\Jwt\Exceptions\JwtException;
+use HyperfExt\Jwt\Exceptions\TokenBlacklistedException;
 use Mine\Annotation\Auth;
+use Mine\Exception\TokenException;
+use Mine\Helper\LoginUser;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -69,5 +72,23 @@ class LoginController extends MineController
     {
         return $this->success($this->systemUserService->getInfo());
     }
+
+    /**
+     * 刷新token
+     * @PostMapping("refresh")
+     * @param LoginUser $user
+     * @return ResponseInterface
+     */
+    public function refresh(LoginUser $user)
+    {
+        try {
+            return $this->success(['token' => $user->refresh()]);
+        } catch (TokenBlacklistedException $e) {
+            return $this->error(__('jwt.token_blacklist'), 401);
+        } catch (JwtException $e) {
+            throw new TokenException(__('jwt.validate_fail'));
+        }
+    }
+
 
 }
