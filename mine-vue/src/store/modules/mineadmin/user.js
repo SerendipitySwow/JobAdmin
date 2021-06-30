@@ -21,7 +21,7 @@ export default {
       commit('store/permission/setRoles', [], { root: true })
       commit('store/menu/headerSet', [], { root: true })
       commit('store/page/init', [], { root: true })
-      // location.reload()
+      location.reload()
     },
     /**
      * @description 设置用户数据

@@ -56,7 +56,7 @@ class LoginUser
     public function check(): ?bool
     {
         try {
-            if ($this->jwt->getToken() !== null) {
+            if ($this->jwt->getToken() === null) {
                 throw new JwtException;
             }
             return true;
