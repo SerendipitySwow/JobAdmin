@@ -55,7 +55,7 @@
             </el-table-column>
             <el-table-column prop="len" label="长度">
               <template slot-scope="scope">
-                <el-input-number size="small" v-model="scope.row.len" controls-position="right" :min="1" :max="9999"></el-input-number>
+                <el-input-number size="small" v-model="scope.row.len" controls-position="right" :min="0" :max="9999"></el-input-number>
               </template>
             </el-table-column>
             <el-table-column prop="index" label="索引类型">

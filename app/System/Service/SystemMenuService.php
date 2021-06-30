@@ -62,7 +62,7 @@ class SystemMenuService extends AbstractService
             return __('system.undefined_menu');
         }
         $name = $this->mapper->findNameByCode($code);
-        return $name ? $name : __('system.undefined_menu');
+        return $name ?? __('system.undefined_menu');
     }
 
     /**
@@ -74,7 +74,7 @@ class SystemMenuService extends AbstractService
     {
         $pid = $data['parent_id'] ?? 0;
         // 顶层菜单
-        if ($pid === 0) {
+        if ($pid === 0 && !empty($pid[0])) {
             $data['level'] = $data['parent_id'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
@@ -82,7 +82,8 @@ class SystemMenuService extends AbstractService
             $data['parent_id'] = array_pop($data['parent_id']);
             $data['level'] = implode(',', $pid);
             $menu = $this->mapper->read((int) $data['parent_id']);
-            if ($data['type'] != SystemMenu::TYPE_CLASSIFY && $data['type'] != SystemMenu::BUTTON) {
+//            && $data['type'] != SystemMenu::BUTTON
+            if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
                 $code = explode('-', $menu['code']);
                 (count($code) > 1) && array_pop($code);
                 $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
@@ -93,7 +94,7 @@ class SystemMenuService extends AbstractService
 
         $id = $this->mapper->save($data);
 
-        // 生成RESTful按钮菜单
+        // 生成RESTFUL按钮菜单
         if ($data['type'] == SystemMenu::MENUS_LIST && $data['restful'] == '0') {
             $this->genButtonMenu(explode(',', $data['level'].','.$id));
         }
@@ -140,7 +141,7 @@ class SystemMenuService extends AbstractService
     {
         $pid = $data['parent_id'] ?? 0;
         // 顶层菜单
-        if ($pid === 0) {
+        if ($pid == 0) {
             $data['level'] = $data['parent_id'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
@@ -151,8 +152,11 @@ class SystemMenuService extends AbstractService
             } else {
                 $data['level'] = '0,' . $data['parent_id'];
             }
+            if ($data['type'] == SystemMenu::TYPE_CLASSIFY) {
+                return $this->mapper->update($id, $data);
+            }
             $menu = $this->mapper->read((int) $data['parent_id']);
-            if ($data['type'] != SystemMenu::TYPE_CLASSIFY && $data['type'] != SystemMenu::BUTTON) {
+            if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
                 $code = explode('-', $menu['code']);
                 (count($code) > 1) && array_pop($code);
                 $curCode = explode('-', $data['code']);
