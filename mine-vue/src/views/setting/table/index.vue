@@ -11,7 +11,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="所属模块" size="small" class="ma-inline-form-item" prop="module">
-          <el-select v-model="module" placeholder="请选择模块">
+          <el-select v-model="form.module" placeholder="请选择模块">
             <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
           </el-select>
           <el-button style="margin-left: 5px;" icon="el-icon-plus">创建模块</el-button>
@@ -22,70 +22,70 @@
         <div slot="header" class="clearfix">
           <span>字段</span>
         </div>
-        <el-table :data="form.columns" tooltip-effect="dark">
-            <el-table-column prop="name" label="字段名称" width="150">
+        <el-table :data="form.columns" empty-text="请添加字段...">
+            <el-table-column prop="name" label="字段名称">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.name" size="mini" placeholder="字段名称"></el-input>
+                <el-input v-model="scope.row.name" size="small" placeholder="字段名称"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="type" label="字段类型" width="150">
+            <el-table-column prop="type" label="字段类型">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.type" size="mini" placeholder="字段类型">
+                <el-select v-model="scope.row.type" size="small" placeholder="字段类型">
                   <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="unsigned" label="Unsigned" width="130">
+            <el-table-column prop="unsigned" label="Unsigned" width="100">
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.unsigned">无负号</el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column prop="isNull" label="NULL" width="120">
+            <el-table-column prop="isNull" label="NULL" width="100">
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.isNull">为空</el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column prop="len" label="长度" width="140">
+            <el-table-column prop="len" label="长度">
               <template slot-scope="scope">
-                <el-input-number size="mini" style="width:110px" v-model="scope.row.len" controls-position="right" :min="1" :max="9999"></el-input-number>
+                <el-input-number size="small" v-model="scope.row.len" controls-position="right" :min="1" :max="9999"></el-input-number>
               </template>
             </el-table-column>
-            <el-table-column prop="index" label="索引类型" width="140">
+            <el-table-column prop="index" label="索引类型">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.index" size="mini" placeholder="索引类型">
+                <el-select v-model="scope.row.index" size="small" placeholder="索引类型">
                   <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="default" label="默认值" width="140">
+            <el-table-column prop="default" label="默认值">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.default" size="mini" placeholder="默认值"></el-input>
+                <el-input v-model="scope.row.default" size="small" placeholder="默认值"></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="comment" label="注释" width="160">
+            <el-table-column prop="comment" label="注释">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.comment" size="mini" placeholder="注释"></el-input>
+                <el-input v-model="scope.row.comment" size="small" placeholder="注释"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" width="100">
               <template slot-scope="scope">
-                <el-button type="text" v-hasPermission="['system:dictType:realDelete']" @click="handleRealDelete(scope.row.id, 'type')">删除</el-button>
+                <el-button type="text" v-hasPermission="['system:dictType:realDelete']" @click="handleDeleteColumn(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
           <el-row class="mt-20">
-            <el-form-item label="ID主键" size="mini" class="ma-inline-form-item" prop="pk">
+            <el-form-item label="ID主键" size="small" class="ma-inline-form-item" prop="pk">
               <el-input  v-model="form.pk" placeholder="请输入ID主键"></el-input>
             </el-form-item>
-            <el-form-item label="表引擎" size="mini" class="ma-inline-form-item" prop="engine">
+            <el-form-item label="表引擎" size="small" class="ma-inline-form-item" prop="engine">
               <el-select v-model="form.engine" placeholder="表引擎">
                   <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
                 </el-select>
             </el-form-item>
-            <el-form-item label="表注释" size="mini" class="ma-inline-form-item" prop="comment">
+            <el-form-item label="表注释" size="small" class="ma-inline-form-item" prop="comment">
               <el-input  v-model="form.comment" placeholder="请输入表注释"></el-input>
             </el-form-item>
-            <el-button size="mini" icon="el-icon-plus">增加字段</el-button>
+            <el-button size="small" icon="el-icon-plus" @click="handleAddColumn">增加字段</el-button>
           </el-row>
           <el-row class="mt-20">
             <el-checkbox v-model="form.autoTime">创建created_at & updated_at</el-checkbox>
@@ -98,6 +98,7 @@
   </ma-container>
 </template>
 <script>
+import { Field } from 'vant'
 export default {
   name: 'system-table-index',
   data () {
@@ -106,12 +107,28 @@ export default {
       form: {
         name: '',
         module: '',
-        columns: [{id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: ''}],
+        columns: [],
         autoTime: true,
         pk: 'id',
         engine: '',
-        comment: '',
+        comment: ''
       },
+      fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' }
+    }
+  },
+  methods: {
+    handleAddColumn () {
+      const field = JSON.parse(JSON.stringify(this.fields))
+      field.id = this.form.columns.length + 1
+      this.form.columns.push(field)
+    },
+    handleDeleteColumn (id) {
+      for (let i = 0; i < this.form.columns.length; i++) {
+        if (this.form.columns[i].id === id) {
+          this.form.columns.splice(i, 1)
+          break
+        }
+      }
     }
   }
 }
