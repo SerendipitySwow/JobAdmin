@@ -4,24 +4,52 @@
 namespace Mine\Event;
 
 
-class realDeleteUploadfile
+use App\System\Model\SystemUploadfile;
+use League\Flysystem\Filesystem;
+
+class RealDeleteUploadFile
 {
-    protected $ids;
+    protected $model;
 
     protected $confirm = true;
 
-    public function __construct(string $ids)
+    protected $filesystem;
+
+    public function __construct(SystemUploadfile $model, Filesystem $filesystem)
     {
-        $this->ids = !empty($ids) ? explode(',', $ids) : [];
+        $this->model = $model;
+        $this->filesystem = $filesystem;
     }
 
-    public function getIds()
+    /**
+     * 获取当前模型实例
+     * @return SystemUploadfile
+     */
+    public function getModel(): SystemUploadfile
     {
-        return $this->ids;
+        return $this->model;
     }
 
-    public function getConfirm()
+    /**
+     * 获取文件处理系统
+     * @return Filesystem
+     */
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    /**
+     * 是否删除
+     * @return bool
+     */
+    public function getConfirm(): bool
     {
         return $this->confirm;
+    }
+
+    public function setConfirm(bool $confirm): void
+    {
+        $this->confirm = $confirm;
     }
 }
