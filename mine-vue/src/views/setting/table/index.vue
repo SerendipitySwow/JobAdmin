@@ -7,12 +7,20 @@
         </div>
         <el-form-item label="表名称" size="small" class="ma-inline-form-item" prop="name">
           <el-input  v-model="form.name" placeholder="请输入表名称">
-            <template slot="prepend">{{tablePrefix}}</template>
+            <template slot="prepend">{{sysinfo.tablePrefix === '' ? '无前缀' : sysinfo.tablePrefix}}</template>
           </el-input>
         </el-form-item>
         <el-form-item label="所属模块" size="small" class="ma-inline-form-item" prop="module">
           <el-select v-model="form.module" placeholder="请选择模块">
-            <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
+            <el-option
+              :label="item.name"
+              :value="item.name"
+              v-for="(item, index) in sysinfo.modulesList"
+              :key="index"
+              >
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.description }}</span>
+            </el-option>
           </el-select>
           <el-button style="margin-left: 5px;" icon="el-icon-plus">创建模块</el-button>
           <el-button type="primary" style="margin-left: 20px;">提交</el-button>
@@ -53,7 +61,7 @@
             <el-table-column prop="index" label="索引类型">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.index" size="small" placeholder="索引类型">
-                  <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
+                  <el-option v-for="name in indexs" :value="name" :key="name">{{name}}</el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -79,7 +87,7 @@
             </el-form-item>
             <el-form-item label="表引擎" size="small" class="ma-inline-form-item" prop="engine">
               <el-select v-model="form.engine" placeholder="表引擎">
-                  <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
+                  <el-option :value="item.value" :label="item.label" v-for="(item, index) in engines" :key="index">{{item.label}}</el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="表注释" size="small" class="ma-inline-form-item" prop="comment">
@@ -98,12 +106,11 @@
   </ma-container>
 </template>
 <script>
-import { Field } from 'vant'
+import { getSystemInfo } from '@/api/setting/table'
 export default {
   name: 'system-table-index',
   data () {
     return {
-      tablePrefix: '无前缀',
       form: {
         name: '',
         module: '',
@@ -113,8 +120,21 @@ export default {
         engine: '',
         comment: ''
       },
-      fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' }
+      sysinfo: {},
+      engines: null,
+      fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' },
+      indexs: [
+        'UNIQUE', 'NORMAL', 'FULLTEXT'
+      ]
     }
+  },
+  async created () {
+    await getSystemInfo().then(res => {
+      this.sysinfo = res.data
+    })
+    await this.getDicts('table_engine').then(res => {
+      this.engines = res.data
+    })
   },
   methods: {
     handleAddColumn () {

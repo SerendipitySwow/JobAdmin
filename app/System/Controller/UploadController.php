@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\Filesystem\FilesystemFactory;
+use Mine\Annotation\Auth;
 use Mine\MineController;
 
 /**
@@ -29,7 +30,10 @@ class UploadController extends MineController
     /**
      * 上传文件
      * @PostMapping("uploadFile")
-     * @throws \Exception
+     * @param UploadFileRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \League\Flysystem\FileExistsException
+     * @Auth
      */
     public function uploadFile(UploadFileRequest $request): \Psr\Http\Message\ResponseInterface
     {
@@ -46,7 +50,10 @@ class UploadController extends MineController
     /**
      * 上传图片
      * @PostMapping("uploadImage")
+     * @param UploadImageRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws \League\Flysystem\FileExistsException
+     * @Auth
      */
     public function uploadImage(UploadImageRequest $request): \Psr\Http\Message\ResponseInterface
     {
@@ -70,20 +77,11 @@ class UploadController extends MineController
     }
 
     /**
-     * 获取文件url
-     * @GetMapping("getFileUrl")
+     * 获取文件信息
+     * @GetMapping("getFileInfo")
      */
-    public function getFileUrl()
+    public function getFileInfo()
     {
-
-    }
-
-    /**
-     * 输出图片
-     * @GetMapping("outPutImage")
-     */
-    public function outPutImage()
-    {
-
+        return $this->success($this->service->read($this->request->input('id', null)));
     }
 }

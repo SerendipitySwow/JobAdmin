@@ -1,7 +1,7 @@
 {
-    "name": "system",
-    "description": "system module",
+    "name": "System",
+    "description": "系统模块，内置",
     "installed": true,
-    "version": "0.1.1",
+    "version": "1.0.0",
     "enabled": true
 }
