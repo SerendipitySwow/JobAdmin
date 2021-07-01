@@ -72,41 +72,22 @@ class SystemMenuService extends AbstractService
      */
     public function save(array $data): int
     {
-        $pid = $data['parent_id'] ?? 0;
-        // 顶层菜单
-        if ($pid === 0 && !empty($pid[0])) {
-            $data['level'] = $data['parent_id'] = '0';
-            $data['type'] = SystemMenu::TYPE_CLASSIFY;
-        } else {
-            array_unshift($pid, '0');
-            $data['parent_id'] = array_pop($data['parent_id']);
-            $data['level'] = implode(',', $pid);
-            $menu = $this->mapper->read((int) $data['parent_id']);
-//            && $data['type'] != SystemMenu::BUTTON
-            if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
-                $code = explode('-', $menu['code']);
-                (count($code) > 1) && array_pop($code);
-                $data['code'] = sprintf('%s-%s', implode('-', $code), $data['code']);
-            } else {
-                $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
-            }
-        }
-
-        $id = $this->mapper->save($data);
+        $id = $this->mapper->save($this->handleData($data));
 
         // 生成RESTFUL按钮菜单
         if ($data['type'] == SystemMenu::MENUS_LIST && $data['restful'] == '0') {
-            $this->genButtonMenu(explode(',', $data['level'].','.$id));
+            $this->genButtonMenu($id);
         }
+
         return $id;
     }
 
     /**
      * 生成按钮菜单
-     * @param array $parent_id
+     * @param int $parent_id
      * @return bool
      */
-    public function genButtonMenu(array $parent_id): bool
+    public function genButtonMenu(int $parent_id): bool
     {
         $btns = [
             ['name' => '列表', 'code' => 'index'],
@@ -118,7 +99,6 @@ class SystemMenuService extends AbstractService
             ['name' => '真实删除', 'code' => 'realDelete']
         ];
 
-        array_shift($parent_id);
         foreach ($btns as $btn) {
             $this->save(
                 array_merge(
@@ -139,33 +119,23 @@ class SystemMenuService extends AbstractService
      */
     public function update(int $id, array $data): bool
     {
-        $pid = $data['parent_id'] ?? 0;
-        // 顶层菜单
-        if ($pid == 0) {
-            $data['level'] = $data['parent_id'] = '0';
+        return $this->mapper->update($id, $this->handleData($data));
+    }
+
+    /**
+     * 处理数据
+     * @param $data
+     * @return mixed
+     */
+    protected function handleData($data) {
+        if ($data['parent_id'] == 0) {
+            $data['level'] = '0';
             $data['type'] = SystemMenu::TYPE_CLASSIFY;
         } else {
-            if (is_array($data['parent_id'])) {
-                $data['parent_id'] = array_pop($data['parent_id']);
-                array_unshift($pid, '0');
-                $data['level'] = implode(',', $pid);
-            } else {
-                $data['level'] = '0,' . $data['parent_id'];
-            }
-            if ($data['type'] == SystemMenu::TYPE_CLASSIFY) {
-                return $this->mapper->update($id, $data);
-            }
-            $menu = $this->mapper->read((int) $data['parent_id']);
-            if ($data['type'] != SystemMenu::TYPE_CLASSIFY) {
-                $code = explode('-', $menu['code']);
-                (count($code) > 1) && array_pop($code);
-                $curCode = explode('-', $data['code']);
-                $data['code'] = sprintf('%s-%s', implode('-', $code), array_pop($curCode));
-            } else {
-                $data['code'] = sprintf('%s-%s', $menu['code'], $data['code']);
-            }
+            $parentMenu = $this->mapper->read((int) $data['parent_id']);
+            $data['level'] = $parentMenu['level'] . ',' . $parentMenu['id'];
         }
-        return $this->mapper->update($id, $data);
+        return $data;
     }
 
     /**

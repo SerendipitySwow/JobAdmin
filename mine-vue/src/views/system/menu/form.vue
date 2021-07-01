@@ -114,29 +114,30 @@ export default {
         name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
         code: [{ required: true, message: '请输入菜单代码', trigger: 'blur' }],
         route: [{ required: true, message: '请输入路由', trigger: 'blur' }],
-        component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }]
+        // component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }]
       }
     }
-  },
-  // 创建生命周期
-  created () {
-    getSelectTree().then(res => {
-      this.selectTree = res.data
-    })
   },
   methods: {
     // 新增菜单
     create () {
+      getSelectTree().then(res => {
+        this.selectTree = res.data
+      })
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增菜单'
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
+        this.form.parent_id = [0]
       })
     },
     // 更新菜单
     update (record) {
+      getSelectTree().then(res => {
+        this.selectTree = res.data
+      })
       this.saveType = 'update'
       this.record = record
       this.title = '编辑菜单'
@@ -145,6 +146,7 @@ export default {
         this.$refs.form.resetFields()
         // 填充form数据
         this.setFormData(record)
+        this.form.parent_id = [record.parent_id]
       })
     },
     // 关闭处理方法
@@ -161,28 +163,26 @@ export default {
     submitForm () {
       this.$refs.form.validate(valid => {
         if (valid) {
+          let parent_id = this.form.parent_id[this.form.parent_id.length - 1]
+          parent_id = parent_id == undefined ? 0 : parent_id
+          if (parent_id === 0 && this.form.type !== 'T') {
+            this.error('类型非分类请选择上级菜单')
+            return false
+          }
           if (this.saveType === 'create') {
             // 新增数据
+            this.form.parent_id = parent_id
             save(this.form).then(res => {
               this.success(res.message)
               this.resetForm()
             })
           } else {
             // 更新数据
-            if (this.form.parent_id !== null && typeof this.form.parent_id !== 'number') {
-              const id = this.form.parent_id.pop()
-              if (id === this.record.id) {
-                this.error('上级菜单不能选择本菜单')
-                this.form.parent_id.push(id)
-                return false
-              } else {
-                this.form.parent_id.push(id)
-              }
-            } else if (typeof this.form.parent_id === 'number') {
-              const id = this.form.parent_id
-              this.form.parent_id = []
-              this.form.parent_id.push(id)
+            if (parent_id === this.record.id) {
+              this.error('上级菜单不能选择本菜单')
+              return false
             }
+            this.form.parent_id = parent_id
             update(this.form.id, this.form).then(res => {
               this.success(res.message)
               this.resetForm()

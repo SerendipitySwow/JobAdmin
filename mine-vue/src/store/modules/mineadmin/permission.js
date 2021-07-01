@@ -64,8 +64,14 @@ function filterAsyncRouter (asyncRouterMap) {
       route.component = mainLayout
     } else if (route.type === 'C') {
       route.component = loadView('public/index/container')
-    } else if (route.type === 'M' && typeof route.component === 'string') {
+    } else if (route.type === 'M' && typeof route.component === 'string' && route.component !== null) {
       route.component = loadView(route.component)
+    }
+    if (! /^http\:\/\/|https\:\/\//.test(route.path)) {
+      route.path = '/' + route.path
+    }
+    if (route.type === 'B') {
+      return false
     }
     if (route.type === 'C' && !route.children) {
       return false
