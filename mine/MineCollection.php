@@ -101,9 +101,7 @@ class MineCollection extends Collection
         foreach ($data as $value) {
             if ($value[$parentField] == $parentId) {
                 $child = $this->toTree($data, $value[$id]);
-                if (!empty($child)) {
-                    $value[$children] = $child;
-                }
+                $value[$children] = $child ?: [];
                 array_push($tree, $value);
             }
         }
