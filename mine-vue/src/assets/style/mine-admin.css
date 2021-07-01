@@ -23,7 +23,7 @@
     padding-left: 15px !important;
 }
 .el-textarea > textarea {
-    font-family: '微软雅黑';
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 .ma-tree-border {
     border: 1px solid #e5e6e7;
