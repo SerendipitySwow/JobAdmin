@@ -1,34 +1,51 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+
       <el-form-item label="上级部门" prop="parent_id">
-        <el-cascader v-model="form.parent_id" size="small" clearable style="width:100%" :options="selectTree" :props="{ checkStrictly: true }"></el-cascader>
+        <el-cascader
+          v-model="form.parent_id"
+          size="small"
+          clearable
+          style="width:100%"
+          :options="selectTree"
+          :props="{ checkStrictly: true }"
+        ></el-cascader>
       </el-form-item>
+
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="form.name" size="small" placeholder="请输入部门名称"></el-input>
       </el-form-item>
+
       <el-form-item label="负责人" prop="leader">
         <el-input v-model="form.leader" size="small" placeholder="请输入部门负责人"></el-input>
       </el-form-item>
+
       <el-form-item label="联系电话" prop="phone">
         <el-input v-model="form.phone" size="small" placeholder="请输入负责人电话"></el-input>
       </el-form-item>
+
       <el-form-item label="排序" prop="sort">
         <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
       </el-form-item>
+
       <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
         <el-radio-group v-model="form.status">
           <el-radio label="0">启用</el-radio>
           <el-radio label="1">停用</el-radio>
         </el-radio-group>
       </el-form-item>
+
     </el-form>
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>
+
   </el-dialog>
 </template>
+
 <script>
 import { getSelectTree, save, update } from '@/api/system/dept'
 export default {

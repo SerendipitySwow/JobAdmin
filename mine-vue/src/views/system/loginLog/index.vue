@@ -2,6 +2,7 @@
   <ma-container>
     <template slot="header" v-if="showSearch">
       <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
+
         <el-form-item label="登录时间" class="ma-inline-form-item">
           <el-date-picker
             size="small"
@@ -15,18 +16,22 @@
             end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
+
         <!-- <el-form-item label="IP" class="ma-inline-form-item" prop="ip">
           <el-input size="small" v-model="queryParams.ip" placeholder="请输入IP"></el-input>
         </el-form-item> -->
+
         <el-form-item label="登录用户" class="ma-inline-form-item" prop="username">
           <el-input size="small" v-model="queryParams.username" placeholder="请输入登录用户"></el-input>
         </el-form-item>
+
         <el-form-item label="状态" class="ma-inline-form-item" prop="status">
           <el-select size="small" v-model="queryParams.status" placeholder="登录状态">
             <el-option label="成功" value="0">成功</el-option>
             <el-option label="失败" value="1">失败</el-option>
           </el-select>
         </el-form-item>
+
         <!-- <el-form-item label="请求方法" class="ma-inline-form-item" prop="method">
           <el-select size="small" v-model="queryParams.method" placeholder="请求方法">
             <el-option label="GET" value="GET">GET</el-option>
@@ -35,10 +40,12 @@
             <el-option label="DELETE" value="DELETE">DELETE</el-option>
           </el-select>
         </el-form-item> -->
+
         <el-form-item class="ma-inline-form-item">
           <el-button size="small" type="primary" @click="handleSearch" icon="el-icon-search">搜索</el-button>
           <el-button size="small" type="default" @click="resetSearch" icon="el-icon-refresh">重置</el-button>
         </el-form-item>
+
       </el-form>
     </template>
     <el-row :gutter="20">
