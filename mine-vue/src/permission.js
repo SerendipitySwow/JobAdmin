@@ -16,6 +16,7 @@ const defaultRoutePath = '/dashboard'
  * 权限验证
  */
 router.beforeEach(async (to, from, next) => {
+  console.log(to)
   await store.dispatch('store/page/isLoaded')
   await store.dispatch('store/size/isLoaded')
   // 进度条

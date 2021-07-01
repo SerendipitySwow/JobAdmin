@@ -37,7 +37,6 @@ class SystemMenuMapper extends AbstractMapper
         return $this->model::query()
             ->select(...$this->menuField)
             ->where('status', $this->model::ENABLE)
-            ->where('type', '!=', $this->model::BUTTON)
             ->orderBy('sort', 'desc')
             ->get()->sysMenuToRouterTree();
     }
@@ -52,7 +51,6 @@ class SystemMenuMapper extends AbstractMapper
         return $this->model::query()
             ->whereIn('id', $ids)
             ->where('status', $this->model::ENABLE)
-            ->where('type', '!=', $this->model::BUTTON)
             ->orderBy('sort', 'desc')
             ->select(...$this->menuField)
             ->get()->sysMenuToRouterTree();

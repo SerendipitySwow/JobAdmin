@@ -39,6 +39,7 @@ export default {
     async genRouters ({ commit, state }) {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
+        console.log(accessedRoutes)
         const menu = util.supplementPath(accessedRoutes)
         menu.unshift({ title: '首页', path: '/', name: 'dashboard', icon: 'home' })
         accessedRoutes.push({
@@ -60,6 +61,9 @@ export default {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter (asyncRouterMap) {
   return asyncRouterMap.filter(route => {
+    if (route.type === 'B') {
+      return false
+    }
     if (route.type === 'T') {
       route.component = mainLayout
     } else if (route.type === 'C') {
@@ -70,9 +74,7 @@ function filterAsyncRouter (asyncRouterMap) {
     if (! /^http\:\/\/|https\:\/\//.test(route.path)) {
       route.path = '/' + route.path
     }
-    if (route.type === 'B') {
-      return false
-    }
+    
     if (route.type === 'C' && !route.children) {
       return false
     }

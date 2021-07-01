@@ -76,7 +76,8 @@ class SystemMenuService extends AbstractService
 
         // 生成RESTFUL按钮菜单
         if ($data['type'] == SystemMenu::MENUS_LIST && $data['restful'] == '0') {
-            $this->genButtonMenu($id);
+            $code = $this->mapper->model::where('id', $id)->value('code');
+            $this->genButtonMenu($id, $code);
         }
 
         return $id;
@@ -87,16 +88,16 @@ class SystemMenuService extends AbstractService
      * @param int $parent_id
      * @return bool
      */
-    public function genButtonMenu(int $parent_id): bool
+    public function genButtonMenu(int $parent_id, $code): bool
     {
         $btns = [
-            ['name' => '列表', 'code' => 'index'],
-            ['name' => '保存', 'code' => 'save'],
-            ['name' => '更新', 'code' => 'update'],
-            ['name' => '删除', 'code' => 'delete'],
-            ['name' => '读取', 'code' => 'read'],
-            ['name' => '恢复', 'code' => 'recovery'],
-            ['name' => '真实删除', 'code' => 'realDelete']
+            ['name' => '列表', 'code' => $code.':index'],
+            ['name' => '保存', 'code' => $code.':save'],
+            ['name' => '更新', 'code' => $code.':update'],
+            ['name' => '删除', 'code' => $code.':delete'],
+            ['name' => '读取', 'code' => $code.':read'],
+            ['name' => '恢复', 'code' => $code.':recovery'],
+            ['name' => '真实删除', 'code' => $code.':realDelete']
         ];
 
         foreach ($btns as $btn) {
