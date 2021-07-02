@@ -64,6 +64,11 @@ function filterAsyncRouter (asyncRouterMap) {
     if (route.type === 'B') {
       return false
     }
+
+    if (route.hidden) {
+      return false
+    }
+
     if (route.type === 'T') {
       route.component = mainLayout
     } else if (route.type === 'C') {
@@ -71,13 +76,19 @@ function filterAsyncRouter (asyncRouterMap) {
     } else if (route.type === 'M' && typeof route.component === 'string' && route.component !== null) {
       route.component = loadView(route.component)
     }
-    if (! /^http\:\/\/|https\:\/\//.test(route.path)) {
+
+    if (!/^http:\/\/|https:\/\//.test(route.path)) {
       route.path = '/' + route.path
     }
-    
+
     if (route.type === 'C' && !route.children) {
       return false
     }
+
+    if (route.type === 'M') {
+      route.children = undefined
+    }
+
     if (route.children != null && route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children)
     }

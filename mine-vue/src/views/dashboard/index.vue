@@ -4,6 +4,7 @@
       版本号：{{$version}}
       最后构建时间：{{$buildTime}}
     </template>
+    <el-empty description="描述文字"></el-empty>
   </ma-container>
 </template>
 
