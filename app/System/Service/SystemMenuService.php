@@ -76,8 +76,8 @@ class SystemMenuService extends AbstractService
 
         // 生成RESTFUL按钮菜单
         if ($data['type'] == SystemMenu::MENUS_LIST && $data['restful'] == '0') {
-            $code = $this->mapper->model::where('id', $id)->value('code');
-            $this->genButtonMenu($id, $code);
+            $model = $this->mapper->model::find($id, ['id', 'name', 'code']);
+            $this->genButtonMenu($model);
         }
 
         return $id;
@@ -85,25 +85,25 @@ class SystemMenuService extends AbstractService
 
     /**
      * 生成按钮菜单
-     * @param int $parent_id
+     * @param SystemMenu $model
      * @return bool
      */
-    public function genButtonMenu(int $parent_id, $code): bool
+    public function genButtonMenu(SystemMenu $model): bool
     {
         $btns = [
-            ['name' => '列表', 'code' => $code.':index'],
-            ['name' => '保存', 'code' => $code.':save'],
-            ['name' => '更新', 'code' => $code.':update'],
-            ['name' => '删除', 'code' => $code.':delete'],
-            ['name' => '读取', 'code' => $code.':read'],
-            ['name' => '恢复', 'code' => $code.':recovery'],
-            ['name' => '真实删除', 'code' => $code.':realDelete']
+            ['name' => $model->name.'列表', 'code' => $model->code.':index'],
+            ['name' => $model->name.'保存', 'code' => $model->code.':save'],
+            ['name' => $model->name.'更新', 'code' => $model->code.':update'],
+            ['name' => $model->name.'删除', 'code' => $model->code.':delete'],
+            ['name' => $model->name.'读取', 'code' => $model->code.':read'],
+            ['name' => $model->name.'恢复', 'code' => $model->code.':recovery'],
+            ['name' => $model->name.'真实删除', 'code' => $model->code.':realDelete']
         ];
 
         foreach ($btns as $btn) {
             $this->save(
                 array_merge(
-                    ['parent_id' => $parent_id, 'type' => SystemMenu::BUTTON],
+                    ['parent_id' => $model->id, 'type' => SystemMenu::BUTTON],
                     $btn
                 )
             );
