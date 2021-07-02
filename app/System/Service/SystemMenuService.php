@@ -90,21 +90,24 @@ class SystemMenuService extends AbstractService
      */
     public function genButtonMenu(SystemMenu $model): bool
     {
-        $btns = [
+        $buttonMenus = [
             ['name' => $model->name.'列表', 'code' => $model->code.':index'],
+            ['name' => $model->name.'回收站列表', 'code' => $model->code.':recycle'],
             ['name' => $model->name.'保存', 'code' => $model->code.':save'],
             ['name' => $model->name.'更新', 'code' => $model->code.':update'],
             ['name' => $model->name.'删除', 'code' => $model->code.':delete'],
             ['name' => $model->name.'读取', 'code' => $model->code.':read'],
             ['name' => $model->name.'恢复', 'code' => $model->code.':recovery'],
-            ['name' => $model->name.'真实删除', 'code' => $model->code.':realDelete']
+            ['name' => $model->name.'真实删除', 'code' => $model->code.':realDelete'],
+            ['name' => $model->name.'导入', 'code' => $model->code.':import'],
+            ['name' => $model->name.'导出', 'code' => $model->code.':export']
         ];
 
-        foreach ($btns as $btn) {
+        foreach ($buttonMenus as $button) {
             $this->save(
                 array_merge(
                     ['parent_id' => $model->id, 'type' => SystemMenu::BUTTON],
-                    $btn
+                    $button
                 )
             );
         }

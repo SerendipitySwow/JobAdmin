@@ -37,7 +37,6 @@ class UserController extends MineController
      * @GetMapping("index")
      * @return ResponseInterface
      * @Permission("system:user:index")
-     * @OperationLog
      */
     public function index(): ResponseInterface
     {
@@ -60,6 +59,7 @@ class UserController extends MineController
      * @param SystemUserCreateRequest $request
      * @return ResponseInterface
      * @Permission("system:user:save")
+     * @OperationLog
      */
     public function save(SystemUserCreateRequest $request): ResponseInterface
     {
@@ -85,6 +85,7 @@ class UserController extends MineController
      * @param SystemUserUpdateRequest $request
      * @return ResponseInterface
      * @Permission("system:user:update")
+     * @OperationLog
      */
     public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
@@ -109,6 +110,7 @@ class UserController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("system:user:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -132,6 +134,7 @@ class UserController extends MineController
      * @PutMapping("changeUserStatus")
      * @param SystemUserStatusRequest $request
      * @return ResponseInterface
+     * @Permission("system:user:changeUserStatus")
      */
     public function changeUserStatus(SystemUserStatusRequest $request): ResponseInterface
     {
@@ -145,6 +148,8 @@ class UserController extends MineController
      * @PutMapping("initUserPassword/{id}")
      * @param int $id
      * @return ResponseInterface
+     * @Permission("system:user:initUserPassword")
+     * @OperationLog
      */
     public function initUserPassword(int $id): ResponseInterface
     {
