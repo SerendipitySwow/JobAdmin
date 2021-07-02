@@ -7,14 +7,7 @@
       <el-form-item label="角色权限" prop="menu_ids">
         <el-checkbox @change="handleTreeExpand($event)">展开/折叠</el-checkbox>
         <el-checkbox @change="handleTreeAll($event)">全选/全不选</el-checkbox>
-        <el-tree
-          class="ma-tree-border"
-          ref="tree"
-          :data="dataList"
-          show-checkbox
-          node-key="id"
-          empty-text="加载数据中..."
-          :props="defaultProps">
+        <el-tree class="ma-tree-border" ref="tree" :data="dataList" show-checkbox node-key="id" empty-text="加载数据中..." :props="defaultProps">
         </el-tree>
       </el-form-item>
     </el-form>
@@ -26,7 +19,7 @@
 </template>
 <script>
 import { update, getMenuByRole } from '@/api/system/role'
-import { getSelectTree } from '@/api/system/menu'
+import { getMenuTree } from '@/api/system/menu'
 export default {
   data () {
     return {
@@ -42,12 +35,13 @@ export default {
       form: {
         id: null,
         name: null,
+        code: null,
         menu_ids: null
       },
       // ele 树props
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'name'
       }
     }
   },
@@ -64,7 +58,7 @@ export default {
     },
     // 获取菜单数据
     getTreeList () {
-      getSelectTree().then(res => {
+      getMenuTree().then(res => {
         this.dataList = res.data
       })
     },

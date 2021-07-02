@@ -62,7 +62,7 @@
                 <el-button type="text" v-hasPermission="['system:user:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
               </div>
               <div v-else>
-                <el-button type="text" v-hasPermission="['system:user:update']" @click="$refs.userForm.update(scope.row)">修改</el-button>
+                <el-button type="text" v-if="scope.row.username !== 'superAdmin'" v-hasPermission="['system:user:update']" @click="$refs.userForm.update(scope.row)">修改</el-button>
                 <el-button type="text" v-hasPermission="['system:user:initPassword']" @click="handleInitPassword(scope.row.id)">初始密码</el-button>
                 <el-button type="text" v-if="scope.row.username !== 'superAdmin'" v-hasPermission="['system:user:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
               </div>
