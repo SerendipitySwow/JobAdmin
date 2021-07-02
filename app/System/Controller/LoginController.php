@@ -79,7 +79,7 @@ class LoginController extends MineController
      * @param LoginUser $user
      * @return ResponseInterface
      */
-    public function refresh(LoginUser $user)
+    public function refresh(LoginUser $user): ResponseInterface
     {
         try {
             return $this->success(['token' => $user->refresh()]);

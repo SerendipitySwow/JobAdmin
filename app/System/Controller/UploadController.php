@@ -80,7 +80,7 @@ class UploadController extends MineController
      * 获取文件信息
      * @GetMapping("getFileInfo")
      */
-    public function getFileInfo()
+    public function getFileInfo(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success($this->service->read($this->request->input('id', null)));
     }

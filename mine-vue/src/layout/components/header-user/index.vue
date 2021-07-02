@@ -1,10 +1,16 @@
 <template>
   <el-dropdown size="small" class="ma-mr">
-    <span class="btn-text">{{info.name ? `你好 ${info.name}` : '未登录'}}</span>
+    <div class="btn-text"><el-avatar size="small"> S </el-avatar><div class="username">{{info.name}}</div></div>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item @click.native="logOff">
-        <ma-icon name="power-off" class="ma-mr-5"/>
-        注销
+      <el-dropdown-item @click.native="logOff" icon="el-icon-user">个人信息
+      </el-dropdown-item>
+      <el-dropdown-item @click.native="logOff" icon="el-icon-delete">清除缓存
+      </el-dropdown-item>
+      <el-dropdown-item @click.native="logOff" icon="el-icon-refresh-right">重启后台
+      </el-dropdown-item>
+      <el-dropdown-item divided @click.native="logOff" icon="el-icon-lock">后台锁屏
+      </el-dropdown-item>
+      <el-dropdown-item @click.native="logOff" icon="el-icon-switch-button">注销账户
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -38,3 +44,15 @@ export default {
   }
 }
 </script>
+<style scoped>
+.btn-text {
+  position: relative;
+  padding: 0 10px !important;
+}
+.btn-text .username {
+  display: inline-block;
+  position: relative;
+  left: 7px;
+  top: -9px;
+}
+</style>

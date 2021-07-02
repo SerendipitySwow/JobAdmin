@@ -4,6 +4,7 @@ namespace Mine\Aspect;
 
 use App\System\Service\SystemMenuService;
 use App\System\Service\SystemUserService;
+use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
@@ -47,7 +48,11 @@ class PermissionAspect extends AbstractAspect
      * @param MineRequest $request
      * @param LoginUser $loginUser
      */
-    public function __construct(SystemUserService $service, MineRequest $request, LoginUser $loginUser)
+    public function __construct(
+        SystemUserService $service,
+        MineRequest $request,
+        LoginUser $loginUser
+    )
     {
         $this->service = $service;
         $this->request = $request;
@@ -65,10 +70,21 @@ class PermissionAspect extends AbstractAspect
         if ($this->loginUser->isSuperAdmin()) {
             return $proceedingJoinPoint->process();
         }
+
+        /** @var Permission $permission */
+        if (isset($proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class])) {
+            $permission = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class];
+        }
+
+        // 注解权限为空，则放行
+        if (empty($permission->menuCode)) {
+            return $proceedingJoinPoint->process();
+        }
+
+        // 获取当前用户权限列表
         $codes = $this->service->getInfo()['codes'];
         $pathInfo = $this->request->getPathInfo();
-        $menu = make(SystemMenuService::class)->mapper->findMenuByRoute($pathInfo);
-        if (empty($menu) || !in_array($menu['code'], $codes)) {
+        if (!in_array($permission->menuCode, $codes)) {
             throw new NoPermissionException(__('system.no_permission') . ' -> ['. $pathInfo.']');
         }
         return $proceedingJoinPoint->process();

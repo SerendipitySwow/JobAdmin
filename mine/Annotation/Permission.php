@@ -9,4 +9,19 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-class Permission extends AbstractAnnotation {}
+class Permission extends AbstractAnnotation {
+
+    /**
+     * 菜单代码
+     * @var string
+     */
+    public $menuCode;
+
+    public function __construct($value = null)
+    {
+        parent::__construct($value);
+        $this->bindMainProperty('menuCode', $value);
+    }
+
+
+}

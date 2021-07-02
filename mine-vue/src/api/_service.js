@@ -11,9 +11,10 @@ import store from '@/store'
  * @param {Error} error 错误对象
  */
 function handleError (error) {
+  console.log(error)
   // 显示提示
   Notification.error({
-    message: '服务器错误',
+    message: error == undefined ? '服务器错误' : error.message,
     title: '错误',
     duration: 5 * 1000
   })

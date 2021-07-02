@@ -15,7 +15,7 @@ class Operation
         $this->requestInfo = $requestInfo;
     }
 
-    public function getRequsetInfo()
+    public function getRequestInfo(): array
     {
         return $this->requestInfo;
     }

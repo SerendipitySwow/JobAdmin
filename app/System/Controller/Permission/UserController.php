@@ -14,6 +14,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -35,7 +36,8 @@ class UserController extends MineController
     /**
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:index")
+     * @OperationLog
      */
     public function index(): ResponseInterface
     {
@@ -45,7 +47,7 @@ class UserController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -57,7 +59,7 @@ class UserController extends MineController
      * @PostMapping("save")
      * @param SystemUserCreateRequest $request
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:save")
      */
     public function save(SystemUserCreateRequest $request): ResponseInterface
     {
@@ -69,7 +71,7 @@ class UserController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -82,7 +84,7 @@ class UserController extends MineController
      * @param int $id
      * @param SystemUserUpdateRequest $request
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:update")
      */
     public function update(int $id, SystemUserUpdateRequest $request): ResponseInterface
     {
@@ -94,7 +96,7 @@ class UserController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -106,7 +108,7 @@ class UserController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:realDelete")
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -118,7 +120,7 @@ class UserController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:user:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {

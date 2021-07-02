@@ -45,7 +45,7 @@ class OperactionListener implements ListenerInterface
      */
     public function process(object $event)
     {
-        $requestInfo = $event->getRequsetInfo();
+        $requestInfo = $event->getRequestInfo();
         if (!in_array($requestInfo['router'], $this->ignoreRouter)) {
             $service = $this->container->get(SystemOperLogService::class);
             $requestInfo['request_data'] = json_encode($requestInfo['request_data'], JSON_UNESCAPED_UNICODE);

@@ -38,19 +38,10 @@ class AuthAspect extends AbstractAspect
     /**
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
-     * @throws Exception
+     * @throws Exception|\HyperfExt\Jwt\Exceptions\TokenBlacklistedException
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-//        $instance = $proceedingJoinPoint->getInstance();
-//        $className = $proceedingJoinPoint->className;
-//        $method = $proceedingJoinPoint->methodName;
-//        $arguments = $proceedingJoinPoint->arguments;
-//
-//        $instance = $proceedingJoinPoint->getInstance();
-//
-//        $permission = $proceedingJoinPoint->getAnnotationMetadata()->class[Auth::class];
-
         /** @noinspection PhpUnhandledExceptionInspection */
         if ($this->loginUser->check()) {
             return $proceedingJoinPoint->process();
