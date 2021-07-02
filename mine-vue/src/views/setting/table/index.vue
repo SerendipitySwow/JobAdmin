@@ -27,8 +27,8 @@
           </el-select>
         </el-form-item>
 
-        <el-button style="margin-left: 5px;" icon="el-icon-plus">创建模块</el-button>
-        <el-button type="primary" style="margin-left: 20px;">提交</el-button>
+        <el-button style="margin-left: 5px;" size="small" icon="el-icon-plus">创建模块</el-button>
+        <el-button type="primary" size="small" style="margin-left: 20px;">提交</el-button>
 
       </el-card>
 
