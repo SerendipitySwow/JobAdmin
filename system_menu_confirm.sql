@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 50726
+ Source Server Version : 80012
  Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 03/07/2021 21:33:12
+ Date: 04/07/2021 00:09:05
 */
 
 SET NAMES utf8mb4;
@@ -149,5 +149,6 @@ INSERT INTO `system_menu` VALUES (2320829498528, 2252965575840, '0,2252249837216
 INSERT INTO `system_menu` VALUES (2320840184992, 2252965575840, '0,2252249837216,2252346015392,2252965575840', '角色数据权限', 'system:role:dataPermission', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 11:38:56', '2021-07-03 11:38:56', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2322805963936, 2290791951008, '0,2252263087264,2290791951008', '模块列表', 'setting:module:index', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 12:42:56', '2021-07-03 14:22:44', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2322831636128, 2290791951008, '0,2252263087264,2290791951008', '新增模块', 'setting:module:save', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 12:43:46', '2021-07-03 14:23:04', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2343852283552, 2290791951008, '0,2252263087264,2252471315616,2290791951008', '删除模块', 'setting:module:delete', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-04 00:08:02', '2021-07-04 00:08:02', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
