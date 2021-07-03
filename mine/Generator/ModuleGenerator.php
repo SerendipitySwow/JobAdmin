@@ -87,7 +87,7 @@ class ModuleGenerator extends MineGenerator
             'Request',
             'Service',
             'Mapper',
-            'DataBase',
+            'Database',
             'Middleware',
         ];
     }
