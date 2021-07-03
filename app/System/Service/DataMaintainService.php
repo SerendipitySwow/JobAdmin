@@ -30,7 +30,7 @@ class DataMaintainService
             $collect = $collect->where('Engine', $params['engine']);
         }
 
-        $data = $collect->forPage($params['page'] ?? 1, $params['pageSize'] ?? 10)->toArray();
+        $data = $collect->forPage((int) $params['page'] ?? 1, (int) $params['pageSize'] ?? 10)->toArray();
         $tables = [];
         foreach ($data as $item) {
             $tables[] = array_change_key_case((array)$item);

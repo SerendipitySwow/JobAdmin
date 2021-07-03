@@ -31,6 +31,8 @@ class ModuleService
             $this->mine->getModuleInfo()
         );
 
+        print_r($params);
+
         if ($params['name'] ?? false) {
             $collect = $collect->where('name', $params['name']);
         }
@@ -39,7 +41,7 @@ class ModuleService
             $collect = $collect->where('label', $params['label']);
         }
 
-        $data = $collect->forPage($params['page'] ?? 1, $params['pageSize'] ?? 10)->toArray();
+        $data = $collect->forPage((int) $params['page'] ?? 1, (int) $params['pageSize'] ?? 10)->toArray();
 
         $modules = [];
 

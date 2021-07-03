@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Mine\Generator;
 
-use http\Exception\RuntimeException;
 use Hyperf\Utils\Filesystem\Filesystem;
 
 class ModuleGenerator extends MineGenerator
@@ -30,13 +29,13 @@ class ModuleGenerator extends MineGenerator
     public function createModule(): bool
     {
         if (! ($this->moduleInfo['name'] ?? false)) {
-            throw new RuntimeException('模块名称为空');
+            throw new \RuntimeException('模块名称为空');
         }
 
         $this->moduleInfo['name'] = ucfirst($this->moduleInfo['name']);
 
         if (! empty($this->mine->getModuleInfo($this->moduleInfo['name']))) {
-            throw new RuntimeException('同名模块已存在');
+            throw new \RuntimeException('同名模块已存在');
         }
 
         $appPath = BASE_PATH . '/app/';
