@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 03/07/2021 20:02:47
+ Date: 03/07/2021 21:33:12
 */
 
 SET NAMES utf8mb4;
@@ -130,7 +130,7 @@ INSERT INTO `system_menu` VALUES (2253492861088, 2253492815520, '0,2252263087264
 INSERT INTO `system_menu` VALUES (2253492866720, 2253492815520, '0,2252263087264,2252471315616,2253492815520', '定时任务真实删除', 'setting:crontab:realDelete', NULL, NULL, NULL, '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-01 23:06:39', '2021-07-01 23:06:39', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2253717921440, 2252367037088, '0,2252249837216,2252367037088', '操作日志', 'system:operLog', 'pencil-square-o', 'operLog', 'system/operLog/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-01 23:13:58', '2021-07-01 23:13:58', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2253746544288, 2252367037088, '0,2252249837216,2252367037088', '登录日志', 'system:loginLog', 'binoculars', 'loginLog', 'system/loginLog/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-01 23:14:54', '2021-07-01 23:14:54', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2290791951008, 2252263087264, '0,2252263087264', '模块管理', 'setting:module', 'modx', 'module', 'setting/module/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-02 19:20:49', '2021-07-03 14:29:01', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2290791951008, 2252471315616, '0,2252263087264,2252471315616', '模块管理', 'setting:module', 'modx', 'module', 'setting/module/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-02 19:20:49', '2021-07-03 20:45:32', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2299742418080, 2252523422880, '0,2252249837216,2252346015392,2252523422880', '用户初始化密码', 'system:user:initUserPassword', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 00:12:10', '2021-07-03 00:12:27', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2299764721312, 2252523422880, '0,2252249837216,2252346015392,2252523422880', '用户状态修改', 'system:user:changeUserStatus', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 00:12:53', '2021-07-03 00:12:53', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2316357808800, 2252965575840, '0,2252249837216,2252346015392,2252965575840', '角色回收站列表', 'system:role:recycle', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 09:13:02', '2021-07-03 09:13:02', NULL, NULL);
