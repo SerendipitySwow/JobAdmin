@@ -63,7 +63,7 @@
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/post'
 import PostForm from './form'
 export default {
-  name: 'system:post:index',
+  name: 'system-post-index',
   components: {
     PostForm
   },

@@ -70,7 +70,7 @@
 import { getMenuTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/menu'
 import MenuForm from './form'
 export default {
-  name: 'system:menu:index',
+  name: 'system-menu-index',
   components: {
     MenuForm
   },

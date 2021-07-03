@@ -99,7 +99,7 @@ import RoleForm from './form'
 import MenuForm from './menuForm'
 import DataForm from './dataForm'
 export default {
-  name: 'system:role:index',
+  name: 'system-role-index',
   components: {
     RoleForm,
     MenuForm,

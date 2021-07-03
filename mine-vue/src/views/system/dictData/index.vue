@@ -134,7 +134,7 @@ import { getDataPageList, getDataPageListByRecycle, deletesDictData, recoverysDi
 import dictTypeForm from './dictType'
 import dictDataForm from './dictData'
 export default {
-  name: 'system:dictData:index',
+  name: 'system-dictData-index',
   components: {
     dictTypeForm,
     dictDataForm

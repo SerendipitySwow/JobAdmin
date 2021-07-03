@@ -79,7 +79,7 @@
 <script>
 import { getPageList, deletes } from '@/api/system/loginLog'
 export default {
-  name: 'system:loginLog:index',
+  name: 'system-loginLog-index',
   data () {
     return {
       // 是否显示搜索

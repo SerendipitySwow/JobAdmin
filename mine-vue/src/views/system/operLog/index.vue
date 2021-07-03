@@ -77,7 +77,7 @@
 <script>
 import { getPageList, deletes } from '@/api/system/operLog'
 export default {
-  name: 'system:operLog:index',
+  name: 'system-operLog-index',
   data () {
     return {
       // 是否显示搜索

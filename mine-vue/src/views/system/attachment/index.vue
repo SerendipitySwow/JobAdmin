@@ -57,10 +57,17 @@
       <el-table-column prop="object_name" label="新文件名" width="160" :show-overflow-tooltip="true">
       </el-table-column>
 
-      <el-table-column prop="mime_type" label="资源类型" width="160" :show-overflow-tooltip="true">
+      <el-table-column prop="storage_mode" label="存储模式">
+        <template slot-scope="scope">
+          {{getLable(scope.row.storage_mode)}}
+        </template>
+      </el-table-column>
+      
+
+      <el-table-column prop="mime_type" label="资源类型" width="140" :show-overflow-tooltip="true">
       </el-table-column>
 
-      <el-table-column prop="storage_path" label="存储目录" :show-overflow-tooltip="true">
+      <el-table-column prop="storage_path" label="存储目录"  :show-overflow-tooltip="true">
       </el-table-column>
 
       <el-table-column prop="suffix" label="扩展名" width="80">
@@ -121,7 +128,7 @@
 <script>
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/attachment'
 export default {
-  name: 'system:attachment:index',
+  name: 'system-attachment-index',
   data () {
     return {
       // 是否显示回收站数据
@@ -206,6 +213,10 @@ export default {
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
+    },
+    // 字段映射标签
+    getLable (value) {
+      return (this.storageMode.filter(item => item.value == value ))[0].label
     },
     // 选择时间事件
     handleDateChange (values) {

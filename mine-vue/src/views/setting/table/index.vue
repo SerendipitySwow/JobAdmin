@@ -56,13 +56,13 @@
 
           <el-table-column prop="unsigned" label="Unsigned" width="100">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.unsigned">无负号</el-checkbox>
+              <el-checkbox v-model="scope.row.unsigned"></el-checkbox>
             </template>
           </el-table-column>
 
           <el-table-column prop="isNull" label="NULL" width="100">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.isNull">为空</el-checkbox>
+              <el-checkbox v-model="scope.row.isNull"></el-checkbox>
             </template>
           </el-table-column>
 
@@ -133,7 +133,7 @@
 <script>
 import { getSystemInfo } from '@/api/setting/table'
 export default {
-  name: 'setting:table:index',
+  name: 'setting-table-index',
   data () {
     return {
       form: {

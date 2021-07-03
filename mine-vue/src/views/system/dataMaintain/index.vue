@@ -146,7 +146,7 @@
 <script>
 import { getPageList, getColumnList, optimize, fragment } from '@/api/system/dataMaintain'
 export default {
-  name: 'system:dataMaintain:index',
+  name: 'system-dataMaintain-index',
   data () {
     return {
       // 是否显示搜索
