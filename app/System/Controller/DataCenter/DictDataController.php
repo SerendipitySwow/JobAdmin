@@ -12,6 +12,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -35,7 +36,7 @@ class DictDataController extends MineController
     /**
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:index")
      */
     public function index(): ResponseInterface
     {
@@ -45,7 +46,6 @@ class DictDataController extends MineController
     /**
      * @GetMapping("list")
      * @return ResponseInterface
-     * @Permission()
      */
     public function list(): ResponseInterface
     {
@@ -55,7 +55,7 @@ class DictDataController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -67,7 +67,8 @@ class DictDataController extends MineController
      * @PostMapping("save")
      * @param DictDataCreateRequest $request
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:save")
+     * @OperationLog
      */
     public function save(DictDataCreateRequest $request): ResponseInterface
     {
@@ -79,7 +80,7 @@ class DictDataController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -92,7 +93,7 @@ class DictDataController extends MineController
      * @param int $id
      * @param DictDataCreateRequest $request
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:update")
      */
     public function update(int $id, DictDataCreateRequest $request): ResponseInterface
     {
@@ -104,7 +105,7 @@ class DictDataController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -116,7 +117,8 @@ class DictDataController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -128,23 +130,10 @@ class DictDataController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dictData:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {
         return $this->service->recovery($ids) ? $this->success() : $this->error();
     }
-
-//    /**
-//     * 更改用户状态
-//     * @PutMapping("changeUserStatus")
-//     * @param SystemUserStatusRequest $request
-//     * @return ResponseInterface
-//     */
-//    public function changeUserStatus(SystemUserStatusRequest $request): ResponseInterface
-//    {
-//        $id = $request->input('id');
-//        $status = $request->input('status');
-//        return $this->success($this->service->changeUserStatus((int) $id, (string) $status));
-//    }
 }

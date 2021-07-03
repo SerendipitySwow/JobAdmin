@@ -13,6 +13,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +35,7 @@ class DeptController extends MineController
     /**
      * 获取部门树
      * @GetMapping("index")
-     * @Permission
+     * @Permission("system:dept:index")
      */
     public function index(): ResponseInterface
     {
@@ -44,7 +45,7 @@ class DeptController extends MineController
     /**
      * 从回收站获取部门树
      * @GetMapping("recycleTree")
-     * @Permission
+     * @Permission("system:dept:recycle")
      */
     public function recycleTree():ResponseInterface
     {
@@ -65,7 +66,8 @@ class DeptController extends MineController
      * @PostMapping("save")
      * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:dept:save")
+     * @OperationLog
      */
     public function save(SystemMenuCreateRequest $request): ResponseInterface
     {
@@ -75,7 +77,7 @@ class DeptController extends MineController
     /**
      * 更新部门
      * @PutMapping("update/{id}")
-     * @Permission
+     * @Permission("system:dept:update")
      * @param int $id
      * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
@@ -90,7 +92,7 @@ class DeptController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dept:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -102,7 +104,8 @@ class DeptController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dept:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -117,7 +120,8 @@ class DeptController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:dept:recovery")
+     * @OperationLog
      */
     public function recovery(String $ids): ResponseInterface
     {

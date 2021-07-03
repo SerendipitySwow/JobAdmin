@@ -12,6 +12,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +35,7 @@ class PostController extends MineController
      * 获取列表分页数据
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:post:index")
      */
     public function index(): ResponseInterface
     {
@@ -44,7 +45,7 @@ class PostController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:post:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -55,7 +56,6 @@ class PostController extends MineController
      * 获取列表数据
      * @GetMapping("list")
      * @return ResponseInterface
-     * @Permission
      */
     public function list(): ResponseInterface
     {
@@ -65,8 +65,10 @@ class PostController extends MineController
     /**
      * 保存数据
      * @PostMapping("save")
+     * @param SystemPostCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:post:save")
+     * @OperationLog
      */
     public function save(SystemPostCreateRequest $request): ResponseInterface
     {
@@ -78,7 +80,7 @@ class PostController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:post:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -91,7 +93,7 @@ class PostController extends MineController
      * @param int $id
      * @param SystemPostCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:post:update")
      */
     public function update(int $id, SystemPostCreateRequest $request): ResponseInterface
     {
@@ -103,7 +105,7 @@ class PostController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:post:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -115,7 +117,8 @@ class PostController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:post:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -127,7 +130,7 @@ class PostController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:post:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {

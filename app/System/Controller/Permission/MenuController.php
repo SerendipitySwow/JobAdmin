@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\Helper\LoginUser;
 use Mine\MineController;
@@ -33,7 +34,7 @@ class MenuController extends MineController
     /**
      * 获取菜单树
      * @GetMapping("index")
-     * @Permission
+     * @Permission("system:menu:index")
      */
     public function index(): ResponseInterface
     {
@@ -43,7 +44,7 @@ class MenuController extends MineController
     /**
      * 从回收站获取菜单树
      * @GetMapping("recycleTree")
-     * @Permission
+     * @Permission("system:menu:recycle")
      */
     public function recycleTree():ResponseInterface
     {
@@ -64,7 +65,8 @@ class MenuController extends MineController
      * @PostMapping("save")
      * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:menu:save")
+     * @OperationLog
      */
     public function save(SystemMenuCreateRequest $request): ResponseInterface
     {
@@ -74,10 +76,11 @@ class MenuController extends MineController
     /**
      * 更新菜单
      * @PutMapping("update/{id}")
-     * @Permission
+     * @Permission("system:menu:update")
      * @param int $id
      * @param SystemMenuCreateRequest $request
      * @return ResponseInterface
+     * @OperationLog
      */
     public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
     {
@@ -89,7 +92,7 @@ class MenuController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:menu:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -101,7 +104,8 @@ class MenuController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:menu:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -116,7 +120,7 @@ class MenuController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:menu:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {

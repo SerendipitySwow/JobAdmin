@@ -98,6 +98,7 @@ class UserController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("system:user:delete")
+     * @OperationLog
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -123,6 +124,7 @@ class UserController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("system:user:recovery")
+     * @OperationLog
      */
     public function recovery(String $ids): ResponseInterface
     {
@@ -135,6 +137,7 @@ class UserController extends MineController
      * @param SystemUserStatusRequest $request
      * @return ResponseInterface
      * @Permission("system:user:changeUserStatus")
+     * @OperationLog
      */
     public function changeUserStatus(SystemUserStatusRequest $request): ResponseInterface
     {

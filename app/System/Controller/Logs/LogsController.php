@@ -10,6 +10,7 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 
@@ -39,7 +40,7 @@ class LogsController extends MineController
     /**
      * 获取登录日志列表
      * @GetMapping("getLoginLogPageList")
-     * @Permission
+     * @Permission("system:loginLog:index")
      */
     public function getLoginLogPageList(): \Psr\Http\Message\ResponseInterface
     {
@@ -49,7 +50,7 @@ class LogsController extends MineController
     /**
      * 获取操作日志列表
      * @GetMapping("getOperLogPageList")
-     * @Permission
+     * @Permission("system:operLog:index")
      */
     public function getOperLogPageList(): \Psr\Http\Message\ResponseInterface
     {
@@ -59,7 +60,8 @@ class LogsController extends MineController
     /**
      * 删除操作日志
      * @DeleteMapping("deleteOperLog/{ids}")
-     * @Permission
+     * @Permission("system:operLog:delete")
+     * @OperationLog
      * @param String $ids
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -71,7 +73,8 @@ class LogsController extends MineController
     /**
      * 删除登录日志
      * @DeleteMapping("deleteLoginLog/{ids}")
-     * @Permission
+     * @Permission("system:loginLog:delete")
+     * @OperationLog
      * @param String $ids
      * @return \Psr\Http\Message\ResponseInterface
      */

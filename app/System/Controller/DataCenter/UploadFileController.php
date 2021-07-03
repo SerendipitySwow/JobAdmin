@@ -13,6 +13,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -37,7 +38,7 @@ class UploadFileController extends MineController
      * 列表数据
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:attachment:index")
      */
     public function index(): ResponseInterface
     {
@@ -48,7 +49,7 @@ class UploadFileController extends MineController
      * 回收站列表数据
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:attachment:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -56,23 +57,11 @@ class UploadFileController extends MineController
     }
 
     /**
-     * 获取一个字典类型数据
-     * @GetMapping("read/{id}")
-     * @param int $id
-     * @return ResponseInterface
-     * @Permission()
-     */
-    public function read(int $id): ResponseInterface
-    {
-        return $this->success($this->service->read($id));
-    }
-
-    /**
      * 单个或批量字典数据
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:attachment:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -84,7 +73,8 @@ class UploadFileController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:attachment:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -96,7 +86,7 @@ class UploadFileController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:attachment:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {

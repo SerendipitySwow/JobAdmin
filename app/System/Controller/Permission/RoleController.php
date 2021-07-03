@@ -13,6 +13,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Mine\Traits\ControllerTrait;
@@ -35,7 +36,7 @@ class RoleController extends MineController
     /**
      * 获取角色分页列表
      * @GetMapping("index")
-     * @Permission
+     * @Permission("system:role:index")
      * @return ResponseInterface
      */
     public function index(): ResponseInterface
@@ -46,7 +47,7 @@ class RoleController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:role:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -56,7 +57,6 @@ class RoleController extends MineController
     /**
      * 通过角色获取菜单
      * @GetMapping("getMenuByRole/{id}")
-     * @Permission
      * @param int $id
      * @return ResponseInterface
      */
@@ -68,7 +68,6 @@ class RoleController extends MineController
     /**
      * 通过角色获取部门
      * @GetMapping("getDeptByRole/{id}")
-     * @Permission
      * @param int $id
      * @return ResponseInterface
      */
@@ -80,7 +79,6 @@ class RoleController extends MineController
     /**
      * 获取角色列表
      * @GetMapping("list")
-     * @Permission
      * @return ResponseInterface
      */
     public function list(): ResponseInterface
@@ -93,7 +91,8 @@ class RoleController extends MineController
      * @PostMapping("save")
      * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:role:save")
+     * @OperationLog
      */
     public function save(SystemRoleCreateRequest $request): ResponseInterface
     {
@@ -106,7 +105,8 @@ class RoleController extends MineController
      * @param int $id
      * @param SystemRoleCreateRequest $request
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:role:update")
+     * @OperationLog
      */
     public function update(int $id, SystemRoleCreateRequest $request): ResponseInterface
     {
@@ -118,7 +118,8 @@ class RoleController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:role:delete")
+     * @OperationLog
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -130,7 +131,8 @@ class RoleController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:role:realDelete")
+     * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
     {
@@ -142,7 +144,8 @@ class RoleController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission()
+     * @Permission("system:role:recovery")
+     * @OperationLog
      */
     public function recovery(String $ids): ResponseInterface
     {
@@ -154,6 +157,8 @@ class RoleController extends MineController
      * @PutMapping("changeRoleStatus")
      * @param SystemRoleStatusRequest $request
      * @return ResponseInterface
+     * @Permission("system:role:changeRoleStatus")
+     * @OperationLog
      */
     public function changeRoleStatus(SystemRoleStatusRequest $request): ResponseInterface
     {

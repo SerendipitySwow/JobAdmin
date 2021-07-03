@@ -10,6 +10,7 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -49,10 +50,11 @@ class DataMaintainController extends MineController
     }
 
     /**
- * 优化表
- * @PostMapping("optimize")
- * @Permission
- */
+     * 优化表
+     * @PostMapping("optimize")
+     * @Permission("system:dataMaintain:optimize")
+     * @OperationLog
+     */
     public function optimize(): ResponseInterface
     {
         $tables = $this->request->input('tables', []);
@@ -62,7 +64,8 @@ class DataMaintainController extends MineController
     /**
      * 清理表碎片
      * @PostMapping("fragment")
-     * @Permission
+     * @Permission("system:dataMaintain:fragment")
+     * @OperationLog
      */
     public function fragment(): ResponseInterface
     {
