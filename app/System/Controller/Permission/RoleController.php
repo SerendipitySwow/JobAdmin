@@ -114,6 +114,32 @@ class RoleController extends MineController
     }
 
     /**
+     * 更新用户菜单权限
+     * @PutMapping("menuPermission/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     * @Permission("system:role:menuPermission")
+     * @OperationLog
+     */
+    public function menuPermission(int $id): ResponseInterface
+    {
+        return $this->service->update($id, $this->request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 更新用户数据权限
+     * @PutMapping("dataPermission/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     * @Permission("system:role:dataPermission")
+     * @OperationLog
+     */
+    public function dataPermission(int $id): ResponseInterface
+    {
+        return $this->service->update($id, $this->request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
      * 单个或批量删除数据到回收站
      * @DeleteMapping("delete/{ids}")
      * @param String $ids

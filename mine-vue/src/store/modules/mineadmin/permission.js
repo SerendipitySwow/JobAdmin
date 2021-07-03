@@ -39,7 +39,6 @@ export default {
     async genRouters ({ commit, state }) {
       return new Promise(resolve => {
         const accessedRoutes = filterAsyncRouter(state.routers)
-        console.log(accessedRoutes)
         const menu = util.supplementPath(accessedRoutes)
         menu.unshift({ title: '首页', path: '/', name: 'dashboard', icon: 'home' })
         accessedRoutes.push({

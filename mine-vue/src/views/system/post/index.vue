@@ -23,9 +23,9 @@
     <el-row :gutter="20">
       <el-col :span="1.5">
         <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:post:save']" @click="$refs.postForm.create()">新增</el-button>
-        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:post:import']" @click="handleDeletes">删除</el-button>
+        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:post:delete']" @click="handleDeletes">删除</el-button>
       </el-col>
-      <table-right-toolbar recycleCode="system-post-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+      <table-right-toolbar recycleCode="system:post:recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
@@ -63,7 +63,7 @@
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/post'
 import PostForm from './form'
 export default {
-  name: 'system-post-index',
+  name: 'system:post:index',
   components: {
     PostForm
   },

@@ -23,9 +23,9 @@
     <el-row :gutter="20">
       <el-col :span="1.5">
         <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:role:save']" @click="$refs.roleForm.create()">新增</el-button>
-        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:role:import']" @click="handleDeletes">删除</el-button>
+        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:role:delete']" @click="handleDeletes">删除</el-button>
       </el-col>
-      <table-right-toolbar recycleCode="system-role-recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+      <table-right-toolbar recycleCode="system:role:recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
@@ -56,14 +56,14 @@
             <el-button
              type="text"
              v-if="scope.row.code !== 'superAdmin'"
-             v-hasPermission="['system:role:menuPermi']"
+             v-hasPermission="['system:role:menuPermission']"
              @click="$refs.menuForm.load(scope.row)"
             >菜单权限</el-button>
 
             <el-button
               type="text"
               v-if="scope.row.code !== 'superAdmin'"
-              v-hasPermission="['system:role:dataPermi']"
+              v-hasPermission="['system:role:dataPermission']"
               @click="$refs.dataForm.load(scope.row)"
             >数据权限</el-button>
 
@@ -99,7 +99,7 @@ import RoleForm from './form'
 import MenuForm from './menuForm'
 import DataForm from './dataForm'
 export default {
-  name: 'system-role-index',
+  name: 'system:role:index',
   components: {
     RoleForm,
     MenuForm,

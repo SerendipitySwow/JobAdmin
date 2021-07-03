@@ -133,7 +133,7 @@
 <script>
 import { getSystemInfo } from '@/api/setting/table'
 export default {
-  name: 'system-table-index',
+  name: 'setting:table:index',
   data () {
     return {
       form: {

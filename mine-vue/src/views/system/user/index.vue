@@ -33,10 +33,10 @@
           <el-col :span="1.5">
             <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:user:save']" @click="$refs.userForm.create()">新增</el-button>
             <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:user:delete']" @click="handleDeletes">删除</el-button>
-            <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:user:import']" @click="$refs.userForm.create()">导入</el-button>
-            <el-button size="small" icon="el-icon-download" v-hasPermission="['system:user:export']" @click="$refs.userForm.create()">导出</el-button>
+            <el-button size="small" icon="el-icon-upload2" v-hasPermission="['system:user:import']">导入</el-button>
+            <el-button size="small" icon="el-icon-download" v-hasPermission="['system:user:export']">导出</el-button>
           </el-col>
-          <table-right-toolbar recycleCode="system-user-save" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+          <table-right-toolbar recycleCode="system:user:recycle" @toggleData="switchDataType" @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
         </el-row>
         <el-table v-loading="loading" :data="userData" row-key="id" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
@@ -83,7 +83,7 @@ import { getSelectTree } from '@/api/system/dept'
 import { getPageList, getPageListByRecycle, recoverys, deletes, realDeletes, changeUserStatus, initUserPassword } from '@/api/system/user'
 import userForm from './form'
 export default {
-  name: 'system-user-index',
+  name: 'system:user:index',
   components: {
     userForm
   },

@@ -33,13 +33,13 @@
         size="small"
         icon="el-icon-delete"
          :disabled="btnIsDisabed"
-          v-hasPermission="['system:attachment:import']"
+          v-hasPermission="['system:attachment:delete']"
            @click="handleDeletes"
         >删除</el-button>
       </el-col>
 
       <table-right-toolbar
-       recycleCode="system-attachment-recycle"
+       recycleCode="system:attachment:recycle"
        @toggleData="switchDataType"
        @refreshTable="getList"
        @toggleSearch="switchShowSearch"
@@ -121,7 +121,7 @@
 <script>
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/attachment'
 export default {
-  name: 'system-attachment-index',
+  name: 'system:attachment:index',
   data () {
     return {
       // 是否显示回收站数据

@@ -29,7 +29,7 @@
     </template>
     <el-row :gutter="20">
       <el-col :span="1.5">
-        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:post:delete']" @click="handleDeletes">删除</el-button>
+        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:operLog:delete']" @click="handleDeletes">删除</el-button>
       </el-col>
       <table-right-toolbar @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
     </el-row>
@@ -77,7 +77,7 @@
 <script>
 import { getPageList, deletes } from '@/api/system/operLog'
 export default {
-  name: 'system-loginlog-index',
+  name: 'system:operLog:index',
   data () {
     return {
       // 是否显示搜索

@@ -34,7 +34,7 @@
       </el-col>
 
       <table-right-toolbar
-       recycleCode="system-dept-recycle"
+       recycleCode="system:dept:recycle"
        @toggleData="switchDataType"
        @refreshTable="getList"
        @toggleSearch="switchShowSearch"
@@ -84,7 +84,7 @@
 import { getDeptTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/dept'
 import DeptForm from './form'
 export default {
-  name: 'system-dept-index',
+  name: 'system:dept:index',
   components: {
     DeptForm
   },

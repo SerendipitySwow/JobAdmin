@@ -28,7 +28,7 @@
               <el-button size="small" icon="el-icon-plus" v-hasPermission="['system:dictType:save']" @click="$refs.typeForm.create()">新增</el-button>
               <el-button size="small" icon="el-icon-delete" :disabled="typeBtnIsDisabed" v-hasPermission="['system:dictType:delete']" @click="handleDeletes('type')">删除</el-button>
             </el-col>
-            <table-right-toolbar recycleCode="system-dictType-save" @toggleData="switchTypeList" @refreshTable="getTypeList" @toggleSearch="switchShowTypeSearch"></table-right-toolbar>
+            <table-right-toolbar recycleCode="system:dictType:recycle" @toggleData="switchTypeList" @refreshTable="getTypeList" @toggleSearch="switchShowTypeSearch"></table-right-toolbar>
           </el-row>
           <!-- 字典类型工具栏end -->
           <!-- 字典类型表格start -->
@@ -89,7 +89,7 @@
               <el-button size="small" icon="el-icon-plus" :disabled="record === null" v-hasPermission="['system:dictData:save']" @click="$refs.dataForm.create(record)">新增</el-button>
               <el-button size="small" icon="el-icon-delete" :disabled="dataBtnIsDisabed" v-hasPermission="['system:dictData:delete']" @click="handleDeletes('data')">删除</el-button>
             </el-col>
-            <table-right-toolbar recycleCode="system-dictData-save" @toggleData="switchDataList" @refreshTable="getDataList" @toggleSearch="switchShowDataSearch"></table-right-toolbar>
+            <table-right-toolbar recycleCode="system:dictData:recycle" @toggleData="switchDataList" @refreshTable="getDataList" @toggleSearch="switchShowDataSearch"></table-right-toolbar>
           </el-row>
           <!-- 字典数据工具栏end -->
           <!-- 字典数据表格start -->
@@ -134,7 +134,7 @@ import { getDataPageList, getDataPageListByRecycle, deletesDictData, recoverysDi
 import dictTypeForm from './dictType'
 import dictDataForm from './dictData'
 export default {
-  name: 'system-dict-index',
+  name: 'system:dictData:index',
   components: {
     dictTypeForm,
     dictDataForm
