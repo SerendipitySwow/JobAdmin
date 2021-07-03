@@ -25,7 +25,7 @@ class TableController extends MineController
      * 获取系统信息
      * @GetMapping("getSystemInfo")
      */
-    public function getSystemInfo()
+    public function getSystemInfo(): \Psr\Http\Message\ResponseInterface
     {
         $this->mine->scanModule();
         return $this->success([

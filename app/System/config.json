@@ -1,7 +1,7 @@
 {
     "name": "System",
-    "description": "系统模块，内置",
+    "label": "系统模块",
+    "description": "MineAdmin核心、内置模块，提供系统管理、基础业务管理功能",
     "installed": true,
-    "version": "1.0.0",
-    "enabled": true
+    "version": "1.0.0"
 }

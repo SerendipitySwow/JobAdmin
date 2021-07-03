@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 50726
  Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 03/07/2021 09:50:28
+ Date: 03/07/2021 20:02:47
 */
 
 SET NAMES utf8mb4;
@@ -130,9 +130,7 @@ INSERT INTO `system_menu` VALUES (2253492861088, 2253492815520, '0,2252263087264
 INSERT INTO `system_menu` VALUES (2253492866720, 2253492815520, '0,2252263087264,2252471315616,2253492815520', '定时任务真实删除', 'setting:crontab:realDelete', NULL, NULL, NULL, '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-01 23:06:39', '2021-07-01 23:06:39', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2253717921440, 2252367037088, '0,2252249837216,2252367037088', '操作日志', 'system:operLog', 'pencil-square-o', 'operLog', 'system/operLog/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-01 23:13:58', '2021-07-01 23:13:58', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2253746544288, 2252367037088, '0,2252249837216,2252367037088', '登录日志', 'system:loginLog', 'binoculars', 'loginLog', 'system/loginLog/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-01 23:14:54', '2021-07-01 23:14:54', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2287751021728, 2252263087264, '0,2252263087264', '模块管理', 'module', 'modx', 'module', '', '1', '0', '1', '1', 'C', '0', 0, 1843154008224, NULL, '2021-07-02 17:41:49', '2021-07-02 19:24:25', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2290791951008, 2287751021728, '0,2252263087264,2287751021728', '本地模块', 'setting:local', 'cube', 'local', 'setting/local/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-02 19:20:49', '2021-07-02 19:25:03', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2290893940896, 2287751021728, '0,2252263087264,2287751021728', '应用商店', 'setting:store', 'university', 'store', 'setting/store/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-02 19:24:08', '2021-07-02 19:25:10', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2290791951008, 2252263087264, '0,2252263087264', '模块管理', 'setting:module', 'modx', 'module', 'setting/module/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-02 19:20:49', '2021-07-03 14:29:01', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2299742418080, 2252523422880, '0,2252249837216,2252346015392,2252523422880', '用户初始化密码', 'system:user:initUserPassword', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 00:12:10', '2021-07-03 00:12:27', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2299764721312, 2252523422880, '0,2252249837216,2252346015392,2252523422880', '用户状态修改', 'system:user:changeUserStatus', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 00:12:53', '2021-07-03 00:12:53', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2316357808800, 2252965575840, '0,2252249837216,2252346015392,2252965575840', '角色回收站列表', 'system:role:recycle', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 09:13:02', '2021-07-03 09:13:02', NULL, NULL);
@@ -147,5 +145,9 @@ INSERT INTO `system_menu` VALUES (2317133276832, 2253746544288, '0,2252249837216
 INSERT INTO `system_menu` VALUES (2317158155424, 2253746544288, '0,2252249837216,2252367037088,2253746544288', '登录日志删除', 'system:loginLog:delete', '', NULL, NULL, '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 09:39:05', '2021-07-03 09:39:05', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2317170769568, 2253717921440, '0,2252249837216,2252367037088,2253717921440', '操作日志列表', 'system:operLog:index', '', NULL, NULL, '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 09:39:30', '2021-07-03 09:39:30', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2317181318816, 2253717921440, '0,2252249837216,2252367037088,2253717921440', '操作日志删除', 'system:operLog:delete', '', NULL, NULL, '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-03 09:39:50', '2021-07-03 09:39:50', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2320829498528, 2252965575840, '0,2252249837216,2252346015392,2252965575840', '角色菜单权限', 'system:role:menuPermission', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 11:38:36', '2021-07-03 11:39:41', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2320840184992, 2252965575840, '0,2252249837216,2252346015392,2252965575840', '角色数据权限', 'system:role:dataPermission', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 11:38:56', '2021-07-03 11:38:56', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2322805963936, 2290791951008, '0,2252263087264,2290791951008', '模块列表', 'setting:module:index', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 12:42:56', '2021-07-03 14:22:44', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2322831636128, 2290791951008, '0,2252263087264,2290791951008', '新增模块', 'setting:module:save', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 12:43:46', '2021-07-03 14:23:04', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

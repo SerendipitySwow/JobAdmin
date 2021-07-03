@@ -22,13 +22,11 @@
               :key="index"
               >
                 <span style="float: left">{{ item.name }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.description }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-
-        <el-button style="margin-left: 5px;" size="small" icon="el-icon-plus">创建模块</el-button>
-        <el-button type="primary" size="small" style="margin-left: 20px;">提交</el-button>
+        <el-button type="primary" size="small">创建数据表</el-button>
 
       </el-card>
 
@@ -49,7 +47,17 @@
           <el-table-column prop="type" label="字段类型">
             <template slot-scope="scope">
               <el-select v-model="scope.row.type" size="small" placeholder="字段类型">
-                <!-- <el-option label="System 系统模块">System 系统模块</el-option> -->
+                <el-option-group
+                  v-for="group in mysqlTypes"
+                  :key="group.label"
+                  :label="group.label">
+                  <el-option
+                    v-for="(item, key) in group.options"
+                    :key="key"
+                    :label="item.value"
+                    :value="item.value">
+                  </el-option>
+                </el-option-group>
               </el-select>
             </template>
           </el-table-column>
@@ -150,7 +158,8 @@ export default {
       fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' },
       indexs: [
         'UNIQUE', 'NORMAL', 'FULLTEXT'
-      ]
+      ],
+      mysqlTypes,
     }
   },
   async created () {
@@ -177,4 +186,55 @@ export default {
     }
   }
 }
+
+const mysqlTypes = [
+  {
+    label: '数字',
+    options: [
+      { value: 'tinyint' },
+      { value: 'smallint' },
+      { value: 'mediumint' },
+      { value: 'int' },
+      { value: 'bigint' },
+      { value: 'decimal' },
+      { value: 'float' },
+      { value: 'uuid' },
+      { value: 'boolean' }
+    ]
+  },
+  {
+    label: '日期与时间',
+    options: [
+      { value: 'date' },
+      { value: 'datetime' },
+      { value: 'timestamp' },
+      { value: 'time' }
+    ]
+  },
+  {
+    label: '文本',
+    options: [
+      { value: 'char' },
+      { value: 'varchar' },
+      { value: 'tinyText' },
+      { value: 'text' },
+      { value: 'mediumText' },
+      { value: 'longText' },
+      { value: 'binary' },
+      { value: 'varbinary' },
+      { value: 'tinyblob' },
+      { value: 'blob' },
+      { value: 'mediumblob' },
+      { value: 'longblob' },
+      { value: 'enum' },
+      { value: 'set' }
+    ]
+  },
+  {
+    label: 'json',
+    options: [
+      { value: 'json' }
+    ]
+  }
+]
 </script>
