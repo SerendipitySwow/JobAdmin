@@ -31,8 +31,6 @@ class ModuleService
             $this->mine->getModuleInfo()
         );
 
-        print_r($params);
-
         if ($params['name'] ?? false) {
             $collect = $collect->where('name', $params['name']);
         }
