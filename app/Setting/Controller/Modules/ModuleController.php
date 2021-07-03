@@ -7,6 +7,7 @@ use App\Setting\Request\Module\ModuleCreateRequest;
 use App\Setting\Service\ModuleService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
@@ -51,9 +52,21 @@ class ModuleController extends MineController
      */
     public function save(ModuleCreateRequest $request): ResponseInterface
     {
-        $data = $request->validated();
-        print_r($data);
+        $this->service->createModule($request->validated());
         return $this->success();
+    }
+
+    /**
+     * 删除模块
+     * @DeleteMapping("delete/{name}")
+     * @Permission("setting:module:delete")
+     * @OperationLog
+     * @param string $name
+     * @return ResponseInterface
+     */
+    public function delete(string $name): ResponseInterface
+    {
+        return $this->service->deleteModule($name) ? $this->success() : $this->error();
     }
 
 }

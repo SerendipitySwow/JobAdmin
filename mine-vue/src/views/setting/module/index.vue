@@ -65,7 +65,10 @@
 
       <el-table-column label="操作" align="center" width="150">
         <template slot-scope="scope">
-          <el-button type="text" :disabled="scope.row.name == 'System' || scope.row.name == 'Setting'" v-hasPermission="['system:dataMaintain:columnList']" @click="handleDetail(scope.row.name)">卸载</el-button>
+          <el-button type="text" 
+            :disabled="scope.row.name == 'System' || scope.row.name == 'Setting'" 
+            v-hasPermission="['system:module:delete']" 
+            @click="handleDelete(scope.row.name)">删除</el-button>
         </template>
       </el-table-column>
 
@@ -87,7 +90,7 @@
   </ma-container>
 </template>
 <script>
-import { getPageList } from '@/api/setting/module'
+import { getPageList, remove } from '@/api/setting/module'
 import addForm from './form'
 export default {
   name: 'setting-local-index',
@@ -124,6 +127,18 @@ export default {
         this.dataList = res.data.items
         this.pageInfo = res.data.pageInfo
         this.loading = false
+      })
+    },
+    handleDelete (name) {
+      this.$confirm('删除模块不可逆，确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        remove(name).then(res => {
+          this.success(res.message)
+          this.getList()
+        })
       })
     },
     // form组件关闭调用方法

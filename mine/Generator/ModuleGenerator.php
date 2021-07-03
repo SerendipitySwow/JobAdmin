@@ -49,7 +49,7 @@ class ModuleGenerator extends MineGenerator
             $filesystem->makeDirectory($modulePath . $dir);
         }
 
-        $this->createModuleJSON();
+        $this->createConfigJson($filesystem);
 
         return true;
     }
@@ -57,9 +57,22 @@ class ModuleGenerator extends MineGenerator
     /**
      * 创建模块JSON文件
      */
-    protected function createModuleJSON()
+    protected function createConfigJson(Filesystem $filesystem)
     {
+        $json = $filesystem->sharedGet($this->getStubDir() . 'config.stub');
 
+        $content = str_replace(
+            ['{NAME}','{LABEL}','{DESCRIPTION}', '{VERSION}'],
+            [
+                $this->moduleInfo['name'],
+                $this->moduleInfo['label'],
+                $this->moduleInfo['description'],
+                $this->moduleInfo['version']
+            ],
+            $json
+        );
+
+        $filesystem->put(BASE_PATH . '/app/' .$this->moduleInfo['name'] . '/config.json', $content);
     }
 
     /**

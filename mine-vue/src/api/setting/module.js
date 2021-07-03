@@ -24,3 +24,14 @@ export function getPageList (params = {}) {
   })
 }
 
+/**
+ * 删除模块
+ * @returns
+ */
+ export function remove (name) {
+  return request({
+    url: 'setting/module/delete/' + name,
+    method: 'delete'
+  })
+}
+

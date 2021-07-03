@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Setting\Service;
 
 use Hyperf\Utils\Collection;
+use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Generator\ModuleGenerator;
 use Mine\Mine;
 
@@ -39,6 +40,8 @@ class ModuleService
             $collect = $collect->where('label', $params['label']);
         }
 
+        $collect = $collect->sortByDesc('order');
+
         $data = $collect->forPage((int) $params['page'] ?? 1, (int) $params['pageSize'] ?? 10)->toArray();
 
         $modules = [];
@@ -68,5 +71,18 @@ class ModuleService
         $moduleGen = make(ModuleGenerator::class);
         $moduleGen->setModuleInfo($moduleInfo)->createModule();
         return true;
+    }
+
+    /**
+     * 删除模块
+     * @param string $name
+     * @return bool
+     */
+    public function deleteModule(string $name): bool
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = make(Filesystem::class);
+        $modulePath = BASE_PATH . '/app/' . ucfirst($name);
+        return $filesystem->deleteDirectory($modulePath);
     }
 }
