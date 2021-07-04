@@ -1,6 +1,6 @@
 <template>
   <ma-container>
-    <el-form ref="form" :inline="true" :model="form">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules">
       <el-card class="box-card ma-card" shadow="hover" style="margin-top:0">
 
         <div slot="header" class="clearfix">
@@ -8,13 +8,14 @@
         </div>
 
         <el-form-item label="表名称" size="small" class="ma-inline-form-item" prop="name">
-          <el-input  v-model="form.name" placeholder="请输入表名称">
+          <el-input  v-model="form.name" placeholder="请输入表名称" clearable>
             <template slot="prepend">{{sysinfo.tablePrefix === '' ? '无前缀' : sysinfo.tablePrefix}}</template>
+            <template slot="prepend">{{currentModule === '' ? ''  : currentModule + '_'}}</template>
           </el-input>
         </el-form-item>
 
         <el-form-item label="所属模块" size="small" class="ma-inline-form-item" prop="module">
-          <el-select v-model="form.module" placeholder="请选择模块">
+          <el-select v-model="form.module" clearable placeholder="请选择模块" @change="hanldeChangeModule">
             <el-option
               :label="item.name"
               :value="item.name"
@@ -26,7 +27,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" size="small">创建数据表</el-button>
+        <el-button type="primary" size="small" @click="handleSubmit" :loading="loading">创建数据表</el-button>
 
       </el-card>
 
@@ -40,13 +41,13 @@
 
           <el-table-column prop="name" label="字段名称">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.name" size="small" placeholder="字段名称"></el-input>
+              <el-input v-model="scope.row.name" size="small" clearable placeholder="字段名称"></el-input>
             </template>
           </el-table-column>
 
           <el-table-column prop="type" label="字段类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.type" size="small" placeholder="字段类型">
+              <el-select v-model="scope.row.type" size="small" clearable placeholder="字段类型">
                 <el-option-group
                   v-for="group in mysqlTypes"
                   :key="group.label"
@@ -76,13 +77,13 @@
 
           <el-table-column prop="len" label="长度">
             <template slot-scope="scope">
-              <el-input-number size="small" v-model="scope.row.len" controls-position="right" :min="1" :max="9999"></el-input-number>
+              <el-input-number size="small" v-model="scope.row.len" clearable controls-position="right" :min="1" :max="9999"></el-input-number>
             </template>
           </el-table-column>
 
           <el-table-column prop="index" label="索引类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.index" size="small" placeholder="索引类型">
+              <el-select v-model="scope.row.index" size="small" clearable placeholder="索引类型">
                 <el-option v-for="name in indexs" :value="name" :key="name">{{name}}</el-option>
               </el-select>
             </template>
@@ -90,13 +91,13 @@
 
           <el-table-column prop="default" label="默认值">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.default" size="small" placeholder="默认值"></el-input>
+              <el-input v-model="scope.row.default" size="small" clearable placeholder="默认值"></el-input>
             </template>
           </el-table-column>
 
           <el-table-column prop="comment" label="注释">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.comment" size="small" placeholder="注释"></el-input>
+              <el-input v-model="scope.row.comment" size="small" clearable placeholder="注释"></el-input>
             </template>
           </el-table-column>
 
@@ -111,16 +112,16 @@
         <el-row class="mt-20">
 
           <el-form-item label="表引擎" size="small" class="ma-inline-form-item" prop="engine">
-            <el-select v-model="form.engine" placeholder="表引擎">
+            <el-select v-model="form.engine" placeholder="表引擎" clearable>
                 <el-option :value="item.value" :label="item.label" v-for="(item, index) in engines" :key="index">{{item.label}}</el-option>
               </el-select>
           </el-form-item>
 
-          <el-form-item label="表注释" size="small" fixed class="ma-inline-form-item" prop="comment">
+          <el-form-item label="表注释" size="small" fixed class="ma-inline-form-item" prop="comment" clearable>
             <el-input  v-model="form.comment" placeholder="请输入表注释"></el-input>
           </el-form-item>
 
-          <el-form-item label="ID主键" size="small" class="ma-inline-form-item" prop="pk">
+          <el-form-item label="ID主键" size="small" class="ma-inline-form-item" prop="pk" clearable>
             <el-input  v-model="form.pk" placeholder="请输入ID主键"></el-input>
           </el-form-item>
           <el-tooltip
@@ -136,9 +137,9 @@
 
         <el-row class="mt-20">
           <el-checkbox v-model="form.autoTime">创建时间 & 更新时间</el-checkbox>
-          <el-checkbox v-model="form.autoTime">创建人 & 更新人</el-checkbox>
-          <el-checkbox v-model="form.autoTime">软删除</el-checkbox>
-          <el-checkbox v-model="form.autoTime">Migrate迁移文件</el-checkbox>
+          <el-checkbox v-model="form.autoUser">创建人 & 更新人</el-checkbox>
+          <el-checkbox v-model="form.softDelete">软删除</el-checkbox>
+          <el-checkbox v-model="form.migrate">Migrate迁移文件</el-checkbox>
         </el-row>
 
       </el-card>
@@ -146,27 +147,38 @@
   </ma-container>
 </template>
 <script>
-import { getSystemInfo } from '@/api/setting/table'
+import { getSystemInfo, save } from '@/api/setting/table'
 export default {
   name: 'setting-table-index',
   data () {
     return {
+      loading: false,
       form: {
         name: '',
         module: '',
         columns: [],
         autoTime: true,
+        autoUser: true,
+        softDelete: true,
+        migrate: true,
         pk: 'id',
         engine: '',
         comment: ''
       },
       sysinfo: {},
+      currentModule: '',
+      tablePrefix: '',
       engines: null,
       fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' },
-      indexs: [
-        'UNIQUE', 'NORMAL', 'FULLTEXT'
-      ],
+      indexs: [ 'UNIQUE', 'NORMAL', 'FULLTEXT' ],
       mysqlTypes,
+      rules: {
+        name: [{ required: true, pattern: /^[A-Za-z|_]{2,}$/g, message: '表名称只能是英文和下划线，至少两个字符', trigger: 'blur' }],
+        module: [{ required: true,  message: '请选择所属模块', trigger: 'change' }],
+        engine: [{ required: true,  message: '请选择表引擎', trigger: 'change' }],
+        comment: [{ required: true, message: '请输入表注释', trigger: 'blur' }],
+        pk: [{ required: true, pattern: /^[A-Za-z|_]{2,}$/g,  message: '主键为英文和下划线，至少两个字符', trigger: 'blur' }],
+      },
     }
   },
   async created () {
@@ -178,11 +190,13 @@ export default {
     })
   },
   methods: {
+    // 增加字段
     handleAddColumn () {
       const field = JSON.parse(JSON.stringify(this.fields))
       field.id = this.form.columns.length + 1
       this.form.columns.push(field)
     },
+    // 删除字段
     handleDeleteColumn (id) {
       for (let i = 0; i < this.form.columns.length; i++) {
         if (this.form.columns[i].id === id) {
@@ -190,6 +204,56 @@ export default {
           break
         }
       }
+    },
+    // 选择模块处理
+    hanldeChangeModule (val) {
+      this.currentModule = val.toLowerCase()
+    },
+    // 提交数据处理
+    handleSubmit () {
+      this.loading = true
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          // 提交数据
+          if (this.form.columns.length < 1) {
+            this.error('表没有字段')
+            this.loading = false
+            return;
+          }
+          let columns = this.form.columns
+          for (let i = 0; i < columns.length; i++) {
+            let requiredField = []
+            if (columns[i].name == '') {
+              requiredField.push('字段名称')
+            } else if(! /^[A-Za-z|_]{2,}$/g.test(columns[i].name)) {
+              this.error(`第${columns[i].id}行的字段名称必须是英文和下划线组成`)
+              this.loading = false
+              return
+            }
+            if (columns[i].type == '') {
+              requiredField.push('字段类型')
+            }
+            if (columns[i].comment == '') {
+              requiredField.push('表注释')
+            }
+
+            if (requiredField.length > 0) {
+              this.error(`第${columns[i].id}行字段列表的 ` + requiredField.join('、') + ' 为空 ')
+              this.loading = false
+              return
+            }
+          }
+          save(this.form).then(res => {
+            this.success(res.message)
+          }).catch(err => {
+            this.error(err)
+          })
+          this.loading = false
+        } else {
+          this.loading = false
+          return false
+        }
+      })
     }
   }
 }

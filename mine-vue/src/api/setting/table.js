@@ -10,3 +10,16 @@ export function getSystemInfo () {
     method: 'get'
   })
 }
+
+/**
+ * 保存表
+ * @returns
+ */
+ export function save (params = {}) {
+  return request({
+    url: 'setting/table/save',
+    method: 'put',
+    params
+  })
+}
+

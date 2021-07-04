@@ -18,4 +18,14 @@ class TableService
     {
         return env('DB_PREFIX', '');
     }
+
+    /**
+     * 创建数据表
+     * @param array $data
+     * @return bool
+     */
+    public function createTable(array $data): bool
+    {
+        return true;
+    }
 }

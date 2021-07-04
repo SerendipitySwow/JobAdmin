@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Setting\Controller\Tools;
 
+use App\Setting\Request\Tool\TableCreateRequest;
 use App\Setting\Service\TableService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -32,5 +33,19 @@ class TableController extends MineController
             'tablePrefix' => $this->service->getTablePrefix(),
             'modulesList' => $this->mine->getModuleInfo()
         ]);
+    }
+
+    /**
+     * 创建数据表
+     * @param TableCreateRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function save(TableCreateRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        if ($this->service->createTable($request->validated())) {
+            return $this->success();
+        } else {
+            return $this->error();
+        }
     }
 }
