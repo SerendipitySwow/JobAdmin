@@ -15,11 +15,11 @@ export function getSystemInfo () {
  * 保存表
  * @returns
  */
- export function save (params = {}) {
+ export function save (data = {}) {
   return request({
     url: 'setting/table/save',
     method: 'put',
-    params
+    data
   })
 }
 

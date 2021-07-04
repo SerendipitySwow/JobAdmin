@@ -7,12 +7,17 @@ use App\Setting\Service\TableService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
+use Hyperf\HttpServer\Annotation\PutMapping;
+use Mine\Annotation\Auth;
+use Mine\Annotation\OperationLog;
+use Mine\Annotation\Permission;
 use Mine\MineController;
 
 /**
  * Class TableController
  * @package App\Setting\Controller\Tools
  * @Controller(prefix="setting/table")
+ * @Auth
  */
 class TableController extends MineController
 {
@@ -37,6 +42,9 @@ class TableController extends MineController
 
     /**
      * 创建数据表
+     * @PutMapping("save")
+     * @Permission("setting:table:save")
+     * @OperationLog
      * @param TableCreateRequest $request
      * @return \Psr\Http\Message\ResponseInterface
      */

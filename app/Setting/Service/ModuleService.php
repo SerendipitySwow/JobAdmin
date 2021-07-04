@@ -33,11 +33,15 @@ class ModuleService
         );
 
         if ($params['name'] ?? false) {
-            $collect = $collect->where('name', $params['name']);
+            $collect = $collect->filter(function ($row) use ($params) {
+                return \Mine\Helper\Str::contains($row['name'], $params['name']);
+            });
         }
 
         if ($params['label'] ?? false) {
-            $collect = $collect->where('label', $params['label']);
+            $collect = $collect->filter(function ($row) use ($params) {
+                return \Mine\Helper\Str::contains($row['label'], $params['label']);
+            });
         }
 
         $collect = $collect->sortByDesc('order');
