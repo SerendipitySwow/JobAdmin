@@ -22,8 +22,7 @@ class SystemDeptCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:30',
-            'code' => 'required|min:3|max:50',
+            'name' => 'required|max:30'
         ];
     }
 }
