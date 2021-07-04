@@ -11,7 +11,6 @@ import store from '@/store'
  * @param {Error} error 错误对象
  */
 function handleError (error) {
-  console.log(error)
   // 显示提示
   Notification.error({
     message: error == undefined ? '服务器错误' : error.message,
@@ -43,13 +42,13 @@ function createService () {
   service.interceptors.response.use(
     response => {
       // 有 code 判断为项目接口请求
-      if (response.status === 200) {
-        return response.data
-      } else if (response.status === 200 && (!response.data.success || response.data.code !== 200)) {
-        Notification.warning(
+      if (response.status === 200 && (!response.data.success || response.data.code !== 200)) {
+        Notification.error(
           { message: response.data.message, title: '提示', duration: 5 * 1000 }
         )
-        throw new Error()
+        return null;
+      } else if (response.status === 200) {
+        return response.data
       } else {
         switch (response.status) {
           case 401: throw new Error(response.data.message)
@@ -67,7 +66,7 @@ function createService () {
         case 403: error.message = `${error.response.data.message}`; break
         case 404: error.message = `请求地址出错: ${error.response.config.url}`; break
         case 408: error.message = '请求超时'; break
-        case 500: error.message = `${error.response.data.message}`; break
+        case 500: error.message = `服务器错误`; break
         case 501: error.message = '服务未实现'; break
         case 502: error.message = '网关错误'; break
         case 503: error.message = '服务不可用'; break

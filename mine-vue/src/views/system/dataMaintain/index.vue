@@ -64,7 +64,7 @@
       <el-table-column type="selection" width="55">
       </el-table-column>
 
-      <el-table-column prop="name" label="表名称" width="180">
+      <el-table-column prop="name" label="表名称" width="180" :show-overflow-tooltip="true">
       </el-table-column>
 
       <el-table-column prop="engine" label="表引擎">
@@ -91,7 +91,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="collation" label="字符集" width="180"></el-table-column>
+      <el-table-column prop="collation" label="字符集" width="180" :show-overflow-tooltip="true"></el-table-column>
 
       <el-table-column prop="create_time" label="创建时间">
         <template slot-scope="scope">

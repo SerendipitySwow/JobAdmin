@@ -110,28 +110,35 @@
 
         <el-row class="mt-20">
 
-          <el-form-item label="ID主键" size="small" class="ma-inline-form-item" prop="pk">
-            <el-input  v-model="form.pk" placeholder="请输入ID主键"></el-input>
-          </el-form-item>
-
           <el-form-item label="表引擎" size="small" class="ma-inline-form-item" prop="engine">
             <el-select v-model="form.engine" placeholder="表引擎">
                 <el-option :value="item.value" :label="item.label" v-for="(item, index) in engines" :key="index">{{item.label}}</el-option>
               </el-select>
           </el-form-item>
 
-          <el-form-item label="表注释" size="small" class="ma-inline-form-item" prop="comment">
+          <el-form-item label="表注释" size="small" fixed class="ma-inline-form-item" prop="comment">
             <el-input  v-model="form.comment" placeholder="请输入表注释"></el-input>
           </el-form-item>
 
-          <el-button size="small" icon="el-icon-plus" @click="handleAddColumn">增加字段</el-button>
+          <el-form-item label="ID主键" size="small" class="ma-inline-form-item" prop="pk">
+            <el-input  v-model="form.pk" placeholder="请输入ID主键"></el-input>
+          </el-form-item>
+          <el-tooltip
+            class="item"
+            content="主键非自增，系统通过雪花算法生成ID"
+            placement="top"
+          >
+            <ma-icon name="question-circle" />
+          </el-tooltip>
+
+          <el-button size="small" style="margin-left: 10px" icon="el-icon-plus" @click="handleAddColumn">增加字段</el-button>
         </el-row>
 
         <el-row class="mt-20">
-          <el-checkbox v-model="form.autoTime">创建created_at & updated_at</el-checkbox>
-          <el-checkbox v-model="form.autoTime">创建created_by & updated_by</el-checkbox>
-          <el-checkbox v-model="form.autoTime">创建软删除</el-checkbox>
-          <el-checkbox v-model="form.autoTime">创建Migrates迁移文件</el-checkbox>
+          <el-checkbox v-model="form.autoTime">创建时间 & 更新时间</el-checkbox>
+          <el-checkbox v-model="form.autoTime">创建人 & 更新人</el-checkbox>
+          <el-checkbox v-model="form.autoTime">软删除</el-checkbox>
+          <el-checkbox v-model="form.autoTime">Migrate迁移文件</el-checkbox>
         </el-row>
 
       </el-card>
@@ -189,51 +196,52 @@ export default {
 
 const mysqlTypes = [
   {
-    label: '数字',
+    label: '整型及数字类型',
     options: [
-      { value: 'tinyint' },
-      { value: 'smallint' },
-      { value: 'mediumint' },
-      { value: 'int' },
-      { value: 'bigint' },
-      { value: 'decimal' },
-      { value: 'float' },
-      { value: 'uuid' },
-      { value: 'boolean' }
+      { value: 'BIGINT' },
+      { value: 'INT' },
+      { value: 'TINYINT' },
+      { value: 'SMALLINT' },
+      { value: 'MEDIUMINT' },
+      { value: 'DECIMAL' },
     ]
   },
   {
-    label: '日期与时间',
+    label: '字符串及文本类型',
     options: [
-      { value: 'date' },
-      { value: 'datetime' },
-      { value: 'timestamp' },
-      { value: 'time' }
+      { value: 'CHAR' },
+      { value: 'VARCHAR' },
+      { value: 'TINYTEXT' },
+      { value: 'TEXT' },
+      { value: 'MEDIUMTEXT' },
+      { value: 'LONGTEXT' },
     ]
   },
   {
-    label: '文本',
+    label: '日期与时间类型',
     options: [
-      { value: 'char' },
-      { value: 'varchar' },
-      { value: 'tinyText' },
-      { value: 'text' },
-      { value: 'mediumText' },
-      { value: 'longText' },
-      { value: 'binary' },
-      { value: 'varbinary' },
-      { value: 'tinyblob' },
-      { value: 'blob' },
-      { value: 'mediumblob' },
-      { value: 'longblob' },
-      { value: 'enum' },
-      { value: 'set' }
+      { value: 'DATE' },
+      { value: 'DATETIME' },
+      { value: 'TIMESTAMP' },
+      { value: 'TIME' }
     ]
   },
   {
-    label: 'json',
+    label: 'JSON类型',
     options: [
-      { value: 'json' }
+      { value: 'JSON' }
+    ]
+  },
+  {
+    label: '其他类型',
+    options: [
+      { value: 'BINARY' },
+      { value: 'VARBINARY' },
+      { value: 'TINYBLOB' },
+      { value: 'BLOB' },
+      { value: 'MEDIUMBLOB' },
+      { value: 'LONGBLOB' },
+      { value: 'ENUM' }
     ]
   }
 ]

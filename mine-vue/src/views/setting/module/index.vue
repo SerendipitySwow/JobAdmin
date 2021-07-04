@@ -29,7 +29,7 @@
 
         <el-button
           size="small"
-          icon="el-icon-puls"
+          icon="el-icon-plus"
           v-hasPermission="['setting:local:save']"
           @click="$refs.Form.create()"
         >创建新模块</el-button>

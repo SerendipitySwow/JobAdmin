@@ -18,7 +18,7 @@ class DataMaintainService
     public function getPageList(?array $params = []): array
     {
         $collect = new Collection(
-            Db::select(Db::raw("SHOW TABLE STATUS WHERE name <> 'migrations'")->getValue())
+            Db::select(Db::raw("SHOW TABLE STATUS WHERE name NOT LIKE '%migrations'")->getValue())
         );
 
         if ($params['name'] ?? false) {
@@ -53,7 +53,7 @@ class DataMaintainService
     public function getColumnList(string $table): array
     {
         if ($table) {
-            return Schema::getColumnTypeListing($table);
+            return Schema::getColumnTypeListing(str_replace(env('DB_PREFIX'), '', $table));
         } else {
             return [];
         }
