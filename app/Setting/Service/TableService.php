@@ -3,6 +3,8 @@
 declare(strict_types=1);
 namespace App\Setting\Service;
 
+use Mine\Generator\TableGenerator;
+
 /**
  * 数据表设计服务
  * Class TableService
@@ -26,6 +28,6 @@ class TableService
      */
     public function createTable(array $data): bool
     {
-        return true;
+        return make(TableGenerator::class)->setTableInfo($data)->createTable();
     }
 }
