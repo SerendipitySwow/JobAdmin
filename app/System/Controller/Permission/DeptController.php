@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\System\Controller\Permission;
 
 
-use App\System\Request\Menu\SystemMenuCreateRequest;
+use App\System\Request\Dept\SystemDeptCreateRequest;
 use App\System\Service\SystemDeptService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -64,12 +64,12 @@ class DeptController extends MineController
     /**
      * 新增部门
      * @PostMapping("save")
-     * @param SystemMenuCreateRequest $request
+     * @param SystemDeptCreateRequest $request
      * @return ResponseInterface
      * @Permission("system:dept:save")
      * @OperationLog
      */
-    public function save(SystemMenuCreateRequest $request): ResponseInterface
+    public function save(SystemDeptCreateRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->all())]);
     }
@@ -79,10 +79,10 @@ class DeptController extends MineController
      * @PutMapping("update/{id}")
      * @Permission("system:dept:update")
      * @param int $id
-     * @param SystemMenuCreateRequest $request
+     * @param SystemDeptCreateRequest $request
      * @return ResponseInterface
      */
-    public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
+    public function update(int $id, SystemDeptCreateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
