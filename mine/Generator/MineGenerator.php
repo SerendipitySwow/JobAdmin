@@ -3,20 +3,12 @@
 declare(strict_types=1);
 namespace Mine\Generator;
 
-use Mine\Mine;
-
 class MineGenerator
 {
     protected $stubDir;
 
-    /**
-     * @var Mine
-     */
-    protected $mine;
-
-    public function __construct(Mine $mine)
+    public function __construct()
     {
-        $this->mine = $mine;
         $this->setStubDir(BASE_PATH . '/mine/Generator/Stubs/');
     }
 

@@ -245,8 +245,6 @@ export default {
           }
           save(this.form).then(res => {
             this.success(res.message)
-          }).catch(err => {
-            this.error(err)
           })
           this.loading = false
         } else {

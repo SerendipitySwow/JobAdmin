@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Mine\Generator;
 
 use Hyperf\Utils\Filesystem\Filesystem;
+use Mine\Exception\NormalStatusException;
 use Mine\Helper\Str;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 
-class TableGenerator
+class TableGenerator extends MineGenerator
 {
     /**
      * @var array
@@ -35,9 +36,34 @@ class TableGenerator
         $result = true;
         $init && $this->init();
 
+        if (Schema::hasTable($this->getTableName())) {
+            throw new NormalStatusException(
+                "数据表 {$this->getTableName()} 已存在",
+                500
+            );
+        }
+
         // 创建数据表迁移文件
         if ($this->tableInfo['migrate']) {
-            $result = $this->createMigrateFile();
+            Schema::create($this->getTableName(), function (Blueprint $table) {
+                foreach ($this->tableInfo['columns'] as $column) {
+                    $currentTable = $table->addColumn(
+                        Str::lower($column['type']).'eger',
+                        $column['name'],
+                        $this->getColumnOptions($column),
+                    );
+                    if ($column['isNull']) {
+                        $currentTable->nullable();
+                    }
+                    if (!empty($column['index'])) {
+                        $currentTable->index($column['name']);
+                    }
+                }
+                $table->primary($this->tableInfo['pk']);
+                $table->engine = $this->tableInfo['engine'];
+                $table->comment($this->tableInfo['comment']);
+            });
+//            $result = $this->createMigrateFile();
         }
 
         // 创建数据表
@@ -50,7 +76,10 @@ class TableGenerator
 
     protected function init(): void
     {
-        $this->setTableName(Str::lower(trim($this->tableInfo['name'])));
+        $this->setTableName(
+            Str::lower($this->tableInfo['module']) . '_' .
+            Str::lower(trim($this->tableInfo['name']))
+        );
         $this->setModuleName(Str::lower($this->tableInfo['module']));
     }
 
@@ -67,7 +96,45 @@ class TableGenerator
      */
     protected function createMigrateFile(): bool
     {
+        /** @var Filesystem $fs */
+        $fs = make(Filesystem::class);
+        $content = $fs->sharedGet($this->getStubDir() . 'table.stub');
+        echo $this->getTableColumns();
+//        $content = str_replace(
         return true;
+    }
+
+    protected function getTableColumns(): string
+    {
+
+        return '';
+    }
+
+    private function getColumnOptions(&$column): array
+    {
+        $type = Str::lower($column['type']);
+        $option = [];
+        if (strpos($type, 'int')) {
+            $option = [
+                'unsigned' => $column['unsigned'],
+                'length'   => $column['len'],
+            ];
+        }
+        if ($type == 'decimal') {
+            $total = $column['len'];
+            $places = 2;
+            $option = [
+                'unsigned' => $column['unsigned'],
+                compact('total', 'places')
+            ];
+        }
+
+        if (!empty($option['default'])) {
+            $option['default'] = $column['default'];
+        }
+        $option['comment'] = $column['comment'];
+
+        return $option;
     }
 
     /**

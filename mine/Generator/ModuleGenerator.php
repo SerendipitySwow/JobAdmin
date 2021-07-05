@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Mine\Generator;
 
 use Hyperf\Utils\Filesystem\Filesystem;
+use Mine\Mine;
 
 class ModuleGenerator extends MineGenerator
 {
@@ -34,7 +35,10 @@ class ModuleGenerator extends MineGenerator
 
         $this->moduleInfo['name'] = ucfirst($this->moduleInfo['name']);
 
-        if (! empty($this->mine->getModuleInfo($this->moduleInfo['name']))) {
+        $mine = new Mine;
+        $mine->scanModule();
+
+        if (! empty($mine->getModuleInfo($this->moduleInfo['name']))) {
             throw new \RuntimeException('同名模块已存在');
         }
 
