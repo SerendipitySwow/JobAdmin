@@ -119,7 +119,7 @@ class SystemUserService extends AbstractService
         try {
             $cache = $this->container->get(CacheInterface::class);
             $key = 'captcha:' . md5($code);
-            if ($code == $cache->get($key)) {
+            if (\Mine\Helper\Str::lower($code) == $cache->get($key)) {
                 $cache->delete($key);
                 return true;
             } else {
