@@ -43,32 +43,14 @@ class TableGenerator extends MineGenerator
             );
         }
 
-        // 创建数据表迁移文件
-        if ($this->tableInfo['migrate']) {
-            Schema::create($this->getTableName(), function (Blueprint $table) {
-                foreach ($this->tableInfo['columns'] as $column) {
-                    $currentTable = $table->addColumn(
-                        Str::lower($column['type']).'eger',
-                        $column['name'],
-                        $this->getColumnOptions($column),
-                    );
-                    if ($column['isNull']) {
-                        $currentTable->nullable();
-                    }
-                    if (!empty($column['index'])) {
-                        $currentTable->index($column['name']);
-                    }
-                }
-                $table->primary($this->tableInfo['pk']);
-                $table->engine = $this->tableInfo['engine'];
-                $table->comment($this->tableInfo['comment']);
-            });
-//            $result = $this->createMigrateFile();
-        }
-
         // 创建数据表
         if ($result) {
-            $this->execSchemaSql();
+            $result = $this->execSchemaSql();
+        }
+
+        // 创建数据表迁移文件
+        if ($this->tableInfo['migrate'] && $result) {
+            $result = $this->createMigrateFile();
         }
 
         return $result;
@@ -86,9 +68,30 @@ class TableGenerator extends MineGenerator
     /**
      * 执行建表架构SQL
      */
-    protected function execSchemaSql()
+    protected function execSchemaSql(): bool
     {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
+            foreach ($this->tableInfo['columns'] as $column) {
+                $currentTable = $table->addColumn(
+                    Str::lower($column['type']).'eger',
+                    $column['name'],
+                    $this->getColumnOptions($column),
+                );
+                if ($column['isNull']) {
+                    $currentTable->nullable();
+                }
+                if (!empty($column['index'])) {
+                    $currentTable->index($column['name']);
+                }
+            }
+            // 添加系统字段
+            $this->addSysColumns($table);
+            $table->primary($this->tableInfo['pk']);
+            $table->engine = $this->tableInfo['engine'];
+            $table->comment($this->tableInfo['comment']);
+        });
 
+        return true;
     }
 
     /**
@@ -110,7 +113,32 @@ class TableGenerator extends MineGenerator
         return '';
     }
 
-    private function getColumnOptions(&$column): array
+    protected function addSysColumns(Blueprint $table)
+    {
+        if ($this->tableInfo['autoUser']) {
+            $table->addColumn(
+                'bigInteger', 'created_by', ['comment' => '创建者']
+            )->nullable();
+            $table->addColumn(
+                'bigInteger', 'updated_by', ['comment' => '更新者']
+            )->nullable();
+        }
+        if ($this->tableInfo['autoTime']) {
+            $table->addColumn(
+                'timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间']
+            )->nullable();
+            $table->addColumn(
+                'timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间']
+            )->nullable();
+        }
+        if ($this->tableInfo['softDelete']) {
+            $table->addColumn(
+                'timestamp', 'deleted_at', ['precision' => 0, 'comment' => '删除时间']
+            )->nullable();
+        }
+    }
+
+    protected function getColumnOptions(&$column): array
     {
         $type = Str::lower($column['type']);
         $option = [];
@@ -136,14 +164,6 @@ class TableGenerator extends MineGenerator
 
         return $option;
     }
-
-    /**
-    $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
-    $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
-    $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
-    $table->addColumn('timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间'])->nullable();
-    $table->addColumn('timestamp', 'deleted_at', ['precision' => 0, 'comment' => '删除时间'])->nullable();
-     */
 
     public function setTableName(string $tableName): TableGenerator
     {
