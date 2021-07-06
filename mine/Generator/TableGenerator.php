@@ -48,10 +48,10 @@ class TableGenerator extends MineGenerator
             $result = $this->execSchemaSql();
         }
 
-        // 创建数据表迁移文件
-        if ($this->tableInfo['migrate'] && $result) {
-            $result = $this->createMigrateFile();
-        }
+        // 创建数据表迁移文件, 暂未开发。
+        // if ($this->tableInfo['migrate'] && $result) {
+        //     $result = $this->createMigrateFile();
+        // }
 
         return $result;
     }
@@ -102,14 +102,11 @@ class TableGenerator extends MineGenerator
         /** @var Filesystem $fs */
         $fs = make(Filesystem::class);
         $content = $fs->sharedGet($this->getStubDir() . 'table.stub');
-        echo $this->getTableColumns();
-//        $content = str_replace(
         return true;
     }
 
     protected function getTableColumns(): string
     {
-
         return '';
     }
 
@@ -141,9 +138,19 @@ class TableGenerator extends MineGenerator
     protected function getColumnType(string $type): string
     {
         $type = Str::lower($type);
-        if (strpos($type, 'int') > 0) {
+        if (strpos($type, 'int') > 0 || $type == 'int') {
             return $type . 'eger';
         }
+
+        if ($type == 'char') {
+            return 'char';
+        }
+
+        if (strpos($type, 'char') > 0) {
+            return 'string';
+        }
+
+        return $type;
     }
 
     protected function getColumnOptions(array &$column): array
@@ -157,12 +164,15 @@ class TableGenerator extends MineGenerator
             ];
         }
         if ($type == 'decimal') {
-            $total = $column['len'];
-            $places = 2;
             $option = [
                 'unsigned' => $column['unsigned'],
-                compact('total', 'places')
+                'total'    => $column['len'],
+                'places'   => 2
             ];
+        }
+
+        if ($type == 'char' || strpos($type, 'char') > 0) {
+            $option = [ 'length'   => $column['len'] ];
         }
 
         if (!empty($option['default'])) {

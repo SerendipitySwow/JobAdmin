@@ -1,7 +1,14 @@
 <template>
   <ma-container>
     <el-form ref="form" :inline="true" :model="form" :rules="rules">
-      <el-card class="box-card ma-card" shadow="hover" style="margin-top:0">
+      <el-alert
+        title="提示"
+        type="warning"
+        :closable="false"
+        description="本表设计器不能替代专业工具，仅提供常用字段选项。另外建议自己制作一个迁移文件"
+        show-icon>
+      </el-alert>
+      <el-card class="box-card ma-card" shadow="hover">
 
         <div slot="header" class="clearfix">
           <span>基础数据</span>
@@ -170,15 +177,15 @@ export default {
       tablePrefix: '',
       engines: null,
       fields: { id: 0, name: '', type: '', unsigned: false, len: 0, isNull: false, index: '', default: '', comment: '' },
-      indexs: [ 'UNIQUE', 'NORMAL', 'FULLTEXT' ],
+      indexs: ['UNIQUE', 'NORMAL', 'FULLTEXT'],
       mysqlTypes,
       rules: {
         name: [{ required: true, pattern: /^[A-Za-z|_]{2,}$/g, message: '表名称只能是英文和下划线，至少两个字符', trigger: 'blur' }],
-        module: [{ required: true,  message: '请选择所属模块', trigger: 'change' }],
-        engine: [{ required: true,  message: '请选择表引擎', trigger: 'change' }],
+        module: [{ required: true, message: '请选择所属模块', trigger: 'change' }],
+        engine: [{ required: true, message: '请选择表引擎', trigger: 'change' }],
         comment: [{ required: true, message: '请输入表注释', trigger: 'blur' }],
-        pk: [{ required: true, pattern: /^[A-Za-z|_]{2,}$/g,  message: '主键为英文和下划线，至少两个字符', trigger: 'blur' }],
-      },
+        pk: [{ required: true, pattern: /^[A-Za-z|_]{2,}$/g, message: '主键为英文和下划线，至少两个字符', trigger: 'blur' }]
+      }
     }
   },
   async created () {
@@ -188,6 +195,7 @@ export default {
     await this.getDicts('table_engine').then(res => {
       this.engines = res.data
     })
+    this.handleAddColumn()
   },
   methods: {
     // 增加字段
@@ -218,22 +226,22 @@ export default {
           if (this.form.columns.length < 1) {
             this.error('表没有字段')
             this.loading = false
-            return;
+            return
           }
-          let columns = this.form.columns
+          const columns = this.form.columns
           for (let i = 0; i < columns.length; i++) {
-            let requiredField = []
-            if (columns[i].name == '') {
+            const requiredField = []
+            if (columns[i].name === '') {
               requiredField.push('字段名称')
-            } else if(! /^[A-Za-z|_]{2,}$/g.test(columns[i].name)) {
+            } else if (!/^[A-Za-z|_]{2,}$/g.test(columns[i].name)) {
               this.error(`第${columns[i].id}行的字段名称必须是英文和下划线组成`)
               this.loading = false
               return
             }
-            if (columns[i].type == '') {
+            if (columns[i].type === '') {
               requiredField.push('字段类型')
             }
-            if (columns[i].comment == '') {
+            if (columns[i].comment === '') {
               requiredField.push('表注释')
             }
 
@@ -265,7 +273,7 @@ const mysqlTypes = [
       { value: 'TINYINT' },
       { value: 'SMALLINT' },
       { value: 'MEDIUMINT' },
-      { value: 'DECIMAL' },
+      { value: 'DECIMAL' }
     ]
   },
   {
@@ -276,7 +284,7 @@ const mysqlTypes = [
       { value: 'TINYTEXT' },
       { value: 'TEXT' },
       { value: 'MEDIUMTEXT' },
-      { value: 'LONGTEXT' },
+      { value: 'LONGTEXT' }
     ]
   },
   {
@@ -292,18 +300,6 @@ const mysqlTypes = [
     label: 'JSON类型',
     options: [
       { value: 'JSON' }
-    ]
-  },
-  {
-    label: '其他类型',
-    options: [
-      { value: 'BINARY' },
-      { value: 'VARBINARY' },
-      { value: 'TINYBLOB' },
-      { value: 'BLOB' },
-      { value: 'MEDIUMBLOB' },
-      { value: 'LONGBLOB' },
-      { value: 'ENUM' }
     ]
   }
 ]
