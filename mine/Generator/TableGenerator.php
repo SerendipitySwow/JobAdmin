@@ -73,7 +73,7 @@ class TableGenerator extends MineGenerator
         Schema::create($this->getTableName(), function (Blueprint $table) {
             foreach ($this->tableInfo['columns'] as $column) {
                 $currentTable = $table->addColumn(
-                    Str::lower($column['type']).'eger',
+                    $this->getColumnType($column['type']),
                     $column['name'],
                     $this->getColumnOptions($column),
                 );
@@ -138,11 +138,19 @@ class TableGenerator extends MineGenerator
         }
     }
 
-    protected function getColumnOptions(&$column): array
+    protected function getColumnType(string $type): string
+    {
+        $type = Str::lower($type);
+        if (strpos($type, 'int') > 0) {
+            return $type . 'eger';
+        }
+    }
+
+    protected function getColumnOptions(array &$column): array
     {
         $type = Str::lower($column['type']);
         $option = [];
-        if (strpos($type, 'int')) {
+        if (strpos($type, 'int') > 0) {
             $option = [
                 'unsigned' => $column['unsigned'],
                 'length'   => $column['len'],
