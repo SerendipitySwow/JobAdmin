@@ -146,7 +146,7 @@
           <el-checkbox v-model="form.autoTime">创建时间 & 更新时间</el-checkbox>
           <el-checkbox v-model="form.autoUser">创建人 & 更新人</el-checkbox>
           <el-checkbox v-model="form.softDelete">软删除</el-checkbox>
-          <el-checkbox v-model="form.migrate">Migrate迁移文件</el-checkbox>
+          <!-- <el-checkbox v-model="form.migrate">Migrate迁移文件</el-checkbox> -->
         </el-row>
 
       </el-card>
@@ -167,7 +167,7 @@ export default {
         autoTime: true,
         autoUser: true,
         softDelete: true,
-        migrate: true,
+        // migrate: true,
         pk: 'id',
         engine: '',
         comment: ''

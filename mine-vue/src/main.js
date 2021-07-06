@@ -7,6 +7,7 @@ import store from '@/store/index'
 import permission from '@/directive/permission/index'
 import { getDicts } from './api/system/dictData'
 import TableRightToolbar from '@/components/ma-table-right-toolbar'
+import Upload from '@/components/ma-upload'
 import './permission'
 import '@/assets/style/mine-admin.css'
 
@@ -17,6 +18,7 @@ Vue.prototype.getDicts = getDicts
 
 // 全局挂载组件
 Vue.component('TableRightToolbar', TableRightToolbar)
+Vue.component('Upload', Upload)
 
 // 全局挂载方法
 Vue.prototype.success = function (msg) {

@@ -119,6 +119,23 @@ class MineUpload
     }
 
     /**
+     * 获取目录内容
+     * @param string $path
+     * @return array
+     */
+    public function getDirectory(string $path = ''): array
+    {
+        $contents = $this->filesystem->listContents($path);
+        $dirs = [];
+        foreach ($contents as $content) {
+            if ($content['type'] == 'dir') {
+                $dirs[] = $content;
+            }
+        }
+        return $dirs;
+    }
+
+    /**
      * 组装url
      * @param string $path
      * @param string $filename

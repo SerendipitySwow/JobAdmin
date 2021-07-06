@@ -44,8 +44,23 @@ class SystemUploadFileService extends AbstractService
      * 上传文件
      * @throws \League\Flysystem\FileExistsException
      */
-    public function upload(UploadedFile $uploadedFile, array $config = []): int
+    public function upload(UploadedFile $uploadedFile, array $config = []): array
     {
-        return $this->save($this->mineUpload->upload($uploadedFile, $config));
+        $data = $this->mineUpload->upload($uploadedFile, $config);
+        if ($this->save($data)) {
+            return $data;
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * 获取根目录下所有目录
+     * @param string $path
+     * @return array
+     */
+    public function getDirectory(string $path = ''): array
+    {
+        return $this->mineUpload->getDirectory($path);
     }
 }

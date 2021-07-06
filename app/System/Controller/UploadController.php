@@ -38,10 +38,10 @@ class UploadController extends MineController
     public function uploadFile(UploadFileRequest $request): \Psr\Http\Message\ResponseInterface
     {
         if ($request->validated() && $request->file('file')->isValid()) {
-            $result = $this->service->upload(
+            $data = $this->service->upload(
                 $request->file('file'), ['path' => $request->input('path', null)]
             );
-            return $result ? $this->success() : $this->error();
+            return empty($data) ? $this->error() : $this->success($data);
         } else {
             return $this->error('文件上传验证不通过');
         }
@@ -58,13 +58,25 @@ class UploadController extends MineController
     public function uploadImage(UploadImageRequest $request): \Psr\Http\Message\ResponseInterface
     {
         if ($request->validated() && $request->file('image')->isValid()) {
-            $result = $this->service->upload(
+            $data = $this->service->upload(
                 $request->file('image'), ['path' => $request->input('path', null)]
             );
-            return $result ? $this->success() : $this->error();
+            return empty($data) ? $this->error() : $this->success($data);
         } else {
             return $this->error('图片上传验证不通过');
         }
+    }
+
+    /**
+     * 获取可上传的目录
+     * @GetMapping("getDirectory")
+     * @Auth
+     */
+    public function getDirectory(): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->success(
+            $this->service->getDirectory($this->request->input('path', ''))
+        );
     }
 
     /**
