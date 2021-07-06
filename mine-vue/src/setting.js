@@ -3,7 +3,7 @@ export default {
   // 支持快捷键 例如 ctrl+shift+s
   hotkey: {
     search: {
-      open: 's',
+      open: 'ctrl+shift+f',
       close: 'esc'
     }
   },

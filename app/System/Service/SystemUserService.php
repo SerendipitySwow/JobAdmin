@@ -316,8 +316,8 @@ class SystemUserService extends AbstractService
      * @param int $id
      * @return bool
      */
-    public function initUserPassword(int $id): bool
+    public function initUserPassword(int $id, string $password = '123456'): bool
     {
-        return $this->mapper->initUserPassword($id, $password = '123456');
+        return $this->mapper->initUserPassword($id, $password);
     }
 }
