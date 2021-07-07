@@ -9,11 +9,13 @@ import { getDicts } from './api/system/dictData'
 import TableRightToolbar from '@/components/ma-table-right-toolbar'
 import Upload from '@/components/ma-upload'
 import Photo from '@/components/ma-photo'
+import VCharts from 'v-charts'
 import './permission'
 import '@/assets/style/mine-admin.css'
 
 Vue.use(mineadmin)
 Vue.use(permission)
+Vue.use(VCharts)
 
 Vue.prototype.getDicts = getDicts
 
