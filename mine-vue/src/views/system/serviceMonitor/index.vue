@@ -33,21 +33,7 @@
     <el-row>
       <el-card class="ma-card">
         <div slot="header" class="clearfix">
-            <span>PHP信息</span>
-        </div>
-        <el-table :data="meminfo">
-
-          <el-table-column prop="name" label="类型"  width="180"></el-table-column>
-          <el-table-column prop="value" label="说明"></el-table-column>
-
-        </el-table>
-      </el-card>
-    </el-row>
-    
-    <el-row>
-      <el-card class="ma-card">
-        <div slot="header" class="clearfix">
-            <span>服务器信息</span>
+            <span>PHP及环境信息</span>
         </div>
         <el-table :data="meminfo">
 
