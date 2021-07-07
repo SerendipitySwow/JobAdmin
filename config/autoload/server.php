@@ -30,7 +30,7 @@ return [
     ],
     'settings' => [
         // 对外部可以直接访问的目录地址，建议使用nginx反向代理访问
-        Constant::OPTION_DOCUMENT_ROOT => BASE_PATH . '/uploadfile',
+        Constant::OPTION_DOCUMENT_ROOT => BASE_PATH . '/public',
         // 开启外部可以访问
         Constant::OPTION_ENABLE_STATIC_HANDLER => true,
         Constant::OPTION_ENABLE_COROUTINE => true,

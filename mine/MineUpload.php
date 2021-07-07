@@ -150,7 +150,7 @@ class MineUpload
         $realpath =  '/'. $path . '/' . $filename;
         $mode = $this->getStorageMode();
         if ($mode == 'local') {
-            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1:9501').$realpath;
+            return $this->getProtocol() . env('RESOURCE_HOST', '127.0.0.1:9501').'/uploadfile'.$realpath;
         }
         if ($mode == 'qiniu') {
             $qiniu = $this->config['qiniu'];

@@ -140,7 +140,7 @@ export default {
     if (this.type === 'image') {
       this.selectButtonText = '选择图片'
       this.uploadButtunText = '上传图片'
-      this.allowUploadFile = '.jpeg,.png,.bmp,.gif 或 svg'
+      this.allowUploadFile = '.jpg,.jpeg,.png,.bmp,.gif 或 svg'
       this.uploadMethod = uploadImage
     } else {
       this.selectButtonText = '选择文件'

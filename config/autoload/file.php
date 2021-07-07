@@ -14,7 +14,7 @@ return [
     'storage' => [
         'local' => [
             'driver' => \Hyperf\Filesystem\Adapter\LocalAdapterFactory::class,
-            'root' => __DIR__ . '/../../uploadfile',
+            'root' => __DIR__ . '/../../public/uploadfile',
         ],
         'oss' => [
             'driver' => \Hyperf\Filesystem\Adapter\AliyunOssAdapterFactory::class,
