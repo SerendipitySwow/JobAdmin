@@ -50,4 +50,12 @@ util.supplementPath = function (menu) {
   })
 }
 
+/**
+ * 检测是否为IE游览器
+ * @returns {boolean}
+ */
+util.isIE = () => {
+  return !isNaN(Number(document.documentMode))
+}
+
 export default util

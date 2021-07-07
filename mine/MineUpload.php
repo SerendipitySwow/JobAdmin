@@ -84,7 +84,11 @@ class MineUpload
      */
     protected function handleUpload(UploadedFile $uploadedFile, array $config): array
     {
-        $path = $config['path'] ?? date('Ymd');
+        if (!isset($config['path']) || $config['path'] == '') {
+            $path = date('Ymd');
+        } else {
+            $path = $config['path'];
+        }
         $filename = $this->getNewName() . '.' . $uploadedFile->getExtension();
 
         if (! $this->filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
@@ -119,7 +123,7 @@ class MineUpload
     }
 
     /**
-     * 获取目录内容
+     * 获取目录
      * @param string $path
      * @return array
      */

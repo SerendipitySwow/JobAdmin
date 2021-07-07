@@ -8,7 +8,7 @@ import 'nprogress/nprogress.css'
 import store from '@/store/index'
 import util from '@/libs/util.js'
 
-const whiteList = ['login']
+const whiteList = ['login', 'test']
 const defaultRoutePath = '/dashboard'
 
 /**

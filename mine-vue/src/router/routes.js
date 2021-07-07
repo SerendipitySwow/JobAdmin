@@ -56,6 +56,11 @@ const frameIn = [
     path: '/login',
     name: 'login',
     component: _import('login')
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: _import('test')
   }
 ]
 

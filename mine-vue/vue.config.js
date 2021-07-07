@@ -28,19 +28,6 @@ const pages = {
       'chunk-vue',
       'chunk-element'
     ]
-  },
-  mobile: {
-    entry: 'src.mobile/main.js',
-    template: 'public/mobile.html',
-    filename: 'mobile.html',
-    chunks: [
-      'manifest',
-      'mobile',
-      'chunk-mobile',
-      'chunk-vendor',
-      'chunk-common',
-      'chunk-vue'
-    ]
   }
 }
 
@@ -52,15 +39,6 @@ const pages = {
 const cdn = {
   // Which external dependencies related to index page are introduced in the form of CDN links
   index: [
-    // {
-    //   name: 'axios',
-    //   library: 'axios',
-    //   js: 'https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js',
-    //   css: ''
-    // }
-  ],
-  // Which external dependencies related to mobile page are introduced in the form of CDN links
-  mobile: [
     // {
     //   name: 'axios',
     //   library: 'axios',
@@ -169,16 +147,6 @@ module.exports = {
           reuseExistingChunk: true,
           enforce: true
         },
-        // External dependencies that are only used by the mobile page
-        mobile: {
-          name: 'chunk-mobile',
-          chunks: 'all',
-          minChunks: 1,
-          test: /[\\/]node_modules[\\/](vant)[\\/]/,
-          priority: 3,
-          reuseExistingChunk: true,
-          enforce: true
-        },
         // Vue family packages
         vue: {
           name: 'chunk-vue',
@@ -266,9 +234,6 @@ module.exports = {
       .exclude
       .add(resolve('src/assets/svg-icons/icons'))
       .end()
-    // set alias
-    config.resolve.alias
-      .set('@.mobile', resolve('src.mobile'))
   },
   // 不输出 map 文件
   productionSourceMap: false,

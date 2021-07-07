@@ -8,6 +8,7 @@ import permission from '@/directive/permission/index'
 import { getDicts } from './api/system/dictData'
 import TableRightToolbar from '@/components/ma-table-right-toolbar'
 import Upload from '@/components/ma-upload'
+import Photo from '@/components/ma-photo'
 import './permission'
 import '@/assets/style/mine-admin.css'
 
@@ -18,6 +19,7 @@ Vue.prototype.getDicts = getDicts
 
 // 全局挂载组件
 Vue.component('TableRightToolbar', TableRightToolbar)
+Vue.component('Photo', Photo)
 Vue.component('Upload', Upload)
 
 // 全局挂载方法

@@ -42,7 +42,11 @@ class MineRequest extends Request
      */
     public function getScheme(): string
     {
-        return $this->getHeader('X-scheme')[0] ?? 'http://';
+        if (isset($this->getHeader('X-scheme')[0])) {
+            return $this->getHeader('X-scheme')[0].'://';
+        } else {
+            return 'http://';
+        }
     }
 }
 
