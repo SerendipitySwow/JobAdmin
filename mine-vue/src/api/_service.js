@@ -97,7 +97,7 @@ function createRequest (service) {
         Authorization: `bearer ${token}`,
         'Content-Type': get(config, 'headers.Content-Type', 'application/json;charset=UTF-8')
       },
-      timeout: 5000,
+      timeout: 10000,
       baseURL: process.env.VUE_APP_API,
       data: {}
     }

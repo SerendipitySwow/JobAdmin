@@ -110,8 +110,9 @@ class ServiceMonitorService
 
     /**
      * 获取PHP及环境信息
+     * @return array
      */
-    public function getPhpAndEnvInfo()
+    public function getPhpAndEnvInfo(): array
     {
         preg_match('/(\d\.\d\.\d)/', shell_exec('php --ri swoole | grep Version'), $matches);
         $result['swoole_version'] = $matches[1];
@@ -134,7 +135,11 @@ class ServiceMonitorService
         return $result;
     }
 
-    public function getNetInfo()
+    /**
+     * 获取网络数据信息
+     * @return array
+     */
+    public function getNetInfo(): array
     {
         preg_match_all('/(\d{2,})/', shell_exec('cat /proc/net/dev | grep eth0'), $net);
         return [
@@ -142,6 +147,25 @@ class ServiceMonitorService
             'receive_pack'  => sprintf('%.2f', $net[0][1] / 1024),
             'send_total'    => sprintf('%.2f', $net[0][2] / 1024 / 1024),
             'send_pack'     => sprintf('%.2f', $net[0][3] / 1024),
+        ];
+    }
+
+    /**
+     * 获取磁盘信息
+     * @return array
+     */
+    public function getDiskInfo(): array
+    {
+        $hds = explode(' ', preg_replace(
+            '/\s{2,}/',
+            ' ',
+            shell_exec('df -h | grep -E "^(/)"')
+        ));
+        return [
+            'total' => $hds[1],
+            'usage' => $hds[2],
+            'free'  => $hds[3],
+            'rate'  => $hds[4]
         ];
     }
 

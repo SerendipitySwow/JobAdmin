@@ -6,6 +6,7 @@
         icon="el-icon-finished"
         size="small"
         :disabled="disabled"
+        @click="$refs.Res.show()"
       >
         {{ selectButtonText }}
       </el-button>
@@ -84,12 +85,17 @@
 
     </el-dialog>
 
+    <res ref="Res" @select="getSelect"></res>
   </el-row>
 </template>
 <script>
 import { getDirectory, uploadImage, uploadFile } from '@/api/system/upload'
+import Res from './components/res'
 export default {
   name: 'upload',
+  components: {
+    Res
+  },
   props: {
     // 组件类型， image图片  file文件上传
     type: {
@@ -159,6 +165,10 @@ export default {
   },
   methods: {
 
+    handleSelectRes () {
+
+    },
+
     handleShowUploadDialog () {
       this.uploadDialog = true
       this.uploadDir = ''
@@ -180,9 +190,12 @@ export default {
           const dataForm = new FormData()
           dataForm.append(this.type, item.raw)
           dataForm.append('path', this.uploadDir)
-          await this.uploadMethod(dataForm).then(res => {
-            this.fileData.push(res.data)
-          })
+          await setTimeout(async () => {
+            await this.uploadMethod(dataForm).then(res => {
+              this.fileData.push(res.data)
+            })
+          }, 1000)
+           
         })
         this.loading = false
         this.uploadDialog = false

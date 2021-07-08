@@ -39,6 +39,7 @@ class ServiceMonitorController extends MineController
             'memory' => $this->service->getMemInfo(),
             'phpenv' => $this->service->getPhpAndEnvInfo(),
             'net'    => $this->service->getNetInfo(),
+            'disk'   => $this->service->getDiskInfo()
         ]);
     }
 }

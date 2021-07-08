@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 04/07/2021 21:35:18
+ Date: 08/07/2021 19:21:24
 */
 
 SET NAMES utf8mb4;
@@ -151,5 +151,7 @@ INSERT INTO `system_menu` VALUES (2322805963936, 2290791951008, '0,2252263087264
 INSERT INTO `system_menu` VALUES (2322831636128, 2290791951008, '0,2252263087264,2290791951008', '新增模块', 'setting:module:save', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-03 12:43:46', '2021-07-03 14:23:04', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2343852283552, 2290791951008, '0,2252263087264,2252471315616,2290791951008', '删除模块', 'setting:module:delete', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1897686194336, NULL, '2021-07-04 00:08:02', '2021-07-04 00:08:02', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2383185206944, 2253460182176, '0,2252263087264,2252471315616,2253460182176', '创建数据表', 'setting:table:save', '', '', '', '1', '0', '1', '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-04 21:28:24', '2021-07-04 21:28:24', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2513031794336, 2252249837216, '0,2252249837216', '系统监控', 'system:monitor', 'crosshairs', 'monitor', '', '1', '0', '1', '1', 'C', '0', 0, 1937003305632, NULL, '2021-07-07 19:55:11', '2021-07-07 19:55:11', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2513105586848, 2513031794336, '0,2252249837216,2513031794336', '服务监控', 'system:monitor:serviceMonitor', 'umbrella', 'serviceMonitor', 'system/serviceMonitor/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-07 19:57:35', '2021-07-07 19:58:14', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

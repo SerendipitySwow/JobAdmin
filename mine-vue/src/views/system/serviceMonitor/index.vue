@@ -100,7 +100,17 @@
                 </tr>
                 <tr>
                   <td><div class="cell">磁盘信息</div></td>
-                  <td colspan="3"><div class="cell" v-if="server.phpenv">{{ server.phpenv.start_time }}</div></td>
+                  <td colspan="3">
+                    <div class="cell" v-if="server.disk">
+                      总空间：{{ server.disk.total }}
+                      <el-divider direction="vertical"></el-divider>
+                      已使用：{{ server.disk.usage }}
+                      <el-divider direction="vertical"></el-divider>
+                      已剩余：{{ server.disk.free }}
+                      <el-divider direction="vertical"></el-divider>
+                      使用率：{{ server.disk.rate }}
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
