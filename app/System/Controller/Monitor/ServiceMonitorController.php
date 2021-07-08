@@ -37,7 +37,8 @@ class ServiceMonitorController extends MineController
         return $this->success([
             'cpu' => $this->service->getCpuInfo(),
             'memory' => $this->service->getMemInfo(),
-            'phpenv'  => $this->service->getPhpAndEnvInfo()
+            'phpenv' => $this->service->getPhpAndEnvInfo(),
+            'net'    => $this->service->getNetInfo(),
         ]);
     }
 }

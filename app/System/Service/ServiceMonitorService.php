@@ -134,4 +134,15 @@ class ServiceMonitorService
         return $result;
     }
 
+    public function getNetInfo()
+    {
+        preg_match_all('/(\d{2,})/', shell_exec('cat /proc/net/dev | grep eth0'), $net);
+        return [
+            'receive_total' => sprintf('%.2f', $net[0][0] / 1024 / 1024),
+            'receive_pack'  => sprintf('%.2f', $net[0][1] / 1024),
+            'send_total'    => sprintf('%.2f', $net[0][2] / 1024 / 1024),
+            'send_pack'     => sprintf('%.2f', $net[0][3] / 1024),
+        ];
+    }
+
 }

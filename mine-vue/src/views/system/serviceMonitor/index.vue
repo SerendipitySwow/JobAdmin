@@ -8,7 +8,7 @@
             <table cellspacing="0" style="width: 100%;">
               <tbody>
                 <tr>
-                  <td><div class="cell">名称</div></td>
+                  <td><div class="cell">型号</div></td>
                   <td><div class="cell" v-if="server.cpu">{{ server.cpu.name }}</div></td>
                 </tr>
                 <tr>
@@ -24,7 +24,7 @@
                   <td><div class="cell" v-if="server.cpu">{{ server.cpu.usage }}%</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">当前空闲率</div></td>
+                  <td><div class="cell">空闲率</div></td>
                   <td><div class="cell" v-if="server.cpu">{{ server.cpu.free }}%</div></td>
                 </tr>
               </tbody>
@@ -56,7 +56,7 @@
                   <td><div class="cell" v-if="server.memory">{{ server.memory.free }}G</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">当前使用率</div></td>
+                  <td><div class="cell">使用率</div></td>
                   <td><div class="cell" v-if="server.memory">{{ server.memory.rate }}%</div></td>
                 </tr>
               </tbody>
@@ -97,6 +97,32 @@
                   <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.start_time }}</div></td>
                   <td><div class="cell">系统运行时间</div></td>
                   <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.run_time }}</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </el-card>
+    </el-row>
+
+    <el-row>
+      <el-card class="ma-card">
+        <div slot="header" class="clearfix">
+            <span>网络信息</span>
+        </div>
+        <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td><div class="cell">接收总大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.receive_total }}M</div></td>
+                  <td><div class="cell">当前接收包大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.receive_pack }}K</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">发送总大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.send_total }}M</div></td>
+                  <td><div class="cell">当前发送包大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.send_pack }}K</div></td>
                 </tr>
               </tbody>
             </table>
