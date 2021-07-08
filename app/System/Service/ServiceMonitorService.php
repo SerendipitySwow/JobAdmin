@@ -28,8 +28,7 @@ class ServiceMonitorService
      */
     public function getCpuName(): string
     {
-        $string = shell_exec('cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c');
-        preg_match('/^\s+\d\s+(.+)/', $string, $matches);
+        preg_match('/^\s+\d\s+(.+)/', shell_exec('cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c'), $matches);
         return $matches[1];
     }
 
@@ -38,8 +37,7 @@ class ServiceMonitorService
      */
     public function getCpuPhysicsCores(): string
     {
-        $string = shell_exec('cat /proc/cpuinfo |grep "physical id"|sort |uniq|wc -l');
-        return str_replace("\n", '', $string);
+        return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "physical id"|sort |uniq|wc -l'));
     }
 
     /**
@@ -47,8 +45,7 @@ class ServiceMonitorService
      */
     public function getCpuLogicCores(): string
     {
-        $string = shell_exec('cat /proc/cpuinfo |grep "processor"|wc -l');
-        return str_replace("\n", '', $string);
+        return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "processor"|wc -l'));
     }
 
     /**
@@ -66,8 +63,6 @@ class ServiceMonitorService
 
         $timeStart = $start['time'];
         $timeEnd = $end['time'];
-
-        unset($start, $end);
 
         return sprintf('%.2f', ($timeEnd - $timeStart) / ($totalEnd - $totalStart) * 100);
     }
@@ -110,8 +105,6 @@ class ServiceMonitorService
             '%.2f', (sprintf('%.2f', $result['usage']) / sprintf('%.2f', $result['total'])) * 100
         );
 
-        unset($total, $free, $project);
-
         return $result;
     }
 
@@ -120,22 +113,21 @@ class ServiceMonitorService
      */
     public function getPhpAndEnvInfo()
     {
-        // swoole 版本
         preg_match('/(\d\.\d\.\d)/', shell_exec('php --ri swoole | grep Version'), $matches);
         $result['swoole_version'] = $matches[1];
-        // PHP 版本
+
         $result['php_version'] = PHP_VERSION;
-        // OS
+
         $result['os'] = PHP_OS;
-        // 项目地址
+
         $result['project_path'] = BASE_PATH;
-        // 程序启动时间
+
         $result['start_time'] = date('Y-m-d H:i:s', START_TIME);
-        // 程序运行时长
+
         $result['run_time'] = \Mine\Helper\Str::Sec2Time(time() - START_TIME);
-        // 系统版本
+
         $result['mineadmin_version'] = \Mine\Mine::getVersion();
-        // hyperf框架版本
+
         preg_match('/(\d\.\d\.\d)/', shell_exec('composer info | grep hyperf/framework'), $hv);
         $result['hyperf_version'] = $hv[1];
 

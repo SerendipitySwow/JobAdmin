@@ -314,6 +314,7 @@ class SystemUserService extends AbstractService
     /**
      * 初始化用户密码
      * @param int $id
+     * @param string $password
      * @return bool
      */
     public function initUserPassword(int $id, string $password = '123456'): bool
