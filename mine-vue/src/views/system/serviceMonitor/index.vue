@@ -3,29 +3,77 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card class="ma-card">
-          <div slot="header" class="clearfix">
-              <span>CPU使用率</span>
+          <div slot="header" class="clearfix"><span>CPU使用率</span></div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th class="is-leaf"><div class="cell">类型</div></th>
+                  <th class="is-leaf"><div class="cell">结果</div></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="cell">名称</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.name }}</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">核心数</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.cores }}%</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">缓存</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.cache }}M</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">使用率</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.usage }}%</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">当前空闲率</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.free }}%</div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <el-table :data="cpuinfo">
-
-            <el-table-column prop="name" label="类型"  width="180"></el-table-column>
-            <el-table-column prop="value" label="说明"></el-table-column>
-
-          </el-table>
         </el-card>
       </el-col>
 
       <el-col :span="12">
         <el-card class="ma-card">
-          <div slot="header" class="clearfix">
-              <span>内存使用率</span>
+          <div slot="header" class="clearfix"><span>内存使用率</span></div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th class="is-leaf"><div class="cell">类型</div></th>
+                  <th class="is-leaf"><div class="cell">结果</div></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="cell">总内存</div></td>
+                  <td><div class="cell" v-if="server.memory">{{ server.memory.total }}G</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">已使用内存</div></td>
+                  <td><div class="cell" v-if="server.memory">{{ server.memory.usage }}G</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">PHP使用内存</div></td>
+                  <td><div class="cell" v-if="server.memory">{{ server.memory.php }}M</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">空闲内存</div></td>
+                  <td><div class="cell" v-if="server.memory">{{ server.memory.free }}G</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">当前使用率</div></td>
+                  <td><div class="cell" v-if="server.memory">{{ server.memory.rate }}%</div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <el-table :data="meminfo">
-
-            <el-table-column prop="name" label="类型"  width="180"></el-table-column>
-            <el-table-column prop="value" label="说明"></el-table-column>
-
-          </el-table>
         </el-card>
       </el-col>
     </el-row>
@@ -35,41 +83,50 @@
         <div slot="header" class="clearfix">
             <span>PHP及环境信息</span>
         </div>
-        <el-table :data="meminfo">
-
-          <el-table-column prop="name" label="类型"  width="180"></el-table-column>
-          <el-table-column prop="value" label="说明"></el-table-column>
-
-        </el-table>
+        <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td><div class="cell">操作系统</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.os }}</div></td>
+                  <td><div class="cell">PHP版本</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.php_version }}</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">Swoole版本</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.swoole_version }}</div></td>
+                  <td><div class="cell">Hyperf版本</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.hyperf_version }}</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">MineAdmin版本</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.mineadmin_version }}</div></td>
+                  <td><div class="cell">系统物理路径</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.project_path }}</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">系统启动时间</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.start_time }}</div></td>
+                  <td><div class="cell">系统运行时间</div></td>
+                  <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.run_time }}</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
       </el-card>
     </el-row>
 
-    <el-row>
-      <el-card class="ma-card">
-        <div slot="header" class="clearfix">
-            <span>磁盘信息</span>
-        </div>
-        <el-table :data="meminfo">
-
-          <el-table-column prop="name" label="类型"  width="180"></el-table-column>
-          <el-table-column prop="value" label="说明"></el-table-column>
-
-        </el-table>
-      </el-card>
-    </el-row>
   </ma-container>
 </template>
 <script>
-import { getServerInfo } from '@/api/system/serviceMonitor'
+import { getServerInfo } from '@/api/system/monitor'
 export default {
   name: 'system-serviceMonitor',
 
   data () {
     return {
       loading: [],
-      cpuinfo: [],
-      meminfo: [],
-      projectMemory: '',
+      server: []
     }
   },
 
@@ -82,35 +139,18 @@ export default {
 
     async getService () {
       await getServerInfo().then(res => {
-        let cpuinfo = res.data.cpuinfo
-        this.cpuinfo.push({ name: 'CPU名称', value: cpuinfo.cpuName })
-        this.cpuinfo.push({ name: 'CPU核心数', value: cpuinfo.cpuCores })
-        for (let i = 0; i < cpuinfo.cpuUsage.length; i++) {
-          let n = i + 1
-          this.cpuinfo.push({ name: `CPU-${n} 使用率`, value: `${cpuinfo.cpuUsage[i]}%` })
-        }
-
-        let meminfo = res.data.meminfo
-        this.projectMemory = meminfo.memProject
-
-        this.meminfo.push({ name: '总内存', value: meminfo.memTotal })
-        this.meminfo.push({ name: '空闲内存', value: meminfo.memFree })
-        this.meminfo.push({ name: '已用内存', value: meminfo.memUsage })
-        this.meminfo.push({ name: '系统占用内存', value: meminfo.memProject })
-        this.meminfo.push({ name: '内存使用率', value: meminfo.memRate })
-
-        
+        this.server = res.data
       })
       this.loading.close()
     },
 
-    openLoading() {
+    openLoading () {
       this.loading = this.$loading({
         lock: true,
-        text: "拼命读取中",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
-      });
+        text: '拼命读取中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
     }
   }
 }

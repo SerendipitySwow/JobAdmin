@@ -15,7 +15,7 @@ use Mine\MineController;
 /**
  * Class ServiceMonitorController
  * @package App\System\Controller\Monitor
- * @Controller(prefix="system/serviceMonitor")
+ * @Controller(prefix="system/monitor")
  * @Auth
  */
 class ServiceMonitorController extends MineController
@@ -28,14 +28,16 @@ class ServiceMonitorController extends MineController
 
     /**
      * 获取服务器信息
-     * @GetMapping("serverInfo")
+     * @GetMapping("serviceMonitor")
      * @return \Psr\Http\Message\ResponseInterface
+     * @Permission("system:monitor:serviceMonitor")
      */
     public function getServerInfo(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success([
-            'cpuinfo' => $this->service->getCpuInfo(),
-            'meminfo' => $this->service->getMemInfo(),
+            'cpu' => $this->service->getCpuInfo(),
+            'memory' => $this->service->getMemInfo(),
+            'phpenv'  => $this->service->getPhpAndEnvInfo()
         ]);
     }
 }

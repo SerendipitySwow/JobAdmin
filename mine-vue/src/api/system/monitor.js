@@ -6,7 +6,7 @@ import { request } from '@/api/_service.js'
  */
 export function getServerInfo () {
   return request({
-    url: 'system/serviceMonitor/serverInfo',
+    url: 'system/monitor/serviceMonitor',
     method: 'get'
   })
 }

@@ -14,10 +14,14 @@ class ServiceMonitorService
      */
     public function getCpuInfo(): array
     {
+        $cpu = $this->getCpuUsage();
+        preg_match('/(\d+)/', shell_exec('cat /proc/cpuinfo | grep "cache size"'), $cache);
         return [
-            'cpuName'  => $this->getCpuName(),
-            'cpuCores' => 'CPU物理核心数：'.$this->getCpuPhysicsCores().'，CPU逻辑核心数：'.$this->getCpuLogicCores(),
-            'cpuUsage' => $this->getCpuUsage()
+            'name'  => $this->getCpuName(),
+            'cores' => 'CPU物理核心数：'.$this->getCpuPhysicsCores().'，CPU逻辑核心数：'.$this->getCpuLogicCores(),
+            'cache' => $cache[1] / 1024,
+            'usage' => $cpu,
+            'free'  => 100 - $cpu
         ];
     }
 
@@ -54,7 +58,7 @@ class ServiceMonitorService
      * 获取CPU使用率
      * @return array
      */
-    public function getCpuUsage(): array
+    public function getCpuUsage(): string
     {
         $start = $this->calculationCpu();
         sleep(1);
@@ -68,13 +72,7 @@ class ServiceMonitorService
 
         unset($start, $end);
 
-        $result = [];
-
-        foreach ($totalStart as $k => $total) {
-            $result[] = sprintf('%.2f', ($timeEnd[$k] - $timeStart[$k]) / ($totalEnd[$k] - $total) * 100);
-        }
-
-        return $result;
+        return sprintf('%.2f', ($timeEnd - $timeStart) / ($totalEnd - $totalStart) * 100);
     }
 
     /**
@@ -83,48 +81,66 @@ class ServiceMonitorService
      */
     protected function calculationCpu(): array
     {
-        $mode = '/(cpu[0-9]?)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)/';
+        $mode = '/(cpu)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)/';
         $string = shell_exec('more /proc/stat | grep cpu');
         preg_match_all($mode, $string,$matches);
 
-        $step = count($matches[0]);
-
-        $total = $time = [];
-
-        for ($i = 0; $i < $step; $i++){
-            $total[] = $matches[2][$i] + $matches[3][$i] + $matches[4][$i] + $matches[5][$i] + $matches[6][$i] + $matches[7][$i] + $matches[8][$i] + $matches[9][$i];
-            $time[]  = $matches[2][$i] + $matches[3][$i] + $matches[4][$i] + $matches[6][$i] + $matches[7][$i] + $matches[8][$i] + $matches[9][$i];
-        }
+        $total = $matches[2][0] + $matches[3][0] + $matches[4][0] + $matches[5][0] + $matches[6][0] + $matches[7][0] + $matches[8][0] + $matches[9][0];
+        $time  = $matches[2][0] + $matches[3][0] + $matches[4][0] + $matches[6][0] + $matches[7][0] + $matches[8][0] + $matches[9][0];
 
         return ['total' => $total, 'time' => $time];
     }
 
+    /**
+     * 获取内存信息
+     * @return array
+     */
     public function getMemInfo(): array
     {
-        $fs = new Filesystem;
         $string = shell_exec('cat /proc/meminfo | grep MemTotal');
         preg_match('/(\d+)/', $string, $total);
-        $result['memTotal'] = sprintf('%.2f%s', $total[1] / 1024 / 1024, 'G');
+        $result['total'] = sprintf('%.2f', $total[1] / 1024 / 1024);
 
         $string = shell_exec('cat /proc/meminfo | grep MemFree');
         preg_match('/(\d+)/', $string, $free);
-        $result['memFree'] = sprintf('%.2f%s', $free[1] / 1024 / 1024, 'G');
+        $result['free'] = sprintf('%.2f', $free[1] / 1024 / 1024);
 
-        $result['memUsage'] = sprintf('%.2f%s', ($total[1] - $free[1]) / 1024 / 1024, 'G');
+        $result['usage'] = sprintf('%.2f', ($total[1] - $free[1]) / 1024 / 1024);
 
-        $pid = $fs->sharedGet(BASE_PATH . '/runtime/hyperf.pid');
+        $result['php'] = round(memory_get_usage()/1024/1024, 2);
 
-        $string = shell_exec('cat /proc/'.$pid.'/status | grep VmRSS');
-        preg_match('/(\d+)/', $string, $project);
-        $result['memProject'] = sprintf('%.2f%s', $project[1] / 1024 / 1024, 'G');
-
-        $result['memRate'] = sprintf(
-            '%.2f%s',
-            (sprintf('%.2f', $result['memUsage']) / sprintf('%.2f', $result['memTotal'])) * 100,
-            '%'
+        $result['rate'] = sprintf(
+            '%.2f', (sprintf('%.2f', $result['usage']) / sprintf('%.2f', $result['total'])) * 100
         );
 
-        unset($total, $free, $project, $fs);
+        unset($total, $free, $project);
+
+        return $result;
+    }
+
+    /**
+     * 获取PHP及环境信息
+     */
+    public function getPhpAndEnvInfo()
+    {
+        // swoole 版本
+        preg_match('/(\d\.\d\.\d)/', shell_exec('php --ri swoole | grep Version'), $matches);
+        $result['swoole_version'] = $matches[1];
+        // PHP 版本
+        $result['php_version'] = PHP_VERSION;
+        // OS
+        $result['os'] = PHP_OS;
+        // 项目地址
+        $result['project_path'] = BASE_PATH;
+        // 程序启动时间
+        $result['start_time'] = date('Y-m-d H:i:s', START_TIME);
+        // 程序运行时长
+        $result['run_time'] = \Mine\Helper\Str::Sec2Time(time() - START_TIME);
+        // 系统版本
+        $result['mineadmin_version'] = \Mine\Mine::getVersion();
+        // hyperf框架版本
+        preg_match('/(\d\.\d\.\d)/', shell_exec('composer info | grep hyperf/framework'), $hv);
+        $result['hyperf_version'] = $hv[1];
 
         return $result;
     }
