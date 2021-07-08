@@ -3,15 +3,9 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card class="ma-card">
-          <div slot="header" class="clearfix"><span>CPU使用率</span></div>
+          <div slot="header" class="clearfix"><span>CPU信息</span></div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <table cellspacing="0" style="width: 100%;">
-              <thead>
-                <tr>
-                  <th class="is-leaf"><div class="cell">类型</div></th>
-                  <th class="is-leaf"><div class="cell">结果</div></th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
                   <td><div class="cell">名称</div></td>
@@ -19,7 +13,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">核心数</div></td>
-                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.cores }}%</div></td>
+                  <td><div class="cell" v-if="server.cpu">{{ server.cpu.cores }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">缓存</div></td>
@@ -41,15 +35,9 @@
 
       <el-col :span="12">
         <el-card class="ma-card">
-          <div slot="header" class="clearfix"><span>内存使用率</span></div>
+          <div slot="header" class="clearfix"><span>内存信息</span></div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <table cellspacing="0" style="width: 100%;">
-              <thead>
-                <tr>
-                  <th class="is-leaf"><div class="cell">类型</div></th>
-                  <th class="is-leaf"><div class="cell">结果</div></th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
                   <td><div class="cell">总内存</div></td>

@@ -3,9 +3,6 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
-
-use Hyperf\Utils\Filesystem\Filesystem;
-
 class ServiceMonitorService
 {
     /**
@@ -18,7 +15,7 @@ class ServiceMonitorService
         preg_match('/(\d+)/', shell_exec('cat /proc/cpuinfo | grep "cache size"'), $cache);
         return [
             'name'  => $this->getCpuName(),
-            'cores' => 'CPU物理核心数：'.$this->getCpuPhysicsCores().'，CPU逻辑核心数：'.$this->getCpuLogicCores(),
+            'cores' => '物理核心数：'.$this->getCpuPhysicsCores().'个，逻辑核心数：'.$this->getCpuLogicCores().'个',
             'cache' => $cache[1] / 1024,
             'usage' => $cpu,
             'free'  => 100 - $cpu
@@ -56,7 +53,7 @@ class ServiceMonitorService
 
     /**
      * 获取CPU使用率
-     * @return array
+     * @return string
      */
     public function getCpuUsage(): string
     {
