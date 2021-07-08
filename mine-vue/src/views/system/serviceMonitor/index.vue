@@ -98,6 +98,10 @@
                   <td><div class="cell">系统运行时间</div></td>
                   <td><div class="cell" v-if="server.phpenv">{{ server.phpenv.run_time }}</div></td>
                 </tr>
+                <tr>
+                  <td><div class="cell">磁盘信息</div></td>
+                  <td colspan="3"><div class="cell" v-if="server.phpenv">{{ server.phpenv.start_time }}</div></td>
+                </tr>
               </tbody>
             </table>
           </div>
