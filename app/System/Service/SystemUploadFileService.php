@@ -76,24 +76,26 @@ class SystemUploadFileService extends AbstractService
      */
     public function getAllFile(array $params = []): array
     {
-        $collect = new Collection(
-            $this->mineUpload->listContents($params['path'] ?? '')
-        );
+        $directory = $this->getDirectory($params['storage_path'] ?? '');
 
-        if ($params['name'] ?? false) {
-            $collect = $collect->filter(function ($row) use ($params) {
-                return \Mine\Helper\Str::contains($row->Name, $params['name']);
-            });
-        }
+        $params['select'] = [
+            'origin_name',
+            'object_name',
+            'mime_type',
+            'url',
+            'size_info',
+            'storage_path',
+            'created_at'
+        ];
+
+        $params['select'] = implode(',', $params['select']);
+
+        $collect = new Collection( array_merge($directory, $this->getList($params)) );
 
         $data = $collect->forPage(
             (int) $params['page'] ?? 1,
             (int) $params['pageSize'] ?? 10
         )->toArray();
-
-        foreach ($data as &$item) {
-            $item['url'] = $this->mineUpload->assembleUrl($item['dirname'], $item['basename']);
-        }
 
         return [
             'items' => $data,

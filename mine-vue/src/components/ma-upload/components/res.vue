@@ -1,10 +1,6 @@
 <template>
   <ma-container>
-    <el-dialog
-      :title="title"
-      :visible.sync="resDialog"
-      width="753px"
-      :before-close="handleResClose">
+    <el-dialog :title="title" :visible.sync="resDialog" width="753px" :before-close="handleResClose">
 
       <!-- 按钮组 及 搜索 -->
       <el-row>
@@ -12,30 +8,15 @@
         <el-col :span="10">
           <el-button-group>
 
-            <el-tooltip 
-              class="item"
-              effect="dark"
-              :content="'选择当前页所有' + (type == 'image' ? '图片' : '文件')"
-              placement="top"
-            >
+            <el-tooltip class="item" effect="dark" :content="'选择当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
               <el-button size="small" icon="el-icon-check">全选</el-button>
             </el-tooltip>
 
-            <el-tooltip 
-              class="item"
-              effect="dark"
-              :content="'反选当前页所有' + (type == 'image' ? '图片' : '文件')"
-              placement="top"
-            >  
+            <el-tooltip class="item" effect="dark" :content="'反选当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
               <el-button size="small" icon="el-icon-close">反选</el-button>
             </el-tooltip>
 
-            <el-tooltip 
-              class="item"
-              effect="dark"
-              :content="'取消所有选中的' + (type == 'image' ? '图片' : '文件')"
-              placement="top"
-            >  
+            <el-tooltip class="item" effect="dark" :content="'取消所有选中的' + (type == 'image' ? '图片' : '文件')" placement="top">
               <el-button size="small" icon="el-icon-error">取消</el-button>
             </el-tooltip>
 
@@ -44,11 +25,7 @@
 
         <el-col :span="14">
 
-          <el-input 
-            :placeholder="'输入' + (type == 'image' ? '图片' : '文件') + '名称筛选'"
-            size="small"
-            v-model="queryParams.name"
-          >
+          <el-input :placeholder="'输入' + (type == 'image' ? '图片' : '文件') + '名称筛选'" size="small" v-model="queryParams.origin_name">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
 
@@ -58,9 +35,9 @@
 
       <el-row>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-<!-- @click="loadPath(item.path)" -->
+          <!-- @click="loadPath(item.path)" -->
           <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index">
-            <a @click="openFolder(item.path, 'out')" >{{ item.name }}</a>
+            <a @click="openFolder(item.path, 'out')">{{ item.name }}</a>
           </el-breadcrumb-item>
 
         </el-breadcrumb>
@@ -72,35 +49,40 @@
 
           <div class="list" v-for="(item, index) in dataList" :key="index">
 
-            <div 
-              class="icon"
-              @click="openFolder(item.basename, 'in')"
-              v-if="item.type === 'dir'"
-            >
+            <div class="icon" @click="openFolder(item.basename, 'in')" v-if="item.type === 'dir'">
               <ma-icon name="folder"></ma-icon>
             </div>
 
-            <div 
-              class="file"
-              @click="select(item.name)"
-              v-if="item.type === 'file'"
-            >
-              <el-image
-                class="image"
-                v-if="item.url && item.url !== ''"
-                :src="item.url"
-                fit="contain"></el-image>
+            <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
+              <ma-icon name="file-text-o"></ma-icon>
+            </div>
+
+            <div class="file" @click="select(item.name)" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
+              <el-image class="image" :src="item.url" fit="contain"></el-image>
             </div>
 
             <el-tooltip placement="bottom">
 
               <div slot="content">
-                <span v-if="item.type === 'dir'">文件夹 <br /></span>
-                名称：{{ item.basename }} <br />
-                日期：{{ dayjs(item.timestamp * 1000).format('YYYY-M-D HH:mm:ss') }}
+                <span v-if="item.type === 'dir'">文件夹<br /></span>
+
+                原名称：
+                <span v-if="item.type === 'dir'">{{ item.basename }}</span>
+                <span v-else>{{ item.origin_name }}</span>
+                <br />
+
+                <span v-if="item.type !== 'dir'">存储名称：{{ item.object_name }}<br /></span>
+
+                日期：
+                <span v-if="item.type === 'dir'">{{ dayjs(item.timestamp * 1000).format('YYYY-M-D HH:mm:ss') }}</span>
+                <span v-else>{{ item.created_at }}</span>
+                <br />
+
+                <span v-if="item.type !== 'dir'">大小：{{ item.size_info }}</span>
               </div>
 
-              <div class="name">{{item.basename}}</div>
+              <div class="name" v-if="item.type === 'dir'">{{ item.basename }}</div>
+              <div class="name" v-else>{{ item.origin_name }}</div>
 
             </el-tooltip>
           </div>
@@ -108,37 +90,20 @@
         </div>
 
       </el-row>
-      
+
       <el-empty v-else :description="'暂无' + (type == 'image' ? '图片' : '文件')">
         <el-button icon="el-icon-refresh" size="small" type="primary" @click="getList()">刷新</el-button>
       </el-empty>
 
       <span slot="footer" class="dialog-footer">
-        
-        <el-pagination
-          class="ma-fl"
-          @size-change="getList"
-          @current-change="getList"
-          layout="total, sizes, prev, pager, next"
-          :page-sizes="[30, 60]"
-          :current-page.sync="queryParams.page"
-          :page-size.sync="queryParams.pageSize"
-          :total="pageInfo.total"
-        ></el-pagination>
 
-        <el-button
-          @click="handleResClose"
-          size="small"
-        >
+        <el-pagination class="ma-fl" @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next" :page-sizes="[30, 60]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total"></el-pagination>
+
+        <el-button @click="handleResClose" size="small">
           关 闭
         </el-button>
 
-        <el-button
-          type="primary"
-          @click="selectSubmit"
-          :loading="loading"
-          size="small"
-        >
+        <el-button type="primary" @click="selectSubmit" :loading="loading" size="small">
           确 定
         </el-button>
 
@@ -174,7 +139,9 @@ export default {
       pageInfo: {},
       // 搜索参数
       queryParams: {
-        name: undefined,
+        origin_name: undefined,
+        storage_path: '',
+        mime_type: 'image',
         page: 1,
         pageSize: 30
       }
@@ -184,6 +151,7 @@ export default {
 
     show () {
       this.resDialog = true
+      this.queryParams.mime_type = this.type === 'image' ? 'image' : ''
       this.title = this.type === 'image' ? '选择图片' : '选择文件'
       this.getList()
     },
@@ -200,10 +168,10 @@ export default {
     },
 
     openFolder (folder, type) {
-      this.queryParams.path = folder
+      this.queryParams.storage_path = folder
       if (type === 'in') {
         const parent = this.breadcrumb[this.breadcrumb.length - 1];
-        this.breadcrumb.push({ name: folder, path: parent.path + '/' + folder})
+        this.breadcrumb.push({ name: folder, path: parent.path + '/' + folder })
       }
       if (type == 'out') {
         if (folder == '/' && this.breadcrumb.length > 1) {
@@ -225,7 +193,7 @@ export default {
   padding: 10px 20px !important;
 }
 .breadcrumb {
-  border: 1px solid #EBEEF5;
+  border: 1px solid #ebeef5;
   padding: 10px;
   border-radius: 2px;
   margin-top: 10px;
@@ -233,12 +201,12 @@ export default {
 .file-list {
   display: inline-flex;
   flex-wrap: wrap;
-  flex-direction:row;
+  flex-direction: row;
 }
 .file-list .list {
   width: 105px;
   height: 120px;
-  border: 1px solid #EBEEF5;
+  border: 1px solid #ebeef5;
   margin-right: 14px;
   margin-bottom: 14px;
   display: flex;
@@ -250,7 +218,7 @@ export default {
   background: #f5f5f5;
 }
 .file-list .list:nth-child(6) {
-    margin-right: 0; 
+  margin-right: 0;
 }
 .list .icon {
   height: 70px;
@@ -274,8 +242,8 @@ export default {
   line-height: 27px;
   height: 27px;
   width: 90%;
-  font-size: 12px; 
-  margin:0 auto;
+  font-size: 12px;
+  margin: 0 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

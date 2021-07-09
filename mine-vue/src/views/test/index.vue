@@ -1,11 +1,11 @@
 <template>
-    <ma-container>
-        <photo v-model="files">
-            <template slot="upload">
-                <upload type="image" @uploadData="getFiles"></upload>
-            </template>
-        </photo>
-    </ma-container>
+  <ma-container>
+    <photo v-model="files">
+      <template slot="upload">
+        <upload type="file" @uploadData="getFiles"></upload>
+      </template>
+    </photo>
+  </ma-container>
 </template>
 
 <script>

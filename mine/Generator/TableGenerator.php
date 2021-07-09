@@ -81,7 +81,7 @@ class TableGenerator extends MineGenerator
                     $currentTable->nullable();
                 }
                 if (!empty($column['index'])) {
-                    $currentTable->index($column['name']);
+                    $table->index($column['name'], null, $column['index']);
                 }
             }
             // 添加系统字段

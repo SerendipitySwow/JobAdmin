@@ -2,58 +2,23 @@
   <el-row>
 
     <el-row>
-      <el-button
-        icon="el-icon-finished"
-        size="small"
-        :disabled="disabled"
-        @click="$refs.Res.show()"
-      >
+      <el-button icon="el-icon-finished" size="small" :disabled="disabled" @click="$refs.Res.show()">
         {{ selectButtonText }}
       </el-button>
 
-      <el-button
-        icon="el-icon-upload2"
-        type="primary"
-        size="small"
-        @click="handleShowUploadDialog"
-        :disabled="disabled"
-      >
+      <el-button icon="el-icon-upload2" type="primary" size="small" @click="handleShowUploadDialog" :disabled="disabled">
         {{ uploadButtunText }}
       </el-button>
     </el-row>
 
-    <el-dialog
-      :title="uploadButtunText"
-      :visible.sync="uploadDialog"
-      width="420px"
-      :before-close="handleUploadClose">
+    <el-dialog :title="uploadButtunText" :visible.sync="uploadDialog" width="420px" :before-close="handleUploadClose">
 
       <el-select v-model="uploadDir" filterable placeholder="请选择上传目录" style="width: 100%" size="small">
-        <el-option
-          v-for="item in dirs"
-          :key="item.path"
-          :label="item.basename"
-          :value="item.path">
+        <el-option v-for="item in dirs" :key="item.path" :label="item.basename" :value="item.path">
         </el-option>
       </el-select>
 
-      <el-upload
-        class="mt-20"
-        ref="upload"
-        drag
-        :multiple="multiple"
-        :accept="allowUploadFile"
-        style="width: 100%"
-        action="Fake Action"
-        :disabled="disabled"
-        :limit="limit"
-        :auto-upload="false"
-        :file-list="fileList"
-        :on-exceed="handleExceed"
-        :on-change="handleChange"
-        :on-remove="handleRemove"
-        :http-request="handleUpload"
-      >
+      <el-upload class="mt-20" ref="upload" drag :multiple="multiple" :accept="allowUploadFile" style="width: 100%" action="Fake Action" :disabled="disabled" :limit="limit" :auto-upload="false" :file-list="fileList" :on-exceed="handleExceed" :on-change="handleChange" :on-remove="handleRemove" :http-request="handleUpload">
 
         <i class="el-icon-upload"></i>
 
@@ -64,20 +29,11 @@
 
       <span slot="footer" class="dialog-footer">
 
-        <el-button
-          @click="uploadDialog = false"
-          size="small"
-        >
+        <el-button @click="uploadDialog = false" size="small">
           关 闭
         </el-button>
 
-        <el-button
-          type="primary"
-          @click="uploadSubmit"
-          :loading="loading"
-          :disabled="disabled"
-          size="small"
-        >
+        <el-button type="primary" @click="uploadSubmit" :loading="loading" :disabled="disabled" size="small">
           上 传
         </el-button>
 
@@ -85,7 +41,7 @@
 
     </el-dialog>
 
-    <res ref="Res" @select="getSelect"></res>
+    <res ref="Res" :type="type" @select="getSelect"></res>
   </el-row>
 </template>
 <script>
@@ -180,10 +136,10 @@ export default {
       this.fileList = []
     },
 
-    handleUpload (data) {},
+    handleUpload (data) { },
 
     getSelect () {
-      
+
     },
 
     uploadSubmit () {
