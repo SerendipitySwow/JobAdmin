@@ -30,7 +30,6 @@ class DeleteUploadFileListener implements ListenerInterface
     {
         $filePath = $this->getFilePath($event->getModel());
         try {
-            echo $filePath;
             $event->getFilesystem()->delete($filePath);
         } catch (FileNotFoundException $e) {
             // 文件删除失败，跳过删除数据

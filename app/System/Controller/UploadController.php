@@ -80,6 +80,19 @@ class UploadController extends MineController
     }
 
     /**
+     * 获取当前目录所有文件和目录
+     * @GetMapping("getAllFiles")
+     * @Auth
+     */
+    public function getAllFile(): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->success(
+            $this->service->getAllFile($this->request->input('path', ''))
+        );
+    }
+
+
+    /**
      * 下载文件
      * @GetMapping("download")
      */

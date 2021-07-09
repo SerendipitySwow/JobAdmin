@@ -195,7 +195,6 @@ export default {
               this.fileData.push(res.data)
             })
           }, 1000)
-           
         })
         this.loading = false
         this.uploadDialog = false

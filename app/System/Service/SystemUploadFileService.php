@@ -42,6 +42,9 @@ class SystemUploadFileService extends AbstractService
 
     /**
      * 上传文件
+     * @param UploadedFile $uploadedFile
+     * @param array $config
+     * @return array
      * @throws \League\Flysystem\FileExistsException
      */
     public function upload(UploadedFile $uploadedFile, array $config = []): array
@@ -62,5 +65,15 @@ class SystemUploadFileService extends AbstractService
     public function getDirectory(string $path = ''): array
     {
         return $this->mineUpload->getDirectory($path);
+    }
+
+    /**
+     * 获取当前目录下所有文件（包含目录）
+     * @param string $path
+     * @return array
+     */
+    public function getAllFile(string $path = ''): array
+    {
+        return $this->mineUpload->listContents($path);
     }
 }
