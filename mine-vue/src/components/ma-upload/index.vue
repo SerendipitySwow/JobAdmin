@@ -182,6 +182,10 @@ export default {
 
     handleUpload (data) {},
 
+    getSelect () {
+      
+    },
+
     uploadSubmit () {
       this.loading = true
 

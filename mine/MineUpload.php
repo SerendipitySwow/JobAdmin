@@ -145,7 +145,7 @@ class MineUpload
      * @param string $filename
      * @return string
      */
-    protected function assembleUrl(string $path, string $filename): string
+    public function assembleUrl(string $path, string $filename): string
     {
         $realpath =  '/'. $path . '/' . $filename;
         $mode = $this->getStorageMode();

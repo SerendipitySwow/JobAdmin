@@ -87,7 +87,7 @@ class UploadController extends MineController
     public function getAllFile(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success(
-            $this->service->getAllFile($this->request->input('path', ''))
+            $this->service->getAllFile($this->request->all())
         );
     }
 

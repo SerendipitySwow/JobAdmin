@@ -13,6 +13,18 @@ import { request } from '@/api/_service.js'
 }
 
 /**
+ * 获取目录列表
+ * @returns
+ */
+ export function getAllFiles (params = {}) {
+  return request({
+    url: 'system/getAllFiles',
+    method: 'get',
+    params
+  })
+}
+
+/**
  * 上传图片
  * @returns
  */

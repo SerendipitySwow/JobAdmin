@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemUploadFileMapper;
+use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpMessage\Upload\UploadedFile;
+use Hyperf\Utils\Collection;
 use Mine\Abstracts\AbstractService;
 use Mine\MineUpload;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -69,11 +71,37 @@ class SystemUploadFileService extends AbstractService
 
     /**
      * 获取当前目录下所有文件（包含目录）
-     * @param string $path
+     * @param array $params
      * @return array
      */
-    public function getAllFile(string $path = ''): array
+    public function getAllFile(array $params = []): array
     {
-        return $this->mineUpload->listContents($path);
+        $collect = new Collection(
+            $this->mineUpload->listContents($params['path'] ?? '')
+        );
+
+        if ($params['name'] ?? false) {
+            $collect = $collect->filter(function ($row) use ($params) {
+                return \Mine\Helper\Str::contains($row->Name, $params['name']);
+            });
+        }
+
+        $data = $collect->forPage(
+            (int) $params['page'] ?? 1,
+            (int) $params['pageSize'] ?? 10
+        )->toArray();
+
+        foreach ($data as &$item) {
+            $item['url'] = $this->mineUpload->assembleUrl($item['dirname'], $item['basename']);
+        }
+
+        return [
+            'items' => $data,
+            'pageInfo' => [
+                'total' => $collect->count(),
+                'currentPage' => $params['page'] ?? 1,
+                'totalPage' => ceil($collect->count() / ($params['pageSize'] ?? 10))
+            ]
+        ];
     }
 }
