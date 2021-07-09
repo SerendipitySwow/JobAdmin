@@ -4,14 +4,14 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSettingCrontabLogTable extends Migration
+class CreateSettingGenerateTablesTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('setting_crontab_log', function (Blueprint $table) {
+        Schema::create('setting_generate_tables', function (Blueprint $table) {
             $table->engine = 'Innodb';
             $table->comment('定时任务执行日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
