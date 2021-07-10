@@ -91,25 +91,35 @@ class MineUpload
         }
         $filename = $this->getNewName() . '.' . $uploadedFile->getExtension();
 
-        if (! $this->filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
+        if (!$this->filesystem->writeStream($path . '/' . $filename, $uploadedFile->getStream()->detach())) {
             throw new \RuntimeException($uploadedFile->getError(), 500);
         }
 
         $fileInfo = [
             'storage_mode' => $this->getMappingMode(),
-            'origin_name'  => $uploadedFile->getClientFilename(),
-            'object_name'  => $filename,
-            'mime_type'    => $uploadedFile->getClientMediaType(),
+            'origin_name' => $uploadedFile->getClientFilename(),
+            'object_name' => $filename,
+            'mime_type' => $uploadedFile->getClientMediaType(),
             'storage_path' => $path,
-            'suffix'       => $uploadedFile->getExtension(),
-            'size_byte'    => $uploadedFile->getSize(),
-            'size_info'    => $this->getSizeInfo($uploadedFile->getSize()),
-            'url'          => $this->assembleUrl($path, $filename),
+            'suffix' => $uploadedFile->getExtension(),
+            'size_byte' => $uploadedFile->getSize(),
+            'size_info' => $this->getSizeInfo($uploadedFile->getSize()),
+            'url' => $this->assembleUrl($path, $filename),
         ];
 
         $this->evDispatcher->dispatch(new \Mine\Event\UploadAfter($fileInfo));
 
         return $fileInfo;
+    }
+
+    /**
+     * 创建目录
+     * @param string $name
+     * @return bool
+     */
+    public function createUploadDir(string $name): bool
+    {
+        return $this->filesystem->createDir($name);
     }
 
     /**
@@ -119,17 +129,18 @@ class MineUpload
      */
     public function listContents(string $path = ''): array
     {
-        return $this->factory->get($this->getStorageMode())->listContents($path);
+        return $this->filesystem->listContents($path);
     }
 
     /**
      * 获取目录
      * @param string $path
+     * @param bool $isChildren
      * @return array
      */
-    public function getDirectory(string $path = ''): array
+    public function getDirectory(string $path, bool $isChildren): array
     {
-        $contents = $this->filesystem->listContents($path);
+        $contents = $this->filesystem->listContents($path, $isChildren);
         $dirs = [];
         foreach ($contents as $content) {
             if ($content['type'] == 'dir') {

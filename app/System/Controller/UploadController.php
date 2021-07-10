@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\System\Request\Upload\CreateUploadDirRequest;
 use App\System\Request\Upload\UploadFileRequest;
 use App\System\Request\Upload\UploadImageRequest;
 use App\System\Service\SystemUploadFileService;
@@ -10,7 +11,6 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
-use Hyperf\Filesystem\FilesystemFactory;
 use Mine\Annotation\Auth;
 use Mine\MineController;
 
@@ -75,7 +75,10 @@ class UploadController extends MineController
     public function getDirectory(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success(
-            $this->service->getDirectory($this->request->input('path', ''))
+            $this->service->getDirectory(
+                $this->request->input('path', ''),
+                (bool) $this->request->input('isChildren', false)
+            )
         );
     }
 
@@ -91,6 +94,15 @@ class UploadController extends MineController
         );
     }
 
+    /**
+     * 获取当前目录所有文件和目录
+     * @PostMapping("createUploadDir")
+     * @Auth
+     */
+    public function createUploadDir(CreateUploadDirRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->service->createUploadDir($request->all()) ? $this->success() : $this->error();
+    }
 
     /**
      * 下载文件

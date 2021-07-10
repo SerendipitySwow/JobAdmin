@@ -25,6 +25,20 @@ import { request } from '@/api/_service.js'
 }
 
 /**
+ * 创建上传目录
+ * @returns
+ */
+export function createUploadDir (params = {}) {
+  return request({
+    url: 'system/createUploadDir',
+    method: 'post',
+    params
+  })
+}
+
+
+
+/**
  * 上传图片
  * @returns
  */

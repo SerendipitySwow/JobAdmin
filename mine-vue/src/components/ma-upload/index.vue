@@ -14,9 +14,17 @@
     <el-dialog :title="uploadButtunText" :visible.sync="uploadDialog" width="420px" :before-close="handleUploadClose">
 
       <el-select v-model="uploadDir" filterable placeholder="请选择上传目录" style="width: 100%" size="small">
-        <el-option v-for="item in dirs" :key="item.path" :label="item.basename" :value="item.path">
-        </el-option>
+        <el-option v-for="item in dirs" :key="item.path" :label="item.path" :value="item.path"></el-option>
       </el-select>
+
+      <el-button 
+        size="small"
+        class="ma-mt-10"
+        style="width: 100%"
+        icon="el-icon-plus"
+        @click="createDir"
+        >新建目录
+      </el-button>
 
       <el-upload class="mt-20" ref="upload" drag :multiple="multiple" :accept="allowUploadFile" style="width: 100%" action="Fake Action" :disabled="disabled" :limit="limit" :auto-upload="false" :file-list="fileList" :on-exceed="handleExceed" :on-change="handleChange" :on-remove="handleRemove" :http-request="handleUpload">
 
@@ -33,7 +41,11 @@
           关 闭
         </el-button>
 
-        <el-button type="primary" @click="uploadSubmit" :loading="loading" :disabled="disabled" size="small">
+        <el-button 
+          type="primary"
+          @click="uploadSubmit" 
+          :loading="loading"
+          :disabled="disabled" size="small">
           上 传
         </el-button>
 
@@ -45,7 +57,7 @@
   </el-row>
 </template>
 <script>
-import { getDirectory, uploadImage, uploadFile } from '@/api/system/upload'
+import { getDirectory, uploadImage, uploadFile, createUploadDir } from '@/api/system/upload'
 import Res from './components/res'
 export default {
   name: 'upload',
@@ -110,14 +122,6 @@ export default {
       this.allowUploadFile = '.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rar,.zip,.7z,.gz,.pdf,.wps,.md'
       this.uploadMethod = uploadFile
     }
-
-    getDirectory().then(res => {
-      this.dirs = res.data
-      this.dirs.unshift({
-        path: '',
-        basename: '根目录按日期存放'
-      })
-    })
   },
   methods: {
 
@@ -125,10 +129,20 @@ export default {
 
     },
 
+    getDirectorys () {
+      getDirectory({ path: '', isChildren: true }).then(res => {
+        this.dirs = res.data
+        this.dirs.unshift({
+          path: '/',
+        })
+      })
+    },
+
     handleShowUploadDialog () {
       this.uploadDialog = true
       this.uploadDir = ''
       this.fileList = []
+      this.getDirectorys()
     },
 
     handleUploadClose () {
@@ -186,6 +200,20 @@ export default {
         const count = this.limit - fileList.length
         this.error(`上传数量超出限制，最多还能选择 ${count} 个文件`)
       }
+    },
+
+    createDir () {
+      this.$prompt('请输入目录名称（只允许英文和数字下划线组成）', '新建目录', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[A-Za-z0-9_]+$/,
+        inputErrorMessage: '请输入合法的目录名称'
+      }).then(({ value }) => {
+        createUploadDir({ name: value, path: this.uploadDir }).then(res => {
+          this.success(res.message)
+          this.getDirectorys()
+        })
+      })
     }
 
   }

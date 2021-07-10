@@ -25,8 +25,12 @@
 
         <el-col :span="14">
 
-          <el-input :placeholder="'输入' + (type == 'image' ? '图片' : '文件') + '名称筛选'" size="small" v-model="queryParams.origin_name">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input 
+            :placeholder="'输入' + (type == 'image' ? '图片' : '文件') + '名称筛选'"
+            size="small"
+            clearable
+            v-model="queryParams.origin_name">
+            <el-button slot="append" icon="el-icon-search" @click="getList()"></el-button>
           </el-input>
 
         </el-col>
@@ -173,8 +177,10 @@ export default {
         const parent = this.breadcrumb[this.breadcrumb.length - 1];
         this.breadcrumb.push({ name: folder, path: parent.path + '/' + folder })
       }
-      if (type == 'out') {
-        if (folder == '/' && this.breadcrumb.length > 1) {
+      if (type === 'out') {
+        if (folder === '/') {
+          this.breadcrumb = [{ name: '根目录', path: '/' }]
+        } else {
           this.breadcrumb.pop()
         }
       }

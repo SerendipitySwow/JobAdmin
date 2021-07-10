@@ -60,13 +60,28 @@ class SystemUploadFileService extends AbstractService
     }
 
     /**
+     * 创建新目录
+     * @param array $params
+     * @return bool
+     */
+    public function createUploadDir(array $params): bool
+    {
+        $name = $params['name'];
+        if ($params['path'] ?? false) {
+            $name = $params['path'] . '/' . $name;
+        }
+        return $this->mineUpload->createUploadDir($name);
+    }
+
+    /**
      * 获取根目录下所有目录
      * @param string $path
+     * @param bool $isChildren
      * @return array
      */
-    public function getDirectory(string $path = ''): array
+    public function getDirectory(string $path = '', bool $isChildren = false): array
     {
-        return $this->mineUpload->getDirectory($path);
+        return $this->mineUpload->getDirectory($path, $isChildren);
     }
 
     /**
