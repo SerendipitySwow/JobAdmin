@@ -21,7 +21,7 @@ class UploadFileRequest extends FormRequest
     {
         return [
             'file' => 'required|mimes:txt,doc,docx,xls,xlsx,ppt,pptx,rar,zip,7z,gz,pdf,wps,md',
-            'path' => 'min:2|max:20',
+            'path' => 'max:30',
         ];
     }
 }

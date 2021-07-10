@@ -21,7 +21,7 @@ class UploadImageRequest extends FormRequest
     {
         return [
             'image' => 'required|image',
-            'path' => 'min:2|max:20',
+            'path'  => 'max:30',
         ];
     }
 }

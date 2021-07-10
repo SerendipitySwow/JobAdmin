@@ -14,7 +14,11 @@
     <el-dialog :title="uploadButtunText" :visible.sync="uploadDialog" width="420px" :before-close="handleUploadClose">
 
       <el-select v-model="uploadDir" filterable placeholder="请选择上传目录" style="width: 100%" size="small">
-        <el-option v-for="item in dirs" :key="item.path" :label="item.path" :value="item.path"></el-option>
+        <el-option 
+          v-for="item in dirs"
+          :key="item.path"
+          :label="item.path == '' ? '根目录按日期存放' : item.path"
+          :value="item.path"></el-option>
       </el-select>
 
       <el-button 
@@ -132,9 +136,7 @@ export default {
     getDirectorys () {
       getDirectory({ path: '', isChildren: true }).then(res => {
         this.dirs = res.data
-        this.dirs.unshift({
-          path: '/',
-        })
+        this.dirs.unshift({ path: '' })
       })
     },
 
@@ -203,7 +205,7 @@ export default {
     },
 
     createDir () {
-      this.$prompt('请输入目录名称（只允许英文和数字下划线组成）', '新建目录', {
+      this.$prompt('请输入目录名称（只允许字母、数字和下划线组成）', '新建目录', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^[A-Za-z0-9_]+$/,
