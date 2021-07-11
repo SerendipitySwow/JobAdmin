@@ -94,6 +94,7 @@ class SystemUploadFileService extends AbstractService
         $directory = $this->getDirectory($params['storage_path'] ?? '');
 
         $params['select'] = [
+            'id',
             'origin_name',
             'object_name',
             'mime_type',

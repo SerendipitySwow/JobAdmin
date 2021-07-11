@@ -48,51 +48,50 @@
       </el-row>
 
       <el-row class="mt-20 file-list" v-if="dataList.length > 0">
+        <el-checkbox-group v-model="checkList">
+          <div class="file-list">
+            <div class="list" v-for="(item, index) in dataList" :key="index">
 
-        <div class="file-list">
-
-          <div class="list" v-for="(item, index) in dataList" :key="index">
-
-            <div class="icon" @click="openFolder(item.basename, 'in')" v-if="item.type === 'dir'">
-              <ma-icon name="folder"></ma-icon>
-            </div>
-
-            <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
-              <ma-icon name="file-text-o"></ma-icon>
-            </div>
-
-            <div class="file" @click="select(item.name)" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
-              <el-image class="image" :src="item.url" fit="contain"></el-image>
-            </div>
-
-            <el-tooltip placement="bottom">
-
-              <div slot="content">
-                <span v-if="item.type === 'dir'">文件夹<br /></span>
-
-                原名称：
-                <span v-if="item.type === 'dir'">{{ item.basename }}</span>
-                <span v-else>{{ item.origin_name }}</span>
-                <br />
-
-                <span v-if="item.type !== 'dir'">存储名称：{{ item.object_name }}<br /></span>
-
-                日期：
-                <span v-if="item.type === 'dir'">{{ dayjs(item.timestamp * 1000).format('YYYY-M-D HH:mm:ss') }}</span>
-                <span v-else>{{ item.created_at }}</span>
-                <br />
-
-                <span v-if="item.type !== 'dir'">大小：{{ item.size_info }}</span>
+              <div class="icon" @click="openFolder(item.basename, 'in')" v-if="item.type === 'dir'">
+                <ma-icon name="folder"></ma-icon>
               </div>
 
-              <div class="name" v-if="item.type === 'dir'">{{ item.basename }}</div>
-              <div class="name" v-else>{{ item.origin_name }}</div>
+              <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
+                <ma-icon name="file-text-o"></ma-icon>
+              </div>
 
-            </el-tooltip>
+              <div class="file" @click="handleSelect(item.id)" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
+                <el-checkbox class="check"></el-checkbox>
+                <el-image class="image" :src="item.url" fit="contain"></el-image>
+              </div>
+
+              <el-tooltip placement="bottom">
+
+                <div slot="content">
+                  <span v-if="item.type === 'dir'">文件夹<br /></span>
+
+                  原名称：
+                  <span v-if="item.type === 'dir'">{{ item.basename }}</span>
+                  <span v-else>{{ item.origin_name }}</span>
+                  <br />
+
+                  <span v-if="item.type !== 'dir'">存储名称：{{ item.object_name }}<br /></span>
+
+                  日期：
+                  <span v-if="item.type === 'dir'">{{ dayjs(item.timestamp * 1000).format('YYYY-M-D HH:mm:ss') }}</span>
+                  <span v-else>{{ item.created_at }}</span>
+                  <br />
+
+                  <span v-if="item.type !== 'dir'">大小：{{ item.size_info }}</span>
+                </div>
+
+                <div class="name" v-if="item.type === 'dir'">{{ item.basename }}</div>
+                <div class="name" v-else>{{ item.origin_name }}</div>
+
+              </el-tooltip>
+            </div>
           </div>
-
-        </div>
-
+        </el-checkbox-group>
       </el-row>
 
       <el-empty v-else :description="'暂无' + (type == 'image' ? '图片' : '文件')">
@@ -139,6 +138,8 @@ export default {
       breadcrumb: [{ name: '根目录', path: '/' }],
       // 数据列表
       dataList: [],
+      // 选择数据
+      checkList: [],
       // 分页数据
       pageInfo: {},
       // 搜索参数
@@ -185,6 +186,10 @@ export default {
         }
       }
       this.getList()
+    },
+
+    handleSelect (id) {
+      console.log(id)
     },
 
     selectSubmit () {
@@ -238,6 +243,7 @@ export default {
 .list .file {
   height: 94px;
   overflow: hidden;
+  position: relative;
 }
 .list .file .image {
   width: 100%;
@@ -253,5 +259,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.list .file .check {
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 </style>
