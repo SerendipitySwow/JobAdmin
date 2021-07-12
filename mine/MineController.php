@@ -90,4 +90,15 @@ abstract class MineController
     {
         return $this->response->redirect($toUrl, $status, $schema);
     }
+
+    /**
+     * 下载文件
+     * @param string $filePath
+     * @param string $name
+     * @return ResponseInterface
+     */
+    public function _download(string $filePath, string $name = '')
+    {
+        return $this->response->download($filePath, $name);
+    }
 }

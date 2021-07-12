@@ -13,7 +13,7 @@ class CreateSettingGenerateColumnsTable extends Migration
     {
         Schema::create('setting_generate_columns', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('定时任务执行日志表');
+            $table->comment('代码生成业务字段信息表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();

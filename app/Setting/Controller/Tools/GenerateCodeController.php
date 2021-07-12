@@ -12,7 +12,7 @@ use Mine\Annotation\Auth;
  * @Controller(prefix="setting/code")
  * @Auth
  */
-class CodeController
+class GenerateCodeController
 {
     
 }
