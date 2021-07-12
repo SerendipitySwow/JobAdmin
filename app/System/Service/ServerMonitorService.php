@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
-class ServiceMonitorService
+class ServerMonitorService
 {
     /**
      * 获取cpu信息
