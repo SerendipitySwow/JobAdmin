@@ -215,9 +215,8 @@ export default {
 
     // 提交数据
     selectSubmit () {
-      console.log(this.checkList)
-
       this.$emit('confirmData', this.checkList)
+      this.resDialog = false
     }
   }
 }
