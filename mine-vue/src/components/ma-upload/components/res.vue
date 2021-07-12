@@ -9,15 +9,19 @@
           <el-button-group>
 
             <el-tooltip class="item" effect="dark" :content="'选择当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-check">全选</el-button>
+              <el-button size="small" icon="el-icon-check" @click="selectAll">全选</el-button>
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'反选当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-close">反选</el-button>
+              <el-button size="small" icon="el-icon-close" @click="selectInvert">反选</el-button>
             </el-tooltip>
 
-            <el-tooltip class="item" effect="dark" :content="'取消所有选中的' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-error">取消</el-button>
+            <el-tooltip class="item" effect="dark" :content="'取消选择当前页' + (type == 'image' ? '图片' : '文件')" placement="top">
+              <el-button size="small" icon="el-icon-close" @click="selectCancel">取消</el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" :content="'清除所有选中的' + (type == 'image' ? '图片' : '文件')" placement="top">
+              <el-button size="small" icon="el-icon-error" @click="checkList = []">清除</el-button>
             </el-tooltip>
 
           </el-button-group>
@@ -25,7 +29,7 @@
 
         <el-col :span="14">
 
-          <el-input 
+          <el-input
             :placeholder="'输入' + (type == 'image' ? '图片' : '文件') + '名称筛选'"
             size="small"
             clearable
@@ -60,8 +64,8 @@
                 <ma-icon name="file-text-o"></ma-icon>
               </div>
 
-              <div class="file" @click="handleSelect(item.id)" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
-                <el-checkbox class="check"></el-checkbox>
+              <div class="file" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
+                <el-checkbox class="check" :label="item" > {{ index + 1 }}</el-checkbox>
                 <el-image class="image" :src="item.url" fit="contain"></el-image>
               </div>
 
@@ -116,6 +120,7 @@
 </template>
 <script>
 import { getAllFiles } from '@/api/system/upload'
+import { union, xor, difference } from 'lodash'
 import dayjs from 'dayjs'
 export default {
   props: {
@@ -138,7 +143,7 @@ export default {
       breadcrumb: [{ name: '根目录', path: '/' }],
       // 数据列表
       dataList: [],
-      // 选择数据
+      // 选择数据id
       checkList: [],
       // 分页数据
       pageInfo: {},
@@ -154,13 +159,21 @@ export default {
   },
   methods: {
 
+    // 显示modal
     show () {
       this.resDialog = true
       this.queryParams.mime_type = this.type === 'image' ? 'image' : ''
       this.title = this.type === 'image' ? '选择图片' : '选择文件'
+      this.checkList = []
       this.getList()
     },
 
+    // 关闭modal
+    handleResClose () {
+      this.resDialog = false
+    },
+
+    // 获取目录及文件
     getList () {
       getAllFiles(this.queryParams).then(res => {
         this.dataList = res.data.items
@@ -168,14 +181,10 @@ export default {
       })
     },
 
-    handleResClose () {
-      this.resDialog = false
-    },
-
+    // 打开目录
     openFolder (folder, type) {
-      this.queryParams.storage_path = folder
       if (type === 'in') {
-        const parent = this.breadcrumb[this.breadcrumb.length - 1];
+        const parent = this.breadcrumb[this.breadcrumb.length - 1]
         this.breadcrumb.push({ name: folder, path: parent.path + '/' + folder })
       }
       if (type === 'out') {
@@ -185,15 +194,30 @@ export default {
           this.breadcrumb.pop()
         }
       }
+      this.queryParams.storage_path = folder
       this.getList()
     },
 
-    handleSelect (id) {
-      console.log(id)
+    // 全选当前页
+    selectAll () {
+      this.checkList = union(this.checkList, this.dataList)
     },
 
-    selectSubmit () {
+    // 反选当前页
+    selectInvert () {
+      this.checkList = xor(this.checkList, this.dataList)
+    },
 
+    // 取消当前页选择
+    selectCancel () {
+      this.checkList = difference(this.checkList, this.dataList)
+    },
+
+    // 提交数据
+    selectSubmit () {
+      console.log(this.checkList)
+
+      this.$emit('confirmData', this.checkList)
     }
   }
 }
@@ -228,7 +252,16 @@ export default {
 .file-list .list:hover {
   background: #f5f5f5;
 }
-.file-list .list:nth-child(6) {
+.file-list .list:nth-child(6),
+.file-list .list:nth-child(12),
+.file-list .list:nth-child(18),
+.file-list .list:nth-child(24),
+.file-list .list:nth-child(30),
+.file-list .list:nth-child(36),
+.file-list .list:nth-child(42),
+.file-list .list:nth-child(48),
+.file-list .list:nth-child(54),
+.file-list .list:nth-child(60) {
   margin-right: 0;
 }
 .list .icon {
@@ -262,7 +295,17 @@ export default {
 }
 .list .file .check {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: -1px;
+  left: 2px;
+  width: 100px;
+  height: 90px;
+  z-index: 9;
+  overflow: hidden;
+}
+/deep/ .el-checkbox__label {
+  padding-right: 2px;
+  line-height: 16px;
+  font-size: 12px;
+  float: right;
 }
 </style>

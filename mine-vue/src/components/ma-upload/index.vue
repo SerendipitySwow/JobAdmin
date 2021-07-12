@@ -14,14 +14,14 @@
     <el-dialog :title="uploadButtunText" :visible.sync="uploadDialog" width="420px" :before-close="handleUploadClose">
 
       <el-select v-model="uploadDir" filterable placeholder="请选择上传目录" style="width: 100%" size="small">
-        <el-option 
+        <el-option
           v-for="item in dirs"
           :key="item.path"
           :label="item.path == '' ? '根目录按日期存放' : item.path"
           :value="item.path"></el-option>
       </el-select>
 
-      <el-button 
+      <el-button
         size="small"
         class="ma-mt-10"
         style="width: 100%"
@@ -45,9 +45,9 @@
           关 闭
         </el-button>
 
-        <el-button 
+        <el-button
           type="primary"
-          @click="uploadSubmit" 
+          @click="uploadSubmit"
           :loading="loading"
           :disabled="disabled" size="small">
           上 传
@@ -57,7 +57,7 @@
 
     </el-dialog>
 
-    <res ref="Res" :type="type" @select="getSelect"></res>
+    <res ref="Res" :type="type" @confirmData="getConfirmData"></res>
   </el-row>
 </template>
 <script>
@@ -129,10 +129,7 @@ export default {
   },
   methods: {
 
-    handleSelectRes () {
-
-    },
-
+    // 获取目录内容
     getDirectorys () {
       getDirectory({ path: '', isChildren: true }).then(res => {
         this.dirs = res.data
@@ -140,6 +137,7 @@ export default {
       })
     },
 
+    // 显示modal
     handleShowUploadDialog () {
       this.uploadDialog = true
       this.uploadDir = ''
@@ -147,17 +145,23 @@ export default {
       this.getDirectorys()
     },
 
+    // 关闭modal
     handleUploadClose () {
       this.uploadDialog = false
       this.fileList = []
     },
 
+    // 上传处理方法，空方法。
     handleUpload (data) { },
 
-    getSelect () {
-
+    // 获取选择资源里的数据
+    getConfirmData (data) {
+      this.$emit('uploadData', data)
+      this.uploadDialog = false
+      this.success('选择成功')
     },
 
+    // 提交上传
     uploadSubmit () {
       this.loading = true
 
@@ -183,10 +187,12 @@ export default {
       }
     },
 
+    // 处理修改事件
     handleChange (file, fileList) {
       this.fileList = fileList
     },
 
+    // 处理移除事件
     handleRemove (file, fileList) {
       this.fileList = fileList
     },
@@ -204,6 +210,7 @@ export default {
       }
     },
 
+    // 请求创建目录
     createDir () {
       this.$prompt('请输入目录名称（只允许字母、数字和下划线组成）', '新建目录', {
         confirmButtonText: '确定',
