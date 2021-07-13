@@ -54,9 +54,10 @@ class ModuleService extends AbstractService
 
     /**
      * 设置需要分页的数组数据
+     * @param array $params
      * @return array
      */
-    protected function getArrayData(): array
+    protected function getArrayData(array $params = []): array
     {
         // 先扫描模块
         $this->mine->scanModule();
