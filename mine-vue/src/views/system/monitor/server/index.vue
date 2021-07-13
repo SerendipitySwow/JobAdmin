@@ -149,7 +149,7 @@
 <script>
 import { getServerInfo } from '@/api/system/monitor'
 export default {
-  name: 'system-serviceMonitor',
+  name: 'system-monitor-server',
 
   data () {
     return {

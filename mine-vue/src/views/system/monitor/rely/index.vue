@@ -14,11 +14,17 @@
 
       </el-form>
     </template>
+
     <el-table v-loading="loading" :data="dataList">
+
       <el-table-column prop="name" label="依赖包名" width="260" fixed :show-overflow-tooltip="true"></el-table-column>
+
       <el-table-column prop="version" label="版本号" width="100"></el-table-column>
+
       <el-table-column prop="description" label="简介" :show-overflow-tooltip="true"></el-table-column>
+
       <el-table-column label="操作" width="80" >
+
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -26,11 +32,23 @@
             @click="handleDetails(scope.row.name)"
           >详细</el-button>
         </template>
+
       </el-table-column>
+
     </el-table>
+
     <template slot="footer">
-      <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
-      </el-pagination>
+
+      <el-pagination
+        @size-change="getList"
+        @current-change="getList"
+        layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[10, 20, 30, 50]"
+        :current-page.sync="queryParams.page"
+        :page-size.sync="queryParams.pageSize"
+        :total="pageInfo.total"
+      ></el-pagination>
+
     </template>
 
     <el-dialog
@@ -47,9 +65,12 @@
   </ma-container>
 </template>
 <script>
+
 import { getPackagePageList, getPackageDetail } from '@/api/system/monitor'
+
 export default {
   name: 'system-monitor-rely',
+
   data () {
     return {
       // dialog
@@ -75,9 +96,11 @@ export default {
       }
     }
   },
+
   created () {
     this.getList()
   },
+
   methods: {
 
     // 获取数据
@@ -99,12 +122,12 @@ export default {
         this.detailsLoading = false
       })
     },
-    
+
     // 关闭dialog
     handleClose () {
       this.relyVisible = false
     },
-   
+
     // 搜索
     handleSearch () {
       this.getList()

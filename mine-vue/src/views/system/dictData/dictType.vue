@@ -1,31 +1,40 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+
       <el-form-item label="类型名称" prop="name">
         <el-input v-model="form.name" size="small" placeholder="请输入类型名称"></el-input>
       </el-form-item>
+
       <el-form-item label="类型标识" prop="code">
         <el-input v-model="form.code" size="small" placeholder="请输入类型标识"></el-input>
       </el-form-item>
+
       <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
         <el-radio-group v-model="form.status">
           <el-radio label="0">启用</el-radio>
           <el-radio label="1">停用</el-radio>
         </el-radio-group>
       </el-form-item>
+
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" size="small" :rows="3" placeholder="备注信息" v-model="form.remark">
         </el-input>
       </el-form-item>
+
     </el-form>
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>
+
   </el-dialog>
 </template>
 <script>
+
 import { saveDictType, updateDictType } from '@/api/system/dictType'
+
 export default {
   data () {
     return {
@@ -52,7 +61,9 @@ export default {
       }
     }
   },
+
   methods: {
+
     // 新增字典类型
     create () {
       this.showForm = true
@@ -63,6 +74,7 @@ export default {
         this.form.id = null
       })
     },
+
     // 更新字典类型
     update (record) {
       this.saveType = 'update'
@@ -75,16 +87,19 @@ export default {
         this.setFormData(record)
       })
     },
+
     // 关闭处理方法
     handleClose () {
       this.showForm = false
       this.record = null
     },
+
     // 取消处理方法
     cancel () {
       this.showForm = false
       this.record = null
     },
+
     // 提交处理方法
     submitForm () {
       this.$refs.form.validate(valid => {
@@ -106,12 +121,14 @@ export default {
         }
       })
     },
+
     // 重置表单
     resetForm () {
       this.$emit('closeDialog', true)
       this.showForm = false
       this.$refs.form.resetFields()
     },
+
     // 填充form数据
     setFormData (record) {
       for (const item in this.form) {

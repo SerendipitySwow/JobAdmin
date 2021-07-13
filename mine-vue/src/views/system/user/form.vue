@@ -3,62 +3,79 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="90px">
       <el-row>
         <el-col :span="12">
+
           <el-form-item label="用户名" prop="username">
             <el-input v-model="form.username" size="small" :disabled="isDisabled" placeholder="请输入用户名"></el-input>
           </el-form-item>
+
           <el-form-item label="用户密码" prop="password" v-if="saveType === 'create'">
             <el-input v-model="form.password" size="small" placeholder="请输入用户密码" show-password></el-input>
           </el-form-item>
+
           <el-form-item label="角色" prop="role_ids">
             <el-select v-model="form.role_ids" size="small" clearable style="width:100%" multiple placeholder="请选择用户角色">
               <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
+
           <el-form-item label="手机" prop="phone" >
             <el-input v-model="form.phone" size="small" placeholder="请输入手机"></el-input>
           </el-form-item>
+
           <el-form-item label="岗位" prop="post_ids">
             <el-select v-model="form.post_ids" size="small" clearable style="width:100%" multiple placeholder="请选择用户岗位">
               <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
+
         </el-col>
         <el-col :span="12">
+
           <el-form-item label="所属部门" prop="dept_id">
             <el-cascader v-model="form.dept_id" size="small" clearable style="width:100%" :options="deptTree" :props="{ checkStrictly: true }"></el-cascader>
           </el-form-item>
+
           <el-form-item label="用户昵称" prop="nickname" >
             <el-input v-model="form.nickname" size="small" placeholder="请输入用户昵称"></el-input>
           </el-form-item>
+
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="form.email" size="small" placeholder="请输入邮箱"></el-input>
           </el-form-item>
+
           <el-form-item label="状态" prop="status">
             <el-radio-group v-model="form.status">
               <el-radio label="0">启用</el-radio>
               <el-radio label="1">停用</el-radio>
             </el-radio-group>
           </el-form-item>
+
         </el-col>
       </el-row>
+
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" size="small" :rows="3" placeholder="用户备注信息" v-model="form.remark">
         </el-input>
       </el-form-item>
+
     </el-form>
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>
+
   </el-dialog>
 </template>
 <script>
+
 import { getSelectTree } from '@/api/system/dept'
 import { getRoleList } from '@/api/system/role'
 import { getPostList } from '@/api/system/post'
 import { save, update, read } from '@/api/system/user'
+
 export default {
   data () {
     return {
@@ -103,13 +120,12 @@ export default {
       }
     }
   },
-  // 创建生命周期
-  mounted () {
-    this.initData()
-  },
+
   methods: {
+
     // 新增用户
     create () {
+      this.initData()
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增用户'
@@ -120,8 +136,10 @@ export default {
         this.form.password = '123456'
       })
     },
+
     // 更新用户
     update (record) {
+      this.initData()
       this.saveType = 'update'
       this.title = '编辑用户'
       this.showForm = true
@@ -141,6 +159,8 @@ export default {
         })
       })
     },
+
+    // 请求部门、角色、岗位数据
     initData () {
       getSelectTree().then(res => {
         this.deptTree = res.data
@@ -152,16 +172,19 @@ export default {
         this.postData = res.data
       })
     },
+
     // 关闭处理方法
     handleClose () {
       this.showForm = false
       this.record = null
     },
+
     // 取消处理方法
     cancel () {
       this.showForm = false
       this.record = null
     },
+
     // 提交处理方法
     submitForm () {
       this.$refs.form.validate(valid => {
@@ -184,12 +207,14 @@ export default {
         }
       })
     },
+
     // 重置表单
     resetForm () {
       this.$emit('closeDialog', true)
       this.showForm = false
       this.$refs.form.resetFields()
     },
+
     // 填充form数据
     setFormData (record) {
       for (const item in this.form) {

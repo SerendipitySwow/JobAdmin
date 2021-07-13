@@ -15,8 +15,19 @@
         </el-form-item>
 
         <el-form-item label="创建时间" class="ma-inline-form-item">
-          <el-date-picker size="small" type="daterange" v-model="dateRange" range-separator="至" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="handleDateChange" start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
+
+          <el-date-picker
+            size="small"
+            type="daterange"
+            v-model="dateRange"
+            range-separator="至"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            @change="handleDateChange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+
         </el-form-item>
 
         <el-form-item class="ma-inline-form-item">
@@ -29,21 +40,24 @@
 
     <el-row :gutter="20">
       <el-col :span="1.5">
+
         <el-button
-        size="small"
-        icon="el-icon-delete"
-         :disabled="btnIsDisabed"
+          size="small"
+          icon="el-icon-delete"
+          :disabled="btnIsDisabed"
           v-hasPermission="['system:attachment:delete']"
-           @click="handleDeletes"
+          @click="handleDeletes"
         >删除</el-button>
+
       </el-col>
 
       <table-right-toolbar
-       recycleCode="system:attachment:recycle"
-       @toggleData="switchDataType"
-       @refreshTable="getList"
-       @toggleSearch="switchShowSearch"
+        recycleCode="system:attachment:recycle"
+        @toggleData="switchDataType"
+        @refreshTable="getList"
+        @toggleSearch="switchShowSearch"
       ></table-right-toolbar>
+
     </el-row>
 
     <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
@@ -62,7 +76,6 @@
           {{getLable(scope.row.storage_mode)}}
         </template>
       </el-table-column>
-      
 
       <el-table-column prop="mime_type" label="资源类型" width="140" :show-overflow-tooltip="true">
       </el-table-column>
@@ -84,20 +97,45 @@
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
+
           <div v-if="showRecycle">
-            <el-button type="text" v-hasPermission="['system:attachment:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button type="text" v-hasPermission="['system:attachment:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:attachment:recovery']"
+              @click="handleRecovery(scope.row.id)"
+            >恢复</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:attachment:realDelete']"
+              @click="handleRealDelete(scope.row.id)"
+            >删除</el-button>
+
           </div>
+
           <div v-else>
-            <el-button type="text" @click="review(scope.row)">预览</el-button>
-            <el-button type="text" v-hasPermission="['system:attachment:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+
+            <el-button
+              type="text"
+              @click="review(scope.row)"
+            >预览</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:attachment:delete']"
+              @click="handleDelete(scope.row.id)"
+            >移到回收站</el-button>
+
           </div>
         </template>
+
       </el-table-column>
 
     </el-table>
 
     <template slot="footer">
+
       <el-pagination
         @size-change="getList"
         @current-change="getList"
@@ -107,6 +145,7 @@
         :page-size.sync="queryParams.pageSize"
         :total="pageInfo.total">
       </el-pagination>
+
     </template>
 
     <el-dialog
@@ -126,9 +165,12 @@
   </ma-container>
 </template>
 <script>
+
 import { getPageList, getPageListByRecycle, deletes, recoverys, realDeletes } from '@/api/system/attachment'
+
 export default {
   name: 'system-attachment-index',
+
   data () {
     return {
       // 是否显示回收站数据
@@ -167,10 +209,13 @@ export default {
       record: { url: '' }
     }
   },
+
   created () {
     this.getList()
   },
+
   methods: {
+
     // 获取数据
     getList () {
       this.loading = true
@@ -188,6 +233,7 @@ export default {
         })
       }
     },
+
     // 预览图片
     review (row) {
       this.record = row
@@ -198,26 +244,32 @@ export default {
         this.dialogVisible = true
       }
     },
+
     handleReviewClose () {
       this.dialogVisible = false
     },
+
     // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
     },
+
     // 切换回收站数据方法
     switchDataType () {
       this.showRecycle = !this.showRecycle
       this.getList()
     },
+
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
     },
+
     // 字段映射标签
     getLable (value) {
-      return (this.storageMode.filter(item => item.value == value ))[0].label
+      return (this.storageMode.filter(item => item.value == value))[0].label
     },
+
     // 选择时间事件
     handleDateChange (values) {
       if (values !== null) {
@@ -225,6 +277,7 @@ export default {
         this.queryParams.maxDate = values[1]
       }
     },
+
     // 移到回收站
     handleDelete (id) {
       this.$confirm('此操作会将数据移到回收站！', '提示', {
@@ -238,6 +291,7 @@ export default {
         })
       })
     },
+
     // 真实删除数据
     handleRealDelete (id) {
       this.$confirm('此操作会将数据物理删除', '提示', {
@@ -251,6 +305,7 @@ export default {
         })
       })
     },
+
     // 多选
     handleSelectionChange (items) {
       if (items.length > 0) {
@@ -265,10 +320,12 @@ export default {
         this.ids = null
       }
     },
+
     // 批量删除
     handleDeletes () {
       this.showRecycle ? this.handleRealDelete(this.ids) : this.handleDelete(this.ids)
     },
+
     // 恢复数据
     handleRecovery (id) {
       recoverys(id).then(res => {
@@ -276,10 +333,12 @@ export default {
         this.getList()
       })
     },
+
     // 搜索
     handleSearch () {
       this.getList()
     },
+
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()
@@ -287,6 +346,7 @@ export default {
       this.queryParams.minDate = this.queryParams.maxDate = undefined
       this.handleSearch()
     }
+
   }
 }
 </script>

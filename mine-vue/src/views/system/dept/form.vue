@@ -47,7 +47,9 @@
 </template>
 
 <script>
+
 import { getSelectTree, save, update } from '@/api/system/dept'
+
 export default {
   data () {
     return {
@@ -78,46 +80,52 @@ export default {
       }
     }
   },
-  // 创建生命周期
-  created () {
-    getSelectTree().then(res => {
-      this.selectTree = res.data
-    })
-  },
+
   methods: {
+
     // 新增部门
     create () {
       this.showForm = true
       this.saveType = 'create'
       this.title = '新增部门'
+      getSelectTree().then(res => {
+        this.selectTree = res.data
+      })
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         this.form.id = null
         this.form.parent_id = null
       })
     },
+
     // 更新部门
     update (record) {
       this.saveType = 'update'
       this.record = record
       this.title = '编辑部门'
       this.showForm = true
+      getSelectTree().then(res => {
+        this.selectTree = res.data
+      })
       this.$nextTick(() => {
         this.$refs.form.resetFields()
         // 填充form数据
         this.setFormData(record)
       })
     },
+
     // 关闭处理方法
     handleClose () {
       this.showForm = false
       this.record = null
     },
+
     // 取消处理方法
     cancel () {
       this.showForm = false
       this.record = null
     },
+
     // 提交处理方法
     submitForm () {
       this.$refs.form.validate(valid => {
@@ -154,12 +162,14 @@ export default {
         }
       })
     },
+
     // 重置表单
     resetForm () {
       this.$emit('closeDialog', true)
       this.showForm = false
       this.$refs.form.resetFields()
     },
+
     // 填充form数据
     setFormData (record) {
       for (const item in this.form) {

@@ -1,9 +1,11 @@
 <template>
   <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="40%">
     <el-form ref="form" :model="form" label-width="80px">
+
       <el-form-item label="角色名称">
         <el-input v-model="form.name" size="small" :disabled="true" placeholder="请输入角色名称"></el-input>
       </el-form-item>
+
       <el-form-item label="权限边界">
         <el-select v-model="form.data_scope" size="small" placeholder="请选择权限边界" @change="handleChangeScope">
           <el-option
@@ -14,6 +16,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
+
       <el-form-item v-if="form.data_scope === '1'" label="数据权限" prop="menu_ids">
         <el-checkbox @change="handleTreeExpand($event)">展开/折叠</el-checkbox>
         <el-checkbox @change="handleTreeAll($event)">全选/全不选</el-checkbox>
@@ -27,16 +30,21 @@
           :props="defaultProps">
         </el-tree>
       </el-form-item>
+
     </el-form>
+
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm" size="small">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>
+
   </el-dialog>
 </template>
 <script>
+
 import { update, getDeptByRole } from '@/api/system/role'
 import { getSelectTree } from '@/api/system/dept'
+
 export default {
   data () {
     return {

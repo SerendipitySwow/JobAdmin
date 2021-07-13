@@ -102,9 +102,17 @@
       <el-table-column prop="comment" label="表注释" :show-overflow-tooltip="true"></el-table-column>
 
       <el-table-column label="操作" align="center">
+
         <template slot-scope="scope">
-          <el-button type="text" v-hasPermission="['system:dataMaintain:columnList']" @click="handleDetail(scope.row.name)">查看</el-button>
+
+          <el-button
+            type="text"
+            v-hasPermission="['system:dataMaintain:columnList']"
+            @click="handleDetail(scope.row.name)"
+          >查看</el-button>
+
         </template>
+
       </el-table-column>
 
     </el-table>
@@ -128,6 +136,7 @@
       :before-close="handleDialogClose"
     >
         <el-table :data="columnList" stripe>
+
           <el-table-column prop="column_name" label="字段名称">
           </el-table-column>
 
@@ -136,17 +145,23 @@
 
           <el-table-column prop="column_comment" label="字段注释">
           </el-table-column>
+
         </el-table>
+
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="dialogVisible = false" size="small">确 定</el-button>
         </span>
+
     </el-dialog>
   </ma-container>
 </template>
 <script>
+
 import { getPageList, getColumnList, optimize, fragment } from '@/api/system/dataMaintain'
+
 export default {
   name: 'system-dataMaintain-index',
+
   data () {
     return {
       // 是否显示搜索
@@ -176,13 +191,16 @@ export default {
       names: []
     }
   },
+
   created () {
     this.getList()
     this.getDicts('table_engine').then(res => {
       this.engines = res.data
     })
   },
+
   methods: {
+
     // 获取数据
     getList () {
       this.loading = true
@@ -192,6 +210,7 @@ export default {
         this.loading = false
       })
     },
+
     // 显示表字段
     handleDetail (name) {
       getColumnList(name).then(res => {
@@ -199,30 +218,36 @@ export default {
         this.dialogVisible = true
       })
     },
+
     // 表字段modal关闭
     handleDialogClose () {
       this.dialogVisible = false
     },
+
     // 优化表
     handleOptimize () {
       optimize({ tables: this.names }).then(res => {
         res.success && this.success(res.message)
       })
     },
+
     // 清理表碎片
     handleClear () {
       fragment({ tales: this.names }).then(res => {
         res.success && this.success(res.message)
       })
     },
+
     // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
     },
+
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
     },
+
     formatData (data) {
       if (data < (1024 * 1024)) {
         return parseInt(data / 1024 / 1024) + 'Kb'
@@ -230,6 +255,7 @@ export default {
         return parseInt(data / 1024 / 1024 / 1024) + 'Mb'
       }
     },
+
     // 多选
     handleSelectionChange (items) {
       if (items.length > 0) {
@@ -242,10 +268,12 @@ export default {
         this.names = []
       }
     },
+
     // 搜索
     handleSearch () {
       this.getList()
     },
+
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()

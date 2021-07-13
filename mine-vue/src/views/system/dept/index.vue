@@ -24,13 +24,16 @@
     </template>
 
     <el-row :gutter="10">
+
       <el-col :span="1">
+
         <el-button
           size="small"
           icon="el-icon-plus"
           v-hasPermission="['system:dept:save']"
           @click="$refs.deptForm.create()"
         >新增</el-button>
+
       </el-col>
 
       <table-right-toolbar
@@ -39,9 +42,15 @@
        @refreshTable="getList"
        @toggleSearch="switchShowSearch"
       ></table-right-toolbar>
+
     </el-row>
 
-    <el-table v-loading="loading" :data="deptTree" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+    <el-table
+      v-loading="loading"
+      :data="deptTree"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    >
 
       <el-table-column prop="name" label="部门名称" fixed width="240" :show-overflow-tooltip="true">
       </el-table-column>
@@ -63,15 +72,40 @@
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
+
           <div v-if="showRecycle">
-            <el-button type="text" v-hasPermission="['system:dept:recovery']" @click="handleRecovery(scope.row.id)">恢复</el-button>
-            <el-button type="text" v-hasPermission="['system:dept:realDelete']" @click="handleRealDelete(scope.row.id)">删除</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:dept:recovery']"
+              @click="handleRecovery(scope.row.id)"
+            >恢复</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:dept:realDelete']"
+              @click="handleRealDelete(scope.row.id)"
+            >删除</el-button>
+
           </div>
+
           <div v-else>
-            <el-button type="text" v-hasPermission="['system:dept:update']" @click="$refs.deptForm.update(scope.row)">修改</el-button>
-            <el-button type="text" v-hasPermission="['system:dept:delete']" @click="handleDelete(scope.row.id)">移到回收站</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:dept:update']"
+              @click="$refs.deptForm.update(scope.row)"
+            >修改</el-button>
+
+            <el-button
+              type="text"
+              v-hasPermission="['system:dept:delete']"
+              @click="handleDelete(scope.row.id)"
+            >移到回收站</el-button>
+
           </div>
         </template>
+
       </el-table-column>
 
     </el-table>
@@ -81,13 +115,17 @@
   </ma-container>
 </template>
 <script>
+
 import { getDeptTree, getRecycle, deletes, recoverys, realDeletes } from '@/api/system/dept'
 import DeptForm from './form'
+
 export default {
   name: 'system-dept-index',
+
   components: {
     DeptForm
   },
+
   data () {
     return {
       // 是否显示回收站数据
@@ -105,10 +143,13 @@ export default {
       }
     }
   },
+
   created () {
     this.getList()
   },
+
   methods: {
+
     // 获取数据
     getList () {
       this.loading = true
@@ -124,19 +165,23 @@ export default {
         })
       }
     },
+
     // form组件关闭调用方法
     handleClose (e) {
       e && this.getList()
     },
+
     // 切换回收站数据方法
     switchDataType () {
       this.showRecycle = !this.showRecycle
       this.getList()
     },
+
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
     },
+
     // 移到回收站
     handleDelete (id) {
       this.$confirm('此操作会将数据移到回收站！', '提示', {
@@ -150,6 +195,7 @@ export default {
         })
       })
     },
+
     // 真实删除数据
     handleRealDelete (id) {
       this.$confirm('此操作会将数据物理删除', '提示', {
@@ -163,6 +209,7 @@ export default {
         })
       })
     },
+
     // 恢复数据
     handleRecovery (id) {
       recoverys(id).then(res => {
@@ -170,10 +217,12 @@ export default {
         this.getList()
       })
     },
+
     // 搜索
     handleSearch () {
       this.getList()
     },
+
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()

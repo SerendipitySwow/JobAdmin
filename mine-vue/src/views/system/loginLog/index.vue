@@ -1,5 +1,6 @@
 <template>
   <ma-container>
+
     <template slot="header" v-if="showSearch">
       <el-form :inline="true" ref="queryParams" :model="queryParams" label-width="80px">
 
@@ -49,37 +50,74 @@
       </el-form>
     </template>
     <el-row :gutter="20">
+
       <el-col :span="1.5">
-        <el-button size="small" icon="el-icon-delete" :disabled="btnIsDisabed" v-hasPermission="['system:loginLog:delete']" @click="handleDeletes">删除</el-button>
+
+        <el-button
+          size="small"
+          icon="el-icon-delete"
+          :disabled="btnIsDisabed"
+          v-hasPermission="['system:loginLog:delete']"
+          @click="handleDeletes"
+        >删除</el-button>
+
       </el-col>
-      <table-right-toolbar @refreshTable="getList" @toggleSearch="switchShowSearch"></table-right-toolbar>
+
+      <table-right-toolbar
+        @refreshTable="getList"
+        @toggleSearch="switchShowSearch"
+      ></table-right-toolbar>
+
     </el-row>
     <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+
+      <el-table-column type="selection" width="55"></el-table-column>
+
       <el-table-column prop="username" label="登录用户"></el-table-column>
+
       <el-table-column prop="ip" label="IP"></el-table-column>
+
       <el-table-column prop="ip_location" label="登录地点"></el-table-column>
+
       <el-table-column prop="os" label="操作系统"></el-table-column>
+
       <el-table-column prop="browser" label="浏览器"></el-table-column>
+
       <el-table-column prop="status" label="状态">
         <template slot-scope="scope">
           {{ scope.row.status === '0' ? '成功' : '失败' }}
         </template>
       </el-table-column>
+
       <el-table-column prop="message" label="登录信息" ></el-table-column>
+
       <el-table-column prop="login_time" label="登录时间" width="160" ></el-table-column>
+
     </el-table>
+
     <template slot="footer">
-      <el-pagination @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 50]" :current-page.sync="queryParams.page" :page-size.sync="queryParams.pageSize" :total="pageInfo.total">
-      </el-pagination>
+
+      <el-pagination
+        @size-change="getList"
+        @current-change="getList"
+        layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[10, 20, 30, 50]"
+        :current-page.sync="queryParams.page"
+        :page-size.sync="queryParams.pageSize"
+        :total="pageInfo.total"
+      ></el-pagination>
+
     </template>
+
   </ma-container>
 </template>
 <script>
+
 import { getPageList, deletes } from '@/api/system/loginLog'
+
 export default {
   name: 'system-loginLog-index',
+
   data () {
     return {
       // 是否显示搜索
@@ -109,10 +147,13 @@ export default {
       }
     }
   },
+
   created () {
     this.getList()
   },
+
   methods: {
+
     // 获取数据
     getList () {
       this.loading = true
@@ -122,6 +163,7 @@ export default {
         this.loading = false
       })
     },
+
     // 选择时间事件
     handleDateChange (values) {
       if (values !== null) {
@@ -129,10 +171,12 @@ export default {
         this.queryParams.maxDate = values[1]
       }
     },
+
     // 显隐搜索
     switchShowSearch () {
       this.showSearch = !this.showSearch
     },
+
     // 真实删除数据
     handleRealDelete (id) {
       this.$confirm('此操作会将数据物理删除', '提示', {
@@ -146,6 +190,7 @@ export default {
         })
       })
     },
+
     // 多选
     handleSelectionChange (items) {
       if (items.length > 0) {
@@ -160,14 +205,17 @@ export default {
         this.ids = null
       }
     },
+
     // 批量删除
     handleDeletes () {
       this.handleRealDelete(this.ids)
     },
+
     // 搜索
     handleSearch () {
       this.getList()
     },
+
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()
