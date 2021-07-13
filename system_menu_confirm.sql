@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 12/07/2021 15:41:27
+ Date: 13/07/2021 09:14:44
 */
 
 SET NAMES utf8mb4;
@@ -132,8 +132,8 @@ INSERT INTO `system_menu` VALUES (2253717921440, 2252367037088, '0,2252249837216
 INSERT INTO `system_menu` VALUES (2253746544288, 2252367037088, '0,2252249837216,2252367037088', '登录日志', 'system:loginLog', 'binoculars', 'loginLog', 'system/loginLog/index', '1', '0', '1', '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-01 23:14:54', '2021-07-01 23:14:54', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2287751021728, 2252471315616, '0,2252263087264,2252471315616', '模块管理', 'system:module', 'modx', 'module', 'setting/module/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-02 17:41:49', '2021-07-12 15:40:45', NULL, NULL);
 INSERT INTO `system_menu` VALUES (2543748984480, 2252249837216, '0,2252249837216', '系统监控', 'system:monitor', 'crosshairs', 'monitor', '', '1', '0', '1', '1', 'C', '0', 0, 1843154008224, NULL, '2021-07-08 12:35:05', '2021-07-08 12:35:05', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2543799467168, 2543748984480, '0,2252249837216,2543748984480', '服务监控', 'system:monitor:serviceMonitor', 'umbrella', 'serviceMonitor', 'system/serviceMonitor/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-08 12:36:44', '2021-07-08 12:36:44', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2726164958368, 2543748984480, '0,2252249837216,2543748984480', '依赖监控', 'system:monitor:relyMonitor', 'trello', 'relyMonitor', 'system/relyMonitor/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-12 15:33:06', '2021-07-12 15:34:49', NULL, NULL);
-INSERT INTO `system_menu` VALUES (2726278364320, 2543748984480, '0,2252249837216,2543748984480', '缓存监控', 'system:monitor:cacheMonitor', 'cogs', 'cacheMonitor', 'system/cacheMonitor/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-12 15:36:48', '2021-07-12 15:36:48', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2543799467168, 2543748984480, '0,2252249837216,2543748984480', '服务监控', 'system:monitor:server', 'umbrella', 'server', 'system/monitor/server/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-08 12:36:44', '2021-07-08 12:36:44', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2726164958368, 2543748984480, '0,2252249837216,2543748984480', '依赖监控', 'system:monitor:rely', 'trello', 'rely', 'system/monitor/rely/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-12 15:33:06', '2021-07-12 15:34:49', NULL, NULL);
+INSERT INTO `system_menu` VALUES (2726278364320, 2543748984480, '0,2252249837216,2543748984480', '缓存监控', 'system:monitor:cache', 'cogs', 'cache', 'system/monitor/cache/index', '1', '0', '1', '1', 'M', '0', 0, 1843154008224, NULL, '2021-07-12 15:36:48', '2021-07-12 15:36:48', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
