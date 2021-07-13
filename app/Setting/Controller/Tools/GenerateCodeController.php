@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 namespace App\Setting\Controller\Tools;
 
+use App\Setting\Request\Tool\LoadTableRequest;
 use App\Setting\Service\SettingGenerateColumnsService;
 use App\Setting\Service\SettingGenerateTablesService;
 use Hyperf\Di\Annotation\Inject;
@@ -41,7 +42,7 @@ class GenerateCodeController extends MineController
      * 代码生成列表分页
      * @GetMapping("index")
      */
-    public function index()
+    public function index(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success($this->tableService->getPageList($this->request->All()));
     }
@@ -67,10 +68,11 @@ class GenerateCodeController extends MineController
     /**
      * 加载数据表
      * @PostMapping("loadTable")
+     *
      */
-    public function loadTable()
+    public function loadTable(LoadTableRequest $request): \Psr\Http\Message\ResponseInterface
     {
-
+        return $this->tableService->loadTable($request->input('names')) ? $this->success() : $this->error();
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\System\Mapper;
 use App\System\Model\SystemMenu;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Model;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 
 class SystemMenuMapper extends AbstractMapper
@@ -115,10 +116,17 @@ class SystemMenuMapper extends AbstractMapper
      */
     public function realDelete(array $ids): bool
     {
-        foreach ($ids as $id) {
-            $model = $this->model::withTrashed()->find($id);
-            $model->roles()->detach();
-            $model->forceDelete();
+        try {
+            Db::beginTransaction();
+            foreach ($ids as $id) {
+                $model = $this->model::withTrashed()->find($id);
+                $model->roles()->detach();
+                $model->forceDelete();
+            }
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
         }
         return true;
     }

@@ -156,9 +156,11 @@ export default {
 
     // 获取选择资源里的数据
     getConfirmData (data) {
-      this.$emit('uploadData', data)
       this.uploadDialog = false
-      this.success('选择成功')
+      if (data.length > 0) {
+        this.$emit('uploadData', data)
+        this.success('选择成功')
+      }
     },
 
     // 提交上传
@@ -178,8 +180,10 @@ export default {
         })
         this.loading = false
         this.uploadDialog = false
-        this.$emit('uploadData', this.fileData)
-        this.success('上传成功')
+        if (this.fileList.length > 0) {
+          this.$emit('uploadData', this.fileData)
+          this.success('上传成功')
+        }
       } else {
         this.error('上传类型指定错误，组件type只能是image或者file')
         this.loading = false

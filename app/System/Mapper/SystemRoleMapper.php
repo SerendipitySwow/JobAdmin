@@ -4,6 +4,7 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemRole;
 use Hyperf\Database\Model\Builder;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 
 class SystemRoleMapper extends AbstractMapper
@@ -66,9 +67,16 @@ class SystemRoleMapper extends AbstractMapper
         $menuIds = $data['menu_ids'] ?? [];
         $deptIds = $data['dept_ids'] ?? [];
         $this->filterExecuteAttributes($data);
-        $role = $this->model::create($data);
-        empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
-        empty($deptIds) || $role->depts()->sync($deptIds, false);
+        try {
+            Db::beginTransaction();
+            $role = $this->model::create($data);
+            empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
+            empty($deptIds) || $role->depts()->sync($deptIds, false);
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return 0;
+        }
         return $role->id;
     }
 
@@ -83,11 +91,18 @@ class SystemRoleMapper extends AbstractMapper
         $menuIds = $data['menu_ids'] ?? [];
         $deptIds = $data['dept_ids'] ?? [];
         $this->filterExecuteAttributes($data);
-        $this->model::query()->where('id', $id)->update($data);
-        if ($id != env('ADMIN_ROLE')) {
-            $role = $this->model::find($id);
-            $role->menus()->sync(array_unique($menuIds));
-            $role->depts()->sync($deptIds);
+        try {
+            Db::beginTransaction();
+            $this->model::query()->where('id', $id)->update($data);
+            if ($id != env('ADMIN_ROLE')) {
+                $role = $this->model::find($id);
+                $role->menus()->sync(array_unique($menuIds));
+                $role->depts()->sync($deptIds);
+            }
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
         }
         return true;
     }
@@ -114,19 +129,26 @@ class SystemRoleMapper extends AbstractMapper
      */
     public function realDelete(array $ids): bool
     {
-        foreach ($ids as $id) {
-            if ($id == env('ADMIN_ROLE')) {
-                continue;
+        try {
+            Db::beginTransaction();
+            foreach ($ids as $id) {
+                if ($id == env('ADMIN_ROLE')) {
+                    continue;
+                }
+                $role = $this->model::withTrashed()->find($id);
+                // 删除关联菜单
+                $role->menus()->detach();
+                // 删除关联部门
+                $role->depts()->detach();
+                // 删除关联用户
+                $role->users()->detach();
+                // 删除角色数据
+                $role->forceDelete();
             }
-            $role = $this->model::withTrashed()->find($id);
-            // 删除关联菜单
-            $role->menus()->detach();
-            // 删除关联部门
-            $role->depts()->detach();
-            // 删除关联用户
-            $role->users()->detach();
-            // 删除角色数据
-            $role->forceDelete();
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
         }
         return true;
     }

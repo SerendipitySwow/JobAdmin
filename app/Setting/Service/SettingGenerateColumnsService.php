@@ -26,4 +26,28 @@ class SettingGenerateColumnsService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * 循环插入数据
+     * @param array $data
+     * @return int
+     */
+    public function save(array $data): int
+    {
+        // 组装数据
+        foreach ($data as $k => $item) {
+            $column = [
+                'table_id' => $item['table_id'],
+                'column_name' => $item['column_name'],
+                'column_comment' => $item['column_comment'],
+                'column_type' => $item['data_type'],
+                'is_pk' => empty($item['column_key']) ? '0' : '1' ,
+                'query_type' => 'eq',
+                'view_type' => 'text',
+                'sort' => count($data) - $k,
+            ];
+            $this->mapper->save($column);
+        }
+        return 1;
+    }
 }

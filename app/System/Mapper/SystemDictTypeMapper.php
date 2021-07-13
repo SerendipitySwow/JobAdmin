@@ -5,6 +5,7 @@ namespace App\System\Mapper;
 use App\System\Model\SystemDictData;
 use App\System\Model\SystemDictType;
 use Hyperf\Database\Model\Builder;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 
 /**
@@ -25,19 +26,31 @@ class SystemDictTypeMapper extends AbstractMapper
 
     public function update(int $id, array $data): bool
     {
-        if (parent::update($id, $data)) {
-            return SystemDictData::where('type_id', $id)->update(['code' => $data['code']]) > 0;
-        } else {
+        try {
+            Db::beginTransaction();
+            parent::update($id, $data);
+            SystemDictData::where('type_id', $id)->update(['code' => $data['code']]) > 0;
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
             return false;
         }
+        return true;
     }
 
     public function realDelete(array $ids): bool
     {
-        foreach ($ids as $id) {
-            $model = $this->model::withTrashed()->find($id);
-            $model->dictData()->forceDelete();
-            $model->forceDelete();
+        try {
+            Db::beginTransaction();
+            foreach ($ids as $id) {
+                $model = $this->model::withTrashed()->find($id);
+                $model->dictData()->forceDelete();
+                $model->forceDelete();
+            }
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
         }
         return true;
     }

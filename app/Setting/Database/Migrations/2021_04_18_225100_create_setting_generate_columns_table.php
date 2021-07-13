@@ -37,7 +37,7 @@ class CreateSettingGenerateColumnsTable extends Migration
                 'string', 'view_type',
                 [
                     'length' => 100,
-                    'default' => 'eq',
+                    'default' => 'text',
                     'comment' => '页面控件，text, textarea, password, select, checkbox, radio, date, upload, ma-upload（封装的上传控件）'
                 ]
             )->nullable();

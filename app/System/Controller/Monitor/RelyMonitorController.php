@@ -8,6 +8,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\Permission;
 use Mine\MineController;
 
 /**
@@ -26,6 +27,7 @@ class RelyMonitorController extends MineController
     /**
      * 获取依赖包列表数据
      * @GetMapping("index")
+     * @Permission("system:monitor:rely")
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPackagePageList(): \Psr\Http\Message\ResponseInterface
@@ -36,6 +38,7 @@ class RelyMonitorController extends MineController
     /**
      * 获取依赖包详细信息
      * @GetMapping("detail")
+     * @Permission("system:monitor:relyDetail")
      */
     public function getDetail(): \Psr\Http\Message\ResponseInterface
     {

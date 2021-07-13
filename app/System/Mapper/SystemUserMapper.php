@@ -6,6 +6,7 @@ namespace App\System\Mapper;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\ModelNotFoundException;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 
 /**
@@ -66,9 +67,17 @@ class SystemUserMapper extends AbstractMapper
         $role_ids = $data['role_ids'] ?? [];
         $post_ids = $data['post_ids'] ?? [];
         $this->filterExecuteAttributes($data, true);
-        $user = $this->model::create($data);
-        $user->roles()->sync($role_ids, false);
-        $user->posts()->sync($post_ids, false);
+        try {
+            Db::beginTransaction();
+            $user = $this->model::create($data);
+            $user->roles()->sync($role_ids, false);
+            $user->posts()->sync($post_ids, false);
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return 0;
+        }
+
         return $user->id;
     }
 
@@ -83,10 +92,18 @@ class SystemUserMapper extends AbstractMapper
         $role_ids = $data['role_ids'] ?? [];
         $post_ids = $data['post_ids'] ?? [];
         $this->filterExecuteAttributes($data, true);
-        $this->model::query()->where('id', $id)->update($data);
-        $user = $this->model::find($id);
-        !empty($role_ids) && $user->roles()->sync($role_ids);
-        $user->posts()->sync($post_ids);
+        try {
+            Db::beginTransaction();
+            $this->model::query()->where('id', $id)->update($data);
+            $user = $this->model::find($id);
+            !empty($role_ids) && $user->roles()->sync($role_ids);
+            $user->posts()->sync($post_ids);
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
+        }
+
         return true;
     }
 
@@ -97,12 +114,20 @@ class SystemUserMapper extends AbstractMapper
      */
     public function realDelete(array $ids): bool
     {
-        foreach ($ids as $id) {
-            $user = $this->model::withTrashed()->find($id);
-            $user->roles()->detach();
-            $user->posts()->detach();
-            $user->forceDelete();
+        try {
+            Db::beginTransaction();
+            foreach ($ids as $id) {
+                $user = $this->model::withTrashed()->find($id);
+                $user->roles()->detach();
+                $user->posts()->detach();
+                $user->forceDelete();
+            }
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
         }
+
         return true;
     }
 

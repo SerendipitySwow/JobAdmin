@@ -1,6 +1,6 @@
 <template>
   <el-row>
-
+    <upload></upload>
   </el-row>
 </template>
 
@@ -8,6 +8,7 @@
 export default {
   data () {
     return {
+      files: []
     }
   },
 
