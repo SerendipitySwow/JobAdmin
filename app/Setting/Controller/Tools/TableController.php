@@ -14,6 +14,7 @@ use Mine\Annotation\Permission;
 use Mine\MineController;
 
 /**
+ * 表设计器
  * Class TableController
  * @package App\Setting\Controller\Tools
  * @Controller(prefix="setting/table")
