@@ -1,23 +1,20 @@
 <template>
-    <ma-container>
-        <el-empty></el-empty>
-        <upload type="image" @uploadData="getFiles"></upload>
-    </ma-container>
+  <ma-container>
+
+  </ma-container>
 </template>
 
 <script>
 export default {
-    data () {
-        return {
-            files: [],
-        }
-    },
+  name: 'system:generate:code',
+  data () {
+    return {
 
-    methods: {
-        getFiles(files) {
-            this.files = files
-            console.log(this.files)
-        }
     }
+  },
+
+  methods: {
+
+  }
 }
 </script>

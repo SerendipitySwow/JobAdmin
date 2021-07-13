@@ -91,6 +91,38 @@ class SystemUploadFileService extends AbstractService
      */
     public function getAllFile(array $params = []): array
     {
+        return $this->getArrayToPageList($params);
+    }
+
+    /**
+     * 数组数据搜索器
+     * @param Collection $collect
+     * @param array $params
+     * @return Collection
+     */
+    protected function handleArraySearch(Collection $collect, array $params): Collection
+    {
+        if ($params['name'] ?? false) {
+            $collect = $collect->filter(function ($row) use ($params) {
+                return \Mine\Helper\Str::contains($row['name'], $params['name']);
+            });
+        }
+
+        if ($params['label'] ?? false) {
+            $collect = $collect->filter(function ($row) use ($params) {
+                return \Mine\Helper\Str::contains($row['label'], $params['label']);
+            });
+        }
+        return $collect;
+    }
+
+    /**
+     * 设置需要分页的数组数据
+     * @param array $params
+     * @return array
+     */
+    protected function getArrayData(array $params = []): array
+    {
         $directory = $this->getDirectory($params['storage_path'] ?? '');
 
         $params['select'] = [
@@ -106,20 +138,6 @@ class SystemUploadFileService extends AbstractService
 
         $params['select'] = implode(',', $params['select']);
 
-        $collect = new Collection( array_merge($directory, $this->getList($params)) );
-
-        $data = $collect->forPage(
-            (int) $params['page'] ?? 1,
-            (int) $params['pageSize'] ?? 10
-        )->toArray();
-
-        return [
-            'items' => $data,
-            'pageInfo' => [
-                'total' => $collect->count(),
-                'currentPage' => $params['page'] ?? 1,
-                'totalPage' => ceil($collect->count() / ($params['pageSize'] ?? 10))
-            ]
-        ];
+        return array_merge($directory, $this->getList($params));
     }
 }

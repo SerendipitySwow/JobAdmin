@@ -2,11 +2,11 @@
   <el-row>
 
     <el-row>
-      <el-button icon="el-icon-finished" size="small" :disabled="disabled" @click="$refs.Res.show()">
+      <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
         {{ selectButtonText }}
       </el-button>
 
-      <el-button icon="el-icon-upload2" type="primary" size="small" @click="handleShowUploadDialog" :disabled="disabled">
+      <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
         {{ uploadButtunText }}
       </el-button>
     </el-row>
@@ -228,3 +228,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+/deep/ .button {
+  position: relative !important;
+  z-index: 1 !important;
+}
+/deep/ .ma-container-full {
+  border: 0 !important;
+}
+</style>

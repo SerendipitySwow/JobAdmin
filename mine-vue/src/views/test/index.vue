@@ -1,25 +1,17 @@
 <template>
-  <ma-container>
-    <photo v-model="files">
-      <template slot="upload">
-        <upload type="image" @uploadData="getFiles"></upload>
-      </template>
-    </photo>
-  </ma-container>
+  <el-row>
+
+  </el-row>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      files: []
     }
   },
 
   methods: {
-    getFiles (files) {
-      this.files = files
-    }
   }
 }
 </script>

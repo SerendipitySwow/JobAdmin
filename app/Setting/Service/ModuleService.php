@@ -5,10 +5,11 @@ namespace App\Setting\Service;
 
 use Hyperf\Utils\Collection;
 use Hyperf\Utils\Filesystem\Filesystem;
+use Mine\Abstracts\AbstractService;
 use Mine\Generator\ModuleGenerator;
 use Mine\Mine;
 
-class ModuleService
+class ModuleService extends AbstractService
 {
     /**
      * @var Mine
@@ -26,12 +27,17 @@ class ModuleService
      */
     public function getPageList(?array $params = []): array
     {
-        // 先扫描模块
-        $this->mine->scanModule();
-        $collect = new Collection(
-            $this->mine->getModuleInfo()
-        );
+        return $this->getArrayToPageList($params);
+    }
 
+    /**
+     * 数组数据搜索器
+     * @param Collection $collect
+     * @param array $params
+     * @return Collection
+     */
+    protected function handleArraySearch(Collection $collect, array $params): Collection
+    {
         if ($params['name'] ?? false) {
             $collect = $collect->filter(function ($row) use ($params) {
                 return \Mine\Helper\Str::contains($row['name'], $params['name']);
@@ -43,25 +49,18 @@ class ModuleService
                 return \Mine\Helper\Str::contains($row['label'], $params['label']);
             });
         }
+        return $collect;
+    }
 
-        $collect = $collect->sortByDesc('order');
-
-        $data = $collect->forPage((int) $params['page'] ?? 1, (int) $params['pageSize'] ?? 10)->toArray();
-
-        $modules = [];
-
-        foreach ($data as $item) {
-            $modules[] = $item;
-        }
-
-        return [
-            'items' => $modules,
-            'pageInfo' => [
-                'total' => $collect->count(),
-                'currentPage' => $params['page'] ?? 1,
-                'totalPage' => ceil($collect->count() / ($params['pageSize'] ?? 10))
-            ]
-        ];
+    /**
+     * 设置需要分页的数组数据
+     * @return array
+     */
+    protected function getArrayData(): array
+    {
+        // 先扫描模块
+        $this->mine->scanModule();
+        return $this->mine->getModuleInfo();
     }
 
     /**

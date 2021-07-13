@@ -1,14 +1,14 @@
 <?php
 
-
+declare(strict_types=1);
 namespace App\System\Service;
-
 
 use Hyperf\Database\Model\Collection;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
+use Mine\Abstracts\AbstractService;
 
-class DataMaintainService
+class DataMaintainService extends AbstractService
 {
     /**
      * 获取表状态分页列表
@@ -17,10 +17,17 @@ class DataMaintainService
      */
     public function getPageList(?array $params = []): array
     {
-        $collect = new Collection(
-            Db::select(Db::raw("SHOW TABLE STATUS WHERE name NOT LIKE '%migrations'")->getValue())
-        );
+        return $this->getArrayToPageList($params);
+    }
 
+    /**
+     * 数组数据搜索器
+     * @param \Hyperf\Utils\Collection $collect
+     * @param array $params
+     * @return Collection
+     */
+    protected function handleArraySearch(\Hyperf\Utils\Collection $collect, array $params): \Hyperf\Utils\Collection
+    {
         if ($params['name'] ?? false) {
             $collect = $collect->filter(function ($row) use ($params) {
                 return \Mine\Helper\Str::contains($row->Name, $params['name']);
@@ -29,20 +36,32 @@ class DataMaintainService
         if ($params['engine'] ?? false) {
             $collect = $collect->where('Engine', $params['engine']);
         }
+        return $collect;
+    }
 
-        $data = $collect->forPage((int) $params['page'] ?? 1, (int) $params['pageSize'] ?? 10)->toArray();
+    /**
+     * 数组当前页数据返回之前处理器，默认对key重置
+     * @param array $data
+     * @param array $params
+     * @return array
+     */
+    protected function getCurrentArrayPageBefore(array &$data, array $params = []): array
+    {
         $tables = [];
         foreach ($data as $item) {
             $tables[] = array_change_key_case((array)$item);
         }
-        return [
-            'items' => $tables,
-            'pageInfo' => [
-                'total' => $collect->count(),
-                'currentPage' => $params['page'] ?? 1,
-                'totalPage' => ceil($collect->count() / ($params['pageSize'] ?? 10))
-            ]
-        ];
+        return $tables;
+    }
+
+    /**
+     * 设置需要分页的数组数据
+     * @param array $params
+     * @return array
+     */
+    protected function getArrayData(array $params = []): array
+    {
+        return Db::select(Db::raw("SHOW TABLE STATUS WHERE name NOT LIKE '%migrations'")->getValue());
     }
 
     /**

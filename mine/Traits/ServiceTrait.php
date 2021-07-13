@@ -2,6 +2,7 @@
 
 namespace Mine\Traits;
 
+use Hyperf\Database\Model\Collection;
 use Mine\Abstracts\AbstractMapper;
 use Mine\MineModel;
 
@@ -206,5 +207,72 @@ trait ServiceTrait
         } else {
             return false;
         }
+    }
+
+    /**
+     * 数组数据转分页数据显示
+     * @param array|null $params
+     * @param string $pageName
+     * @return array
+     */
+    public function getArrayToPageList(?array $params = [], string $pageName = 'page'): array
+    {
+        $collect = $this->handleArraySearch(collect($this->getArrayData($params)), $params);
+
+        $pageSize = MineModel::PAGE_SIZE;
+        $page = 1;
+
+        if ($params[$pageName] ?? false) {
+            $page = (int) $params[$pageName];
+        }
+
+        if ($params['pageSize'] ?? false) {
+            $pageSize = (int) $params['pageSize'];
+        }
+
+        $data = $collect->forPage($page, $pageSize)->toArray();
+
+        return [
+            'items' => $this->getCurrentArrayPageBefore($data, $params),
+            'pageInfo' => [
+                'total' => $collect->count(),
+                'currentPage' => $page,
+                'totalPage' => ceil($collect->count() / $pageSize)
+            ]
+        ];
+
+    }
+
+    /**
+     * 数组数据搜索器
+     * @param \Hyperf\Utils\Collection $collect
+     * @param array $params
+     * @return Collection
+     */
+    protected function handleArraySearch(\Hyperf\Utils\Collection $collect, array $params): \Hyperf\Utils\Collection
+    {
+        return $collect;
+    }
+
+    /**
+     * 数组当前页数据返回之前处理器，默认对key重置
+     * @param array $data
+     * @param array $params
+     * @return array
+     */
+    protected function getCurrentArrayPageBefore(array &$data, array $params = []): array
+    {
+        sort($data);
+        return $data;
+    }
+
+    /**
+     * 设置需要分页的数组数据
+     * @param array $params
+     * @return array
+     */
+    protected function getArrayData(array $params = []): array
+    {
+        return [];
     }
 }

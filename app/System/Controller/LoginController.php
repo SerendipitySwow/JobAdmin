@@ -5,6 +5,7 @@ namespace App\System\Controller;
 
 use App\System\Request\User\SystemUserLoginRequest;
 use App\System\Service\SystemUserService;
+use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
@@ -16,6 +17,7 @@ use Mine\Exception\TokenException;
 use Mine\Helper\LoginUser;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Class LoginController
@@ -89,6 +91,4 @@ class LoginController extends MineController
             throw new TokenException(__('jwt.validate_fail'));
         }
     }
-
-
 }

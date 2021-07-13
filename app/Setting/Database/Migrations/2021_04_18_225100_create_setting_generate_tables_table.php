@@ -26,7 +26,8 @@ class CreateSettingGenerateTablesTable extends Migration
                 'string', 'type',
                 ['length' => 100, 'comment' => '生成类型，single 单表CRUD，tree 树表CRUD，parent_sub父子表CRUD'])
                 ->nullable();
-            $table->addColumn('string', 'options', ['length' => 2000, 'comment' => '其他业务选项'])->nullable();
+            $table->addColumn('char', 'generate_type', ['length' => 1, 'default' => '0', 'comment' => '0 压缩包下载 1 生成到模块'])->nullable();
+            $table->addColumn('string', 'options', ['length' => 1500, 'comment' => '其他业务选项'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
