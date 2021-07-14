@@ -95,9 +95,13 @@ class ServerMonitorService
 
         $string = shell_exec('cat /proc/meminfo | grep MemFree');
         preg_match('/(\d+)/', $string, $free);
-        $result['free'] = sprintf('%.2f', $free[1] / 1024 / 1024);
 
-        $result['usage'] = sprintf('%.2f', ($total[1] - $free[1]) / 1024 / 1024);
+        $string = shell_exec('cat /proc/meminfo | grep MemAvailable');
+        preg_match('/(\d+)/', $string, $available);
+        $free = $free[1] + $available[1];
+        $result['free'] = sprintf('%.2f', $free / 1024 / 1024);
+
+        $result['usage'] = sprintf('%.2f', ($total[1] - $free) / 1024 / 1024);
 
         $result['php'] = round(memory_get_usage()/1024/1024, 2);
 
