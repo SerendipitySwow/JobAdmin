@@ -96,7 +96,7 @@ class RelyMonitorService extends AbstractService
             array_shift($item);
             $infos[] = [
                 'name' => array_shift($item),
-                'value' => explode(PHP_EOL, $item)
+                'value' => implode('<br />', $item)
             ];
         }
 
