@@ -61,6 +61,7 @@ class RelyMonitorService extends AbstractService
                 'description' => $matches[3][$k]
             ];
         }
+
         return $packages;
     }
 
@@ -75,11 +76,8 @@ class RelyMonitorService extends AbstractService
             return [];
         }
 
-        preg_match_all(
-            "/(\w+)\s+:(.+)/i",
-            shell_exec(sprintf('composer info %s', $name)),
-            $matches
-        );
+        $content = shell_exec(sprintf('composer info %s', $name));
+        preg_match_all("/(\w+)\s+:(.+)/i", $content, $matches);
 
         $infos = [];
 
@@ -89,6 +87,19 @@ class RelyMonitorService extends AbstractService
                 'value' => $matches[2][$k],
             ];
         }
+
+        preg_match_all('/\n(\w+)\n((.+)[\n]?)+/', $content, $matche);
+
+        foreach ($matche[0] as $match) {
+            $item = explode("\n", $match);
+            array_pop($item);
+            array_shift($item);
+            $infos[] = [
+                'name' => array_shift($item),
+                'value' => explode(PHP_EOL, $item)
+            ];
+        }
+
         return $infos;
     }
 }
