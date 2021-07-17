@@ -1,45 +1,26 @@
 <?php
 
 declare(strict_types = 1);
-namespace App\System\Service;
+namespace {NAMESPACE};
 
 
-use App\System\Mapper\SystemDeptMapper;
+{USE}
 use Mine\Abstracts\AbstractService;
 
-class SystemDeptService extends AbstractService
+class {CLASS_NAME} extends AbstractService
 {
     /**
-     * @var SystemDeptMapper
+     * @var {MAPPER}
      */
     public $mapper;
 
-    public function __construct(SystemDeptMapper $mapper)
+    public function __construct({MAPPER} $mapper)
     {
         $this->mapper = $mapper;
     }
 
     /**
-     * @param array|null $params
-     * @return array
-     */
-    public function getTreeList(?array $params = null): array
-    {
-        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
-        return parent::getTreeList($params);
-    }
-
-    /**
-     * 获取前端选择树
-     * @return array
-     */
-    public function getSelectTree(): array
-    {
-        return $this->mapper->getSelectTree();
-    }
-
-    /**
-     * 新增部门
+     * 新增数据
      * @param array $data
      * @return int
      */
@@ -49,7 +30,7 @@ class SystemDeptService extends AbstractService
     }
 
     /**
-     * 更新部门
+     * 更新
      * @param int $id
      * @param array $data
      * @return bool
@@ -66,28 +47,19 @@ class SystemDeptService extends AbstractService
      */
     protected function handleData($data): array
     {
-        $pid = $data['parent_id'] ?? 0;
-
-        if ($pid === 0) {
-            $data['level'] = $data['parent_id'] = '0';
-        } else {
-            array_unshift($pid, '0');
-            $data['level'] = implode(',', $pid);
-            $data['parent_id'] = array_pop($pid);
-        }
-
+        //TODO...
         return $data;
     }
 
     /**
-     * 真实删除部门
+     * 真实删除数据，跳过存在子节点的数据
      * @param string $ids
      * @return array
      */
     public function realDel(string $ids): ?array
     {
         $ids = explode(',', $ids);
-        // 跳过的部门
+        // 存在子节点，跳过的数据
         $ctuIds = [];
         if (count($ids)) foreach ($ids as $id) {
             if (!$this->checkChildrenExists( (int) $id)) {
@@ -96,11 +68,11 @@ class SystemDeptService extends AbstractService
                 array_push($ctuIds, $id);
             }
         }
-        return count($ctuIds) ? $this->mapper->getDeptName($ctuIds) : null;
+        return count($ctuIds) ? $this->mapper->getTreeName($ctuIds) : null;
     }
 
     /**
-     * 检查子部门是否存在
+     * 检查子节点是否存在
      * @param int $id
      * @return bool
      */

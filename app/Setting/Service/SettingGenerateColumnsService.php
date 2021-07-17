@@ -51,7 +51,7 @@ class SettingGenerateColumnsService extends AbstractService
             ];
 
             // 设置默认选项
-            if (!in_array($item['column_name'], $default_column) || empty($item['column_key'])) {
+            if (!in_array($item['column_name'], $default_column) && empty($item['column_key'])) {
                 $column = array_merge(
                     $column,
                     ['is_edit' => '1', 'is_list' => '1', 'is_query' => '1']
