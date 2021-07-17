@@ -34,18 +34,30 @@ class SettingGenerateColumnsService extends AbstractService
      */
     public function save(array $data): int
     {
+        $default_column = ['created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at', 'remark'];
         // 组装数据
         foreach ($data as $k => $item) {
+
             $column = [
                 'table_id' => $item['table_id'],
                 'column_name' => $item['column_name'],
                 'column_comment' => $item['column_comment'],
                 'column_type' => $item['data_type'],
                 'is_pk' => empty($item['column_key']) ? '0' : '1' ,
+                'is_insert' => '1',
                 'query_type' => 'eq',
                 'view_type' => 'text',
                 'sort' => count($data) - $k,
             ];
+
+            // 设置默认选项
+            if (!in_array($item['column_name'], $default_column) || empty($item['column_key'])) {
+                $column = array_merge(
+                    $column,
+                    ['is_edit' => '1', 'is_list' => '1', 'is_query' => '1']
+                );
+            }
+
             $this->mapper->save($column);
         }
         return 1;

@@ -104,9 +104,11 @@ export default {
 
     // 装载数据表
     loadTable () {
-      console.log(this.names)
       loadTable({ names: this.names }).then(res => {
-        res.success && this.$emit('confirm')
+        if (res.success) {
+          this.handleDialogClose()
+          this.$emit('confirm')
+        } 
       })
     },
 

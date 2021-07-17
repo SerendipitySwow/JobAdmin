@@ -258,6 +258,6 @@ trait MapperTrait
      */
     public function getModel(): MineModel
     {
-        return $this->model;
+        return new $this->model;
     }
 }

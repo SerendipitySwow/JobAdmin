@@ -5,6 +5,7 @@ namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingGenerateTablesMapper;
 use App\System\Service\DataMaintainService;
+use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
 
@@ -79,6 +80,33 @@ class SettingGenerateTablesService extends AbstractService
             Db::rollBack();
             return false;
         }
+    }
+
+    /**
+     * 同步数据表
+     */
+    public function sync(int $id): bool
+    {
+        $table = $this->read($id);
+        $columns = $this->dataMaintainService->getColumnList(
+            str_replace(env('DB_PREFIX'), '', $table['table_name'])
+        );
+        $model = $this->settingGenerateColumnsService->mapper->getModel();
+        $ids = $model->newQuery()->where('table_id', $table['id'])->pluck('id');
+
+        try {
+            Db::beginTransaction();
+            $this->settingGenerateColumnsService->mapper->delete($ids->toArray());
+            foreach ($columns as &$column) {
+                $column['table_id'] = $id;
+            }
+            $this->settingGenerateColumnsService->save($columns);
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
+        }
+        return true;
     }
 
 }

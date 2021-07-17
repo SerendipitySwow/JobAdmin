@@ -44,6 +44,17 @@ class DictTypeController extends MineController
     }
 
     /**
+     * 获取字典，无分页
+     * @GetMapping("list")
+     * @return ResponseInterface
+     * @Permission("system:dictType:list")
+     */
+    public function list(): ResponseInterface
+    {
+        return $this->success($this->service->getList($this->request->all()));
+    }
+
+    /**
      * @GetMapping("recycle")
      * @return ResponseInterface
      * @Permission("system:dictType:recycle")

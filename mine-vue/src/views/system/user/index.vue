@@ -154,6 +154,7 @@
 
                 <el-button
                   type="text"
+                  v-if="scope.row.username !== 'superAdmin'"
                   v-hasPermission="['system:user:initUserPassword']"
                   @click="handleInitPassword(scope.row.id)"
                 >初始密码</el-button>

@@ -8,12 +8,22 @@
         :model="queryParams"
         label-width="80px"
       >
-        <el-form-item label="模块名称" class="ma-inline-form-item" prop="name">
-          <el-input size="small" v-model="queryParams.name" placeholder="请输入模块名称"></el-input>
+        <el-form-item label="表名称" class="ma-inline-form-item" prop="table_name">
+          <el-input size="small" v-model="queryParams.table_name" placeholder="请输入表名称"></el-input>
         </el-form-item>
 
-        <el-form-item label="模块标签" class="ma-inline-form-item" prop="label">
-          <el-input size="small" v-model="queryParams.label" placeholder="请输入模块标签"></el-input>
+        <el-form-item label="创建时间" class="ma-inline-form-item">
+          <el-date-picker
+            size="small"
+            type="daterange"
+            v-model="dateRange"
+            range-separator="至"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            @change="handleDateChange"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
         </el-form-item>
 
         <el-form-item class="ma-inline-form-item">
@@ -31,8 +41,17 @@
           size="small"
           icon="el-icon-download"
           v-hasPermission="['setting:code:generate']"
-          @click="handleGenCode"
+          :disabled="btnIsDisabed"
+          @click="handleGenCodes"
         >生成代码</el-button>
+
+        <el-button
+          size="small"
+          icon="el-icon-delete"
+          v-hasPermission="['setting:code:delete']"
+          :disabled="btnIsDisabed"
+          @click="handleDeletes"
+        >删除</el-button>
 
         <el-button
           size="small"
@@ -40,13 +59,6 @@
           v-hasPermission="['setting:code:loadTable']"
           @click="$refs.table.show()"
         >装载数据表</el-button>
-
-        <el-button
-          size="small"
-          icon="el-icon-delete"
-          v-hasPermission="['setting:code:delete']"
-          @click="handleDelete"
-        >删除</el-button>
 
       </el-col>
 
@@ -57,49 +69,56 @@
 
     </el-row>
 
-    <el-table v-loading="loading" :data="dataList">
+    <el-table v-loading="loading" :data="dataList" row-key="id" @selection-change="handleSelectionChange">
 
-      <el-table-column prop="name" label="表名称" width="150">
+      <el-table-column type="selection" width="55"></el-table-column>
+
+      <el-table-column prop="table_name" label="表名称" width="180" :show-overflow-tooltip="true">
       </el-table-column>
 
-      <el-table-column prop="label" label="业务名" width="150">
+      <el-table-column prop="table_comment" label="表描述" width="180" :show-overflow-tooltip="true">
       </el-table-column>
 
-      <el-table-column prop="version" label="表描述" width="150">
+      <el-table-column prop="type" label="生成类型">
+        <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.type === 'single'">单表CRUD</el-tag>
+          <el-tag size="small" v-if="scope.row.type === 'tree'">树表CRUD</el-tag>
+          <el-tag size="small" v-if="scope.row.type === 'parent_sub'">父子表CRUD</el-tag>
+        </template>
       </el-table-column>
 
-      <el-table-column prop="version" label="创建时间" :show-overflow-tooltip="true">
+      <el-table-column prop="created_at" label="创建时间">
       </el-table-column>
 
-      <el-table-column prop="version" label="更新时间" :show-overflow-tooltip="true">
+      <el-table-column prop="updated_at" label="更新时间">
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="245">
         <template slot-scope="scope">
 
           <el-button type="text" 
-            v-hasPermission="['system:module:delete']" 
-            @click="handleDelete(scope.row.name)"
+            v-hasPermission="['setting:code:preview']" 
+            @click="handleDelete(scope.row.id)"
           >预览</el-button>
 
           <el-button type="text" 
-            v-hasPermission="['system:module:delete']" 
-            @click="handleDelete(scope.row.name)"
+            v-hasPermission="['setting:code:edit']" 
+            @click="$refs.editForm.show(scope.row)"
           >编辑</el-button>
 
           <el-button type="text" 
-            v-hasPermission="['system:module:delete']" 
-            @click="handleDelete(scope.row.name)"
+            v-hasPermission="['setting:code:sync']" 
+            @click="handleSync(scope.row.id)"
           >同步</el-button>
           
           <el-button type="text" 
-            v-hasPermission="['system:module:delete']" 
-            @click="handleDelete(scope.row.name)"
+            v-hasPermission="['setting:code:delete']" 
+            @click="handleDelete(scope.row.id)"
           >删除</el-button>
 
           <el-button type="text" 
-            v-hasPermission="['system:module:delete']" 
-            @click="handleDelete(scope.row.name)"
+            v-hasPermission="['setting:code:generate']" 
+            @click="handleDelete(scope.row.id)"
           >生成代码</el-button>
 
         </template>
@@ -119,21 +138,23 @@
       </el-pagination>
     </template>
 
-    <table-list ref="table" @confirm="confirm"></table-list>
+    <table-list ref="table" @confirm="confirm" />
 
-    <!-- <add-form ref="Form" @closeDialog="handleClose"></add-form> -->
+    <edit-form ref="editForm" />
+    
   </ma-container>
 </template>
 <script>
 
-import { getPageList, remove } from '@/api/setting/module'
+import { getPageList, deletes, sync } from '@/api/setting/generate'
 
-// import addForm from './form'
+import editForm from './edit'
 import tableList from './table'
 export default {
   name: 'setting-code',
   components: {
-    tableList
+    tableList,
+    editForm
     // addForm
   },
   data () {
@@ -144,15 +165,22 @@ export default {
       dataList: [],
       // 遮罩层
       loading: true,
+      // 使用启用
+      btnIsDisabed: true,
+      // 日期时间范围
+      dateRange: null,
       // 分页数据
       pageInfo: { total: 0 },
       // 搜索
       queryParams: {
-        name: undefined,
-        label: undefined,
+        table_name: undefined,
+        maxDate: undefined,
+        minDate: undefined,
         pageSize: 10,
         page: 1
       },
+      // ID列表
+      ids: []
     }
   },
   created () {
@@ -174,19 +202,45 @@ export default {
     confirm () {
       this.getList()
     },
-    
-    // 删除
-    handleDelete (name) {
-      this.$confirm('删除模块不可逆，确定要删除吗？', '提示', {
+
+    // 同步数据表
+    handleSync (id) {
+      this.$confirm('此操作会导致字段设置信息丢失，确定同步吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        remove(name).then(res => {
+        sync(id).then(res => {
+          res.success && this.success(res.message)
+        })
+      })
+    },
+
+    // 批量删除
+    handleDeletes () {
+      this.handleDelete(this.ids)
+    },
+    
+    // 删除
+    handleDelete (id) {
+      this.$confirm('此操作会将数据物理删除？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletes(id).then(res => {
           this.success(res.message)
           this.getList()
         })
       })
+    },
+
+    // 选择时间事件
+    handleDateChange (values) {
+      if (values !== null) {
+        this.queryParams.minDate = values[0]
+        this.queryParams.maxDate = values[1]
+      }
     },
 
     // form组件关闭调用方法
@@ -207,8 +261,35 @@ export default {
     // 重置搜索
     resetSearch () {
       this.$refs.queryParams.resetFields()
+      this.dateRange = null
+      this.queryParams.minDate = this.queryParams.maxDate = undefined
       this.handleSearch()
-    }
+    },
+
+    // 多选生成
+    handleGenCodes () {
+
+    },
+
+    // 生成代码
+    genCode () {
+
+    },
+
+    // 多选
+    handleSelectionChange (items) {
+      if (items.length > 0) {
+        const ids = []
+        items.forEach(item => {
+          ids.push(item.id)
+          this.btnIsDisabed = false
+          this.ids = ids.join(',')
+        })
+      } else {
+        this.btnIsDisabed = true
+        this.ids = null
+      }
+    },
   }
 }
 </script>

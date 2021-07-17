@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Setting\Mapper;
 
 use App\Setting\Model\SettingGenerateColumns;
+use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 /**
@@ -18,5 +19,19 @@ class SettingGenerateColumnsMapper extends AbstractMapper
     public function assignModel()
     {
         $this->model = SettingGenerateColumns::class;
+    }
+
+    /**
+     * 搜索处理器
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function handleSearch(Builder $query, array $params): Builder
+    {
+        if ($params['table_id'] ?? false) {
+            $query->where('table_id', (int) $params['table_id']);
+        }
+        return $query;
     }
 }

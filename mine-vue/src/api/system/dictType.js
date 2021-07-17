@@ -13,6 +13,18 @@ export function getTypePageList (params = {}) {
 }
 
 /**
+ * 获取字典类型，无分页
+ * @returns
+ */
+ export function getTypeList (params = {}) {
+  return request({
+    url: 'system/dictType/list',
+    method: 'get',
+    params
+  })
+}
+
+/**
  * 从回收站获取字典类型
  * @returns
  */

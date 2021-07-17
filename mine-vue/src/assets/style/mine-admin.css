@@ -35,6 +35,9 @@
 .ma-card {
     margin-top: 10px; 
 }
+.el-drawer__body {
+    padding: 0 20px;
+}
 .ma-card .el-card__header {
     background: #f8fafe !important;
     padding: 12px 17px;
