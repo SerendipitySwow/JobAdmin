@@ -8,7 +8,7 @@ use Mine\MineModel;
 
 interface CodeGenerator
 {
-    public function setGenInfo(MineModel $model);
+    public function setGenInfo($model);
 
     public function generator();
 
