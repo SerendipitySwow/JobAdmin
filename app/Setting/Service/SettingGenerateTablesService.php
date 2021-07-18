@@ -8,6 +8,7 @@ use App\System\Service\DataMaintainService;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
+use Mine\Generator\ControllerGenerator;
 
 /**
  * 业务生成信息表业务处理类
@@ -107,6 +108,24 @@ class SettingGenerateTablesService extends AbstractService
             return false;
         }
         return true;
+    }
+
+    /**
+     * 预览代码
+     * @param int $id
+     * @return array
+     */
+    public function preview(int $id): array
+    {
+        $model = $this->read($id);
+        return [
+            [
+                'tab_name' => 'Controller.php',
+                'name' => 'controller',
+                'code' => make(ControllerGenerator::class)->setGenInfo($model)->preview(),
+                'lang' => 'php'
+            ]
+        ];
     }
 
 }

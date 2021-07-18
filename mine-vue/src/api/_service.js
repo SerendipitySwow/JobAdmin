@@ -46,7 +46,7 @@ function createService () {
         Notification.error(
           { message: response.data.message, title: '提示', duration: 5 * 1000 }
         )
-        return null;
+        return response.data;
       } else if (response.status === 200) {
         return response.data
       } else {

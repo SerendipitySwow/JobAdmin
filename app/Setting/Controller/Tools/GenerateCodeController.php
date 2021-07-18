@@ -65,9 +65,9 @@ class GenerateCodeController extends MineController
      * @GetMapping("preview")
      * @Permission("setting:code:preview")
      */
-    public function preview()
+    public function preview(): \Psr\Http\Message\ResponseInterface
     {
-
+        return $this->success($this->tableService->preview((int) $this->request->input('id', 0)));
     }
 
     /**

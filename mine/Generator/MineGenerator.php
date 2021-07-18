@@ -3,9 +3,11 @@
 declare(strict_types=1);
 namespace Mine\Generator;
 
-class MineGenerator
+abstract class MineGenerator
 {
     protected $stubDir;
+
+    protected $namespace;
 
     public function __construct()
     {
@@ -21,4 +23,22 @@ class MineGenerator
     {
         $this->stubDir = $stubDir;
     }
+
+    /**
+     * @return string
+     */
+    public function getNamespace(): string
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param mixed $namespace
+     */
+    public function setNamespace(string $namespace): void
+    {
+        $this->namespace = $namespace;
+    }
+
+
 }

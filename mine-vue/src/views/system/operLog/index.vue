@@ -105,11 +105,11 @@
       <el-tabs value="request">
 
         <el-tab-pane label="请求参数" name="request">
-          <ma-highlight :code="record.request_data"/>
+          <ma-highlight :code="record.request_data" lang="json" />
         </el-tab-pane>
 
         <el-tab-pane label="返回结果" name="response">
-          <ma-highlight :code="record.response_data"/>
+          <ma-highlight :code="record.response_data" lang="json" />
         </el-tab-pane>
 
       </el-tabs>

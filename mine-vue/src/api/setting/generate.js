@@ -46,6 +46,18 @@ export function sync (data) {
   })
 }
 
+/**
+ * 同步数据表
+ * @returns
+ */
+export function preview (params = {}) {
+  return request({
+    url: 'setting/code/preview',
+    method: 'get',
+    params
+  })
+}
+
 // 获取表中字段信息
 export function getTableColumns(params = {}) {
   return request({

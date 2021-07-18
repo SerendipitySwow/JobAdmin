@@ -98,7 +98,7 @@
 
           <el-button type="text" 
             v-hasPermission="['setting:code:preview']" 
-            @click="handleDelete(scope.row.id)"
+            @click="$refs.preview.show(scope.row.id)"
           >预览</el-button>
 
           <el-button type="text" 
@@ -141,6 +141,8 @@
     <table-list ref="table" @confirm="confirm" />
 
     <edit-form ref="editForm" />
+
+    <preview ref="preview" />
     
   </ma-container>
 </template>
@@ -150,12 +152,14 @@ import { getPageList, deletes, sync } from '@/api/setting/generate'
 
 import editForm from './edit'
 import tableList from './table'
+import preview from './preview'
+
 export default {
   name: 'setting-code',
   components: {
     tableList,
-    editForm
-    // addForm
+    editForm,
+    preview
   },
   data () {
     return {

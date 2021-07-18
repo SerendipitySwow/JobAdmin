@@ -256,7 +256,7 @@ class Str
      * @param  $time int
      * @return string
      */
-    public static function Sec2Time(int $time)
+    public static function Sec2Time(int $time): string
     {
         $value = [
             'years' => 0, 'days' => 0, 'hours' => 0,

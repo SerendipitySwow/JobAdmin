@@ -44,7 +44,7 @@ export default {
   methods: {
     highlight () {
       let code = this.formatHtml ? htmlFormat(this.code) : this.code
-      code = this.formatJson(code);
+      code = this.lang === 'json' ? this.formatJson(code) : code
       this.highlightHTML = highlight.highlightAuto(code, [
         this.lang,
         'html',
