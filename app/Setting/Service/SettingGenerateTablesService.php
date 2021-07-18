@@ -124,7 +124,61 @@ class SettingGenerateTablesService extends AbstractService
                 'name' => 'controller',
                 'code' => make(ControllerGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'php'
-            ]
+            ],
+            [
+                'tab_name' => 'Model.php',
+                'name' => 'model',
+                'code' => '',
+                'lang' => 'php',
+            ],
+            [
+                'tab_name' => 'Service.php',
+                'name' => 'service',
+                'code' => '',
+                'lang' => 'php',
+            ],
+            [
+                'tab_name' => 'Mapper.php',
+                'name' => 'mapper',
+                'code' => '',
+                'lang' => 'php',
+            ],
+            [
+                'tab_name' => 'CreateRequest.php',
+                'name' => 'create_request',
+                'code' => '',
+                'lang' => 'php',
+            ],
+            [
+                'tab_name' => 'UpdateRequest.php',
+                'name' => 'update_request',
+                'code' => '',
+                'lang' => 'php',
+            ],
+            [
+                'tab_name' => 'Api.js',
+                'name' => 'api',
+                'code' => '',
+                'lang' => 'javascript',
+            ],
+            [
+                'tab_name' => 'Index.vue',
+                'name' => 'index',
+                'code' => '',
+                'lang' => 'vue',
+            ],
+            [
+                'tab_name' => 'Form.vue',
+                'name' => 'form',
+                'code' => '',
+                'lang' => 'vue',
+            ],
+            [
+                'tab_name' => 'Menu.sql',
+                'name' => 'sql',
+                'code' => '',
+                'lang' => 'sql',
+            ],
         ];
     }
 
