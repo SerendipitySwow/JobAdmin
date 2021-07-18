@@ -17,6 +17,7 @@ use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
 /**
+ * {COMMENT}
  * Class {CLASS_NAME}
  * @Controller(prefix="{CONTROLLER_ROUTE}")
  * @Auth

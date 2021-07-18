@@ -5,7 +5,6 @@ namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingGenerateTablesMapper;
 use App\System\Service\DataMaintainService;
-use Hyperf\Database\Schema\Schema;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
 use Mine\Generator\ControllerGenerator;
