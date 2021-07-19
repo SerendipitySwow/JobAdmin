@@ -86,6 +86,8 @@ class GenerateCodeController extends MineController
      * @PostMapping("loadTable")
      * @Permission("setting:code:loadTable")
      * @OperationLog
+     * @param LoadTableRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function loadTable(LoadTableRequest $request): \Psr\Http\Message\ResponseInterface
     {
@@ -97,6 +99,8 @@ class GenerateCodeController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @Permission("setting:code:delete")
      * @OperationLog
+     * @param string $ids
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function delete(string $ids): \Psr\Http\Message\ResponseInterface
     {
@@ -108,6 +112,8 @@ class GenerateCodeController extends MineController
      * @PutMapping("sync/{id}")
      * @Permission("setting:code:sync")
      * @OperationLog
+     * @param int $id
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function sync(int $id): \Psr\Http\Message\ResponseInterface
     {

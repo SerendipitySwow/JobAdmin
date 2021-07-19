@@ -13,7 +13,14 @@
         :label="item.tab_name"
         :name="item.name"
       >
-
+        <el-alert
+          title="说明"
+          type="info"
+          :closable="false"
+          v-if="item.name === 'model'"
+          description="模型类预览的代码与实际生成的代码会稍微不同，不会影响实际功能"
+          show-icon>
+        </el-alert>
         <ma-highlight :code="item.code" :lang="item.lang" />
 
       </el-tab-pane>
@@ -52,7 +59,7 @@ export default {
     // 表字段modal关闭
     handleDialogClose () {
       this.dialogVisible = false
-    },
+    }
   }
 }
 </script>

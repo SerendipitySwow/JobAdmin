@@ -80,7 +80,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getControllerTemplatePath(): string
     {
-        return $this->getStubDir().'/'.$this->getControllerType().'/controller.stub';
+        return $this->getStubDir().$this->getControllerType().'/controller.stub';
     }
 
     /**
@@ -157,7 +157,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 初始化控制器明明控件
+     * 初始化控制器命名空间
      * @return string
      */
     protected function initNamespace(): string
