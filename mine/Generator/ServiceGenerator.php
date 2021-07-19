@@ -11,11 +11,11 @@ use Mine\Exception\NormalStatusException;
 use Mine\Helper\Str;
 
 /**
- * 控制器生成
- * Class ControllerGenerator
+ * 服务类生成
+ * Class ServiceGenerator
  * @package Mine\Generator
  */
-class ControllerGenerator extends MineGenerator implements CodeGenerator
+class ServiceGenerator extends MineGenerator implements CodeGenerator
 {
     /**
      * @var SettingGenerateTables
@@ -35,9 +35,9 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     /**
      * 设置生成信息
      * @param SettingGenerateTables $model
-     * @return ControllerGenerator
+     * @return ServiceGenerator
      */
-    public function setGenInfo(SettingGenerateTables $model): ControllerGenerator
+    public function setGenInfo(SettingGenerateTables $model): ServiceGenerator
     {
         $this->model = $model;
         $this->filesystem = make(Filesystem::class);
@@ -52,7 +52,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      * 生成代码
      * @return $this
      */
-    public function generator(): ControllerGenerator
+    public function generator(): ServiceGenerator
     {
         return $this;
     }
@@ -66,7 +66,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 获取生成控制器的类型
+     * 获取生成的类型
      * @return string
      */
     public function getType(): string
@@ -75,12 +75,12 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 获取控制器模板地址
+     * 获取模板地址
      * @return string
      */
     protected function getTemplatePath(): string
     {
-        return $this->getStubDir().$this->getType().'/controller.stub';
+        return $this->getStubDir().$this->getType().'/service.stub';
     }
 
     /**
@@ -95,7 +95,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     /**
      * 占位符替换
      */
-    protected function placeholderReplace(): ControllerGenerator
+    protected function placeholderReplace(): ServiceGenerator
     {
         $this->setCodeContent(str_replace(
             $this->getPlaceHolderContent(),
@@ -113,21 +113,12 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             '{NAMESPACE}',
-            '{COMMENT}',
             '{USE}',
+            '{COMMENT}',
             '{CLASS_NAME}',
-            '{SERVICE}',
-            '{CONTROLLER_ROUTE}',
-            '{INDEX_PERMISSION}',
-            '{RECYCLE_PERMISSION}',
-            '{SAVE_PERMISSION}',
-            '{READ_PERMISSION}',
-            '{UPDATE_PERMISSION}',
-            '{DELETE_PERMISSION}',
-            '{REAL_DELETE_PERMISSION}',
-            '{RECOVERY_PERMISSION}',
-            '{CREATE_REQUEST}',
-            '{UPDATE_REQUEST}'
+            '{MAPPER}',
+            '{FIELD_ID}',
+            '{FIELD_PID}'
         ];
     }
 
@@ -138,35 +129,22 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             $this->initNamespace(),
-            $this->getComment(),
             $this->getUse(),
+            $this->getComment(),
             $this->getClassName(),
-            $this->getServiceName(),
-            $this->getControllerRoute(),
-            $this->getMethodRoute('index'),
-            $this->getMethodRoute('recycle'),
-            $this->getMethodRoute('save'),
-            $this->getMethodRoute('read'),
-            $this->getMethodRoute('update'),
-            $this->getMethodRoute('delete'),
-            $this->getMethodRoute('realDelete'),
-            $this->getMethodRoute('recovery'),
-            $this->getCreateRequestName(),
-            $this->getUpdateRequestName(),
+            $this->getMapperName(),
+            $this->getFieldIdName(),
+            $this->getFieldPidName(),
         ];
     }
 
     /**
-     * 初始化控制器命名空间
+     * 初始化服务类命名空间
      * @return string
      */
     protected function initNamespace(): string
     {
-        $namespace = $this->getNamespace() . "\\Controller";
-        if (!empty($this->model->package_name)) {
-            return $namespace . "\\" . $this->model->package_name;
-        }
-        return $namespace;
+        return $this->getNamespace() . "\\Service";
     }
 
     /**
@@ -175,7 +153,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getComment(): string
     {
-        return $this->model->menu_name. '控制器';
+        return $this->model->menu_name. '服务类';
     }
 
     /**
@@ -185,9 +163,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     protected function getUse(): string
     {
         return <<<UseNamespace
-Use {$this->getNamespace()}\\Service\\{$this->getBusinessName()}Service;
-Use {$this->getNamespace()}\\Request\\{$this->getBusinessName()}CreateRequest;
-Use {$this->getNamespace()}\\Request\\{$this->getBusinessName()}UpdateRequest;
+Use {$this->getNamespace()}\\Mapper\\{$this->getBusinessName()}Mapper;
 UseNamespace;
     }
 
@@ -197,62 +173,50 @@ UseNamespace;
      */
     protected function getClassName(): string
     {
-        return $this->getBusinessName().'Controller';
-    }
-
-    /**
-     * 获取服务类名称
-     * @return string
-     */
-    protected function getServiceName(): string
-    {
         return $this->getBusinessName().'Service';
     }
 
     /**
-     * 获取控制器路由
+     * 获取Mapper类名称
      * @return string
      */
-    protected function getControllerRoute(): string
+    protected function getMapperName(): string
     {
-        return sprintf(
-            '%s/%s',
-            Str::lower($this->model->module_name),
-            $this->getBusinessName()
-        );
+        return $this->getBusinessName().'Mapper';
     }
 
     /**
-     * 获取方法路由
-     * @param string $route
+     * 获取树表ID
      * @return string
      */
-    protected function getMethodRoute(string $route): string
+    protected function getFieldIdName(): string
     {
-        return sprintf(
-            '%s:%s:%s',
-            Str::lower($this->model->module_name),
-            $this->getBusinessName(),
-            $route
-        );
+        if ($this->getType() == 'Tree') {
+            $options = json_decode($this->model->options);
+            if ( $options->tree_id ?? false ) {
+                return $options->tree_id;
+            } else {
+                return 'id';
+            }
+        }
+        return '';
     }
 
     /**
-     * 获取保存数据的验证器
+     * 获取树表父ID
      * @return string
      */
-    protected function getCreateRequestName(): string
+    protected function getFieldPidName(): string
     {
-        return $this->getBusinessName(). 'CreateRequest';
-    }
-
-    /**
-     * 获取更新数据的验证器
-     * @return string
-     */
-    protected function getUpdateRequestName(): string
-    {
-        return $this->getBusinessName(). 'UpdateRequest';
+        if ($this->getType() == 'Tree') {
+            $options = json_decode($this->model->options);
+            if ( $options->tree_pid ?? false ) {
+                return $options->tree_pid;
+            } else {
+                return 'parent_id';
+            }
+        }
+        return '';
     }
 
     /**

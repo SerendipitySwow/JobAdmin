@@ -13,7 +13,7 @@ use Mine\Helper\Str;
 
 /**
  * 模型生成
- * Class ControllerGenerator
+ * Class ModelGenerator
  * @package Mine\Generator
  */
 class ModelGenerator extends MineGenerator implements CodeGenerator
@@ -67,19 +67,10 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 获取生成控制器的类型
-     * @return string
-     */
-    public function getControllerType(): string
-    {
-        return ucfirst($this->model->type);
-    }
-
-    /**
      * 获取控制器模板地址
      * @return string
      */
-    protected function getControllerTemplatePath(): string
+    protected function getTemplatePath(): string
     {
         return $this->getStubDir().'model.stub';
     }
@@ -90,7 +81,7 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
      */
     protected function readTemplate(): string
     {
-        return $this->filesystem->sharedGet($this->getControllerTemplatePath());
+        return $this->filesystem->sharedGet($this->getTemplatePath());
     }
 
     /**

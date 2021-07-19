@@ -9,6 +9,7 @@ use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
 use Mine\Generator\ControllerGenerator;
 use Mine\Generator\ModelGenerator;
+use Mine\Generator\ServiceGenerator;
 
 /**
  * 业务生成信息表业务处理类
@@ -134,7 +135,7 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Service.php',
                 'name' => 'service',
-                'code' => '',
+                'code' => make(ServiceGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'php',
             ],
             [

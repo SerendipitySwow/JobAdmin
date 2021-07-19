@@ -7,6 +7,9 @@ namespace {NAMESPACE};
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
+/**
+ * {COMMENT}
+ */
 class {CLASS_NAME} extends AbstractMapper
 {
     /**

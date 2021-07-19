@@ -7,6 +7,9 @@ namespace {NAMESPACE};
 {USE}
 use Mine\Abstracts\AbstractService;
 
+/**
+ * {COMMENT}
+ */
 class {CLASS_NAME} extends AbstractService
 {
     /**
@@ -17,6 +20,34 @@ class {CLASS_NAME} extends AbstractService
     public function __construct({MAPPER} $mapper)
     {
         $this->mapper = $mapper;
+    }
+
+    /**
+     * 获取树列表
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeList(?array $params = null): array
+    {
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        $params['recycle'] = false;
+        return $this->mapper->getTreeList($params, {FIELD_ID}, {FIELD_PID});
+    }
+
+    /**
+     * 从回收站获取树列表
+     * @param array|null $params
+     * @return array
+     */
+    public function getTreeListByRecycle(?array $params = null): array
+    {
+        if ($params['select'] ?? null) {
+            $params['select'] = explode(',', $params['select']);
+        }
+        $params['recycle'] = true;
+        return $this->mapper->getTreeList($params, {FIELD_ID}, {FIELD_PID});
     }
 
     /**

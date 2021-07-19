@@ -11,11 +11,11 @@ use Mine\Exception\NormalStatusException;
 use Mine\Helper\Str;
 
 /**
- * 控制器生成
- * Class ControllerGenerator
+ * 验证器生成
+ * Class RequestGenerator
  * @package Mine\Generator
  */
-class ControllerGenerator extends MineGenerator implements CodeGenerator
+class RequestGenerator extends MineGenerator implements CodeGenerator
 {
     /**
      * @var SettingGenerateTables
@@ -35,9 +35,10 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
     /**
      * 设置生成信息
      * @param SettingGenerateTables $model
-     * @return ControllerGenerator
+     * @param string $type
+     * @return RequestGenerator
      */
-    public function setGenInfo(SettingGenerateTables $model): ControllerGenerator
+    public function setGenInfo(SettingGenerateTables $model, string $type): RequestGenerator
     {
         $this->model = $model;
         $this->filesystem = make(Filesystem::class);
@@ -52,7 +53,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      * 生成代码
      * @return $this
      */
-    public function generator(): ControllerGenerator
+    public function generator(): RequestGenerator
     {
         return $this;
     }
@@ -69,7 +70,7 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      * 获取生成控制器的类型
      * @return string
      */
-    public function getType(): string
+    public function getControllerType(): string
     {
         return ucfirst($this->model->type);
     }
@@ -78,9 +79,9 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      * 获取控制器模板地址
      * @return string
      */
-    protected function getTemplatePath(): string
+    protected function getControllerTemplatePath(): string
     {
-        return $this->getStubDir().$this->getType().'/controller.stub';
+        return $this->getStubDir().$this->getControllerType().'/controller.stub';
     }
 
     /**
@@ -89,13 +90,13 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      */
     protected function readTemplate(): string
     {
-        return $this->filesystem->sharedGet($this->getTemplatePath());
+        return $this->filesystem->sharedGet($this->getControllerTemplatePath());
     }
 
     /**
      * 占位符替换
      */
-    protected function placeholderReplace(): ControllerGenerator
+    protected function placeholderReplace(): RequestGenerator
     {
         $this->setCodeContent(str_replace(
             $this->getPlaceHolderContent(),

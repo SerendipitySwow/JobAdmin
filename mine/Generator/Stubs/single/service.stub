@@ -6,6 +6,9 @@ namespace {NAMESPACE};
 {USE}
 use Mine\Abstracts\AbstractService;
 
+/**
+ * {COMMENT}
+ */
 class {CLASS_NAME} extends AbstractService
 {
     /**
