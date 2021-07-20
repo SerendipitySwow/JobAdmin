@@ -209,6 +209,7 @@ class InstallProjectCommand extends MineCommand
             $env['SUPER_ADMIN'] = (string) $id->getId();
             $env['ADMIN_ROLE'] = (string) ($id->getId() + rand(0, 99999));
             $env['CONSOLE_SQL'] = 'true';
+            $env['JWT_SECRET'] = base64_encode(random_bytes(64));
 
             $id = null;
 
