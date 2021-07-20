@@ -46,6 +46,7 @@ class LoginController extends MineController
      * @PostMapping("login")
      * @param SystemUserLoginRequest $request
      * @return ResponseInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function login(SystemUserLoginRequest $request): ResponseInterface
     {
@@ -57,7 +58,6 @@ class LoginController extends MineController
      * @Auth
      * @PostMapping("logout")
      * @return ResponseInterface
-     * @throws JwtException
      */
     public function logout(): ResponseInterface
     {
@@ -68,7 +68,6 @@ class LoginController extends MineController
     /**
      * @Auth
      * @GetMapping("getInfo")
-     * @throws JwtException
      */
     public function getInfo(): ResponseInterface
     {
@@ -80,15 +79,10 @@ class LoginController extends MineController
      * @PostMapping("refresh")
      * @param LoginUser $user
      * @return ResponseInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function refresh(LoginUser $user): ResponseInterface
     {
-        try {
-            return $this->success(['token' => $user->refresh()]);
-        } catch (TokenBlacklistedException $e) {
-            return $this->error(__('jwt.token_blacklist'), 401);
-        } catch (JwtException $e) {
-            throw new TokenException(__('jwt.validate_fail'));
-        }
+        return $this->success(['token' => $user->refresh()]);
     }
 }

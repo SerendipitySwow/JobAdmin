@@ -9,7 +9,4 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-class OperationLog extends AbstractAnnotation
-{
-
-}
+class OperationLog extends AbstractAnnotation {}

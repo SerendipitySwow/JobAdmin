@@ -9,7 +9,6 @@ use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
-use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Abstracts\AbstractService;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UploadAfter;
@@ -46,7 +45,6 @@ class SystemUserService extends AbstractService
     protected $request;
 
     /**
-     * @Inject
      * @var LoginUser
      */
     protected $loginUser;
@@ -74,18 +72,21 @@ class SystemUserService extends AbstractService
     /**
      * SystemUserService constructor.
      * @param ContainerInterface $container
+     * @param LoginUser $loginUser
      * @param SystemUserMapper $mapper
      * @param SystemMenuService $systemMenuService
      * @param SystemRoleService $systemRoleService
      */
     public function __construct(
         ContainerInterface $container,
+        LoginUser $loginUser,
         SystemUserMapper $mapper,
         SystemMenuService $systemMenuService,
         SystemRoleService $systemRoleService
     )
     {
         $this->mapper = $mapper;
+        $this->loginUser = $loginUser;
         $this->sysMenuService = $systemMenuService;
         $this->sysRoleService = $systemRoleService;
         $this->container = $container;
@@ -134,6 +135,7 @@ class SystemUserService extends AbstractService
      * 用户登陆
      * @param array $data
      * @return string|null
+     * @throws InvalidArgumentException
      */
     public function login(array $data): ?string
     {
@@ -187,19 +189,17 @@ class SystemUserService extends AbstractService
 
     /**
      * 用户退出
-     * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function logout()
     {
         $this->evDispatcher->dispatch(new UploadAfter($this->loginUser->getUserInfo()));
-        $this->loginUser->getJwt()->invalidate();
-        $this->loginUser->getJwt()->unsetToken();
+        $this->loginUser->getJwt()->logout();
     }
 
     /**
      * 获取用户信息
      * @return array
-     * @throws JwtException
      */
     public function getInfo(): array
     {
@@ -212,7 +212,6 @@ class SystemUserService extends AbstractService
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
-     * @throws JwtException
      */
     protected function getCacheInfo(LoginUser $loginUser, SystemUser $user): array
     {
