@@ -6,8 +6,8 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
+use Mine\Helper\LoginUser;
 use Mine\MineModel;
-use Mine\MineRequest;
 
 /**
  * Class GenIdAspect
@@ -21,27 +21,26 @@ class UpdateAspect extends AbstractAspect
     ];
 
     /**
-     * @var MineRequest
+     * @var LoginUser
      */
-    protected $request;
+    protected $loginUser;
 
-    public function __construct(MineRequest $request)
+    public function __construct(LoginUser $loginUser)
     {
-        $this->request = $request;
+        $this->loginUser = $loginUser;
     }
 
     /**
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
      * @throws Exception
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
         $instance = $proceedingJoinPoint->getInstance();
         // 更新更改人
         if ($instance instanceof MineModel && in_array('updated_by', $instance->getFillable())) {
-            $instance->updated_by = $this->request->getId();
+            $instance->updated_by = $this->loginUser->getId();
         }
         return $proceedingJoinPoint->process();
     }

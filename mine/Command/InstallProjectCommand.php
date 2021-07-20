@@ -271,8 +271,6 @@ class InstallProjectCommand extends MineCommand
     protected function setOthers()
     {
         $this->line(PHP_EOL . ' MineAdmin set others items...' . PHP_EOL, 'comment');
-        // 生成jwt
-        $this->call('gen:jwt-secret');
     }
 
     protected function initUserData()

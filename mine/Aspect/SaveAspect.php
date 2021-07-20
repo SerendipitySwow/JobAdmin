@@ -34,7 +34,6 @@ class SaveAspect extends AbstractAspect
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
      * @throws Exception
-     * @throws \HyperfExt\Jwt\Exceptions\JwtException
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {

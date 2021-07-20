@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Mine\Aspect;
 
 use App\System\Service\SystemMenuService;
-use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
@@ -16,9 +15,6 @@ use Mine\Helper\Str;
 use Mine\MineRequest;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Class OperationLogAspect
@@ -93,6 +89,8 @@ class OperationLogAspect extends AbstractAspect
 
     /**
      * 获取菜单名称
+     * @param string $code
+     * @return string
      */
     protected function getOperationMenuName(string $code): string
     {

@@ -10,8 +10,6 @@ use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Auth;
 use Mine\Exception\TokenException;
 use Mine\Helper\LoginUser;
-use Mine\MineRequest;
-use Mine\MineResponse;
 
 /**
  * Class AuthAspect
@@ -38,7 +36,7 @@ class AuthAspect extends AbstractAspect
     /**
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
-     * @throws Exception|\HyperfExt\Jwt\Exceptions\TokenBlacklistedException
+     * @throws Exception
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {

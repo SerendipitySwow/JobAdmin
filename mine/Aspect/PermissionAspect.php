@@ -2,14 +2,11 @@
 declare(strict_types=1);
 namespace Mine\Aspect;
 
-use App\System\Service\SystemMenuService;
 use App\System\Service\SystemUserService;
-use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
-use HyperfExt\Jwt\Exceptions\JwtException;
 use Mine\Annotation\Permission;
 use Mine\Exception\NoPermissionException;
 use Mine\Helper\LoginUser;
@@ -63,7 +60,6 @@ class PermissionAspect extends AbstractAspect
      * @param ProceedingJoinPoint $proceedingJoinPoint
      * @return mixed
      * @throws Exception
-     * @throws JwtException
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
