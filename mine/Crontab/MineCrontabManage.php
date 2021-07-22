@@ -75,7 +75,8 @@ class MineCrontabManage
      */
     public function getCrontabList(): array
     {
-        if (($crontab = $this->redis->get('MineAdmin:crontab')) === false) {
+        $crontab = $this->redis->get('MineAdmin:crontab');
+        if ($crontab === false) {
             $data = $this->crontabService->getList([
                 'select' => 'id,name,type,target,rule,fail_policy',
                 'status' => '0',
@@ -94,10 +95,12 @@ class MineCrontabManage
                 }
             }
 
-            $this->redis->set('MineAdmin:crontab', $crontab);
+            $this->redis->set('MineAdmin:crontab', json_encode($crontab));
 
+            return $crontab;
+        } else {
+            return json_decode($crontab, true);
         }
-        return $crontab;
     }
 
     /**
