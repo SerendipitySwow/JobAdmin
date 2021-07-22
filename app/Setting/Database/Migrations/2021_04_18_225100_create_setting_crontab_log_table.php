@@ -15,12 +15,12 @@ class CreateSettingCrontabLogTable extends Migration
             $table->engine = 'Innodb';
             $table->comment('定时任务执行日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
-            $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
-            $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
+            $table->addColumn('string', 'name', ['length'=> 255, 'comment' => '任务名称'])->nullable();
+            $table->addColumn('string', 'target', ['length'=> 500, 'comment' => '任务调用目标字符串'])->nullable();
+            $table->addColumn('string', 'message', ['length'=> 500, 'comment' => '执行日志信息'])->nullable();
+            $table->addColumn('string', 'exception_info', ['length'=> 1000, 'comment' => '异常信息'])->nullable();
+            $table->addColumn('char', 'status', ['length' => 1, 'default' => '0', 'comment' => '执行状态 (0成功 1失败)'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
-            $table->addColumn('timestamp', 'updated_at', ['precision' => 0, 'comment' => '更新时间'])->nullable();
-            $table->addColumn('timestamp', 'deleted_at', ['precision' => 0, 'comment' => '删除时间'])->nullable();
-            $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
             $table->primary('id');
         });
     }
