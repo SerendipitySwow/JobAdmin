@@ -39,6 +39,7 @@
     "hyperf/redis": "2.2.*",
     "hyperf/translation": "2.2.*",
     "hyperf/validation": "2.2.*",
+    "hyperf/websocket-server": "^2.2",
     "lifei6671/php-captcha": "^0.1.1",
     "overtrue/flysystem-cos": "^3.0",
     "overtrue/flysystem-qiniu": "^1.0",

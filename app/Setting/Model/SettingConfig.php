@@ -7,6 +7,9 @@ use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
 /**
  * @property int $id 主键
+ * @property string $name 配置名称
+ * @property string $key 配置键名
+ * @property string $value 配置值
  * @property int $created_by 创建者
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
@@ -29,7 +32,7 @@ class SettingConfig extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'name', 'key', 'value', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

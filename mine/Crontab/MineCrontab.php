@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Mine;
+namespace Mine\Crontab;
 
 use Hyperf\Crontab\Parser;
 use Hyperf\Contract\StdoutLoggerInterface;
@@ -11,7 +11,7 @@ use Hyperf\Di\Annotation\Inject;
  * 定时任务
  * Class MineCrontab
  * @package Mine
- * @Crontab(name="MineCrontab", rule="* * * * *", callback="execute", memo="MineAdmin定时任务")
+ * @Crontab(name="MineAdmin Crontab", rule="* * * * *", singleton=true, callback="execute", memo="MineAdmin定时任务调度器")
  */
 class MineCrontab
 {
@@ -33,6 +33,7 @@ class MineCrontab
         if ($times) {
             foreach ($times as $time) {
                 if (time() >= $time->getTimestamp()) {
+                    echo '123';
 //                    (new \App\System\Crontab\O)->execute();
                 }
             }
