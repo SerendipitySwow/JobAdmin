@@ -37,13 +37,16 @@ class MineCrontab
 //                $executor->execute($crontab);
 //            }
 //        });
-        $times = $this->parser->parse("*/1 * * * *", time());
+        $times = $this->parser->parse("*/2 * * * *", time());
         if ($times) {
             foreach ($times as $time) {
                 echo $time->getTimestamp() - time();
+                echo PHP_EOL;
+                echo time() - $time->getTimestamp();
                 if (time() >= $time->getTimestamp()) {
                     echo PHP_EOL;
                     echo '123';
+                    echo PHP_EOL;
 //                    (new \App\System\Crontab\O)->execute();
                 }
             }
