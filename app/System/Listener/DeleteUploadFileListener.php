@@ -3,7 +3,7 @@
 
 namespace App\System\Listener;
 
-use App\System\Model\SystemUploadfile;
+use App\System\Model\SystemUploadFile;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
 use League\Flysystem\FileNotFoundException;
@@ -39,10 +39,10 @@ class DeleteUploadFileListener implements ListenerInterface
 
     /**
      * 获取文件路径
-     * @param SystemUploadfile $model
+     * @param SystemUploadFile $model
      * @return string
      */
-    public function getFilePath(SystemUploadfile $model): string
+    public function getFilePath(SystemUploadFile $model): string
     {
         return $model->storage_path.'/'.$model->object_name;
     }

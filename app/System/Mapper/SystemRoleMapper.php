@@ -116,7 +116,7 @@ class SystemRoleMapper extends AbstractMapper
     {
         $adminId = env('ADMIN_ROLE');
         if (in_array($adminId, $ids)) {
-            unset($ids[array_search($adminId)]);
+            unset($ids[array_search($adminId, $ids)]);
         }
         $this->model::destroy($ids);
         return true;
