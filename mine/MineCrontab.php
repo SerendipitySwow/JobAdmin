@@ -33,7 +33,7 @@ class MineCrontab
         if ($times) {
             foreach ($times as $time) {
                 if (time() >= $time->getTimestamp()) {
-                    (new \App\System\Crontab\O)->execute();
+//                    (new \App\System\Crontab\O)->execute();
                 }
             }
         }

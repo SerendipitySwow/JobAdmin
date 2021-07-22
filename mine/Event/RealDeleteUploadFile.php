@@ -3,8 +3,7 @@
 declare(strict_types=1);
 namespace Mine\Event;
 
-
-use App\System\Model\SystemUploadfile;
+use App\System\Model\SystemUploadFile;
 use League\Flysystem\Filesystem;
 
 class RealDeleteUploadFile
@@ -15,7 +14,7 @@ class RealDeleteUploadFile
 
     protected $filesystem;
 
-    public function __construct(SystemUploadfile $model, Filesystem $filesystem)
+    public function __construct(SystemUploadFile $model, Filesystem $filesystem)
     {
         $this->model = $model;
         $this->filesystem = $filesystem;
@@ -23,9 +22,9 @@ class RealDeleteUploadFile
 
     /**
      * 获取当前模型实例
-     * @return SystemUploadfile
+     * @return SystemUploadFile
      */
-    public function getModel(): SystemUploadfile
+    public function getModel(): SystemUploadFile
     {
         return $this->model;
     }
