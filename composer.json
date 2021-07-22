@@ -33,6 +33,7 @@
     "hyperf/http-server": "2.2.*",
     "hyperf/logger": "2.2.*",
     "hyperf/memory": "2.2.*",
+    "hyperf/model-cache": "^2.2",
     "hyperf/paginator": "^2.2",
     "hyperf/pool": "^2.2",
     "hyperf/process": "2.2.*",

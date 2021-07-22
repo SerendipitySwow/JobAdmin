@@ -5,6 +5,7 @@ namespace Mine;
 
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\ModelCache\Cacheable;
 use Mine\Helper\Id;
 
 /**
@@ -14,6 +15,8 @@ use Mine\Helper\Id;
  */
 class MineModel extends Model
 {
+    use Cacheable;
+
     /**
      * @Inject
      * @var Id

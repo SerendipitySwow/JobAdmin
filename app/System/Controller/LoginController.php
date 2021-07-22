@@ -3,21 +3,18 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
+use App\Setting\Service\SettingCrontabService;
 use App\System\Request\User\SystemUserLoginRequest;
 use App\System\Service\SystemUserService;
-use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
-use HyperfExt\Jwt\Exceptions\JwtException;
-use HyperfExt\Jwt\Exceptions\TokenBlacklistedException;
 use Mine\Annotation\Auth;
-use Mine\Exception\TokenException;
+use Mine\Crontab\MineCrontabManage;
 use Mine\Helper\LoginUser;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * Class LoginController
@@ -58,6 +55,7 @@ class LoginController extends MineController
      * @Auth
      * @PostMapping("logout")
      * @return ResponseInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function logout(): ResponseInterface
     {
@@ -84,5 +82,15 @@ class LoginController extends MineController
     public function refresh(LoginUser $user): ResponseInterface
     {
         return $this->success(['token' => $user->refresh()]);
+    }
+
+    /**
+     * @GetMapping("test")
+     */
+    public function test()
+    {
+        /* @var MineCrontabManage $service */
+        $service = $this->app(MineCrontabManage::class);
+        $service->getCrontabList();
     }
 }

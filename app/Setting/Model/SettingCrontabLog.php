@@ -11,7 +11,7 @@ use Mine\MineModel;
  * @property string $message 执行日志信息
  * @property string $exception_info 异常信息
  * @property string $status 执行状态 (0成功 1失败)
- * @property \Carbon\Carbon $created_at 创建时间
+ * @property string $created_at 创建时间
  */
 class SettingCrontabLog extends MineModel
 {
@@ -34,5 +34,5 @@ class SettingCrontabLog extends MineModel
      *
      * @var array
      */
-    protected $casts = ['id' => 'integer', 'created_at' => 'datetime'];
+    protected $casts = ['id' => 'integer'];
 }
