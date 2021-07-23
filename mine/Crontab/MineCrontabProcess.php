@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
-use App\Setting\Model\SettingCrontab;
-use Exception;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Crontab\Event\CrontabDispatcherStarted;
 use Hyperf\Crontab\Strategy\StrategyInterface;
