@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
+use App\Setting\Service\SettingCrontabLogService;
 use Carbon\Carbon;
 use Closure;
 use Hyperf\Contract\ApplicationInterface;
@@ -83,7 +84,7 @@ class MineExecutor
                             } catch (\Throwable $throwable) {
                                 $result = false;
                             } finally {
-                                $this->logResult($crontab, $result);
+                                $this->logResult($crontab, $result, isset($throwable) ? $throwable->getMessage() : '');
                             }
                         };
 
@@ -101,7 +102,7 @@ class MineExecutor
                 $callback = function () use ($application, $input, $output, $crontab) {
                     $runnable = function () use ($application, $input, $output, $crontab) {
                         $result = $application->run($input, $output);
-                        $this->logResult($crontab, $result === 0);
+                        $this->logResult($crontab, $result === 0, $result);
                     };
                     $this->decorateRunnable($crontab, $runnable)();
                 };
@@ -117,7 +118,11 @@ class MineExecutor
                         } catch (\Throwable $throwable) {
                             $result = false;
                         }
-                        $this->logResult($crontab, $result);
+                        $this->logResult(
+                            $crontab,
+                            $result,
+                            (!$result && isset($response)) ? $response->getBody() : ''
+                        );
                     };
                     $this->decorateRunnable($crontab, $runnable)();
                 };
@@ -125,7 +130,13 @@ class MineExecutor
             case SettingCrontab::EVAL_CRONTAB:
                 $callback = function () use ($crontab) {
                     $runnable = function () use ($crontab) {
-                        eval($crontab->getCallback());
+                        $result = true;
+                        try {
+                            eval($crontab->getCallback());
+                        } catch (\Throwable $throwable) {
+                            $result = false;
+                        }
+                        $this->logResult($crontab, $result, isset($throwable) ? $throwable->getMessage() : '');
                     };
                     $this->decorateRunnable($crontab, $runnable)();
                 };
@@ -201,7 +212,7 @@ class MineExecutor
         return $runnable;
     }
 
-    protected function logResult(MineCrontab $crontab, bool $isSuccess)
+    protected function logResult(MineCrontab $crontab, bool $isSuccess, $result = '')
     {
         if ($this->logger) {
             if ($isSuccess) {
@@ -210,5 +221,15 @@ class MineExecutor
                 $this->logger->error(sprintf('Crontab task [%s] failed execution at %s.', $crontab->getName(), date('Y-m-d H:i:s')));
             }
         }
+        $logService = $this->container->get(SettingCrontabLogService::class);
+        $data = [
+            'name' => $crontab->getName(),
+            'target' => $crontab->getCallback(),
+            'parameter' => $crontab->getParameter(),
+            'exception_info' => $result,
+            'status' => $isSuccess ? '0' : '1',
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $logService->save($data);
     }
 }

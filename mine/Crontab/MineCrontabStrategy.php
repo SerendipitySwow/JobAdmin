@@ -33,4 +33,14 @@ class MineCrontabStrategy
             }
         });
     }
+
+    /**
+     * 执行一次
+     */
+    public function executeOnce(MineCrontab $crontab)
+    {
+        co(function() use($crontab) {
+            $this->executor->execute($crontab);
+        });
+    }
 }
