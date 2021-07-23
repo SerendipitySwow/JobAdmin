@@ -2127,7 +2127,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/hyperf/model-cache/zipball/c4f7da4387cda79d6e713caf8934d9fae6ad53b7",
                 "reference": "c4f7da4387cda79d6e713caf8934d9fae6ad53b7",
-                "shasum": ""
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "hyperf/contract": "~2.2.0",
@@ -9076,6 +9082,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {

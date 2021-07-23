@@ -87,7 +87,7 @@ class MineCrontabManage
             $crontab = [];
             foreach ($data as $item) {
                 $time = $this->parser->parse($item['rule'], $last);
-                if ($time) {
+                if ($time && $this->parser->isValid($item['rule'])) {
                     foreach ($time as $t) {
                         $t['executeTime'] = $t->getTimestamp();
                         $crontab[] = $t;
