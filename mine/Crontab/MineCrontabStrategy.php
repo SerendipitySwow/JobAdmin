@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
+use Carbon\Carbon;
 use Hyperf\Di\Annotation\Inject;
 
 class MineCrontabStrategy
@@ -11,34 +12,25 @@ class MineCrontabStrategy
      * @Inject
      * @var MineCrontabManage
      */
-    private $mineCrontabManage;
+    protected $mineCrontabManage;
 
     /**
-     * @param array $crontab
+     * @Inject
+     * @var MineExecutor
      */
-    public function dispatch(array $crontab)
+    protected $executor;
+
+    /**
+     * @param MineCrontab $crontab
+     */
+    public function dispatch(MineCrontab $crontab)
     {
         co(function() use($crontab) {
-
-            $wait = $crontab['executeTime'] - time();
-            $wait > 0 && \Swoole\Coroutine::sleep($wait);
-
-            $result = true;
-            if ($crontab['type'] == SettingCrontab::COMMAND_CRONTAB) {
-                $result = $this->mineCrontabManage->commandCrontabExecute($crontab);
+            if ($crontab->getExecuteTime() instanceof Carbon) {
+                $wait = $crontab->getExecuteTime()->getTimestamp() - time();
+                $wait > 0 && \Swoole\Coroutine::sleep($wait);
+                $this->executor->execute($crontab);
             }
-            if ($crontab['type'] == SettingCrontab::CLASS_CRONTAB) {
-                $result = $this->mineCrontabManage->classCrontabExecute($crontab);
-            }
-            if ($crontab['type'] == SettingCrontab::URL_CRONTAB) {
-                $result = $this->mineCrontabManage->urlCrontabExecute($crontab);
-            }
-
-            $this->logger->info(
-                'crontab ['.$crontab['name'].'] run time at:' .
-                date('Y-m-d H:i:s') .
-                ' execute status: ' . $result ? 'OK' : 'ERROR'
-            );
         });
     }
 }

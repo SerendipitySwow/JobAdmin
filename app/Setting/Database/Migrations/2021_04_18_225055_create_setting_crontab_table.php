@@ -18,11 +18,15 @@ class CreateSettingCrontabTable extends Migration
             $table->addColumn('string', 'name', ['length' => 100, 'comment' => '任务名称'])->nullable();
             $table->addColumn(
                 'char', 'type',
-                ['length' => 1, 'default' => '0', 'comment' => '任务类型 (1 command, 2 class, 3 url)']
+                ['length' => 1, 'default' => '4', 'comment' => '任务类型 (1 command, 2 class, 3 url, 4 eval)']
             )->nullable();
             $table->addColumn('string', 'target', ['length' => 500, 'comment' => '调用任务字符串'])->nullable();
             $table->addColumn('string', 'parameter', ['length' => 1000, 'comment' => '调用任务参数'])->nullable();
             $table->addColumn('string', 'rule', ['length' => 15, 'comment' => '任务执行表达式'])->nullable();
+            $table->addColumn(
+                'char', 'singleton',
+                ['length' => 1, 'default' => '0', 'comment' => '是否单次执行 (0 是 1 不是)']
+            )->nullable();
             $table->addColumn(
                 'char', 'fail_policy',
                 ['length' => 1, 'default' => '3', 'comment' => '失败策略 (1 执行，2 尝试执行一次，3 放弃执行)']

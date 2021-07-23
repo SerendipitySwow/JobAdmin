@@ -8,10 +8,11 @@ use Mine\MineModel;
 /**
  * @property int $id 主键
  * @property string $name 任务名称
- * @property string $type 任务类型 (1 command, 2 class, 3 url)
+ * @property string $type 任务类型 (1 command, 2 class, 3 url, 4 eval)
  * @property string $target 调用任务字符串
  * @property string $parameter 调用任务参数
  * @property string $rule 任务执行表达式
+ * @property string $singleton 是否单次执行 (0 是 1 不是)
  * @property string $fail_policy 失败策略 (1 执行，2 尝试执行一次，3 放弃执行)
  * @property string $status 状态 (0正常 1停用)
  * @property int $created_by 创建者
@@ -24,6 +25,7 @@ use Mine\MineModel;
 class SettingCrontab extends MineModel
 {
     use SoftDeletes;
+
     // 遇到错误执行，不建议
     public const POLICY_TRY_RUN = '1';
     // 遇到错误，再次尝试一次
@@ -37,7 +39,8 @@ class SettingCrontab extends MineModel
     public const CLASS_CRONTAB = '2';
     // URL任务
     public const URL_CRONTAB = '3';
-
+    // EVAL 任务
+    public const EVAL_CRONTAB = '4';
 
     public $incrementing = false;
     /**
@@ -51,7 +54,7 @@ class SettingCrontab extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'type', 'target', 'parameter', 'rule', 'fail_policy', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'name', 'type', 'target', 'parameter', 'rule', 'singleton', 'fail_policy', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

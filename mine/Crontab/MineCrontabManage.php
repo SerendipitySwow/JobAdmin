@@ -3,11 +3,10 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
-use _HumbugBoxfd814575fcc2\Nette\Neon\Exception;
 use App\Setting\Model\SettingCrontab;
-use App\Setting\Service\SettingCrontabLogService;
 use App\Setting\Service\SettingCrontabService;
 use GuzzleHttp\Exception\GuzzleException;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Crontab\Parser;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\ClientFactory;
@@ -47,11 +46,6 @@ class MineCrontabManage
     protected $crontabService;
 
     /**
-     * @var SettingCrontabLogService
-     */
-    protected $crontabLogService;
-
-    /**
      * @var Redis
      */
     protected $redis;
@@ -64,8 +58,6 @@ class MineCrontabManage
     {
         $this->crontabService = $this->container->get(SettingCrontabService::class);
 
-        $this->crontabLogService = $this->container->get(SettingCrontabLogService::class);
-
         $this->redis = $this->container->get(Redis::class);
     }
 
@@ -75,32 +67,46 @@ class MineCrontabManage
      */
     public function getCrontabList(): array
     {
-        $crontab = $this->redis->get('MineAdmin:crontab');
-        if ($crontab === false) {
+        $data = $this->redis->get('MineAdmin:crontab');
+
+        if ($data === false) {
             $data = $this->crontabService->getList([
-                'select' => 'id,name,type,target,rule,fail_policy',
+                'select' => 'name,type,target,rule,parameter,fail_policy',
                 'status' => '0',
             ]);
+            $this->redis->set('MineAdmin:crontab', serialize($data));
+        } else {
+            $data = unserialize($data);
+        }
 
-            $last = time();
+        $logger = $this->container->get(StdoutLoggerInterface::class);
+        $last = time();
+        $list = [];
 
-            $crontab = [];
-            foreach ($data as $item) {
-                $time = $this->parser->parse($item['rule'], $last);
-                if ($time && $this->parser->isValid($item['rule'])) {
-                    foreach ($time as $t) {
-                        $t['executeTime'] = $t->getTimestamp();
-                        $crontab[] = $t;
-                    }
-                }
+        foreach ($data as $item) {
+
+            $crontab = new MineCrontab();
+            $crontab->setCallback($item['target']);
+            $crontab->setType($item['type']);
+            $crontab->setEnable(true);
+            $crontab->setFailPolicy($item['fail_policy']);
+            $crontab->setName($item['name']);
+            $crontab->setParameter($item['parameter'] ?: '');
+            $crontab->setRule($item['rule']);
+
+            if (!$this->parser->isValid($crontab->getRule())) {
+                $logger->info('Crontab task ['.$item['name'].'] rule error, skipping execution');
+                continue;
             }
 
-            $this->redis->set('MineAdmin:crontab', json_encode($crontab));
-
-            return $crontab;
-        } else {
-            return json_decode($crontab, true);
+            $time = $this->parser->parse($crontab->getRule(), $last);
+            if ($time) {
+                foreach ($time as $t) {
+                    $list[] = clone $crontab->setExecuteTime($t);
+                }
+            }
         }
+        return $list;
     }
 
     /**
@@ -121,7 +127,7 @@ class MineCrontabManage
             $application->setAutoExit(false);
             $result = $application->find($crontab['target'])->run($input, $output);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($isTry) {
                 return false;
             }
@@ -147,7 +153,7 @@ class MineCrontabManage
             } else {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($isTry) {
                 return false;
             }
@@ -170,12 +176,13 @@ class MineCrontabManage
             if ($result->getStatusCode() !== 200) {
                 throw new \Exception;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if ($isTry) {
                 return false;
             }
-        } catch (GuzzleException $e) {
-            return $this->policyRun('urlCrontabExecute', $crontab);
+            if ($e instanceof GuzzleException) {
+                return $this->policyRun('urlCrontabExecute', $crontab);
+            }
         }
         return true;
     }
@@ -191,8 +198,6 @@ class MineCrontabManage
             return false;
         } else if ($crontab['fail_policy'] == SettingCrontab::POLICY_TRY_ONCE) {
             return $this->{$method}($crontab, true);
-        } else if ($crontab['fail_policy'] == SettingCrontab::POLICY_TRY_RUN) {
-            return $this->{$method}($crontab);
         }
         return false;
     }
