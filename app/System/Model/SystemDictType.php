@@ -16,6 +16,7 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Hyperf\Database\Model\Collection|SystemDictData[] $dictData 
  */
 class SystemDictType extends MineModel
 {
@@ -39,12 +40,11 @@ class SystemDictType extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 关联字典数据表
      * @return \Hyperf\Database\Model\Relations\HasMany
      */
-    public function dictData(): \Hyperf\Database\Model\Relations\HasMany
+    public function dictData() : \Hyperf\Database\Model\Relations\HasMany
     {
         return $this->hasMany(SystemDictData::class, 'type_id', 'id');
     }

@@ -10,6 +10,7 @@ use Mine\MineModel;
  * @property string $name 角色名称
  * @property string $code 角色代码
  * @property string $data_scope 数据范围（0：全部数据权限 1：自定义数据权限 2：本部门数据权限 3：本部门及以下数据权限 4：本人数据权限）
+ * @property string $console_type 控制台类型 (0数据统计 1工作台)
  * @property string $status 状态 (0正常 1停用)
  * @property int $sort 排序
  * @property int $created_by 创建者
@@ -18,9 +19,9 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
- * @property-read \Mine\MineCollection|\App\System\Model\SystemDept[] $depts 
- * @property-read \Mine\MineCollection|\App\System\Model\SystemMenu[] $menus 
- * @property-read \Mine\MineCollection|\App\System\Model\SystemUser[] $users 
+ * @property-read \Hyperf\Database\Model\Collection|SystemDept[] $depts 
+ * @property-read \Hyperf\Database\Model\Collection|SystemMenu[] $menus 
+ * @property-read \Hyperf\Database\Model\Collection|SystemUser[] $users 
  */
 class SystemRole extends MineModel
 {
@@ -47,7 +48,7 @@ class SystemRole extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'code', 'data_scope', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'name', 'code', 'data_scope', 'console_type', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
