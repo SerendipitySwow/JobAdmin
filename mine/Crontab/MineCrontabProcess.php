@@ -65,6 +65,9 @@ class MineCrontabProcess extends AbstractProcess
      */
     public function isEnable($server): bool
     {
+        if (!file_exists(BASE_PATH . '/.env')) {
+            return false;
+        }
         return true;
     }
 
