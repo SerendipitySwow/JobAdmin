@@ -38,7 +38,7 @@
 	import save from './save'
 
 	export default {
-		name: "settingMenu",
+		name: "menu:index",
 		components: {
 			save
 		},

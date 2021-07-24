@@ -14,7 +14,8 @@ use Mine\MineModel;
  * @property string $icon 菜单图标
  * @property string $route 路由地址
  * @property string $component 组件路径
- * @property string $is_cache 是否缓存, (0是 1否)
+ * @property string $redirect 跳转地址
+ * @property string $is_hidden_breadcrumb 是否隐藏面包屑, (0是 1否)
  * @property string $is_hidden 是否隐藏 (0是 1否)
  * @property string $type 菜单类型, (M菜单 B按钮 L链接 I iframe)
  * @property string $status 状态 (0正常 1停用)
@@ -34,8 +35,8 @@ class SystemMenu extends MineModel
     /**
      * 类型
      */
-    public const TYPE_CLASSIFY = 'T';
-    public const CATALOG = 'C';
+    public const LINK = 'L';
+    public const IFRAME = 'I';
     public const MENUS_LIST = 'M';
     public const BUTTON = 'B';
     /**
@@ -49,7 +50,7 @@ class SystemMenu extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'component', 'is_cache', 'is_hidden', 'type', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'code', 'icon', 'route', 'component', 'redirect', 'is_hidden_breadcrumb', 'is_hidden', 'type', 'status', 'sort', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

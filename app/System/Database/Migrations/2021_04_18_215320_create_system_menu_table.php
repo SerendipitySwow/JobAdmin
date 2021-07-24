@@ -22,7 +22,8 @@ class CreateSystemMenuTable extends Migration
             $table->addColumn('string', 'icon', ['length' => 50, 'comment' => '菜单图标'])->nullable();
             $table->addColumn('string', 'route', ['length' => 200, 'comment' => '路由地址'])->nullable();
             $table->addColumn('string', 'component', ['length' => 255, 'comment' => '组件路径'])->nullable();
-            $table->addColumn('char', 'is_cache', ['length' => 1, 'default' => '0', 'comment' => '是否缓存, (0是 1否)']);
+            $table->addColumn('string', 'redirect', ['length' => 255, 'comment' => '跳转地址'])->nullable();
+            $table->addColumn('char', 'is_hidden_breadcrumb', ['length' => 1, 'default' => '1', 'comment' => '是否隐藏面包屑, (0是 1否)']);
             $table->addColumn('char', 'is_hidden', ['length' => 1,'default' => '1', 'comment' => '是否隐藏 (0是 1否)']);
             $table->addColumn('char', 'type', ['length' => 1, 'default' => '', 'comment' => '菜单类型, (M菜单 B按钮 L链接 I iframe)']);
             $table->addColumn('char', 'status', ['length' => 1, 'default' => '0', 'comment' => '状态 (0正常 1停用)'])->nullable();

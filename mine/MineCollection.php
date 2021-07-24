@@ -35,12 +35,13 @@ class MineCollection extends Collection
             'name' => $menu['code'],
             'component' => $menu['component'],
             'path' => $menu['route'],
-            'hidden' => ($menu['is_hidden'] == 0),
-            'type' => $menu['type'],
+            'redirect' => $menu['redirect'],
             'meta' => [
-                'cache' => ($menu['is_cache'] == 0),
-                'icon' => $menu['icon'],
-                'title' => $menu['name'],
+                'type'   => $menu['type'],
+                'icon'   => $menu['icon'],
+                'title'  => $menu['name'],
+                'hidden' => ($menu['is_hidden'] == 0),
+                'hiddenBreadcrumb' => ($menu['is_hidden_breadcrumb'] == 0)
             ]
         ];
         return $route;

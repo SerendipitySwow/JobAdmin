@@ -55,9 +55,10 @@ router.beforeEach(async (to, from, next) => {
 					}
 				}
 			}).catch(() => {
+				next({ name: 'login', query: { redirect: to.fullPath } })
 				tool.data.set('user', null)
 				store.commit('SET_ROUTERS', undefined)
-				next({ name: 'login', query: { redirect: to.fullPath } })
+				tool.data.set('token', null)
 			})
 			next()
 		} else {
@@ -87,14 +88,15 @@ router.onError((error) => {
 
 //转换
 function filterAsyncRouter(routerMap) {
+	console.log(routerMap)
 	const accessedRouters = []
 	routerMap.forEach(item => {
-		if (item.meta.type == 'B') {
+		if (item.type == 'B') {
 			return;
 		}
 		item.meta = item.meta?item.meta:{};
 		//处理外部链接特殊路由
-		if(item.meta.type=='iframe'){
+		if(item.type == 'I'){
 			item.meta.url = item.path;
 			item.path = `/i/${item.name}`;
 		}
@@ -103,6 +105,9 @@ function filterAsyncRouter(routerMap) {
 			path: item.path,
 			name: item.name,
 			meta: item.meta,
+			hidden: item.hidden,
+			hiddenBreadcrumb: item.hiddenBreadcrumb,
+			type: item.type,
 			redirect: item.redirect,
 			children: item.children ? filterAsyncRouter(item.children) : null,
 			component: loadComponent(item.component)
