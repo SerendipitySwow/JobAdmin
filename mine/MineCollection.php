@@ -41,7 +41,7 @@ class MineCollection extends Collection
                 'icon'   => $menu['icon'],
                 'title'  => $menu['name'],
                 'hidden' => ($menu['is_hidden'] == 0),
-                'hiddenBreadcrumb' => ($menu['is_hidden_breadcrumb'] == 0)
+                'hiddenBreadcrumb' => false
             ]
         ];
         return $route;

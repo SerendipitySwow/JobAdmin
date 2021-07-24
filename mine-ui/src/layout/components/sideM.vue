@@ -52,11 +52,11 @@
 				map.forEach((item,index) => {
 					item.meta = item.meta?item.meta:{};
 					//处理隐藏
-					if(item.hidden){
+					if(item.meta.hidden){
 						map.splice(index, 1);
 					}
 					//处理http
-					if(item.type == 'I'){
+					if(item.meta.type == 'I'){
 						item.path = `/i/${item.name}`;
 					}
 					//递归循环

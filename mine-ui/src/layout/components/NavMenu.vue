@@ -32,7 +32,7 @@
 			hasChildren(item){
 				var flag = true
 				if (item.children) {
-					if (item.children.every(item => item.hidden)){
+					if (item.children.every(item => item.meta.hidden)){
 						flag = false
 					}
 				}else{

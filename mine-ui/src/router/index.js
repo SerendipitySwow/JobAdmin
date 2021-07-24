@@ -88,15 +88,14 @@ router.onError((error) => {
 
 //转换
 function filterAsyncRouter(routerMap) {
-	console.log(routerMap)
 	const accessedRouters = []
 	routerMap.forEach(item => {
-		if (item.type == 'B') {
+		if (item.meta.type == 'B') {
 			return;
 		}
 		item.meta = item.meta?item.meta:{};
 		//处理外部链接特殊路由
-		if(item.type == 'I'){
+		if(item.meta.type == 'I'){
 			item.meta.url = item.path;
 			item.path = `/i/${item.name}`;
 		}
@@ -105,9 +104,6 @@ function filterAsyncRouter(routerMap) {
 			path: item.path,
 			name: item.name,
 			meta: item.meta,
-			hidden: item.hidden,
-			hiddenBreadcrumb: item.hiddenBreadcrumb,
-			type: item.type,
 			redirect: item.redirect,
 			children: item.children ? filterAsyncRouter(item.children) : null,
 			component: loadComponent(item.component)

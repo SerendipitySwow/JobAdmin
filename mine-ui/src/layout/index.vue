@@ -249,11 +249,11 @@
 				map && map.forEach(item => {
 					item.meta = item.meta?item.meta:{};
 					//处理隐藏
-					if(item.hidden){
+					if(item.meta.hidden){
 						return false
 					}
 					//处理http
-					if(item.type=='iframe'){
+					if(item.meta.type == 'I'){
 						item.path = `/i/${item.name}`;
 					}
 					//递归循环

@@ -21,7 +21,16 @@ class SystemMenuMapper extends AbstractMapper
      * @var string[]
      */
     public $menuField = [
-        'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden', 'component', 'is_cache', 'type'
+        'id',
+        'parent_id',
+        'name',
+        'code',
+        'icon',
+        'route',
+        'is_hidden',
+        'component',
+        'redirect',
+        'type'
     ];
 
     public function assignModel()
