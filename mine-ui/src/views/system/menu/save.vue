@@ -2,53 +2,79 @@
 	<el-row>
 		<el-col :xl="12" :lg="16">
 
-			<h2>{{form.meta.title || "新增菜单"}}</h2>
+			<h2>{{form.name || "新增菜单"}}</h2>
 			<el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px" label-position="left">
-				<el-form-item label="显示名称" prop="meta.title">
-					<el-input v-model="form.meta.title" clearable placeholder="菜单显示名字"></el-input>
+
+				<el-form-item label="菜单名称" prop="name">
+					<el-input v-model="form.name" clearable placeholder="菜单显示名字"></el-input>
 				</el-form-item>
-				<el-form-item label="上级菜单" prop="parent">
-					<el-cascader v-model="form.parent" :options="menu" :props="menuProps" :show-all-levels="false" clearable></el-cascader>
-					<div class="el-form-item-msg">这里还有点问题！el-cascader的props的label 现暂只支持字符串还未支持自定义函数 </div>
+
+				<el-form-item label="上级菜单" prop="parent_id">
+					<el-cascader v-model="form.parent_id" :options="menu" style="width:100%" :props="menuProps" :show-all-levels="false" clearable></el-cascader>
+					<div class="el-form-item-msg">上级菜单，如果不选择则为顶级菜单。</div>
 				</el-form-item>
-				<el-form-item label="类型" prop="meta.type">
-					<el-radio-group v-model="form.meta.type">
-						<el-radio-button label="menu">菜单</el-radio-button>
-						<el-radio-button label="iframe">Iframe</el-radio-button>
-						<el-radio-button label="link">外链</el-radio-button>
-						<el-radio-button label="button">按钮</el-radio-button>
+
+				<el-form-item label="类型" prop="type">
+					<el-radio-group v-model="form.type">
+						<el-radio-button label="M">菜单</el-radio-button>
+						<el-radio-button label="B">按钮</el-radio-button>
+						<el-radio-button label="L">外链</el-radio-button>
+						<el-radio-button label="I">Iframe</el-radio-button>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="别名" prop="name">
-					<el-input v-model="form.name" clearable placeholder="菜单别名"></el-input>
+
+				<el-form-item label="代码标识" prop="code">
+					<el-input v-model="form.code" clearable placeholder="菜单代码"></el-input>
 					<div class="el-form-item-msg">系统唯一且与内置组件名一致，否则导致缓存失效。如类型为Iframe的菜单，别名将代替源地址显示在地址栏</div>
 				</el-form-item>
-				<el-form-item label="菜单图标" prop="meta.icon">
-					<el-input v-model="form.meta.icon" clearable placeholder=""></el-input>
+
+				<el-form-item label="菜单图标" prop="icon">
+					<el-input v-model="form.icon" clearable placeholder="菜单显示的图标"></el-input>
 				</el-form-item>
-				<el-form-item label="路由地址" prop="path">
-					<el-input v-model="form.path" clearable placeholder=""></el-input>
+
+				<el-form-item label="路由地址" prop="route">
+					<el-input v-model="form.route" clearable placeholder="请输入路由地址"></el-input>
 				</el-form-item>
+
 				<el-form-item label="重定向" prop="redirect">
-					<el-input v-model="form.redirect" clearable placeholder=""></el-input>
+					<el-input v-model="form.redirect" clearable placeholder="重定向地址"></el-input>
+					<div class="el-form-item-msg">如果有重定向，那么路由地址将不会生效</div>
 				</el-form-item>
-				<el-form-item label="菜单高亮" prop="active">
-					<el-input v-model="form.active" clearable placeholder=""></el-input>
-					<div class="el-form-item-msg">子节点或详情页需要高亮的上级菜单路由地址</div>
-				</el-form-item>
-				<el-form-item label="视图" prop="component">
-					<el-autocomplete v-model="form.component" :fetch-suggestions="querySearch" :debounce="10" clearable placeholder=""></el-autocomplete>
+
+				<el-form-item label="组件" prop="component">
+					<el-autocomplete v-model="form.component" :fetch-suggestions="querySearch" :debounce="10" clearable style="width:100%" placeholder="请选择组件"></el-autocomplete>
 					<div class="el-form-item-msg">如父节点、链接或Iframe等没有视图的菜单不需要填写</div>
 				</el-form-item>
-				<el-form-item label="颜色" prop="color">
-					<el-color-picker v-model="form.color" :predefine="predefineColors"></el-color-picker>
 
+				<el-form-item label="排序" prop="sort">
+					<el-input-number v-model="form.sort" controls-position="right" :min="0" :max="999"></el-input-number>
+					<div class="el-form-item-msg">菜单排序，数字大的在前面</div>
 				</el-form-item>
-				<el-form-item label="是否隐藏" prop="meta.hidden">
-					<el-checkbox v-model="form.meta.hidden">隐藏菜单</el-checkbox>
-					<el-checkbox v-model="form.meta.hiddenBreadcrumb">隐藏面包屑</el-checkbox>
-					<div class="el-form-item-msg">菜单不显示在导航中，但用户依然可以访问，例如详情页</div>
+
+				<el-form-item label="是否隐藏" prop="is_hidden">
+					<el-radio-group v-model="form.is_hidden">
+						<el-radio label="0">是</el-radio>
+						<el-radio label="1">否</el-radio>
+					</el-radio-group>
+					<div class="el-form-item-msg" true-label="0" false-label="1" label="0">菜单不显示在导航中，但用户依然可以访问，例如详情页</div>
 				</el-form-item>
+
+				<el-form-item label="是否停用" prop="status">
+					<el-radio-group v-model="form.status">
+						<el-radio label="0">启用</el-radio>
+						<el-radio label="1">停用</el-radio>
+					</el-radio-group>
+					<div class="el-form-item-msg" true-label="0" false-label="1" label="0">停用的菜单不会在导航中，也无法访问</div>
+				</el-form-item>
+
+				<el-form-item label="生成按钮" prop="restful">
+					<el-radio-group v-model="form.restful">
+						<el-radio label="0">生成</el-radio>
+						<el-radio label="1">不生成</el-radio>
+					</el-radio-group>
+					<div class="el-form-item-msg" true-label="0" false-label="1" label="1">生成RESTful路由按钮菜单，即：save、update、delete、read、import、export 以及回收站相关按钮菜单</div>
+				</el-form-item>
+
 				<el-form-item>
 					<el-button type="primary">保 存</el-button>
 				</el-form-item>
@@ -67,33 +93,24 @@
 		data(){
 			return {
 				form: {
-					parent: "",
-					name: "",
-					path: "",
-					component: "",
-					redirect: "",
-					meta:{
-						title: "",
-						icon: "",
-						active: "",
-						color: "",
-						type: "menu"
-					}
+					parent: '',
+					name: '',
+					route: '',
+					component: '',
+					redirect: '',
+					code: '',
+					status: '0',
+					is_hidden: '0',
+					icon: '',
+					sort: 0,
+					type: 'M',
+					restful: '1'
 				},
 				menuProps: {
-					value: 'name',
+					value: 'id',
 					label: 'name',
 					checkStrictly: true
 				},
-				predefineColors: [
-					'#ff4500',
-					'#ff8c00',
-					'#ffd700',
-					'#67C23A',
-					'#00ced1',
-					'#409EFF',
-					'#c71585'
-				],
 				rules: {},
 				views: []
 			}
@@ -105,7 +122,7 @@
 			//表单注入数据
 			setData(data, pid){
 				this.form = data
-				this.form.parent = pid
+				this.form.parent_id = pid
 				//可以和上面一样单个注入，也可以像下面一样直接合并进去
 				//Object.assign(this.form, data)
 			},
@@ -113,13 +130,13 @@
 			getViews(){
 				const filesUrl = []
 				//不知道为什么 require.context 会引起Webpack会一并把结果都打包进来使得此文件过大
-				// let files = require.context('@/views', true, /\.vue$/)
-				// files.keys().forEach(file => {
-				// 	// 如需删除index? .replace(/\/index$/, "")
-				// 	filesUrl.push({
-				// 		value: file.replace(/^\.\/(.*)\.\w+$/, '$1')
-				// 	})
-				// })
+				let files = require.context('@/views', true, /\.vue$/)
+				files.keys().forEach(file => {
+					// 如需删除index? .replace(/\/index$/, "")
+					filesUrl.push({
+						value: file.replace(/^\.\/(.*)\.\w+$/, '$1')
+					})
+				})
 				return filesUrl;
 			},
 			querySearch(queryString, cb){

@@ -43,19 +43,19 @@ class MenuController extends MineController
 
     /**
      * 从回收站获取菜单树
-     * @GetMapping("recycleTree")
+     * @GetMapping("recycle")
      * @Permission("system:menu:recycle")
      */
-    public function recycleTree():ResponseInterface
+    public function recycle():ResponseInterface
     {
         return $this->success($this->service->getTreeListByRecycle($this->request->all()));
     }
 
     /**
      * 前端选择树（不需要权限）
-     * @GetMapping("selectTree")
+     * @GetMapping("tree")
      */
-    public function selectTree(): ResponseInterface
+    public function tree(): ResponseInterface
     {
         return $this->success($this->service->getSelectTree());
     }
