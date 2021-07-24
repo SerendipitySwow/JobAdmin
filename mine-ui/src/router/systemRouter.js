@@ -39,6 +39,7 @@ const routes = [{
 	},
 	{
 		path: "/cmd",
+		name: 'cmd',
 		component: () => import(/* webpackChunkName: "cmd" */ '@/views/other/cmd'),
 		meta: {
 			title: "CMD"
@@ -46,6 +47,7 @@ const routes = [{
 	},
 	{
 		path: "/login",
+		name: 'login',
 		component: () => import(/* webpackChunkName: "login" */ '@/views/userCenter/login'),
 		meta: {
 			title: "登录"

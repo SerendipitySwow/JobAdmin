@@ -63,7 +63,7 @@ function createService () {
 					message: "请求服务器无响应！"
 				});
 			}
-			return Promise.reject(error.response);
+			return Promise.reject(error.response.data);
 		}
 	
 	)

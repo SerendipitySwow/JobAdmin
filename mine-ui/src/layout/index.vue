@@ -202,10 +202,11 @@
 		created() {
 			this.onLayoutResize();
 			window.addEventListener('resize', this.onLayoutResize);
-			var menu = this.$TOOL.data.get("user").menuList;
-			var home = this.$router.options.routes[0].children[0];
+			let menu = this.$TOOL.data.get("user").routers;
+			let home = this.$router.options.routes[0].children[0];
 			menu.unshift(home);
-			this.menu = this.filterUrl(menu);
+			this.menu = this.filterUrl(menu)
+			;
 			this.showThis()
 		},
 		watch: {

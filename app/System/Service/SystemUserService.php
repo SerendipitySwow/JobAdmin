@@ -206,9 +206,10 @@ class SystemUserService extends AbstractService
         return $this->getCacheInfo($this->loginUser, SystemUser::find((int) $this->loginUser->getId()));
     }
 
+//@Cacheable(prefix="login_info", ttl=0, value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     * @Cacheable(prefix="login_info", ttl=0, value="userId_#{user.id}")
+     *
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -222,23 +223,13 @@ class SystemUserService extends AbstractService
             $data['roles'] = ['super_admin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
             $data['codes'] = ['*'];
-            $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu();
         } else {
             $roles = $this->sysRoleService->mapper->getMenuIdsByRoleIds($user->roles()->pluck('id')->toArray());
             $ids = $this->filterMenuIds($roles);
             $data['roles'] = $user->roles()->pluck('code')->toArray();
             $data['routers'] = $this->sysMenuService->mapper->getRoutersByIds($ids);
             $data['codes'] = $this->sysMenuService->mapper->getMenuCode($ids);
-            $tempQuickMenu = $this->sysMenuService->mapper->getQuickMenu($ids);
         }
-        $data['quickMenu'] = [];
-        // 快捷菜单
-        if (count($tempQuickMenu)) {
-            foreach ($tempQuickMenu as $quick) {
-                array_push($data['quickMenu'], $collect->setRouter($quick));
-            }
-        }
-        unset($tempQuickMenu);
 
         return $data;
     }

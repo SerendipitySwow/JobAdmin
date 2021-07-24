@@ -94,8 +94,8 @@
 			}
 		},
 		created() {
-			var userInfo = this.$TOOL.data.get("user").userInfo;
-			this.userName = userInfo.userName;
+			var userInfo = this.$TOOL.data.get("user").user;
+			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0,1);
 		},
 		methods: {

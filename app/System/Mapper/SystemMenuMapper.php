@@ -21,7 +21,7 @@ class SystemMenuMapper extends AbstractMapper
      * @var string[]
      */
     public $menuField = [
-        'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden', 'component', 'is_out', 'is_cache', 'type'
+        'id', 'parent_id', 'name', 'code', 'icon', 'route', 'is_hidden', 'component', 'is_cache', 'type'
     ];
 
     public function assignModel()
@@ -68,25 +68,6 @@ class SystemMenuMapper extends AbstractMapper
             ->where('type', '!=', $this->model::BUTTON)
             ->orderBy('sort', 'desc')
             ->get()->toTree();
-    }
-
-    /**
-     * 获取快捷菜单
-     * @param array|null $ids
-     * @return array
-     */
-    public function getQuickMenu(array $ids = null): array
-    {
-        $query = $this->model::query()
-            ->where('is_quick', $this->model::ENABLE)
-            ->where('status', $this->model::ENABLE)
-            ->where('type', $this->model::MENUS_LIST)
-            ->orderBy('sort', 'desc');
-        if (is_array($ids) && count($ids)) {
-            return $query->whereIn('id', $ids)->select(...$this->menuField)->get()->toArray();
-        } else {
-            return $query->select(...$this->menuField)->get()->toArray();
-        }
     }
 
     /**

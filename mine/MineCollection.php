@@ -20,38 +20,7 @@ class MineCollection extends Collection
         foreach ($data as $menu) {
             array_push($routers, $this->setRouter($menu));
         }
-        unset($data);
-        $menus = $this->toTree($routers);
-        foreach ($menus as &$menu) {
-            if ($menu['name'] != 'Dashboard') {
-                if (isset($menu['children'])) {
-                    array_unshift($menu['children'], $this->setPublicRouter($menu));
-                } else {
-                    $menu['children'] = [];
-                    array_unshift($menu['children'], $this->setPublicRouter($menu));
-                }
-            }
-        }
-        return $menus;
-    }
-
-    /**
-     * @param $menu
-     * @return array
-     */
-    private function setPublicRouter($menu): array
-    {
-        return [
-            'name' => sprintf('%s-public', Str::lower($menu['name'])),
-            'type' => 'M',
-            'component' => 'public/index',
-            'path' => sprintf('%s/public/index', $menu['path']),
-            'meta' => [
-                'keepAlive' => true,
-                'title' => sprintf('%s首页', $menu['meta']['title']),
-                'icon' => 'home'
-            ]
-        ];
+        return $this->toTree($routers);
     }
 
     /**
@@ -74,11 +43,6 @@ class MineCollection extends Collection
                 'title' => $menu['name'],
             ]
         ];
-        if ($menu['type'] === 'T' && $menu['code'] != 'Dashboard') {
-            $route['redirect'] = ['name' => sprintf('%s-public', Str::lower($menu['code']))];
-        } else if ($menu['is_out'] == 0) {
-            $route['redirect'] = $menu['route'];
-        }
         return $route;
     }
 

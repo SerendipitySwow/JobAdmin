@@ -6,8 +6,7 @@
 	export default {
 		name: 'App',
 		setup() {
-			
-		}
+		},
 	}
 </script>
 

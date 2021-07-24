@@ -4,10 +4,14 @@ import config from "@/config"
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import tool from '@/utils/tool';
+import store from '@/store/index'
 import systemRouter from './systemRouter';
 
 //系统路由
 const routes = systemRouter
+
+const whiteList = ['login', 'test']
+const defaultRoutePath = '/dashboard'
 
 //系统特殊路由
 const routes_404 = {
@@ -24,44 +28,48 @@ const router = createRouter({
 //设置标题
 document.title = config.APP_NAME
 
-//判断是否已加载过API路由
-let isGetApiRouter = false;
-
 router.beforeEach(async (to, from, next) => {
-	NProgress.start()
 	
+	NProgress.start()
+
 	//动态标题
 	document.title = `${to.meta.title} - ${config.APP_NAME}`
 
-	let userInfo = tool.data.get("user");
+	let token = tool.data.get('token');
 
-	if(to.path === "/login"){
-		isGetApiRouter = false;
-		next();
-		return false;
-	}
-
-	if(!userInfo){
-		next({
-			path: '/login'
-		});
-		return false;
-	}
-
-	//加载API路由
-	if(!isGetApiRouter){
-		console.log(userInfo)
-		const apiRouter = filterAsyncRouter(userInfo.menuList);
-		apiRouter.forEach(item => {
-			router.addRoute("layout", item)
-		})
-		router.addRoute(routes_404)
-		if (to.matched.length == 0) {
-			router.push(to.fullPath);
+	if (token && token !== 'undefined') {
+		if(to.name === 'login'){
+			next({ path: defaultRoutePath })
+		} else if (! store.state.user.routers) {
+			await store.dispatch('getUserInfo').then( res => {
+				if (res.routers.length !== 0) {
+					let routers = res.routers;
+					const apiRouter = filterAsyncRouter(routers);
+					tool.data.set('user', res)
+					apiRouter.forEach(item => {
+						router.addRoute("layout", item)
+					})
+					router.addRoute(routes_404)
+					if (to.matched.length == 0) {
+						router.push(to.fullPath);
+					}
+				}
+			}).catch(() => {
+				tool.data.set('user', null)
+				store.commit('SET_ROUTERS', undefined)
+				next({ name: 'login', query: { redirect: to.fullPath } })
+			})
+			next()
+		} else {
+			next()
 		}
-		isGetApiRouter = true;
+	} else {
+		if (whiteList.includes(to.name)) {
+			next()
+		} else {
+			next({ name: 'login', query: { redirect: to.fullPath } })
+		}
 	}
-	next();
 });
 
 router.afterEach(() => {
@@ -81,6 +89,9 @@ router.onError((error) => {
 function filterAsyncRouter(routerMap) {
 	const accessedRouters = []
 	routerMap.forEach(item => {
+		if (item.meta.type == 'B') {
+			return;
+		}
 		item.meta = item.meta?item.meta:{};
 		//处理外部链接特殊路由
 		if(item.meta.type=='iframe'){
@@ -100,9 +111,10 @@ function filterAsyncRouter(routerMap) {
 	})
 	return accessedRouters
 }
+
 function loadComponent(component){
 	if(component){
-		return () => import(/* webpackChunkName: "[request]" */ `@/views/${component}`)
+		return () => import(`@/views/${component}`)
 	}else{
 		return () => import(`@/views/other/empty`)
 	}
