@@ -11,7 +11,7 @@ const routes = [{
 				component: () => import(`@/views/other/empty`),
 				meta: {
 					title: "首页",
-					icon: "el-icon-platform-eleme"
+					icon: "el-icon-s-home"
 				},
 				children: [
 					{
@@ -19,7 +19,7 @@ const routes = [{
 						path: "/dashboard",
 						meta: {
 							title: "控制台",
-							icon: "el-icon-menu",
+							icon: "el-icon-monitor",
 							affix: true
 						},
 						component: () => import(/* webpackChunkName: "home" */ '@/views/home'),
@@ -30,6 +30,7 @@ const routes = [{
 						meta: {
 							title: "个人信息",
 							icon: "el-icon-user",
+							hidden: true
 						},
 						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/userCenter'),
 					}
