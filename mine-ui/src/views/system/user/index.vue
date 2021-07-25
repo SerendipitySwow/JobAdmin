@@ -40,6 +40,28 @@
 					</div>
 					<div class="right-panel">
 						<div class="right-panel-search">
+							<el-input v-model="search.name" placeholder="搜索用户名" clearable></el-input>
+
+							<el-tooltip class="item" effect="dark" content="搜索" placement="top">
+								<el-button type="primary" icon="el-icon-search" @click="upsearch"></el-button>
+							</el-tooltip>
+
+							<el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+								<el-button icon="el-icon-refresh" @click="upsearch"></el-button>
+							</el-tooltip>
+
+							<el-popover placement="bottom" :width="380" trigger="hover">
+								<template #reference>
+									<el-button type="text">
+										更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
+									</el-button>
+								</template>
+								<el-form label-width="80px">
+									<el-form-item label="登录账号" prop="name">
+										<el-input v-model="search.name" placeholder="用于登录系统" clearable></el-input>
+									</el-form-item>
+								</el-form>
+							</el-popover>
 						</div>
 					</div>
 				</el-header>

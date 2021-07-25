@@ -285,4 +285,7 @@
 	.scTable-table {flex:1;}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
+	/deep/ .el-table .cell {
+		line-height: 20px;
+	}
 </style>
