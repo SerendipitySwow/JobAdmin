@@ -134,7 +134,7 @@ class SystemMenuService extends AbstractService
     protected function handleData($data) {
         if ($data['parent_id'] == 0) {
             $data['level'] = '0';
-            $data['type'] = SystemMenu::TYPE_CLASSIFY;
+            $data['type'] = SystemMenu::MENUS_LIST;
         } else {
             $parentMenu = $this->mapper->read((int) $data['parent_id']);
             $data['level'] = $parentMenu['level'] . ',' . $parentMenu['id'];

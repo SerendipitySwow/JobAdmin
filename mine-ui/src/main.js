@@ -9,7 +9,8 @@ import router from './router'
 import store from './store'
 import api from './api'
 import tool from './utils/tool'
-import permission from './utils/permission'
+import hasPermission from './utils/permission'
+import hasRole from './utils/role'
 import errorHandler from './utils/errorHandler'
 import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
@@ -21,26 +22,27 @@ import scPageHeader from './components/scPageHeader'
 import auth from './directives/auth'
 import role from './directives/role'
 
-const app = createApp(App);
+const app = createApp(App)
 
 //挂载全局对象
-app.config.globalProperties.$CONFIG = config;
-app.config.globalProperties.$TOOL = tool;
-app.config.globalProperties.$API = api;
-app.config.globalProperties.$AUTH = permission;
+app.config.globalProperties.$CONFIG = config
+app.config.globalProperties.$TOOL = tool
+app.config.globalProperties.$API = api
+app.config.globalProperties.$AUTH = hasPermission
+app.config.globalProperties.$ROLE = hasRole
 
-app.use(store);
-app.use(router);
-app.use(ElementPlus, {size: 'small', locale: locale});
+app.use(store)
+app.use(router)
+app.use(ElementPlus, {size: 'small', locale: locale})
 
 //注册全局组件
-app.component('scTable', scTable);
-app.component('scFilterBar', scFilterBar);
-app.component('scUpload', scUpload);
-app.component('scUploadMultiple', scUploadMultiple);
-app.component('scFormTable', scFormTable);
-app.component('scTableSelect', scTableSelect);
-app.component('scPageHeader', scPageHeader);
+app.component('scTable', scTable)
+app.component('scFilterBar', scFilterBar)
+app.component('scUpload', scUpload)
+app.component('scUploadMultiple', scUploadMultiple)
+app.component('scFormTable', scFormTable)
+app.component('scTableSelect', scTableSelect)
+app.component('scPageHeader', scPageHeader)
 
 //注册全局指令
 app.directive('auth', auth)
@@ -49,5 +51,11 @@ app.directive('role', role)
 //全局代码错误捕捉
 app.config.errorHandler = errorHandler
 
+tool.capsule('MineAdmin', `v${config.APP_VER}`)
+console.log('MineAdmin 官网  https://www.mineadmin.com')
+console.log('MineAdmin 文档  https://doc.mineadmin.com')
+console.log('MineAdmin Gitee https://gitee.com/xmo/MineAdmin')
+console.log('请不要吝啬您的 star，谢谢 ~')
+
 //挂载app
-app.mount('#app');
+app.mount('#app')

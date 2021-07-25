@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessageBox } from 'element-plus';
 import sysConfig from "@/config";
 import tool from '@/utils/tool';
 import { get, isEmpty } from 'lodash'
@@ -21,7 +21,7 @@ function createService () {
 	// HTTP response 拦截器
 	service.interceptors.response.use(
 		response => {
-			if (response.data.code !== 200) {
+			if (response.data.code !== 200 || ! response.data.success) {
 				ElNotification.error({
 					title: '请求错误',
 					message: response.data.message
@@ -35,35 +35,40 @@ function createService () {
 					ElNotification.error({
 						title: '请求错误',
 						message: "服务器资源不存在"
-					});
+					})
 				} else if (error.response.status == 500) {
 					ElNotification.error({
 						title: '请求错误',
 						message: "服务器内部错误！"
-					});
+					})
 				} else if (error.response.status == 401) {
-					ElNotification.error({
-						title: '请求错误',
-						message: "您没有登录"
-					});
+					ElMessageBox.confirm('登录状态已过期，是否重新登录？', '系统提示', {
+						confirmButtonText: '重新登录',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						tool.data.set('token', null)
+						location.href = '/'
+					}).catch(() => {})
+					return
 				} else if (error.response.status == 403) {
 					ElNotification.error({
 						title: '请求错误',
 						message: "没有权限访问该资源"
-					});
+					})
 				} else {
 					ElNotification.error({
 						title: '请求错误',
 						message: `Status:${error.response.status}，未知错误！`
-					});
+					})
 				}
 			} else {
 				ElNotification.error({
 					title: '请求错误',
 					message: "请求服务器无响应！"
-				});
+				})
 			}
-			return Promise.reject(error.response.data);
+			return Promise.reject(error.response.data)
 		}
 	
 	)

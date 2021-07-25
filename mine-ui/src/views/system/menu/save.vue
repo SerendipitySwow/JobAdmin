@@ -3,7 +3,7 @@
 		<el-col :xl="12" :lg="16">
 
 			<h2>{{form.name || "新增菜单"}}</h2>
-			<el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px" label-position="right">
+			<el-form :model="form" :rules="rules" ref="form" label-width="80px" label-position="right">
 
 				<el-form-item label="菜单名称" prop="name">
 					<el-input v-model="form.name" clearable placeholder="菜单显示名字"></el-input>
@@ -67,7 +67,7 @@
 					<div class="el-form-item-msg" true-label="0" false-label="1" label="0">停用的菜单不会在导航中，也无法访问</div>
 				</el-form-item>
 
-				<el-form-item label="生成按钮" prop="restful">
+				<el-form-item label="生成按钮" prop="restful" v-if="! form.id">
 					<el-radio-group v-model="form.restful">
 						<el-radio label="0">生成</el-radio>
 						<el-radio label="1">不生成</el-radio>
@@ -76,7 +76,7 @@
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary">保 存</el-button>
+					<el-button type="primary" @click="submitForm">保 存</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -94,7 +94,7 @@
 			return {
 				form: {
 					id: undefined,
-					parent_id: '',
+					parent_id: undefined,
 					name: '',
 					route: '',
 					component: '',
@@ -131,6 +131,32 @@
 				//可以和上面一样单个注入，也可以像下面一样直接合并进去
 				//Object.assign(this.form, data)
 			},
+
+			submitForm () {
+				this.$refs.form.validate(valid => {
+					if (valid) {
+						if (! this.form.parent_id) {
+							this.form.parent_id = 0
+						}
+						this.form.children = undefined
+						console.log(this.form)
+						// 新增
+						if (! this.form.id) {
+							this.$API.menu.save(this.form).then(res => {
+								this.$message.success(res.message)
+							})
+						// 更新
+						} else {
+							this.$API.menu.update(this.form.id, this.form).then(res => {
+								this.$message.success(res.message)
+							})
+						}
+					} else {
+						return false
+					}
+				})
+			},
+			
 			//获取所有视图组件
 			getViews(){
 				const filesUrl = []
@@ -144,6 +170,8 @@
 				})
 				return filesUrl;
 			},
+
+			// 视图组件列表过滤
 			querySearch(queryString, cb){
 				var results = this.getViews();
 				results = results.filter(item => item.value.indexOf(queryString) !== -1)

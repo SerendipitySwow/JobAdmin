@@ -43,15 +43,16 @@ router.beforeEach(async (to, from, next) => {
 		} else if (! store.state.user.routers) {
 			await store.dispatch('getUserInfo').then( res => {
 				if (res.routers.length !== 0) {
-					let routers = res.routers;
-					const apiRouter = filterAsyncRouter(routers);
+					let routers = res.routers
+					console.log(routers)
+					const apiRouter = filterAsyncRouter(routers)
 					tool.data.set('user', res)
 					apiRouter.forEach(item => {
 						router.addRoute("layout", item)
 					})
 					router.addRoute(routes_404)
 					if (to.matched.length == 0) {
-						router.push(to.fullPath);
+						router.push(to.fullPath)
 					}
 				}
 			}).catch(() => {

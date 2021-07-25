@@ -19,7 +19,7 @@ export default {
      */
     getRecycle (params = {}) {
         return request({
-            url: 'system/menu/recycleTree',
+            url: 'system/menu/recycle',
             method: 'get',
             params
         })

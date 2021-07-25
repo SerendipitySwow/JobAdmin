@@ -1,43 +1,96 @@
 <template>
 	<el-container>
-		<el-aside width="283px">
-			<el-container>
-				<el-header>
-					<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
-				</el-header>
-				<el-main class="nopadding">
-					<el-tree
-						ref="menu"
-						class="menu"
-						node-key="name"
-						:data="menuList"
-						:props="menuProps"
-						draggable
-						highlight-current
-                        :expand-on-click-node="false"
- 
-                        :filter-node-method="menuFilterNode"
-                        @node-click="menuClick"
-                    >
+		<el-aside width="282px">
+			<el-main
+				v-loading="loading" element-loading-background="rgba(255, 255, 255, 0.8)"
+				element-loading-text="菜单加载中..." style="height:100%; padding: 0">
+				<el-container>
+					<el-header>
+						<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
+					</el-header>
+					<el-main class="nopadding">
+						<el-tree
+							ref="menu"
+							class="menu"
+							node-key="name"
+							:data="menuList"
+							:props="menuProps"
+							highlight-current
+							:expand-on-click-node="false"
+							:filter-node-method="menuFilterNode"
+							@node-click="menuClick"
+						>
 
-						<template #default="{node, data}">
-							<span class="custom-tree-node">
-								<span class="label">{{ node.label }}</span>
-								<span class="do">
-									<i class="el-icon-plus" @click.stop="add(node, data)"></i>
-									<i class="el-icon-delete" @click.stop="add(node, data)"></i>
+							<template #default="{node, data}">
+								<span class="custom-tree-node">
+									<span class="label">{{ node.label }}</span>
+									<!-- 回收站数据显示按钮 -->
+									<span class="do" v-if="showRecycle">
+										<el-tooltip class="item" effect="dark" content="恢复菜单" placement="top">
+											<i
+												class="el-icon-refresh-left"
+												v-auth="'system:menu:recovery'"
+												@click.stop="handleRecovery(data)"
+											></i>
+										</el-tooltip>
+
+										<el-tooltip class="item" effect="dark" content="物理删除" placement="top">
+											<i
+												class="el-icon-delete-solid"
+												v-auth="'system:menu:realDelete'"
+												@click.stop="handleRealDelete(data)"
+											></i>
+										</el-tooltip>
+									</span>
+									<!-- 正常数据显示按钮 -->
+									<span class="do" v-else>
+
+										<el-tag v-if="data.status == '0'">正常</el-tag>
+										<el-tag type="info" v-else>停用</el-tag>
+
+										<el-tooltip class="item" effect="dark" content="新增子菜单" placement="top">
+											<i
+												class="el-icon-plus"
+												v-auth="'system:menu:save'"
+												@click.stop="add(node, data)"
+											></i>
+										</el-tooltip>
+										
+										<el-tooltip class="item" effect="dark" content="移动回收站" placement="top">
+											<i
+												class="el-icon-delete"
+												v-auth="'system:menu:delete'"
+												@click.stop="handleDelete(data)"
+											></i>
+										</el-tooltip>
+									</span>
 								</span>
-							</span>
-						</template>
+							</template>
 
-					</el-tree>
-				</el-main>
-				<el-footer style="height:51px;">
-					<el-button size="mini" icon="el-icon-plus" v-auth="'system:menu:save'" @click="add()">新增</el-button>
-					<el-button size="mini" plain icon="el-icon-view" @click="delMenu">回收站</el-button>
-					<el-button size="mini" plain icon="el-icon-refresh" @click="delMenu">刷新</el-button>
-				</el-footer>
-			</el-container>
+						</el-tree>
+					</el-main>
+					<el-footer style="height:60px;">
+
+						<el-button
+							icon="el-icon-plus"
+							v-auth="'system:menu:save'"
+							@click="add()"
+							v-if="!showRecycle"
+						>新增</el-button>
+
+						<el-button
+							icon="el-icon-view"
+							v-auth="'system:menu:recycle'"
+							@click="switchData"
+						>{{ getSwitchText }}</el-button>
+
+						<el-button
+							icon="el-icon-refresh"
+							@click="getMenu"
+						>刷新</el-button>
+					</el-footer>
+				</el-container>
+			</el-main>
 		</el-aside>
 		<el-container>
 			<el-main class="nopadding" style="padding:20px;">
@@ -58,6 +111,7 @@
 		},
 		data(){
 			return {
+				loading: false,
 				menuList: [],
 				menuProps: {
 					label: (data)=>{
@@ -71,6 +125,11 @@
 				}
 			}
 		},
+		computed: {
+			getSwitchText() {
+				return this.showRecycle ? '显示正常数据' : '回收站'
+			}
+		},
 		watch: {
 			menuFilterText(val){
 				this.$refs.menu.filter(val);
@@ -82,13 +141,16 @@
 		methods: {
 			//加载树数据
 			async getMenu(){
+				this.loading = true
 				if (! this.showRecycle) {
 					await this.$API.menu.getList(this.queryParams).then(res => {
 						this.menuList = res.data;
+						this.loading = false
 					})
 				} else {
 					await this.$API.menu.getRecycle(this.queryParams).then(res => {
 						this.menuList = res.data;
+						this.loading = false
 					})
 				}
 			},
@@ -111,7 +173,13 @@
 					name: newMenuName,
 					path: "",
 					component: "",
-                    type: 'M'
+					code: '',
+					status: '0',
+					is_hidden: '1',
+					icon: '',
+					sort: 0,
+					type: 'M',
+					restful: '1'
 				}
 				if(node){
 					this.$refs.menu.append(newMenuData, node)
@@ -119,6 +187,7 @@
 					this.$refs.menu.setCurrentKey(lastNode.data.name)
 					let pid = node.data.id;
 					this.$refs.save.setData(newMenuData, pid)
+					this.$refs.menu.getNode(node).expanded = true
 				}else{
 					this.$refs.menu.append(newMenuData)
 					let newNode = this.menuList[this.menuList.length-1]
@@ -128,17 +197,59 @@
 
 			},
 
-			//删除菜单
-			delMenu(){
-				let CheckedNodes = this.$refs.menu.getCheckedNodes()
-				if(CheckedNodes.length == 0){
-					this.$message.warning("请选择需要删除的项")
-					return false;
+			// 移到回收站
+			handleDelete (data) {
+				if (! data.id) {
+					this.$refs.menu.remove(data)
+					this.$message.success('虚拟菜单已删除')
+					return;
 				}
-				CheckedNodes.forEach(item => {
-                    console.log(item)
-					// this.$refs.menu.remove(item)
+				if (data.children && data.children.length > 0) {
+					this.$message.error('请先删除子菜单')
+					return;
+				}
+				this.$confirm('此操作会将数据移到回收站！', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$API.menu.deletes(data.id).then(res => {
+						this.$message.success(res.message)
+						this.getMenu()
+					})
+				}).catch(() => {})
+			},
+
+			// 真实删除数据
+			handleRealDelete (data) {
+				if (data.children && data.children.length > 0) {
+					this.$message.error('请先删除子菜单')
+					return;
+				}
+				this.$confirm('此操作会将数据物理删除', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$API.menu.realDeletes(data.id).then(res => {
+						this.$message.success(res.message)
+						this.getMenu()
+					})
+				}).catch(() => {})
+			},
+
+			// 恢复数据
+			handleRecovery (data) {
+				this.$API.menu.recoverys(data.id).then(res => {
+					this.$message.success(res.message)
+					this.getMenu()
 				})
+			},
+
+			switchData () {
+				this.showRecycle = !this.showRecycle
+				this.getMenu()
+				this.$message.success('数据已切换到' + ( this.showRecycle ? '回收站数据' : '正常数据' ))
 			}
 		}
 	}
