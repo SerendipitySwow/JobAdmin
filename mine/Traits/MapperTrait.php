@@ -82,12 +82,8 @@ trait MapperTrait
             $query->orderBy($params['_mainAdmin_tree_pid']);
         }
 
-        if ($params['order_by'] ?? false) {
-            $query->orderBy($params['order_by'], $params['order_type'] ?? 'asc');
-        }
-
-        if ($params['query_raw'] ?? false) {
-            $query->whereRaw($params['query_raw']);
+        if ($params['orderBy'] ?? false) {
+            $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
         }
 
         return $this->handleSearch($query, $params);

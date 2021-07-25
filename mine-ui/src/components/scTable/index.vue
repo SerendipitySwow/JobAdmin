@@ -1,35 +1,84 @@
 <template>
 	<div class="scTable" ref="scTableMain" v-loading="loading">
 		<div class="scTable-table">
-			<el-table :data="tableData" :row-key="rowKey" :key="toggleIndex" ref="scTable" :height="tableHeight" :stripe="stripe" :highlight-current-row="highlightCurrentRow"  @selection-change="selectionChange" @current-change="currentChange" @sort-change="sortChange" @filter-change="filterChange">
+			<el-table
+				:data="tableData"
+				:row-key="rowKey"
+				:key="toggleIndex"
+				ref="scTable"
+				:height="tableHeight"
+				:stripe="stripe"
+				:highlight-current-row="highlightCurrentRow"
+				@selection-change="selectionChange"
+				@current-change="currentChange"
+				@sort-change="sortChange"
+				@filter-change="filterChange"
+			>
 				<slot></slot>
-				<el-table-column v-for="(item, index) in userColumn" :key="index" :label="item.label" :prop="item.prop" :width="item.width">
+
+				<el-table-column
+					v-for="(item, index) in userColumn"
+					:key="index"
+					:label="item.label"
+					:prop="item.prop"
+					:width="item.width"
+				>
 					<template #default="scope">
 						{{scope.row[item.prop]}}
 					</template>
 					<template #header>
 						{{item.label}}
-						<i class="el-icon-remove" style="color: #F56C6C;cursor: pointer;" @click="removeColumn(index)"></i>
+						<i class="el-icon-remove" style="color: #ecf5ff;cursor: pointer;" @click="removeColumn(index)"></i>
 					</template>
 				</el-table-column>
+
 				<el-table-column min-width="1"></el-table-column>
+
 				<template #empty>
 					<el-empty :description="emptyText" :image-size="100"></el-empty>
 				</template>
+
 			</el-table>
 		</div>
+		
 		<div class="scTable-page">
+
 			<div class="scTable-pagination">
-				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="reload"></el-pagination>
+				<el-pagination
+					v-if="!hidePagination"
+					background
+					:small="true"
+					:layout="paginationLayout"
+					:total="total"
+					:page-size="pageSize"
+					v-model:currentPage="currentPage"
+					@current-change="reload"
+				></el-pagination>
 			</div>
+
 			<div class="scTable-do" v-if="!hideDo">
-				<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
-				<el-popover placement="top" title="设置" :width="500" trigger="click">
+
+				<el-tooltip class="item" effect="dark" :content="getRecycleText" placement="top">
+					<el-button
+						@click="switchData"
+						v-if="showRecycle"
+						icon="el-icon-delete"
+						circle
+						style="margin-left:15px"
+					></el-button>
+				</el-tooltip>
+
+				<el-tooltip class="item" effect="dark" content="刷新表格" placement="top">
+					<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
+				</el-tooltip>
+
+				<el-popover placement="top" title="设置显示列" content="asd" :width="500" trigger="click">
 					<template #reference>
 						<el-button icon="el-icon-setting" circle style="margin-left:15px"></el-button>
 					</template>
 					<columnSetting ref="columnSetting" @userChange="columnSettingChange" :column="column"></columnSetting>
 				</el-popover>
+				
 			</div>
 		</div>
 	</div>
@@ -45,7 +94,7 @@
 			columnSetting
 		},
 		props: {
-			apiObj: { type: Object, default: () => {} },
+			api: { type: Object, default: () => {} },
 			params: { type: Object, default: () => ({}) },
 			data: { type: Object, default: () => {} },
 			rowKey: { type: String, default: "" },
@@ -57,6 +106,7 @@
 			stripe: { type: Boolean, default: false },
 			highlightCurrentRow: { type: Boolean, default: false },
 			paginationLayout: { type: String, default: "total, prev, pager, next, jumper" },
+			showRecycle: { type: Boolean, default: false},
 		},
 		watch: {
 			//监听从props里拿到值了
@@ -64,7 +114,7 @@
 				this.tableData = this.data;
 				this.total = this.tableData.length;
 			},
-			apiObj(){
+			api(){
 				this.tableParams = this.params;
 				this.refresh();
 			}
@@ -82,7 +132,8 @@
 				loading: false,
 				tableHeight:'100%',
 				tableParams: this.params,
-				userColumn: []
+				userColumn: [],
+				isRecycle: false,
 			}
 		},
 		created() {
@@ -91,7 +142,7 @@
 			})
 		},
 		mounted() {
-			if(this.apiObj){
+			if(this.api){
 				this.getData();
 			}else if(this.data){
 				this.tableData = this.data;
@@ -110,26 +161,42 @@
 		methods: {
 			//更新表格高度
 			upTableHeight(){
-				this.tableHeight = (this.$refs.scTableMain.offsetHeight - 50 ) + "px"
+				if (this.$refs.scTableMain.offsetHeight) {
+					this.tableHeight = (this.$refs.scTableMain.offsetHeight - 50 ) + "px"
+				}
 			},
 			//获取数据
 			async getData(){
 				this.loading = true;
-				var reqData = {
+				let requestData = {
 					[config.request.page]: this.currentPage,
 					[config.request.pageSize]: this.pageSize,
 					[config.request.prop]: this.prop,
 					[config.request.order]: this.order
 				}
-				Object.assign(reqData, this.tableParams)
+				Object.assign(requestData, this.tableParams)
+				let response;
+
 				try {
-					var res = await this.apiObj.get(reqData);
+					if (this.isRecycle) {
+						// 回收站数据
+						await this.api.recycleList(requestData).then(res => {
+							response = res
+						})
+					} else {
+						// 正常数据
+						await this.api.list(requestData).then(res => {
+							response = res
+						})
+					}
 				}catch(error){
 					this.loading = false;
 					this.emptyText = error.statusText;
 					return false;
 				}
-				var response = config.parseData(res);
+
+				response = config.parseData(response);
+
 				if(response.code != 200){
 					this.loading = false;
 					this.emptyText = response.msg;
@@ -195,6 +262,19 @@
 			},
 			currentChange(selection){
 				this.$emit('current-change', selection)
+			},
+
+			// 切换数据方法
+			switchData () {
+				this.isRecycle = ! this.isRecycle
+				this.getData()
+				this.$emit('switch-data', this.isRecycle)
+			}
+		},
+
+		computed: {
+			getRecycleText() {
+				return this.isRecycle ? '显示正常数据' : '显示回收站数据'
 			}
 		}
 	}

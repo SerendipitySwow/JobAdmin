@@ -9,17 +9,33 @@
 					<el-input v-model="form.name" clearable placeholder="菜单显示名字"></el-input>
 				</el-form-item>
 
-				<el-form-item label="上级菜单" prop="parent_id">
+				<el-form-item label="上级菜单" prop="parent_id" v-show="!form.top">
 					<el-cascader v-model="form.parent_id" :options="menu" style="width:100%" :props="menuProps" :show-all-levels="false" clearable></el-cascader>
 					<div class="el-form-item-msg">上级菜单，如果不选择则为顶级菜单。</div>
 				</el-form-item>
 
 				<el-form-item label="类型" prop="type">
 					<el-radio-group v-model="form.type">
-						<el-radio-button label="M">菜单</el-radio-button>
-						<el-radio-button label="B">按钮</el-radio-button>
-						<el-radio-button label="L">外链</el-radio-button>
-						<el-radio-button label="I">Iframe</el-radio-button>
+
+						<el-radio-button
+							label="M"
+						>菜单</el-radio-button>
+
+						<el-radio-button
+							label="B"
+							v-if="!form.top"
+						>按钮</el-radio-button>
+
+						<el-radio-button
+							label="L"
+							v-if="!form.top"
+						>外链</el-radio-button>
+
+						<el-radio-button
+							label="I"
+							v-if="!form.top"
+						>Iframe</el-radio-button>
+
 					</el-radio-group>
 				</el-form-item>
 
@@ -28,30 +44,30 @@
 					<div class="el-form-item-msg">系统唯一且与内置组件名一致，否则导致缓存失效。如类型为Iframe的菜单，别名将代替源地址显示在地址栏</div>
 				</el-form-item>
 
-				<el-form-item label="菜单图标" prop="icon">
+				<el-form-item label="菜单图标" prop="icon" v-if="form.type != 'B'">
 					<el-input v-model="form.icon" clearable placeholder="菜单显示的图标"></el-input>
 				</el-form-item>
 
-				<el-form-item label="路由地址" prop="route">
+				<el-form-item label="路由地址" prop="route" v-if="form.type != 'B'">
 					<el-input v-model="form.route" clearable placeholder="请输入路由地址"></el-input>
 				</el-form-item>
 
-				<el-form-item label="重定向" prop="redirect">
+				<el-form-item label="重定向" prop="redirect" v-if="form.type != 'B' && form.type == 'M'">
 					<el-input v-model="form.redirect" clearable placeholder="重定向地址"></el-input>
 					<div class="el-form-item-msg">如果有重定向，那么路由地址将不会生效</div>
 				</el-form-item>
 
-				<el-form-item label="组件" prop="component">
+				<el-form-item label="组件" prop="component" v-if="form.type != 'B' && form.type == 'M'">
 					<el-autocomplete v-model="form.component" :fetch-suggestions="querySearch" :debounce="10" clearable style="width:100%" placeholder="请选择组件"></el-autocomplete>
 					<div class="el-form-item-msg">如父节点、链接或Iframe等没有视图的菜单不需要填写</div>
 				</el-form-item>
 
-				<el-form-item label="排序" prop="sort">
+				<el-form-item label="排序" prop="sort" v-if="form.type != 'B'">
 					<el-input-number v-model="form.sort" controls-position="right" :min="0" :max="999"></el-input-number>
 					<div class="el-form-item-msg">菜单排序，数字大的在前面</div>
 				</el-form-item>
 
-				<el-form-item label="是否隐藏" prop="is_hidden">
+				<el-form-item label="是否隐藏" prop="is_hidden" v-if="form.type != 'B'">
 					<el-radio-group v-model="form.is_hidden">
 						<el-radio label="0">是</el-radio>
 						<el-radio label="1">否</el-radio>
@@ -67,7 +83,7 @@
 					<div class="el-form-item-msg" true-label="0" false-label="1" label="0">停用的菜单不会在导航中，也无法访问</div>
 				</el-form-item>
 
-				<el-form-item label="生成按钮" prop="restful" v-if="! form.id">
+				<el-form-item label="生成按钮" prop="restful" v-if="! form.id && form.type == 'M' ">
 					<el-radio-group v-model="form.restful">
 						<el-radio label="0">生成</el-radio>
 						<el-radio label="1">不生成</el-radio>
@@ -76,7 +92,7 @@
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary" @click="submitForm">保 存</el-button>
+					<el-button type="primary" @click="submitForm" :loading="loading">保 存</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -95,6 +111,9 @@
 				form: {
 					id: undefined,
 					parent_id: undefined,
+					top: undefined,
+					isBtn: undefined,
+					levels: [],
 					name: '',
 					route: '',
 					component: '',
@@ -112,12 +131,14 @@
 					label: 'name',
 					checkStrictly: true
 				},
+				level: [],
 				rules: {
 					name:  [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
 					code:  [{ required: true, message: '请输入标识代码', trigger: 'blur' }],
 					route: [{ required: true, message: '请输入路由', trigger: 'blur' }]
 				},
-				views: []
+				views: [],
+				loading: false
 			}
 		},
 		mounted() {
@@ -133,25 +154,30 @@
 			},
 
 			submitForm () {
+				this.loading = true
 				this.$refs.form.validate(valid => {
 					if (valid) {
 						if (! this.form.parent_id) {
 							this.form.parent_id = 0
 						}
 						this.form.children = undefined
-						console.log(this.form)
 						// 新增
 						if (! this.form.id) {
 							this.$API.menu.save(this.form).then(res => {
 								this.$message.success(res.message)
+								this.loading = false
+								this.$emit('ok')
 							})
 						// 更新
 						} else {
 							this.$API.menu.update(this.form.id, this.form).then(res => {
 								this.$message.success(res.message)
+								this.loading = false
+								this.$emit('ok')
 							})
 						}
 					} else {
+						this.loading = false
 						return false
 					}
 				})

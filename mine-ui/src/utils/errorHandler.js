@@ -15,7 +15,7 @@ export default (error, vm)=>{
 	}
 	var errorName = errorMap[error.name] || "未知错误"
 
-	console.warn(`[SCUI error]: ${error}`);
+	console.warn(`[MineAdmin error]: ${error}`);
 	console.error(error);
 	//throw error;
 

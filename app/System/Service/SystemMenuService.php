@@ -29,7 +29,7 @@ class SystemMenuService extends AbstractService
      */
     public function getTreeList(?array $params = null): array
     {
-        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
+        $params = array_merge(['orderBy' => 'sort', 'orderType' => 'desc'], $params);
         return parent::getTreeList($params);
     }
 
@@ -39,7 +39,7 @@ class SystemMenuService extends AbstractService
      */
     public function getTreeListByRecycle(?array $params = null): array
     {
-        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
+        $params = array_merge(['orderBy' => 'sort', 'orderType' => 'desc'], $params);
         return parent::getTreeListByRecycle($params);
     }
 
@@ -92,7 +92,7 @@ class SystemMenuService extends AbstractService
     {
         $buttonMenus = [
             ['name' => $model->name.'列表', 'code' => $model->code.':index'],
-            ['name' => $model->name.'回收站列表', 'code' => $model->code.':recycle'],
+            ['name' => $model->name.'回收站', 'code' => $model->code.':recycle'],
             ['name' => $model->name.'保存', 'code' => $model->code.':save'],
             ['name' => $model->name.'更新', 'code' => $model->code.':update'],
             ['name' => $model->name.'删除', 'code' => $model->code.':delete'],

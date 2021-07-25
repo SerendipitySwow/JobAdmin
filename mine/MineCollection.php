@@ -34,7 +34,7 @@ class MineCollection extends Collection
             'parent_id' => $menu['parent_id'],
             'name' => $menu['code'],
             'component' => $menu['component'],
-            'path' => $menu['route'],
+            'path' => '/' . $menu['route'],
             'redirect' => $menu['redirect'],
             'meta' => [
                 'type'   => $menu['type'],

@@ -133,13 +133,13 @@ class UserController extends MineController
 
     /**
      * 更改用户状态
-     * @PutMapping("changeUserStatus")
+     * @PutMapping("changeStatus")
      * @param SystemUserStatusRequest $request
      * @return ResponseInterface
-     * @Permission("system:user:changeUserStatus")
+     * @Permission("system:user:changeStatus")
      * @OperationLog
      */
-    public function changeUserStatus(SystemUserStatusRequest $request): ResponseInterface
+    public function changeStatus(SystemUserStatusRequest $request): ResponseInterface
     {
         $id = $request->input('id');
         $status = $request->input('status');

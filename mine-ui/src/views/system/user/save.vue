@@ -123,8 +123,8 @@
 			},
 			//加载树数据
 			async getGroup(){
-				var res = await this.$API.role.select.get();
-				this.groups = res.data;
+				// var res = await this.$API.role.select.get();
+				this.groups = [];
 			},
 			//表单提交方法
 			submit(){

@@ -32,8 +32,8 @@ class SystemDictDataService extends AbstractService
         $args = [
             'select' => 'id, label, value',
             'status' => '0',
-            'order_by' => 'sort',
-            'order_type' => 'desc'
+            'orderBy' => 'sort',
+            'orderType' => 'desc'
         ];
         return parent::getList(array_merge($args, $params));
     }

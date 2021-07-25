@@ -25,7 +25,7 @@ class SystemDeptService extends AbstractService
      */
     public function getTreeList(?array $params = null): array
     {
-        $params = array_merge(['order_by' => 'sort', 'order_type' => 'desc'], $params);
+        $params = array_merge(['orderBy' => 'sort', 'orderType' => 'desc'], $params);
         return parent::getTreeList($params);
     }
 

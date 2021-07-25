@@ -1,0 +1,119 @@
+import { request } from '@/utils/request.js'
+
+export default {
+
+    /**
+     * 获取用户
+     * @returns
+     */
+    getPageList (params = {}) {
+        return request({
+            url: 'system/user/index',
+            method: 'get',
+            params
+        })
+    },
+    
+    /**
+     * 从回收站获取用户
+     * @returns
+     */
+    getPageListByRecycle (params = {}) {
+        return request({
+            url: 'system/user/recycle',
+            method: 'get',
+            params
+        })
+    },
+    
+    /**
+     * 读取一个用户
+     * @returns
+     */
+    read (id) {
+        return request({
+            url: 'system/user/read/' + id,
+            method: 'get'
+        })
+    },
+    
+    /**
+     * 添加用户
+     * @returns
+     */
+    save (params = {}) {
+        return request({
+            url: 'system/user/save',
+            method: 'post',
+            data: params
+        })
+    },
+    
+    /**
+     * 移到回收站
+     * @returns
+     */
+    deletes (ids) {
+        return request({
+            url: 'system/user/delete/' + ids,
+            method: 'delete'
+        })
+    },
+    
+    /**
+     * 恢复数据
+     * @returns
+     */
+    recoverys (ids) {
+        return request({
+            url: 'system/user/recovery/' + ids,
+            method: 'put'
+        })
+    },
+    
+    /**
+     * 真实删除
+     * @returns
+     */
+    realDeletes (ids) {
+        return request({
+            url: 'system/user/realDelete/' + ids,
+            method: 'delete'
+        })
+    },
+    
+    /**
+     * 更新数据
+     * @returns
+     */
+    update (id, params = {}) {
+        return request({
+            url: 'system/user/update/' + id,
+            method: 'put',
+            data: params
+        })
+    },
+    
+    /**
+     * 更改用户状态
+     * @returns
+     */
+     changeStatus (params = {}) {
+        return request({
+            url: 'system/user/changeStatus',
+            method: 'put',
+            data: params
+        })
+    },
+    
+    /**
+     * 初始化用户密码
+     * @returns
+     */
+    initUserPassword (id) {
+        return request({
+            url: 'system/user/initUserPassword/' + id,
+            method: 'put'
+        })
+    }
+}

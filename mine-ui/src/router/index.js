@@ -1,5 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
-import { ElNotification } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import config from "@/config"
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -44,8 +44,8 @@ router.beforeEach(async (to, from, next) => {
 			await store.dispatch('getUserInfo').then( res => {
 				if (res.routers.length !== 0) {
 					let routers = res.routers
-					console.log(routers)
 					const apiRouter = filterAsyncRouter(routers)
+					res.routers = apiRouter
 					tool.data.set('user', res)
 					apiRouter.forEach(item => {
 						router.addRoute("layout", item)
@@ -80,10 +80,7 @@ router.afterEach(() => {
 
 router.onError((error) => {
 	NProgress.done();
-	ElNotification.error({
-		title: '路由错误',
-		message: error.message
-	});
+	ElMessage.error(error.message)
 });
 
 
@@ -100,6 +97,7 @@ function filterAsyncRouter(routerMap) {
 			item.meta.url = item.path;
 			item.path = `/i/${item.name}`;
 		}
+
 		//MAP转路由对象
 		const route = {
 			path: item.path,

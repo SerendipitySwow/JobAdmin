@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<el-aside width="282px">
+		<el-aside width="320px">
 			<el-main
 				v-loading="loading" element-loading-background="rgba(255, 255, 255, 0.8)"
 				element-loading-text="菜单加载中..." style="height:100%; padding: 0">
@@ -45,8 +45,10 @@
 									<!-- 正常数据显示按钮 -->
 									<span class="do" v-else>
 
-										<el-tag v-if="data.status == '0'">正常</el-tag>
-										<el-tag type="info" v-else>停用</el-tag>
+										<el-tag v-if="data.type == 'M'">菜单</el-tag>
+										<el-tag v-if="data.type == 'B'" type="success">按钮</el-tag>
+										<el-tag v-if="data.type == 'L'" type="warning">外链</el-tag>
+										<el-tag v-if="data.type == 'I'" type="danger">Iframe</el-tag>
 
 										<el-tooltip class="item" effect="dark" content="新增子菜单" placement="top">
 											<i
@@ -94,7 +96,7 @@
 		</el-aside>
 		<el-container>
 			<el-main class="nopadding" style="padding:20px;">
-				<save ref="save" :menu="menuList"></save>
+				<save ref="save" :menu="menuList" @ok="handleOk"></save>
 			</el-main>
 		</el-container>
 	</el-container>
@@ -105,7 +107,7 @@
 	import save from './save'
 
 	export default {
-		name: "menu:index",
+		name: "system:menu",
 		components: {
 			save
 		},
@@ -157,6 +159,12 @@
 			//树点击
 			menuClick(data, node){
 				let pid = node.level==1?undefined:node.parent.data.id;
+				if (! pid ) {
+					data.top = 1
+				}
+				if (data.type == 'B') {
+					data.isBtn = true
+				}
 				this.$refs.save.setData(data, pid)
 			},
 			//树过滤
@@ -182,19 +190,40 @@
 					restful: '1'
 				}
 				if(node){
+					if (! node.data.level) {
+						this.$message.error('请先保存上级菜单后，再新增菜单')
+						return
+					} else {
+						if (node.data.type == 'B') {
+							this.$message.error('按钮不允许创建子菜单')
+							return
+						}
+						let level = node.data.level.split(',')
+						if (level.length > 3) {
+							this.$message.error('菜单最大为 4 层')
+							return
+						} else if(level.length == 3) {
+							newMenuData.type = 'B'
+						}
+					}
 					this.$refs.menu.append(newMenuData, node)
 					let lastNode = node.childNodes[node.childNodes.length-1]
 					this.$refs.menu.setCurrentKey(lastNode.data.name)
-					let pid = node.data.id;
+					let pid = node.data.id
 					this.$refs.save.setData(newMenuData, pid)
 					this.$refs.menu.getNode(node).expanded = true
 				}else{
 					this.$refs.menu.append(newMenuData)
 					let newNode = this.menuList[this.menuList.length-1]
+					newMenuData.top = 1
 					this.$refs.menu.setCurrentKey(newNode.name)
 					this.$refs.save.setData(newMenuData)
 				}
 
+			},
+
+			handleOk () {
+				this.getMenu()
 			},
 
 			// 移到回收站
