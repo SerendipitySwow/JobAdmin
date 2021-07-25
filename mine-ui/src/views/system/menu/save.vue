@@ -3,7 +3,7 @@
 		<el-col :xl="12" :lg="16">
 
 			<h2>{{form.name || "新增菜单"}}</h2>
-			<el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px" label-position="left">
+			<el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px" label-position="right">
 
 				<el-form-item label="菜单名称" prop="name">
 					<el-input v-model="form.name" clearable placeholder="菜单显示名字"></el-input>
@@ -93,7 +93,8 @@
 		data(){
 			return {
 				form: {
-					parent: '',
+					id: undefined,
+					parent_id: '',
 					name: '',
 					route: '',
 					component: '',
@@ -111,7 +112,11 @@
 					label: 'name',
 					checkStrictly: true
 				},
-				rules: {},
+				rules: {
+					name:  [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
+					code:  [{ required: true, message: '请输入标识代码', trigger: 'blur' }],
+					route: [{ required: true, message: '请输入路由', trigger: 'blur' }]
+				},
 				views: []
 			}
 		},

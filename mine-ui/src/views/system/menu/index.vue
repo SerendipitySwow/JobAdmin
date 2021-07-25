@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<el-aside width="300px">
+		<el-aside width="283px">
 			<el-container>
 				<el-header>
 					<el-input placeholder="输入关键字进行过滤" v-model="menuFilterText" clearable></el-input>
@@ -15,8 +15,7 @@
 						draggable
 						highlight-current
                         :expand-on-click-node="false"
-                        check-strictly
-                        show-checkbox
+ 
                         :filter-node-method="menuFilterNode"
                         @node-click="menuClick"
                     >
@@ -26,6 +25,7 @@
 								<span class="label">{{ node.label }}</span>
 								<span class="do">
 									<i class="el-icon-plus" @click.stop="add(node, data)"></i>
+									<i class="el-icon-delete" @click.stop="add(node, data)"></i>
 								</span>
 							</span>
 						</template>
@@ -33,8 +33,9 @@
 					</el-tree>
 				</el-main>
 				<el-footer style="height:51px;">
-					<el-button size="mini" icon="el-icon-plus" @click="add()">新增</el-button>
-					<el-button type="danger" size="mini" plain icon="el-icon-delete" @click="delMenu">删除</el-button>
+					<el-button size="mini" icon="el-icon-plus" v-auth="'system:menu:save'" @click="add()">新增</el-button>
+					<el-button size="mini" plain icon="el-icon-view" @click="delMenu">回收站</el-button>
+					<el-button size="mini" plain icon="el-icon-refresh" @click="delMenu">刷新</el-button>
 				</el-footer>
 			</el-container>
 		</el-aside>
@@ -63,12 +64,15 @@
 						return data.name
 					}
 				},
-				menuFilterText: ""
+				menuFilterText: '',
+				showRecycle: false,
+				queryParams: {
+					name: undefined,
+				}
 			}
 		},
 		watch: {
 			menuFilterText(val){
-                console.log(val)
 				this.$refs.menu.filter(val);
 			}
 		},
@@ -78,9 +82,15 @@
 		methods: {
 			//加载树数据
 			async getMenu(){
-				await this.$API.menu.getMenuTree().then(res => {
-                    this.menuList = res.data;
-                })
+				if (! this.showRecycle) {
+					await this.$API.menu.getList(this.queryParams).then(res => {
+						this.menuList = res.data;
+					})
+				} else {
+					await this.$API.menu.getRecycle(this.queryParams).then(res => {
+						this.menuList = res.data;
+					})
+				}
 			},
 			//树点击
 			menuClick(data, node){

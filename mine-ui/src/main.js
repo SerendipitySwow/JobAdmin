@@ -19,6 +19,7 @@ import scFormTable from './components/scFormTable'
 import scTableSelect from './components/scTableSelect'
 import scPageHeader from './components/scPageHeader'
 import auth from './directives/auth'
+import role from './directives/role'
 
 const app = createApp(App);
 
@@ -43,6 +44,7 @@ app.component('scPageHeader', scPageHeader);
 
 //注册全局指令
 app.directive('auth', auth)
+app.directive('role', role)
 
 //全局代码错误捕捉
 app.config.errorHandler = errorHandler

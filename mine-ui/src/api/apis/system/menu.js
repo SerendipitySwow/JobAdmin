@@ -5,7 +5,7 @@ export default {
      * 获取菜单树
      * @returns
      */
-    getMenuTree (params = {}) {
+    getList (params = {}) {
         return request({
             url: 'system/menu/index',
             method: 'get',
