@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace App\System\Mapper;
 
 use App\System\Model\SystemLoginLog;
-use App\System\Model\SystemUploadFile;
+use App\System\Model\SystemUploadfile;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractMapper;
@@ -37,7 +37,7 @@ class SystemUploadFileMapper extends AbstractMapper
 
     public function assignModel()
     {
-        $this->model = SystemUploadFile::class;
+        $this->model = SystemUploadfile::class;
     }
 
     /**

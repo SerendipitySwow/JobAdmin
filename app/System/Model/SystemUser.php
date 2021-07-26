@@ -13,8 +13,9 @@ use Mine\MineModel;
  * @property string $phone 手机
  * @property string $email 用户邮箱
  * @property string $avatar 用户头像
+ * @property string $signed 个人签名
+ * @property string $default_dashboard 后台首页类型
  * @property int $dept_id 部门ID
- * @property string $remember_token 用户Token
  * @property string $status 状态 (0正常 1停用)
  * @property string $login_ip 最后登陆IP
  * @property string $login_time 最后登陆时间
@@ -24,8 +25,8 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
- * @property-read \Mine\MineCollection|\App\System\Model\SystemPost[] $posts 
- * @property-read \Mine\MineCollection|\App\System\Model\SystemRole[] $roles 
+ * @property-read \Hyperf\Database\Model\Collection|SystemPost[] $posts 
+ * @property-read \Hyperf\Database\Model\Collection|SystemRole[] $roles 
  * @property-write mixed $password 密码
  */
 class SystemUser extends MineModel
@@ -45,7 +46,7 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'dept_id', 'remember_token', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'signed', 'default_dashboard', 'dept_id', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
