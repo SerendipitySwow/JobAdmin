@@ -44,7 +44,7 @@ class DeptController extends MineController
 
     /**
      * 从回收站获取部门树
-     * @GetMapping("recycleTree")
+     * @GetMapping("recycle")
      * @Permission("system:dept:recycle")
      */
     public function recycleTree():ResponseInterface
@@ -54,9 +54,9 @@ class DeptController extends MineController
 
     /**
      * 前端选择树（不需要权限）
-     * @GetMapping("selectTree")
+     * @GetMapping("tree")
      */
-    public function selectTree(): ResponseInterface
+    public function tree(): ResponseInterface
     {
         return $this->success($this->service->getSelectTree());
     }

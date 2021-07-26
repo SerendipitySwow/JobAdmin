@@ -1,21 +1,21 @@
 <template>
 	<el-container>
-		<el-aside width="240px" v-loading="showGrouploading">
+		<el-aside width="240px" v-loading="showDeptloading">
 			<el-container>
 				<el-header>
-					<el-input placeholder="输入关键字进行过滤" v-model="groupFilterText" clearable></el-input>
+					<el-input placeholder="输入关键字进行过滤" v-model="deptFilterText" clearable></el-input>
 				</el-header>
 				<el-main class="nopadding">
 					<el-tree
-						ref="group"
+						ref="dept"
 						class="menu"
 						node-key="id"
-						:data="group"
+						:data="dept"
 						:current-node-key="''"
 						:highlight-current="true"
 						:expand-on-click-node="false"
-						:filter-node-method="groupFilterNode"
-						@node-click="groupClick"
+						:filter-node-method="deptFilterNode"
+						@node-click="deptClick"
 					></el-tree>
 				</el-main>
 			</el-container>
@@ -26,6 +26,7 @@
 
 						<el-button
 							icon="el-icon-plus"
+							v-auth="['system:user:save']"
 							@click="add"
 						>新增</el-button>
 
@@ -33,6 +34,7 @@
 							type="danger"
 							plain
 							icon="el-icon-delete"
+							v-auth="['system:user:delete']"
 							:disabled="selection.length==0"
 							@click="batch_del"
 						>删除</el-button>
@@ -40,26 +42,42 @@
 					</div>
 					<div class="right-panel">
 						<div class="right-panel-search">
-							<el-input v-model="search.name" placeholder="搜索用户名" clearable></el-input>
+							<el-input v-model="queryParams.name" placeholder="搜索用户名" clearable></el-input>
 
 							<el-tooltip class="item" effect="dark" content="搜索" placement="top">
-								<el-button type="primary" icon="el-icon-search" @click="upsearch"></el-button>
+								<el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
 							</el-tooltip>
 
 							<el-tooltip class="item" effect="dark" content="清空条件" placement="top">
-								<el-button icon="el-icon-refresh" @click="upsearch"></el-button>
+								<el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
 							</el-tooltip>
 
-							<el-popover placement="bottom" :width="380" trigger="hover">
+							<el-popover placement="bottom-end" :width="450" trigger="click" >
 								<template #reference>
-									<el-button type="text">
+									<el-button type="text" @click="povpoerShow = ! povpoerShow">
 										更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
 									</el-button>
 								</template>
 								<el-form label-width="80px">
-									<el-form-item label="登录账号" prop="name">
-										<el-input v-model="search.name" placeholder="用于登录系统" clearable></el-input>
+									<el-form-item label="状态" class="ma-inline-form-item" prop="status">
+										<el-select size="small" v-model="queryParams.status" placeholder="用户状态">
+											<el-option label="启用" value="0">启用</el-option>
+											<el-option label="停用" value="1">停用</el-option>
+										</el-select>
 									</el-form-item>
+
+									<el-form-item label="创建时间" class="ma-inline-form-item">
+										<el-date-picker
+											size="small"
+											v-model="dateRange"
+											type="daterange"
+											range-separator="至"
+											@change="handleDateChange"
+											start-placeholder="开始日期"
+											end-placeholder="结束日期"
+										></el-date-picker>
+									</el-form-item>
+
 								</el-form>
 							</el-popover>
 						</div>
@@ -99,6 +117,7 @@
 						<el-table-column
 							label="邮箱"
 							prop="email"
+							width="220"
 						></el-table-column>
 
 						<el-table-column
@@ -113,6 +132,7 @@
 						<el-table-column
 							label="创建时间"
 							prop="created_at"
+							width="150"
 							sortable='custom'
 						></el-table-column>
 
@@ -188,26 +208,32 @@
 					{ label: '最后登录时间', prop: 'login_time', width: '200', hide: true  },
 					{ label: '最后登录IP', prop: 'login_ip', width: '180', hide: true  }
 				],
-				showGrouploading: false,
-				groupFilterText: '',
-				group: [],
+				povpoerShow: false,
+				dateRange:'',
+				showDeptloading: false,
+				deptFilterText: '',
+				dept: [],
 				api: {
 					list: this.$API.user.getPageList,
 					recycleList: this.$API.user.getPageListByRecycle,
 				},
 				selection: [],
-				search: {
-					name: null
-				}
+				queryParams: {
+					username: undefined,
+					dept_id: undefined,
+					maxDate: undefined,
+        			minDate: undefined,
+					status: undefined
+				},
 			}
 		},
 		watch: {
-			groupFilterText(val) {
-				this.$refs.group.filter(val);
+			deptFilterText(val) {
+				this.$refs.dept.filter(val);
 			}
 		},
 		mounted() {
-			this.getGroup()
+			this.getDept()
 		},
 		methods: {
 			//添加
@@ -267,27 +293,34 @@
 				this.selection = selection;
 			},
 			//加载树数据
-			async getGroup(){
-				// var res = await this.$API.role.select.get();
-				this.showGrouploading = false;
-				// var allNode ={id: '', label: '所有'}
-				// res.data.unshift(allNode);
-				this.group = []
+			async getDept(){
+				await this.$API.dept.tree().then(res => {
+					res.data.unshift({id: '', label: '所有'})
+					this.dept = res.data
+					this.showDeptloading = false
+				})
 			},
 			//树过滤
-			groupFilterNode(value, data){
+			deptFilterNode(value, data){
 				if (!value) return true;
 				return data.label.indexOf(value) !== -1;
 			},
 			//树点击事件
-			groupClick(data){
-				var params = {
-					groupId: data.id
-				}
-				this.$refs.table.upData(params)
+			deptClick(data){
+				this.queryParams.dept_id = data.id
+				this.$refs.table.upData(this.queryParams)
 			},
+
+			// 选择时间事件
+			handleDateChange (values) {
+				if (values !== null) {
+					this.queryParams.minDate = values[0]
+					this.queryParams.maxDate = values[1]
+				}
+			},
+
 			//搜索
-			upsearch(){
+			handlerSearch(){
 
 			},
 
