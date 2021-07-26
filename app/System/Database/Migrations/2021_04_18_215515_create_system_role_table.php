@@ -24,7 +24,6 @@ class CreateSystemRoleTable extends Migration
                     'default' => '0',
                     'comment' => '数据范围（0：全部数据权限 1：自定义数据权限 2：本部门数据权限 3：本部门及以下数据权限 4：本人数据权限）'
                 ])->nullable();
-            $table->addColumn('char', 'console_type', ['length' => 1, 'default' => '0', 'comment' => '控制台类型 (0数据统计 1工作台)'])->nullable();
             $table->addColumn('char', 'status', ['length' => 1, 'default' => '0', 'comment' => '状态 (0正常 1停用)'])->nullable();
             $table->addColumn('tinyInteger', 'sort', ['unsigned' => true, 'default' => 0, 'comment' => '排序'])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
