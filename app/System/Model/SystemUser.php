@@ -14,7 +14,7 @@ use Mine\MineModel;
  * @property string $email 用户邮箱
  * @property string $avatar 用户头像
  * @property string $signed 个人签名
- * @property string $default_dashboard 后台首页类型
+ * @property string $dashboard 后台首页类型
  * @property int $dept_id 部门ID
  * @property string $status 状态 (0正常 1停用)
  * @property string $login_ip 最后登陆IP
@@ -46,7 +46,7 @@ class SystemUser extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'signed', 'default_dashboard', 'dept_id', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'username', 'password', 'user_type', 'nickname', 'phone', 'email', 'avatar', 'signed', 'dashboard', 'dept_id', 'status', 'login_ip', 'login_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
