@@ -36,6 +36,7 @@ class MineCrontabStrategy
 
     /**
      * 执行一次
+     * @param MineCrontab $crontab
      */
     public function executeOnce(MineCrontab $crontab)
     {
