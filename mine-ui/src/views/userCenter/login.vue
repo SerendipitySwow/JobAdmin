@@ -148,19 +148,19 @@
 		background-image: url(/img/login@bg.jpg);
 	}
 	.login_container {
-		position: absolute;top:50%;left:50%;width: 450px;margin: 0 auto;z-index: 1;transform: translate(-50%, -50%);
+		position: absolute;top:50%;left:50%; width: 400px; margin: 0 auto;z-index: 1;transform: translate(-50%, -50%);
 	}
-	.login_body {width: 95%;display: flex; margin:0 auto;box-shadow: 0px 20px 80px 0px rgba(0,0,0,0.3);}
+	.login_body {width: 100%;display: flex; margin:0 auto;box-shadow: 0px 20px 80px 0px rgba(0,0,0,0.3);}
 
 	.login-logo {text-align: center;margin-bottom: 30px;}
 	.login-logo .logo {width: 70px;height: 70px;vertical-align: bottom;}
-	.login-logo h2 {font-size: 24px;margin-top: 20px;color: #40485b;}
+	.login-logo h2 {font-size: 24px;color: #40485b;}
 
 	.login-title {margin-top: 20px;}
 	.login-title h2 {font-size: 22px;font-weight: normal;}
 	.login-title p {font-size: 12px;margin-top:40px;line-height: 1.8;color: rgba(255,255,255,0.8);}
 
-	.login-form {width: 100%;padding: 30px 30px; border-radius: 5px; margin: 0 auto; background-color: #fff; background: hsla(0,0%,100%,.8);}
+	.login-form {width: 100%;padding: 15px 30px; border-radius: 5px; margin: 0 auto; background-color: #fff; background: hsla(0,0%,100%,.8);}
 	.login-oauth {display: flex;justify-content:space-around;}
 	.login-form .el-divider {margin-top:40px;}
 
@@ -183,18 +183,24 @@
 	.demo-user-item .info p {color: #666;margin-top: 6px;}
 
 	@media (max-height: 650px){
-	.login_container {position: static;transform: none;margin:50px auto;}
+		.login_container {position: static;transform: none;margin:50px auto;}
 	}
 	@media (max-width: 1200px){
-	.login_container {width: 380px;}
-	.login-form {padding:30px;}
+		.login-form {padding:15px 30px;}
 	}
 	@media (max-width: 1000px){
-	.login_container {width: 380px;margin: 0 auto;transform:none;top:15%;bottom:0px;left:0px;right: 0px;}
-	.login_body {box-shadow: none;}
-	.login-form {width:95%;padding:30px 40px;}
-	.login-footer {margin-top: 0; font-family: Arial;}
+		.login_container {margin: 0 auto;transform:none;top:20%;bottom:0px;left:0px;right: 0px;}
+		.login_body {box-shadow: none;}
+		.login-form {width:95%;padding:15px 20px;}
+		.login-footer {margin-top: 0; font-family: Arial;}
 	}
+	@media (max-width: 380px){
+		.login_container {width: 360px;margin: 0 auto;transform:none;top:20%;bottom:0px;left:0px;right: 0px;}
+		.login_body {box-shadow: none;}
+		.login-form {width:100%;padding:15px 20px;}
+		.login-footer {margin-top: 0; font-family: Arial;}
+	}
+	
 	.circles {
 		position: absolute;
 		top: 0;

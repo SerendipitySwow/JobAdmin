@@ -12,6 +12,7 @@ import tool from './utils/tool'
 import hasPermission from './utils/permission'
 import hasRole from './utils/role'
 import errorHandler from './utils/errorHandler'
+import maTable from './components/maTable'          // 原scTable，进行了系统适配优化，与原版scTable并存
 import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
 import scUpload from './components/scUpload'
@@ -36,6 +37,7 @@ app.use(router)
 app.use(ElementPlus, {size: 'small', locale: locale})
 
 //注册全局组件
+app.component('maTable', maTable)
 app.component('scTable', scTable)
 app.component('scFilterBar', scFilterBar)
 app.component('scUpload', scUpload)

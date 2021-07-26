@@ -20,11 +20,25 @@
 		</div>
 		<div class="scTable-page">
 			<div class="scTable-pagination">
-				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="reload"></el-pagination>
+				<el-pagination v-if="!hidePagination" background :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="reload"></el-pagination>
 			</div>
 			<div class="scTable-do" v-if="!hideDo">
-				<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
-				<el-popover placement="top" title="列设置" :width="500" trigger="click">
+
+				<el-tooltip class="item" effect="dark" :content="getRecycleText" placement="top">
+					<el-button
+						@click="switchData"
+						v-if="showRecycle"
+						icon="el-icon-delete"
+						circle
+						style="margin-left:15px"
+					></el-button>
+				</el-tooltip>
+
+				<el-tooltip class="item" effect="dark" content="刷新表格" placement="top">
+					<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
+				</el-tooltip>
+
+				<el-popover placement="top" title="显示列设置" :width="500" trigger="click">
 					<template #reference>
 						<el-button icon="el-icon-setting" circle style="margin-left:15px"></el-button>
 					</template>
@@ -40,13 +54,13 @@
 	import columnSetting from './columnSetting'
 
 	export default {
-		name: 'scTable',
+		name: 'maTable',
 		components: {
 			columnSetting
 		},
 		props: {
 			tableName: { type: String, default: "" },
-			apiObj: { type: Object, default: () => {} },
+			api: { type: Object, default: () => {} },
 			params: { type: Object, default: () => ({}) },
 			data: { type: Object, default: () => {} },
 			rowKey: { type: String, default: "" },
@@ -58,6 +72,7 @@
 			stripe: { type: Boolean, default: false },
 			highlightCurrentRow: { type: Boolean, default: false },
 			paginationLayout: { type: String, default: "total, prev, pager, next, jumper" },
+			showRecycle: { type: Boolean, default: false},
 		},
 		watch: {
 			//监听从props里拿到值了
@@ -65,7 +80,7 @@
 				this.tableData = this.data;
 				this.total = this.tableData.length;
 			},
-			apiObj(){
+			api(){
 				this.tableParams = this.params;
 				this.refresh();
 			}
@@ -92,7 +107,7 @@
 			})
 		},
 		mounted() {
-			if(this.apiObj){
+			if(this.api){
 				this.getData();
 			}else if(this.data){
 				this.tableData = this.data;
@@ -116,21 +131,37 @@
 			//获取数据
 			async getData(){
 				this.loading = true;
-				var reqData = {
+
+				var requestData = {
 					[config.request.page]: this.currentPage,
 					[config.request.pageSize]: this.pageSize,
 					[config.request.prop]: this.prop,
 					[config.request.order]: this.order
 				}
-				Object.assign(reqData, this.tableParams)
+				Object.assign(requestData, this.tableParams)
+
+				let response;
+
 				try {
-					var res = await this.apiObj.get(reqData);
+					if (this.isRecycle) {
+						// 回收站数据
+						await this.api.recycleList(requestData).then(res => {
+							response = res
+						})
+					} else {
+						// 正常数据
+						await this.api.list(requestData).then(res => {
+							response = res
+						})
+					}
 				}catch(error){
 					this.loading = false;
 					this.emptyText = error.statusText;
 					return false;
 				}
-				var response = config.parseData(res);
+
+				response = config.parseData(response);
+
 				if(response.code != 200){
 					this.loading = false;
 					this.emptyText = response.msg;
@@ -201,6 +232,19 @@
 			},
 			currentChange(selection){
 				this.$emit('current-change', selection)
+			},
+
+			// 切换数据方法
+			switchData () {
+				this.isRecycle = ! this.isRecycle
+				this.getData()
+				this.$emit('switch-data', this.isRecycle)
+			}
+		},
+
+		computed: {
+			getRecycleText() {
+				return this.isRecycle ? '显示正常数据' : '显示回收站数据'
 			}
 		}
 	}

@@ -66,7 +66,7 @@
 					</div>
 				</el-header>
 				<el-main class="nopadding">
-					<scTable
+					<maTable
 						ref="table"
 						:api="api"
 						:column="column"
@@ -79,7 +79,7 @@
 					>
 						<el-table-column type="selection" width="50"></el-table-column>
 
-						<el-table-column label="头像" width="60">
+						<el-table-column label="头像" width="80">
 							<template #default="scope">
 								<el-avatar :src="scope.row.avatar" size="small"></el-avatar>
 							</template>
@@ -88,26 +88,22 @@
 						<el-table-column
 							label="登录账号"
 							prop="username"
-							width="150"
 							sortable='custom'
 						></el-table-column>
 
 						<el-table-column
 							label="昵称"
 							prop="nickname"
-							width="130"
 						></el-table-column>
 
 						<el-table-column
 							label="邮箱"
 							prop="email"
-							width="250"
 						></el-table-column>
 
 						<el-table-column
 							label="用户类型"
 							prop="user_type"
-							width="100"
 						>
 							<template #default="scope">
 								{{ scope.row.user_type === '100' ? '系统用户' : '其他类型' }}
@@ -117,7 +113,6 @@
 						<el-table-column
 							label="创建时间"
 							prop="created_at"
-							width="150"
 							sortable='custom'
 						></el-table-column>
 
@@ -164,7 +159,7 @@
 							</template>
 						</el-table-column>
 
-					</scTable>
+					</maTable>
 				</el-main>
 		</el-container>
 	</el-container>
@@ -188,10 +183,10 @@
 					save: false
 				},
 				column: [
-					{ label: '用户ID', prop: 'id', width: '150' },
-					{ label: '手机', prop: 'phone', width: '120' },
-					{ label: '最后登录时间', prop: 'login_time', width: '200' },
-					{ label: '最后登录IP', prop: 'login_ip', width: '180' }
+					{ label: '用户ID', prop: 'id', width: '150', hide: true },
+					{ label: '手机', prop: 'phone', width: '120', hide: true  },
+					{ label: '最后登录时间', prop: 'login_time', width: '200', hide: true  },
+					{ label: '最后登录IP', prop: 'login_ip', width: '180', hide: true  }
 				],
 				showGrouploading: false,
 				groupFilterText: '',

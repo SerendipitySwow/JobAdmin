@@ -1,7 +1,10 @@
 //数据表格配置
+import { ElMessage } from 'element-plus'
 
 export default {
+
 	pageSize: 20,						//表格每一页条数
+
 	parseData: function (res) {			//数据分析
 		return {
 			rows: res.data.items,			//分析行数据字段结构
@@ -10,10 +13,25 @@ export default {
 			code: res.code				//分析状态字段结构
 		}
 	},
+
 	request: {							//请求规定字段
 		page: 'page',					//规定当前分页字段
 		pageSize: 'pageSize',			//规定一页条数字段
 		prop: 'orderBy',					//规定排序字段名字段
 		order: 'orderType'					//规定排序规格字段
+	},
+
+	/**
+	 * 自定义列保存处理
+	 * @tableName scTable组件的props->tableName
+	 * @column 用户配置好的列
+	 * @ref 列配置弹窗组件的ref
+	 */
+	columnSettingSave: function (tableName, column, ref) {
+		ref.isSave = true
+		setTimeout(()=>{
+			ref.isSave = false
+			ElMessage.success(`${tableName} 保存列配置成功`)
+		},1000)
 	}
 }

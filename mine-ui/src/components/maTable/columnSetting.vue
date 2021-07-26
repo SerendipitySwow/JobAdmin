@@ -63,7 +63,7 @@
 			}
 		},
 		mounted() {
-			this.usercolumn.length>0 && this.rowDrop()
+			this.usercolumn.length > 0 && this.rowDrop()
 		},
 		methods: {
 			rowDrop(){
@@ -91,7 +91,6 @@
 </script>
 
 <style scoped>
-	.setting-column {}
 
 	.setting-column__title {border-bottom: 1px solid #EBEEF5;padding-bottom:15px;}
 	.setting-column__title span {display: inline-block;font-weight: bold;color: #909399;font-size: 12px;}

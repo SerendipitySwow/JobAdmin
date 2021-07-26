@@ -7,9 +7,7 @@
 		</div>
 		<el-popover title="新建过滤器" :width="550" trigger="manual" v-model:visible="isadd">
 			<template #reference>
-				<el-tooltip class="item" effect="dark" content="创建过滤器" placement="left">
-					<el-button class="button-new-tag" size="small" type="primary" @click="openAdd" icon="el-icon-zoom-in" />
-				</el-tooltip>
+				<el-button class="button-new-tag" size="small" type="primary" @click="openAdd" icon="el-icon-zoom-in"></el-button>
 			</template>
 			<el-form ref="ruleForm" :model="addFilterForm" :rules="addFilterRules" label-width="80px" style="padding-top:10px;">
 				<el-form-item label="字段" prop="field">
@@ -40,6 +38,7 @@
 				</el-form-item>
 			</el-form>
 		</el-popover>
+
 
 	</div>
 </template>
