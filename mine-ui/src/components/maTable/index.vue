@@ -1,7 +1,19 @@
 <template>
 	<div class="scTable" ref="scTableMain" v-loading="loading">
 		<div class="scTable-table">
-			<el-table :data="tableData" :row-key="rowKey" :key="toggleIndex" ref="scTable" :height="tableHeight" :stripe="stripe" :highlight-current-row="highlightCurrentRow"  @selection-change="selectionChange" @current-change="currentChange" @sort-change="sortChange" @filter-change="filterChange">
+			<el-table
+				:data="tableData"
+				:row-key="rowKey"
+				:key="toggleIndex"
+				ref="scTable"
+				:height="tableHeight"
+				:stripe="stripe"
+				:highlight-current-row="highlightCurrentRow"
+				@selection-change="selectionChange"
+				@current-change="currentChange"
+				@sort-change="sortChange"
+				@filter-change="filterChange"
+			>
 				<slot></slot>
 				<template v-for="(item, index) in userColumn" :key="index">
 					<el-table-column v-if="!item.hide" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :filters="item.filters" :filter-method="remoteFilter||!item.filters?null:filterHandler">
@@ -255,4 +267,10 @@
 	.scTable-table {flex:1;}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
+	/deep/ .el-table__header > .has-gutter tr{
+		background-color: #f8fafe!important; color: #5a657c;
+	}
+	/deep/ .el-table tr, /deep/ .el-table th {
+		background: none;
+	}
 </style>

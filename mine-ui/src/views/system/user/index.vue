@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<el-aside width="240px" v-loading="showDeptloading">
+		<el-aside width="220px" v-loading="showDeptloading">
 			<el-container>
 				<el-header>
 					<el-input placeholder="输入关键字进行过滤" v-model="deptFilterText" clearable></el-input>
@@ -120,6 +120,21 @@
 							width="220"
 						></el-table-column>
 
+						<!-- <el-table-column
+							label="状态"
+							prop="status"
+							width="100"
+						>
+							<template #default="scope">
+								<el-switch
+									v-model="scope.row.status"
+									@change="handleStatus($event, scope.row)"
+									active-value="0"
+									inactive-value="1"
+								></el-switch>
+							</template>
+						</el-table-column> -->
+
 						<el-table-column
 							label="用户类型"
 							prop="user_type"
@@ -159,6 +174,14 @@
 											<el-dropdown-item
 												@click="table_edit(scope.row, scope.$index)"
 											>编辑</el-dropdown-item>
+
+											<el-dropdown-item 
+												@click="table_edit(scope.row, scope.$index)"
+											>设置首页</el-dropdown-item>
+
+											<el-dropdown-item 
+												@click="table_edit(scope.row, scope.$index)"
+											>初始化密码</el-dropdown-item>
 
 											<el-dropdown-item divided>
 												<el-popconfirm
@@ -295,7 +318,7 @@
 			//加载树数据
 			async getDept(){
 				await this.$API.dept.tree().then(res => {
-					res.data.unshift({id: '', label: '所有'})
+					res.data.unshift({id: undefined, label: '所有'})
 					this.dept = res.data
 					this.showDeptloading = false
 				})
@@ -327,6 +350,28 @@
 			// 切换数据类型回调
 			switchData(type) {
 				console.log(type)
+			},
+
+			// 用户状态更改
+			handleStatus (val, row) {
+				console.log(val)
+				const status = row.status === '0' ? '0' : '1'
+				const text = row.status === '0' ? '启用' : '停用'
+				this.$confirm(`确认要${text} ${row.username} 用户吗？`, '提示', {
+					type: 'warning',
+					confirmButtonText: '确定',
+					cancelButtonText: '取消'
+				}).then(() => {
+					this.$API.user.changeStatus({ id: row.id, status }).then(() => {
+						this.$message.success(text + '成功')
+					})
+				}).catch(() => {
+					row.status = row.status === '0' ? '1' : '0'
+				})
+			},
+
+			resetSearch() {
+
 			},
 
 			//本地更新数据
