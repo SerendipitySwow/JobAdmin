@@ -110,7 +110,8 @@
 				loading: false,
 				tableHeight:'100%',
 				tableParams: this.params,
-				userColumn: this.column
+				userColumn: this.column,
+				isRecycle: false
 			}
 		},
 		created() {
@@ -267,19 +268,24 @@
 	.scTable-table {flex:1;}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
-	/deep/ .el-table__header > thead tr{
+
+	:deep(.el-table__header > thead tr){
 		background-color: #f8fafe!important; color: #5a657c;
 	}
-	/deep/ .el-table tr, /deep/ .el-table th {
+
+	:deep(.el-table tr), :deep(.el-table th) {
 		background: none;
 	}
-	/deep/ .el-table__header > thead th:last-child {
+
+	:deep(.el-table__header > thead th:last-child) {
 		background-color: #f8fafe!important; color: #5a657c;
 	}
-	/deep/ .el-table__fixed-body-wrapper {
+
+	:deep(.el-table__fixed-body-wrapper) {
 		background:#fff;
 	}
-	/deep/ .el-table th.is-sortable:hover {
+
+	:deep(.el-table th.is-sortable:hover) {
 		background-color: #eceff7;
 	}
 </style>

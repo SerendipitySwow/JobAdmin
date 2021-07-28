@@ -27,6 +27,7 @@
 						<el-button
 							icon="el-icon-plus"
 							v-auth="['system:user:save']"
+							type="primary"
 							@click="add"
 						>新增</el-button>
 
@@ -120,20 +121,21 @@
 							width="220"
 						></el-table-column>
 
-						<!-- <el-table-column
+						<el-table-column
 							label="状态"
 							prop="status"
 							width="100"
 						>
 							<template #default="scope">
 								<el-switch
+									v-if="scope.row.status"
 									v-model="scope.row.status"
 									@change="handleStatus($event, scope.row)"
 									active-value="0"
 									inactive-value="1"
 								></el-switch>
 							</template>
-						</el-table-column> -->
+						</el-table-column>
 
 						<el-table-column
 							label="用户类型"
@@ -248,6 +250,7 @@
         			minDate: undefined,
 					status: undefined
 				},
+				isRecycle: false,
 			}
 		},
 		watch: {
@@ -344,17 +347,16 @@
 
 			//搜索
 			handlerSearch(){
-
+				this.$refs.table.upData(this.queryParams)
 			},
 
 			// 切换数据类型回调
-			switchData(type) {
-				console.log(type)
+			switchData(isRecycle) {
+				this.isRecycle = isRecycle
 			},
 
 			// 用户状态更改
 			handleStatus (val, row) {
-				console.log(val)
 				const status = row.status === '0' ? '0' : '1'
 				const text = row.status === '0' ? '启用' : '停用'
 				this.$confirm(`确认要${text} ${row.username} 用户吗？`, '提示', {
