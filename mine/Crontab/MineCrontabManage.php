@@ -71,7 +71,7 @@ class MineCrontabManage
 
         if ($data === false) {
             $data = $this->crontabService->getList([
-                'select' => 'name,type,target,rule,parameter,fail_policy',
+                'select' => 'name,type,target,rule,parameter',
                 'status' => '0',
             ]);
             $this->redis->set('MineAdmin:crontab', serialize($data));
@@ -89,7 +89,6 @@ class MineCrontabManage
             $crontab->setCallback($item['target']);
             $crontab->setType($item['type']);
             $crontab->setEnable(true);
-            $crontab->setFailPolicy($item['fail_policy']);
             $crontab->setName($item['name']);
             $crontab->setParameter($item['parameter'] ?: '');
             $crontab->setRule($item['rule']);

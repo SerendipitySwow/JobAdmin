@@ -98,7 +98,7 @@
 					>
 						<el-table-column type="selection" width="50"></el-table-column>
 
-						<el-table-column label="头像" width="80">
+						<el-table-column label="头像" width="60">
 							<template #default="scope">
 								<el-avatar :src="scope.row.avatar" size="small"></el-avatar>
 							</template>
@@ -108,11 +108,13 @@
 							label="登录账号"
 							prop="username"
 							sortable='custom'
+							width="130"
 						></el-table-column>
 
 						<el-table-column
 							label="昵称"
 							prop="nickname"
+							width="120"
 						></el-table-column>
 
 						<el-table-column
@@ -140,6 +142,7 @@
 						<el-table-column
 							label="用户类型"
 							prop="user_type"
+							width="80"
 						>
 							<template #default="scope">
 								{{ scope.row.user_type === '100' ? '系统用户' : '其他类型' }}
