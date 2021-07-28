@@ -267,10 +267,19 @@
 	.scTable-table {flex:1;}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
-	/deep/ .el-table__header > .has-gutter tr{
+	/deep/ .el-table__header > thead tr{
 		background-color: #f8fafe!important; color: #5a657c;
 	}
 	/deep/ .el-table tr, /deep/ .el-table th {
 		background: none;
+	}
+	/deep/ .el-table__header > thead th:last-child {
+		background-color: #f8fafe!important; color: #5a657c;
+	}
+	/deep/ .el-table__fixed-body-wrapper {
+		background:#fff;
+	}
+	/deep/ .el-table th.is-sortable:hover {
+		background-color: #eceff7;
 	}
 </style>
