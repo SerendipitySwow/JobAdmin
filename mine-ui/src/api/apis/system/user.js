@@ -18,7 +18,7 @@ export default {
      * 从回收站获取用户
      * @returns
      */
-    getPageListByRecycle (params = {}) {
+    getRecyclePageList (params = {}) {
         return request({
             url: 'system/user/recycle',
             method: 'get',

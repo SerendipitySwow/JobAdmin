@@ -60,15 +60,16 @@
 									</el-button>
 								</template>
 								<el-form label-width="80px">
-									<el-form-item label="状态" class="ma-inline-form-item" prop="status">
-										<el-select size="small" v-model="queryParams.status" placeholder="用户状态">
+									<el-form-item label="状态" prop="status">
+										<el-select size="small" v-model="queryParams.status" clearable placeholder="用户状态">
 											<el-option label="启用" value="0">启用</el-option>
 											<el-option label="停用" value="1">停用</el-option>
 										</el-select>
 									</el-form-item>
 
-									<el-form-item label="创建时间" class="ma-inline-form-item">
+									<el-form-item label="创建时间">
 										<el-date-picker
+											clearable
 											size="small"
 											v-model="dateRange"
 											type="daterange"
@@ -263,7 +264,7 @@
 				dept: [],
 				api: {
 					list: this.$API.user.getPageList,
-					recycleList: this.$API.user.getPageListByRecycle,
+					recycleList: this.$API.user.getRecyclePageList,
 				},
 				selection: [],
 				queryParams: {
@@ -305,18 +306,6 @@
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('show').setData(row)
 				})
-			},
-			//删除
-			async table_del(row, index){
-				var reqData = {id: row.id}
-				var res = await this.$API.user.del.post(reqData);
-				if(res.code == 200){
-					//这里选择刷新整个表格 OR 插入/编辑现有表格数据
-					this.$refs.table.tableData.splice(index, 1);
-					this.$message.success("删除成功")
-				}else{
-					this.$alert(res.message, "提示", {type: 'error'})
-				}
 			},
 			//批量删除
 			async batchDel(){
