@@ -164,7 +164,7 @@
 								<el-button
 									type="text"
 									size="small"
-									@click="tableShow(scope.row, scope.$index)"
+									@click="show(scope.row, scope.$index)"
 								>查看</el-button>
 
 								<el-dropdown v-if="scope.row.username !== 'superAdmin'">
@@ -179,7 +179,7 @@
 										<el-dropdown-menu>
 
 											<el-dropdown-item
-												@click="tableEdit(scope.row, scope.$index)"
+												@click="edit(scope.row, scope.$index)"
 												v-auth="['system:user:update']"
 											>编辑</el-dropdown-item>
 
@@ -294,14 +294,14 @@
 				})
 			},
 			//编辑
-			tableEdit(row){
+			edit(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('edit').setData(row)
 				})
 			},
 			//查看
-			tableShow(row){
+			show(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('show').setData(row)

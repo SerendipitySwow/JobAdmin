@@ -180,13 +180,13 @@ class RoleController extends MineController
 
     /**
      * 更改角色状态
-     * @PutMapping("changeRoleStatus")
+     * @PutMapping("changeStatus")
      * @param SystemRoleStatusRequest $request
      * @return ResponseInterface
-     * @Permission("system:role:changeRoleStatus")
+     * @Permission("system:role:changeStatus")
      * @OperationLog
      */
-    public function changeRoleStatus(SystemRoleStatusRequest $request): ResponseInterface
+    public function changeStatus(SystemRoleStatusRequest $request): ResponseInterface
     {
         $id = $request->input('id');
         $status = $request->input('status');

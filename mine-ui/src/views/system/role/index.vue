@@ -5,7 +5,7 @@
 
 				<el-button
 					icon="el-icon-plus"
-					v-auth="['system:post:save']"
+					v-auth="['system:role:save']"
 					type="primary"
 					@click="add"
 				>新增</el-button>
@@ -14,7 +14,7 @@
 					type="danger"
 					plain
 					icon="el-icon-delete"
-					v-auth="['system:post:delete']"
+					v-auth="['system:role:delete']"
 					:disabled="selection.length==0"
 					@click="batchDel"
 				>删除</el-button>
@@ -22,7 +22,7 @@
 			</div>
 			<div class="right-panel">
 				<div class="right-panel-search">
-					<el-input v-model="queryParams.name" placeholder="岗位名称" clearable></el-input>
+					<el-input v-model="queryParams.name" placeholder="搜索角色名" clearable></el-input>
 
 					<el-tooltip class="item" effect="dark" content="搜索" placement="top">
 						<el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -39,13 +39,13 @@
 							</el-button>
 						</template>
 						<el-form label-width="80px">
-
+							
 							<el-form-item label="标识" prop="code">
-								<el-input v-model="queryParams.code" placeholder="岗位标识" clearable></el-input>
+								<el-input v-model="queryParams.code" placeholder="角色标识" clearable></el-input>
 							</el-form-item>
 
 							<el-form-item label="状态" prop="status">
-								<el-select size="small" v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
+								<el-select size="small" v-model="queryParams.status" clearable placeholder="状态">
 									<el-option label="启用" value="0">启用</el-option>
 									<el-option label="停用" value="1">停用</el-option>
 								</el-select>
@@ -73,7 +73,6 @@
 			<maTable
 				ref="table"
 				:api="api"
-				:column="column"
 				:showRecycle="true"
 				@selection-change="selectionChange"
 				@switch-data="switchData"
@@ -84,14 +83,14 @@
 				<el-table-column type="selection" width="50"></el-table-column>
 				
 				<el-table-column
-					label="岗位名称"
+					label="角色名称"
 					prop="name"
 					sortable='custom'
 					width="260"
 				></el-table-column>
 
 				<el-table-column
-					label="岗位标识代码"
+					label="角色标识代码"
 					prop="code"
 					width="220"
 				></el-table-column>
@@ -99,7 +98,6 @@
 				<el-table-column
 					label="排序"
 					prop="sort"
-					sortable='custom'
 					width="180"
 				></el-table-column>
 
@@ -133,16 +131,45 @@
 						<el-button
 							type="text"
 							size="small"
-							@click="tableEdit(scope.row, scope.$index)"
-							v-auth="['system:post:update']"
-						>编辑</el-button>
+							@click="show(scope.row, scope.$index)"
+						>查看</el-button>
 
-						<el-button
-							type="text"
-							size="small"
-							@click="deletes(scope.row.id)"
-							v-auth="['system:post:delete']"
-						>删除</el-button>
+						<el-dropdown v-if="scope.row.code !== 'superAdmin'">
+
+							<el-button
+								type="text" size="small"
+							>
+								更多<i class="el-icon-arrow-down el-icon--right"></i>
+							</el-button>
+
+							<template #dropdown>
+								<el-dropdown-menu>
+
+									<el-dropdown-item
+										@click="edit(scope.row, scope.$index)"
+										v-auth="['system:role:update']"
+									>编辑</el-dropdown-item>
+
+									<el-dropdown-item 
+										@click="setHomepage(scope.row)"
+										v-auth="['system:role:menuPermission']"
+									>菜单权限</el-dropdown-item>
+
+									<el-dropdown-item 
+										@click="initUserPassword(scope.row.id)"
+										v-auth="['system:role:dataPermission']"
+									>数据权限</el-dropdown-item>
+
+									<el-dropdown-item
+										@click="deletes(scope.row.id)"
+										divided
+										v-auth="['system:role:delete']"
+									>删除</el-dropdown-item>
+
+								</el-dropdown-menu>
+							</template>
+
+						</el-dropdown>
 						
 					</template>
 				</el-table-column>
@@ -154,14 +181,14 @@
 						<el-button
 							type="text"
 							size="small"
-							v-auth="['system:post:recovery']"
+							v-auth="['system:role:recovery']"
 							@click="recovery(scope.row.id)"
 						>恢复</el-button>
 
 						<el-button
 							type="text"
 							size="small"
-							v-auth="['system:post:realDelete']"
+							v-auth="['system:role:realDelete']"
 							@click="deletes(scope.row.id)"
 						>删除</el-button>
 
@@ -180,7 +207,7 @@
 	import saveDialog from './save'
 
 	export default {
-		name: 'system:post',
+		name: 'system:role',
 		components: {
 			saveDialog
 		},
@@ -190,19 +217,21 @@
 				dialog: {
 					save: false
 				},
-				column: [],
 				povpoerShow: false,
 				dateRange:'',
+				showDeptloading: false,
+				deptFilterText: '',
+				dept: [],
 				api: {
-					list: this.$API.post.getPageList,
-					recycleList: this.$API.post.getRecyclePageList,
+					list: this.$API.role.getPageList,
+					recycleList: this.$API.role.getRecyclePageList,
 				},
 				selection: [],
 				queryParams: {
-					name: undefined,
-					code: undefined,
+					rolename: undefined,
+					dept_id: undefined,
 					maxDate: undefined,
-        			minDate: undefined,
+        	minDate: undefined,
 					status: undefined
 				},
 				isRecycle: false,
@@ -217,14 +246,14 @@
 				})
 			},
 			//编辑
-			tableEdit(row){
+			edit(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('edit').setData(row)
 				})
 			},
 			//查看
-			tableShow(row){
+			show(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('show').setData(row)
@@ -239,9 +268,9 @@
 					let ids = []
 					this.selection.map(item => ids.push(item.id))
 					if (this.isRecycle) {
-						this.$API.post.realDeletes(ids.join(',')).then()
+						this.$API.role.realDeletes(ids.join(',')).then()
 					} else {
-						this.$API.post.deletes(ids.join(',')).then()
+						this.$API.role.deletes(ids.join(',')).then()
 					}
 					this.$refs.table.upData(this.queryParams)
 					loading.close();
@@ -256,9 +285,9 @@
 				}).then(() => {
 					const loading = this.$loading();
 					if (this.isRecycle) {
-						this.$API.post.realDeletes(id).then()
+						this.$API.role.realDeletes(id).then()
 					} else {
-						this.$API.post.deletes(id).then()
+						this.$API.role.deletes(id).then()
 					}
 					this.$refs.table.upData(this.queryParams)
 					loading.close();
@@ -268,7 +297,7 @@
 
 			// 恢复数据
 			async recovery (id) {
-				await this.$API.post.recoverys(id).then(res => {
+				await this.$API.role.recoverys(id).then(res => {
 					this.$message.success(res.message)
 					this.$refs.table.upData(this.queryParams)
 				})
@@ -297,16 +326,16 @@
 				this.isRecycle = isRecycle
 			},
 
-			// 状态更改
+			// 角色状态更改
 			handleStatus (val, row) {
 				const status = row.status === '0' ? '0' : '1'
 				const text = row.status === '0' ? '启用' : '停用'
-				this.$confirm(`确认要${text} ${row.name} 岗位吗？`, '提示', {
+				this.$confirm(`确认要${text} ${row.name} 角色吗？`, '提示', {
 					type: 'warning',
 					confirmButtonText: '确定',
 					cancelButtonText: '取消'
 				}).then(() => {
-					this.$API.post.changeStatus({ id: row.id, status }).then(() => {
+					this.$API.role.changeStatus({ id: row.id, status }).then(() => {
 						this.$message.success(text + '成功')
 					})
 				}).catch(() => {
@@ -316,10 +345,10 @@
 
 			resetSearch() {
 				this.queryParams = {
-					name: undefined,
-					code: undefined,
+					rolename: undefined,
+					dept_id: undefined,
 					maxDate: undefined,
-        			minDate: undefined,
+        	minDate: undefined,
 					status: undefined
 				}
 				this.$refs.table.upData(this.queryParams)
