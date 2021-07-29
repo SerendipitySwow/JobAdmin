@@ -1,41 +1,70 @@
 <template>
-	<el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
+	<el-dialog :title="titleMap[mode]" v-model="visible" :width="550" destroy-on-close @closed="$emit('closed')">
 		<el-form :model="form" :rules="rules" :disabled="mode=='show'" ref="dialogForm" label-width="100px" label-position="top">
+
+			<el-row :gutter="20">
+				<el-col :span="12">
+					<el-form-item label="用户名" prop="username">
+						<el-input v-model="form.username" placeholder="用于登录系统" clearable />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="部门" prop="dept_id">
+						<el-cascader v-model="form.dept_id" clearable style="width:100%" placeholder="请选择部门" :options="deptTree" :props="{ checkStrictly: true }" />
+					</el-form-item>
+				</el-col>
+			</el-row>
+
+			<el-row :gutter="20">
+				<el-col :span="12">
+					<el-form-item label="登录密码" prop="password" >
+						<el-input type="password" v-model="form.password" v-if="mode=='add'" clearable show-password />
+						<el-input v-else placeholder="密码不可修改" :disabled="true" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="昵称" prop="nickname">
+						<el-input v-model="form.nickname" placeholder="用户昵称" clearable />
+					</el-form-item>
+				</el-col>
+			</el-row>
+
+			<el-row :gutter="20">
+				<el-col :span="12">
+					<el-form-item label="角色" prop="role_ids">
+						<el-select v-model="form.role_ids" clearable style="width:100%" multiple placeholder="请选择用户角色">
+              <el-option v-for="item in roleData" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="邮箱" prop="email">
+						<el-input v-model="form.email" placeholder="请输入电子邮箱" clearable />
+					</el-form-item>
+				</el-col>
+			</el-row>
+
+			<el-row :gutter="20">
+				<el-col :span="12">
+					<el-form-item label="岗位" prop="post_ids">
+						<el-select v-model="form.post_ids" clearable style="width:100%" multiple placeholder="用户岗位">
+              <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
+            </el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="手机 " prop="phone">
+						<el-input v-model="form.phone" placeholder="请输入手机" />
+					</el-form-item>
+				</el-col>
+			</el-row>
+
 			<el-row :gutter="20">
 				<el-col :span="24">
-					<el-form-item label="头像" prop="avatar">
-						<sc-upload v-model="form.avatar" title="上传头像"></sc-upload>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row :gutter="20">
-				<el-col :span="12">
-					<el-form-item label="登录账号" prop="userName">
-						<el-input v-model="form.userName" placeholder="用于登录系统" clearable></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="姓名" prop="name">
-						<el-input v-model="form.name" placeholder="请输入完整的真实姓名" clearable></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row :gutter="20" v-if="mode=='add'">
-				<el-col :span="12">
-					<el-form-item label="登录密码" prop="password">
-						<el-input type="password" v-model="form.password" clearable show-password></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="确认密码" prop="password2">
-						<el-input type="password" v-model="form.password2" clearable show-password></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row :gutter="20">
-				<el-col :span="24">
-					<el-form-item label="所属角色" prop="group">
-						<el-cascader v-model="form.group" :options="groups" :props="groupsProps" :show-all-levels="false" clearable style="width: 100%;"></el-cascader>
+					<el-form-item label="备注" prop="remark">
+						<el-input type="textarea" :rows="3" placeholder="用户备注信息" v-model="form.remark" maxlength="255" show-word-limit />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -58,101 +87,103 @@
 					edit: '编辑用户',
 					show: '查看'
 				},
+				// 用户选择器数据
+      	deptTree: [],
+				// 岗位列表
+				postData: [],
+				// 角色列表
+				roleData: [],
 				visible: false,
 				isSaveing: false,
 				//表单数据
 				form: {
-					id:"",
-					userName: "",
-					avatar: "",
-					name: "",
-					group: ""
+					id: null,
+					username: '',
+					nickname: '',
+					phone: '',
+					password: '123456',
+					dept_id: null,
+					role_ids: '',
+					post_ids: '',
+					email: '',
+					status: '0',
+					remark: ''
 				},
 				//验证规则
 				rules: {
-					avatar:[
-						{required: true, message: '请上传头像'}
-					],
-					userName: [
-						{required: true, message: '请输入登录账号'}
-					],
-					name: [
-						{required: true, message: '请输入真实姓名'}
-					],
-					password: [
-						{required: true, message: '请输入登录密码'},
-						{validator: (rule, value, callback) => {
-							if (this.form.password2 !== '') {
-								this.$refs.dialogForm.validateField('password2');
-							}
-							callback();
-						}}
-					],
-					password2: [
-						{required: true, message: '请再次输入密码'},
-						{validator: (rule, value, callback) => {
-							if (value !== this.form.password) {
-								callback(new Error('两次输入密码不一致!'));
-							}else{
-								callback();
-							}
-						}}
-					],
-					group: [
-						{required: true, message: '请选择所属角色'}
-					]
-				},
-				//所需数据选项
-				groups: [],
-				groupsProps: {
-					value: "id",
-					multiple: true,
-					checkStrictly: true
+					avatar:[{ required: true, message: '请上传头像' }],
+					username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+					nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
+					password: [{ required: true, message: '请输入用户密码', trigger: 'blur' }],
+					role_ids: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+					email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+					phone: [{ pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: ['blur'] }]
 				}
 			}
 		},
 		mounted() {
-			this.getGroup()
+			this.initData()
 		},
 		methods: {
+
 			//显示
 			open(mode='add'){
 				this.mode = mode;
 				this.visible = true;
 				return this
 			},
-			//加载树数据
-			async getGroup(){
-				// var res = await this.$API.role.select.get();
-				this.groups = [];
-			},
+
 			//表单提交方法
 			submit(){
 				this.$refs.dialogForm.validate(async (valid) => {
 					if (valid) {
 						this.isSaveing = true;
-						var res = await this.$API.user.save.post(this.form);
+						let res = null
+						if (this.mode == 'add') {
+							res = await this.$API.user.save(this.form)
+						} else {
+							res = await this.$API.user.update(this.form.id, this.form)
+						}
 						this.isSaveing = false;
-						if(res.code == 200){
+						if(res.success){
 							this.$emit('success', this.form, this.mode)
 							this.visible = false;
-							this.$message.success("操作成功")
+							this.$message.success(res.message)
 						}else{
-							this.$alert(res.message, "提示", {type: 'error'})
+							this.$alert(res.message, "提示", { type: 'error' })
 						}
 					}else{
 						return false;
 					}
 				})
+
 			},
+
+			// 请求部门、角色、岗位数据
+    	async initData () {
+				await this.$API.dept.tree().then(res => {
+					this.deptTree = res.data
+				})
+				await this.$API.role.getList().then(res => {
+					this.roleData = res.data
+				})
+				await this.$API.post.getList().then(res => {
+					this.postData = res.data
+				})
+    },
+
 			//表单注入数据
 			setData(data){
 				this.form.id = data.id
-				this.form.userName = data.userName
-				this.form.avatar = data.avatar
-				this.form.name = data.name
-				this.form.group = data.group
-
+				this.form.username = data.username
+				this.form.nickname = data.nickname
+				this.form.phone = data.phone
+				this.form.dept_id = data.dept_id
+				this.form.post_ids = data.post_ids
+				this.form.role_ids = data.role_ids
+				this.form.email = data.email
+				this.form.status = data.status
+				this.form.remark = data.remark
 				//可以和上面一样单个注入，也可以像下面一样直接合并进去
 				//Object.assign(this.form, data)
 			}

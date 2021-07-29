@@ -4,7 +4,7 @@
  */
 
 export default (error, vm)=>{
-	var errorMap = {
+	let errorMap = {
 		InternalError: "Javascript引擎内部错误",
 		ReferenceError: "未找到对象",
 		TypeError: "使用了错误的类型或对象",
@@ -13,16 +13,18 @@ export default (error, vm)=>{
 		EvalError: "错误的使用了Eval",
 		URIError: "URI错误"
 	}
-	var errorName = errorMap[error.name] || "未知错误"
+	let errorName = errorMap[error.name] || "未知错误"
 
-	console.warn(`[MineAdmin error]: ${error}`);
-	console.error(error);
-	//throw error;
+	if (errorName !== '未知错误') {
+		console.warn(`[MineAdmin error]: ${error}`);
+		console.error(error);
+		//throw error;
 
-	vm.$nextTick(() => {
-		vm.$notify.error({
-			title: errorName,
-			message: error
-		});
-	})
+		vm.$nextTick(() => {
+			vm.$notify.error({
+				title: errorName,
+				message: error
+			});
+		})
+	}
 }

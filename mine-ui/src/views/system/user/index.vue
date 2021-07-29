@@ -37,13 +37,13 @@
 							icon="el-icon-delete"
 							v-auth="['system:user:delete']"
 							:disabled="selection.length==0"
-							@click="batch_del"
+							@click="batchDel"
 						>删除</el-button>
 
 					</div>
 					<div class="right-panel">
 						<div class="right-panel-search">
-							<el-input v-model="queryParams.name" placeholder="搜索用户名" clearable></el-input>
+							<el-input v-model="queryParams.username" placeholder="搜索用户名" clearable></el-input>
 
 							<el-tooltip class="item" effect="dark" content="搜索" placement="top">
 								<el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -156,16 +156,17 @@
 							sortable='custom'
 						></el-table-column>
 
-						<el-table-column label="操作" fixed="right" align="right" width="130">
+						<!-- 正常数据操作按钮 -->
+						<el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
 							<template #default="scope">
 
 								<el-button
 									type="text"
 									size="small"
-									@click="table_show(scope.row, scope.$index)"
+									@click="tableShow(scope.row, scope.$index)"
 								>查看</el-button>
 
-								<el-dropdown>
+								<el-dropdown v-if="scope.row.username !== 'superAdmin'">
 
 									<el-button
 										type="text" size="small"
@@ -177,33 +178,52 @@
 										<el-dropdown-menu>
 
 											<el-dropdown-item
-												@click="table_edit(scope.row, scope.$index)"
+												@click="tableEdit(scope.row, scope.$index)"
+												v-auth="['system:user:update']"
 											>编辑</el-dropdown-item>
 
 											<el-dropdown-item 
-												@click="table_edit(scope.row, scope.$index)"
+												@click="setHomepage(scope.row)"
+												v-auth="['system:user:dashboard']"
 											>设置首页</el-dropdown-item>
 
 											<el-dropdown-item 
-												@click="table_edit(scope.row, scope.$index)"
+												@click="initUserPassword(scope.row.id)"
+												v-auth="['system:user:initUserPassword']"
 											>初始化密码</el-dropdown-item>
 
-											<el-dropdown-item divided>
-												<el-popconfirm
-													title="确定删除吗？"
-													@confirm="table_del(scope.row, scope.$index)"
-												>
-													<template #reference>
-														<el-button type="text" size="small">删除</el-button>
-													</template>
-												</el-popconfirm>
-											</el-dropdown-item>
+											<el-dropdown-item
+												@click="deletes(scope.row.id)"
+												divided
+												v-auth="['system:user:delete']"
+											>删除</el-dropdown-item>
 
 										</el-dropdown-menu>
 									</template>
 
 								</el-dropdown>
 								
+							</template>
+						</el-table-column>
+
+						<!-- 回收站操作按钮 -->
+						<el-table-column label="操作" fixed="right" align="right" width="130" v-else>
+							<template #default="scope">
+
+								<el-button
+									type="text"
+									size="small"
+									v-auth="['system:user:recovery']"
+									@click="recovery(scope.row.id)"
+								>恢复</el-button>
+
+								<el-button
+									type="text"
+									size="small"
+									v-auth="['system:user:realDelete']"
+									@click="deletes(scope.row.id)"
+								>删除</el-button>
+
 							</template>
 						</el-table-column>
 
@@ -250,7 +270,7 @@
 					username: undefined,
 					dept_id: undefined,
 					maxDate: undefined,
-        			minDate: undefined,
+        	minDate: undefined,
 					status: undefined
 				},
 				isRecycle: false,
@@ -273,14 +293,14 @@
 				})
 			},
 			//编辑
-			table_edit(row){
+			tableEdit(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('edit').setData(row)
 				})
 			},
 			//查看
-			table_show(row){
+			tableShow(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open('show').setData(row)
@@ -299,24 +319,49 @@
 				}
 			},
 			//批量删除
-			async batch_del(){
-				this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
+			async batchDel(){
+				await this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
 					type: 'warning'
 				}).then(() => {
 					const loading = this.$loading();
-					this.selection.forEach(item => {
-						this.$refs.table.tableData.forEach((itemI, indexI) => {
-							if (item.id === itemI.id) {
-								this.$refs.table.tableData.splice(indexI, 1)
-							}
-						})
-					})
+					let ids = []
+					this.selection.map(item => ids.push(item.id))
+					if (this.isRecycle) {
+						this.$API.user.realDeletes(ids.join(',')).then()
+					} else {
+						this.$API.user.deletes(ids.join(',')).then()
+					}
+					this.$refs.table.upData(this.queryParams)
 					loading.close();
 					this.$message.success("操作成功")
-				}).catch(() => {
-
 				})
 			},
+
+			// 单个删除
+			async deletes(id) {
+				await this.$confirm(`确定删除该用户吗？`, '提示', {
+					type: 'warning'
+				}).then(() => {
+					const loading = this.$loading();
+					if (this.isRecycle) {
+						this.$API.user.realDeletes(id).then()
+					} else {
+						this.$API.user.deletes(id).then()
+					}
+					this.$refs.table.upData(this.queryParams)
+					loading.close();
+					this.$message.success("操作成功")
+				}).catch(()=>{})
+			},
+
+			// 恢复数据
+			async recovery (id) {
+				await this.$API.user.recoverys(id).then(res => {
+					this.$message.success(res.message)
+					this.$refs.table.upData(this.queryParams)
+				})
+			},
+
 			//表格选择后回调事件
 			selectionChange(selection){
 				this.selection = selection;
@@ -324,7 +369,7 @@
 			//加载树数据
 			async getDept(){
 				await this.$API.dept.tree().then(res => {
-					res.data.unshift({id: undefined, label: '所有'})
+					res.data.unshift({id: undefined, label: '所有部门'})
 					this.dept = res.data
 					this.showDeptloading = false
 				})
@@ -336,8 +381,29 @@
 			},
 			//树点击事件
 			deptClick(data){
+				if (this.queryParams.dept_id == data.id) {
+					return
+				}
 				this.queryParams.dept_id = data.id
 				this.$refs.table.upData(this.queryParams)
+			},
+
+			// 初始化用户密码
+			initUserPassword (id) {
+				this.$confirm('确定要将用户密码设置为：123456', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$API.user.initUserPassword(id).then(() => {
+						this.$message.success('用户密码初始化成功')
+					})
+				})
+			},
+
+			// 设置用户首页
+			setHomepage(row) {
+				console.log(row)
 			},
 
 			// 选择时间事件
@@ -376,19 +442,19 @@
 			},
 
 			resetSearch() {
-
+				this.queryParams = {
+					username: undefined,
+					dept_id: undefined,
+					maxDate: undefined,
+        	minDate: undefined,
+					status: undefined
+				}
+				this.$refs.table.upData(this.queryParams)
 			},
 
 			//本地更新数据
-			handleSuccess(data, mode){
-				if(mode=='add'){
-					data.id = new Date().getTime()
-					this.$refs.table.tableData.unshift(data)
-				}else if(mode=='edit'){
-					this.$refs.table.tableData.filter(item => item.id===data.id ).forEach(item => {
-						Object.assign(item, data)
-					})
-				}
+			handleSuccess(){
+				this.$refs.table.upData(this.queryParams)
 			}
 		}
 	}
