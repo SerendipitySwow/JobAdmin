@@ -75,6 +75,7 @@
 											type="daterange"
 											range-separator="至"
 											@change="handleDateChange"
+											value-format="YYYY-MM-DD"
 											start-placeholder="开始日期"
 											end-placeholder="结束日期"
 										></el-date-picker>

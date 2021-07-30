@@ -120,9 +120,9 @@ export default {
    * 更改角色状态
    * @returns
    */
-  changeRoleStatus (params = {}) {
+   changeStatus (params = {}) {
     return request({
-      url: 'system/role/changeRoleStatus',
+      url: 'system/role/changeStatus',
       method: 'put',
       data: params
     })

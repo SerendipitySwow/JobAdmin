@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
-		<el-form :model="form" :rules="rules" ref="dialogForm" label-width="100px" label-position="left">
+		<el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
 			<el-form-item label="岗位名称" prop="name">
 				<el-input v-model="form.name" size="small" clearable placeholder="请输入岗位名称"></el-input>
 			</el-form-item>
@@ -13,7 +13,7 @@
 				<el-input-number v-model="form.sort" size="small" clearable :min="0" :max="999" label="排序"></el-input-number>
 			</el-form-item>
 
-			<el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
+			<el-form-item label="状态" prop="status">
 
 				<el-radio-group v-model="form.status">
 
@@ -113,6 +113,3 @@
 		}
 	}
 </script>
-
-<style>
-</style>

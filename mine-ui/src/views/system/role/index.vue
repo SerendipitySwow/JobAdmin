@@ -59,6 +59,7 @@
 									type="daterange"
 									range-separator="至"
 									@change="handleDateChange"
+									value-format="YYYY-MM-DD"
 									start-placeholder="开始日期"
 									end-placeholder="结束日期"
 								></el-date-picker>
@@ -228,10 +229,10 @@
 				},
 				selection: [],
 				queryParams: {
-					rolename: undefined,
-					dept_id: undefined,
+					name: undefined,
+					code: undefined,
 					maxDate: undefined,
-        	minDate: undefined,
+        			minDate: undefined,
 					status: undefined
 				},
 				isRecycle: false,
@@ -310,6 +311,7 @@
 
 			// 选择时间事件
 			handleDateChange (values) {
+				console.log(values[0])
 				if (values !== null) {
 					this.queryParams.minDate = values[0]
 					this.queryParams.maxDate = values[1]
@@ -345,10 +347,10 @@
 
 			resetSearch() {
 				this.queryParams = {
-					rolename: undefined,
-					dept_id: undefined,
+					name: undefined,
+					code: undefined,
 					maxDate: undefined,
-        	minDate: undefined,
+        			minDate: undefined,
 					status: undefined
 				}
 				this.$refs.table.upData(this.queryParams)
