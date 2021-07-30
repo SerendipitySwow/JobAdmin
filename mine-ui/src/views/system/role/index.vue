@@ -152,12 +152,12 @@
 									>编辑</el-dropdown-item>
 
 									<el-dropdown-item 
-										@click="setHomepage(scope.row)"
+										@click="$refs.menuDialog.open().setData(scope.row)"
 										v-auth="['system:role:menuPermission']"
 									>菜单权限</el-dropdown-item>
 
 									<el-dropdown-item 
-										@click="initUserPassword(scope.row.id)"
+										@click="$refs.dataDialog.open().setData(scope.row)"
 										v-auth="['system:role:dataPermission']"
 									>数据权限</el-dropdown-item>
 
@@ -200,17 +200,24 @@
 		</el-main>
 	</el-container>
 
-	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
+	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false" />
+
+	<menu-dialog ref="menuDialog" />
+	<data-dialog ref="dataDialog" @success="handleSuccess" />
 
 </template>
 
 <script>
 	import saveDialog from './save'
+	import menuDialog from './menuForm'
+	import dataDialog from './dataForm'
 
 	export default {
 		name: 'system:role',
 		components: {
-			saveDialog
+			saveDialog,
+			menuDialog,
+			dataDialog,
 		},
 
 		data() {
@@ -286,11 +293,14 @@
 				}).then(() => {
 					const loading = this.$loading();
 					if (this.isRecycle) {
-						this.$API.role.realDeletes(id).then()
+						this.$API.role.realDeletes(id).then(() => {
+							this.$refs.table.upData(this.queryParams)
+						})
 					} else {
-						this.$API.role.deletes(id).then()
+						this.$API.role.deletes(id).then(() => {
+							this.$refs.table.upData(this.queryParams)
+						})
 					}
-					this.$refs.table.upData(this.queryParams)
 					loading.close();
 					this.$message.success("操作成功")
 				}).catch(()=>{})

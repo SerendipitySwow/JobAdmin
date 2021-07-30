@@ -96,8 +96,8 @@ class SystemRoleMapper extends AbstractMapper
             $this->model::query()->where('id', $id)->update($data);
             if ($id != env('ADMIN_ROLE')) {
                 $role = $this->model::find($id);
-                $role->menus()->sync(array_unique($menuIds));
-                $role->depts()->sync($deptIds);
+                !empty($menuIds) && $role->menus()->sync(array_unique($menuIds));
+                !empty($deptIds) && $role->depts()->sync($deptIds);
             }
             Db::commit();
         } catch (\RuntimeException $e) {

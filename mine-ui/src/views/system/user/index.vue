@@ -334,11 +334,14 @@
 				}).then(() => {
 					const loading = this.$loading();
 					if (this.isRecycle) {
-						this.$API.user.realDeletes(id).then()
+						this.$API.user.realDeletes(id).then(() => {
+							this.$refs.table.upData(this.queryParams)
+						})
 					} else {
-						this.$API.user.deletes(id).then()
+						this.$API.user.deletes(id).then(() => {
+							this.$refs.table.upData(this.queryParams)
+						})
 					}
-					this.$refs.table.upData(this.queryParams)
 					loading.close();
 					this.$message.success("操作成功")
 				}).catch(()=>{})
