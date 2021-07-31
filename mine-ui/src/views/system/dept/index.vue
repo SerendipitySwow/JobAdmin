@@ -5,7 +5,7 @@
 
 				<el-button
 					icon="el-icon-plus"
-					v-auth="['system:post:save']"
+					v-auth="['system:dept:save']"
 					type="primary"
 					@click="add"
 				>新增</el-button>
@@ -14,7 +14,7 @@
 					type="danger"
 					plain
 					icon="el-icon-delete"
-					v-auth="['system:post:delete']"
+					v-auth="['system:dept:delete']"
 					:disabled="selection.length==0"
 					@click="batchDel"
 				>删除</el-button>
@@ -22,7 +22,7 @@
 			</div>
 			<div class="right-panel">
 				<div class="right-panel-search">
-					<el-input v-model="queryParams.name" placeholder="岗位名称" clearable></el-input>
+					<el-input v-model="queryParams.name" placeholder="部门名称" clearable></el-input>
 
 					<el-tooltip class="item" effect="dark" content="搜索" placement="top">
 						<el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -40,8 +40,8 @@
 						</template>
 						<el-form label-width="80px">
 
-							<el-form-item label="标识" prop="code">
-								<el-input v-model="queryParams.code" placeholder="岗位标识" clearable></el-input>
+							<el-form-item label="负责人" prop="code">
+								<el-input v-model="queryParams.code" placeholder="负责人" clearable></el-input>
 							</el-form-item>
 
 							<el-form-item label="状态" prop="status">
@@ -76,38 +76,45 @@
 				:api="api"
 				:column="column"
 				:showRecycle="true"
+				row-key="id"
+				:hidePagination="true"
 				@selection-change="selectionChange"
 				@switch-data="switchData"
 				stripe
 				remoteSort
-				remoteFilter
 			>
 				<el-table-column type="selection" width="50"></el-table-column>
 				
 				<el-table-column
-					label="岗位名称"
+					label="部门名称"
 					prop="name"
 					sortable='custom'
 					width="260"
 				></el-table-column>
+				
+				<el-table-column
+					label="负责人"
+					prop="leader"
+					width="160"
+				></el-table-column>
 
 				<el-table-column
-					label="岗位标识代码"
-					prop="code"
-					width="220"
+					label="电话"
+					prop="phone"
+					width="160"
 				></el-table-column>
 
 				<el-table-column
 					label="排序"
 					prop="sort"
 					sortable='custom'
-					width="180"
+					width="150"
 				></el-table-column>
 
 				<el-table-column
 					label="状态"
 					prop="status"
-					width="200"
+					width="150"
 				>
 					<template #default="scope">
 						<el-switch
@@ -134,15 +141,22 @@
 						<el-button
 							type="text"
 							size="small"
+							@click="tableShow(scope.row, scope.$index)"
+							v-auth="['system:dept:read']"
+						>查看</el-button>
+
+						<el-button
+							type="text"
+							size="small"
 							@click="tableEdit(scope.row, scope.$index)"
-							v-auth="['system:post:update']"
+							v-auth="['system:dept:update']"
 						>编辑</el-button>
 
 						<el-button
 							type="text"
 							size="small"
 							@click="deletes(scope.row.id)"
-							v-auth="['system:post:delete']"
+							v-auth="['system:dept:delete']"
 						>删除</el-button>
 						
 					</template>
@@ -155,14 +169,14 @@
 						<el-button
 							type="text"
 							size="small"
-							v-auth="['system:post:recovery']"
+							v-auth="['system:dept:recovery']"
 							@click="recovery(scope.row.id)"
 						>恢复</el-button>
 
 						<el-button
 							type="text"
 							size="small"
-							v-auth="['system:post:realDelete']"
+							v-auth="['system:dept:realDelete']"
 							@click="deletes(scope.row.id)"
 						>删除</el-button>
 
@@ -181,7 +195,7 @@
 	import saveDialog from './save'
 
 	export default {
-		name: 'system:post',
+		name: 'system:dept',
 		components: {
 			saveDialog
 		},
@@ -195,8 +209,8 @@
 				povpoerShow: false,
 				dateRange:'',
 				api: {
-					list: this.$API.post.getPageList,
-					recycleList: this.$API.post.getRecyclePageList,
+					list: this.$API.dept.getList,
+					recycleList: this.$API.dept.getRecycleList,
 				},
 				selection: [],
 				queryParams: {
@@ -240,9 +254,9 @@
 					let ids = []
 					this.selection.map(item => ids.push(item.id))
 					if (this.isRecycle) {
-						this.$API.post.realDeletes(ids.join(',')).then()
+						this.$API.dept.realDeletes(ids.join(',')).then()
 					} else {
-						this.$API.post.deletes(ids.join(',')).then()
+						this.$API.dept.deletes(ids.join(',')).then()
 					}
 					this.$refs.table.upData(this.queryParams)
 					loading.close();
@@ -257,9 +271,9 @@
 				}).then(() => {
 					const loading = this.$loading();
 					if (this.isRecycle) {
-						this.$API.post.realDeletes(id).then()
+						this.$API.dept.realDeletes(id).then()
 					} else {
-						this.$API.post.deletes(id).then()
+						this.$API.dept.deletes(id).then()
 					}
 					this.$refs.table.upData(this.queryParams)
 					loading.close();
@@ -269,7 +283,7 @@
 
 			// 恢复数据
 			async recovery (id) {
-				await this.$API.post.recoverys(id).then(res => {
+				await this.$API.dept.recoverys(id).then(res => {
 					this.$message.success(res.message)
 					this.$refs.table.upData(this.queryParams)
 				})
@@ -307,7 +321,7 @@
 					confirmButtonText: '确定',
 					cancelButtonText: '取消'
 				}).then(() => {
-					this.$API.post.changeStatus({ id: row.id, status }).then(() => {
+					this.$API.dept.changeStatus({ id: row.id, status }).then(() => {
 						this.$message.success(text + '成功')
 					})
 				}).catch(() => {

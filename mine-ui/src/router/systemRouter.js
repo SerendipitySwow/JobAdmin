@@ -25,6 +25,15 @@ const routes = [{
 						component: () => import(/* webpackChunkName: "home" */ '@/views/home'),
 					},
 					{
+						name: "system",
+						path: "/system",
+						meta: {
+							title: "系统设置",
+							icon: "el-icon-setting",
+						},
+						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/setting/index'),
+					},
+					{
 						name: "userCenter",
 						path: "/usercenter",
 						meta: {

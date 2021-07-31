@@ -1,6 +1,22 @@
 <template>
-	<el-dialog :title="titleMap[mode]" v-model="visible" :width="550" destroy-on-close @closed="$emit('closed')">
-		<el-form :model="form" :rules="rules" :disabled="mode=='show'" ref="dialogForm" label-width="100px" label-position="top">
+	<el-dialog
+		:title="titleMap[mode]"
+		v-model="visible" 
+		:width="550"
+		destroy-on-close
+		@closed="$emit('closed')"
+	>
+		<el-form
+			:model="form"
+			:rules="rules"
+			:disabled="mode=='show'"
+			ref="dialogForm"
+			label-width="100px"
+			label-position="top"
+			v-loading="loading"
+			element-loading-background="rgba(255, 255, 255, 0.8)"
+			element-loading-text="数据加载中..."
+		>
 
 			<el-row :gutter="20">
 				<el-col :span="12">
@@ -82,13 +98,14 @@
 		data() {
 			return {
 				mode: "add",
+				loading: false,
 				titleMap: {
 					add: '新增用户',
 					edit: '编辑用户',
 					show: '查看'
 				},
 				// 用户选择器数据
-      	deptTree: [],
+      			deptTree: [],
 				// 岗位列表
 				postData: [],
 				// 角色列表
@@ -160,7 +177,7 @@
 			},
 
 			// 请求部门、角色、岗位数据
-    	async initData () {
+    		async initData () {
 				await this.$API.dept.tree().then(res => {
 					this.deptTree = res.data
 				})
@@ -170,10 +187,11 @@
 				await this.$API.post.getList().then(res => {
 					this.postData = res.data
 				})
-    },
+    		},
 
 			//表单注入数据
-			setData(data){
+			async setData(data){
+				this.loading = true
 				this.form.id = data.id
 				this.form.username = data.username
 				this.form.nickname = data.nickname
@@ -184,6 +202,18 @@
 				this.form.email = data.email
 				this.form.status = data.status
 				this.form.remark = data.remark
+
+				await this.$API.user.read(data.id).then(res => {
+					this.form.role_ids = res.data.roleList.map(item => {
+						return item.id
+					})
+					this.form.post_ids = res.data.postList.map(item => {
+						return item.id
+					})
+				})
+
+				this.loading = false
+
 				//可以和上面一样单个注入，也可以像下面一样直接合并进去
 				//Object.assign(this.form, data)
 			}

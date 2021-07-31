@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="title" :visible.sync="showForm" :before-close="handleClose" width="800px">
+  <el-dialog
+    :title="title"
+    :visible.sync="showForm"
+    :before-close="handleClose"
+    width="800px"
+    >
     <el-form ref="form" :model="form" :rules="rules" label-width="90px">
       <el-row>
         <el-col :span="12">

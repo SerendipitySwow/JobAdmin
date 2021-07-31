@@ -70,10 +70,12 @@ class SystemDeptService extends AbstractService
 
         if ($pid === 0) {
             $data['level'] = $data['parent_id'] = '0';
-        } else {
+        } else if (is_array($pid)){
             array_unshift($pid, '0');
             $data['level'] = implode(',', $pid);
             $data['parent_id'] = array_pop($pid);
+        } else {
+            $data['level'] = $this->read($data['id'])->level . ',' . $data['parent_id'];
         }
 
         return $data;

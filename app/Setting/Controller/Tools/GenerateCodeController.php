@@ -53,7 +53,6 @@ class GenerateCodeController extends MineController
     /**
      * 获取业务表字段信息
      * @GetMapping("getTableColumns")
-     * @Permission("setting:code:getTableColumns")
      */
     public function getTableColumns(): \Psr\Http\Message\ResponseInterface
     {

@@ -269,6 +269,8 @@
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
 
+	.scTable-pagination {height: 50px;}
+
 	:deep(.el-table__header > thead tr){
 		background-color: #f8fafe!important; color: #5a657c;
 	}
