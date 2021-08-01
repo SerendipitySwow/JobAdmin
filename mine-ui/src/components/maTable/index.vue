@@ -11,6 +11,7 @@
 				:highlight-current-row="highlightCurrentRow"
 				@selection-change="selectionChange"
 				@current-change="currentChange"
+				@row-click="rowClick"
 				@sort-change="sortChange"
 				@filter-change="filterChange"
 			>
@@ -245,6 +246,9 @@
 			},
 			currentChange(selection){
 				this.$emit('current-change', selection)
+			},
+			rowClick(row, column, event){
+				this.$emit('row-click', row, column, event)
 			},
 
 			// 切换数据方法
