@@ -32,6 +32,9 @@ app.config.globalProperties.$API = api
 app.config.globalProperties.$AUTH = hasPermission
 app.config.globalProperties.$ROLE = hasRole
 
+// 全局挂载获取字典数据方法
+app.config.globalProperties.getDicts = api.dataDict.getDicts
+
 app.use(store)
 app.use(router)
 app.use(ElementPlus, {size: 'small', locale: locale})

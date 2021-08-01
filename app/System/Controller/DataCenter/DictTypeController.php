@@ -34,22 +34,12 @@ class DictTypeController extends MineController
     protected $service;
 
     /**
+     * 获取字典，无分页
      * @GetMapping("index")
      * @return ResponseInterface
      * @Permission("system:dictType:index")
      */
     public function index(): ResponseInterface
-    {
-        return $this->success($this->service->getPageList($this->request->all()));
-    }
-
-    /**
-     * 获取字典，无分页
-     * @GetMapping("list")
-     * @return ResponseInterface
-     * @Permission("system:dictType:list")
-     */
-    public function list(): ResponseInterface
     {
         return $this->success($this->service->getList($this->request->all()));
     }
@@ -61,7 +51,7 @@ class DictTypeController extends MineController
      */
     public function recycle(): ResponseInterface
     {
-        return $this->success($this->service->getPageListByRecycle($this->request->all()));
+        return $this->success($this->service->getListByRecycle($this->request->all()));
     }
 
     /**
