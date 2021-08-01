@@ -11,11 +11,45 @@
 							<span class="custom-tree-node">
 								<span class="label">{{ node.label }}</span>
 								<span class="code">{{ data.code }}</span>
-								<span class="do">
-									<el-tooltip class="item" effect="dark" content="编辑字典类型" placement="top">
+								<span class="do" v-if="showTypeRecycle">
+									<el-tooltip
+										class="item"
+										effect="dark"
+										content="回复数据"
+										placement="top"
+										v-auth="'system:dictType:recovery'"
+									>
+										<i class="el-icon-refresh-left" @click.stop="dictTypeRecoverys(data)"></i>
+									</el-tooltip>
+
+									<el-tooltip
+										class="item"
+										effect="dark"
+										content="物理删除"
+										placement="top"
+										v-auth="'system:dictType:realDelete'"
+									>
+										<i class="el-icon-delete" @click.stop="dictTypeDelete(node, data)"></i>
+									</el-tooltip>
+								</span>
+								<span class="do" v-else>
+									<el-tooltip
+										class="item"
+										effect="dark"
+										content="编辑字典类型"
+										placement="top"
+										v-auth="'system:dictType:update'"
+									>
 										<i class="el-icon-edit" @click.stop="dictTypeEdit(data)"></i>
 									</el-tooltip>
-									<el-tooltip class="item" effect="dark" content="删除字典类型" placement="top">
+
+									<el-tooltip
+										class="item"
+										effect="dark"
+										content="删除字典类型"
+										placement="top"
+										v-auth="'system:dictType:delete'"
+									>
 										<i class="el-icon-delete" @click.stop="dictTypeDelete(node, data)"></i>
 									</el-tooltip>
 								</span>
@@ -27,7 +61,7 @@
 					<el-button
 						icon="el-icon-plus"
 						v-auth="'system:dictType:save'"
-						@click="add()"
+						@click="addDictType()"
 						v-if="!showTypeRecycle"
 					>新增</el-button>
 
@@ -88,7 +122,7 @@
 		</el-container>
 	</el-container>
 
-	<dic-dialog v-if="dialog.dic" ref="dicDialog" @success="handleDicSuccess" @closed="dialog.dic=false"></dic-dialog>
+	<dic-dialog v-if="dialog.dictType" ref="dicDialog" @success="handleDicSuccess" @closed="dialog.dictType=false"></dic-dialog>
 
 	<list-dialog v-if="dialog.list" ref="listDialog" @success="handleListSuccess" @closed="dialog.list=false"></list-dialog>
 
@@ -100,7 +134,7 @@
 	import Sortable from 'sortablejs'
 
 	export default {
-		name: 'dic',
+		name: 'system:dataDict',
 		components: {
 			dicDialog,
 			listDialog
@@ -130,7 +164,7 @@
 		},
 		watch: {
 			dicFilterText(val) {
-				this.$refs.dic.filter(val);
+				this.$refs.dictType.filter(val);
 			}
 		},
 		mounted() {
@@ -138,7 +172,7 @@
 			this.rowDrop()
 		},
 		methods: {
-			//加载树数据
+			//加载字典类型数据
 			async getDictTypeList(){
 				this.showDicloading = true
 				if (!this.showTypeRecycle) {
@@ -166,56 +200,58 @@
 					});
 				}
 			},
-			//树过滤
+			//字典类型过滤
 			dicFilterNode(value, data){
 				if (!value) return true;
-				var targetText = data.name + data.code;
-				return targetText.indexOf(value) !== -1;
+				return data.name.indexOf(value) !== -1;
 			},
-			//树增加
-			addDic(){
-				this.dialog.dic = true
+			//字典类型增加
+			addDictType(){
+				this.dialog.dictType = true
 				this.$nextTick(() => {
 					this.$refs.dicDialog.open()
 				})
 			},
-			//编辑树
+			//编辑字典类型
 			dictTypeEdit(data){
-				this.dialog.dic = true
+				this.dialog.dictType = true
 				this.$nextTick(() => {
-					var editNode = this.$refs.dic.getNode(data.id);
+					var editNode = this.$refs.dictType.getNode(data.id);
 					var editNodeParentId =  editNode.level==1?undefined:editNode.parent.data.id
 					data.parentId = editNodeParentId
 					this.$refs.dicDialog.open('edit').setData(data)
 				})
 			},
-			//树点击事件
+			// 恢复字典类型
+			dictTypeRecoverys (data) {
+				this.$API.dictType.recoverys(data.id).then(res => {
+					if (res.success) {
+						this.$message.success('数据恢复成功')
+						this.getDictTypeList()
+					}
+				})
+			},
+			//字典类型点击事件
 			dicClick(data){
 				this.$refs.table.upData({
 					code: data.code
 				})
 			},
-			//删除树
+			//删除字典类型
 			dictTypeDelete(node, data){
 				this.$confirm(`确定删除 ${data.name} 项吗？`, '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.showDicloading = true;
 
-					//删除节点是否为高亮当前 是的话 设置第一个节点高亮
-					var dicCurrentKey = this.$refs.dic.getCurrentKey();
-					this.$refs.dic.remove(data.id)
-					if(dicCurrentKey == data.id){
-						var firstNode = this.dictTypeList[0];
-						if(firstNode){
-							this.$refs.dic.setCurrentKey(firstNode.id);
-							this.$refs.table.upData({
-								code: firstNode.code
-							})
-						}else{
-							this.dictList = null;
-							this.$refs.table.tableData = []
-						}
+					if (this.showTypeRecycle) {
+						this.$API.dictType.realDelete(data.id).then(() => {
+							this.getDictTypeList()
+						})
+					} else {
+						this.$API.dictType.deletes(data.id).then(() => {
+							this.getDictTypeList()
+						})
 					}
 
 					this.showDicloading = false;

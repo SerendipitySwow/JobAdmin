@@ -30,7 +30,7 @@ export default {
      * 添加字典类型
      * @returns
      */
-    saveDictType(params = {}) {
+    save(params = {}) {
         return request({
             url: 'system/dictType/save',
             method: 'post',
@@ -42,7 +42,7 @@ export default {
      * 移到回收站
      * @returns
      */
-    deletesDictType(ids) {
+    deletes(ids) {
         return request({
             url: 'system/dictType/delete/' + ids,
             method: 'delete'
@@ -53,7 +53,7 @@ export default {
      * 恢复数据
      * @returns
      */
-    recoverysDictType(ids) {
+    recoverys(ids) {
         return request({
             url: 'system/dictType/recovery/' + ids,
             method: 'put'
@@ -64,7 +64,7 @@ export default {
      * 真实删除
      * @returns
      */
-    realDeletesDictType(ids) {
+    realDelete(ids) {
         return request({
             url: 'system/dictType/realDelete/' + ids,
             method: 'delete'
@@ -75,7 +75,7 @@ export default {
      * 更新数据
      * @returns
      */
-    updateDictType(id, params = {}) {
+    update(id, params = {}) {
         return request({
             url: 'system/dictType/update/' + id,
             method: 'put',
