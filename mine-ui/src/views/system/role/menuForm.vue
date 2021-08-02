@@ -1,21 +1,21 @@
 <template>
-	<el-dialog title="菜单权限" v-model="visible" :width="500" destroy-on-close>
-		<el-form :model="form" ref="dialogForm" label-width="80px">
+  <el-dialog title="菜单权限" v-model="visible" :width="500" destroy-on-close>
+    <el-form :model="form" ref="dialogForm" label-width="80px">
 
-			<el-form-item label="角色名称" prop="name">
-				<el-input v-model="form.name" size="small" :disabled="true" clearable placeholder="请输入角色名称"></el-input>
-			</el-form-item>
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="form.name" size="small" :disabled="true" clearable placeholder="请输入角色名称"></el-input>
+      </el-form-item>
 
-			<el-form-item label="代码" prop="code">
-				<el-input v-model="form.code" size="small" :disabled="true" clearable placeholder="请输入角色代码"></el-input>
-			</el-form-item>
+      <el-form-item label="代码" prop="code">
+        <el-input v-model="form.code" size="small" :disabled="true" clearable placeholder="请输入角色代码"></el-input>
+      </el-form-item>
 
             <el-form-item
                 label="角色权限"
                 prop="menu_ids"
                 v-loading="loading"
                 element-loading-background="rgba(255, 255, 255, 0.8)"
-				element-loading-text="数据加载中..."
+        element-loading-text="数据加载中..."
             >
                 <el-checkbox @change="handleTreeExpand($event)">展开/折叠</el-checkbox>
                 <el-checkbox @change="handleTreeAll($event)">全选/全不选</el-checkbox>
@@ -29,29 +29,29 @@
                     :props="defaultProps"
                 />
             </el-form-item>
-			
-		</el-form>
-		<template #footer>
-			<el-button @click="visible=false" >取 消</el-button>
-			<el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
-		</template>
-	</el-dialog>
+      
+    </el-form>
+    <template #footer>
+      <el-button @click="visible=false" >取 消</el-button>
+      <el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				visible: false,
-				isSaveing: false,
+  export default {
+    data() {
+      return {
+        visible: false,
+        isSaveing: false,
                 loading: false,
-				//表单数据
-				form: {
-					id: null,
+        //表单数据
+        form: {
+          id: null,
                     name: null,
                     code: null,
                     menu_ids: null,
-				},
+        },
 
                 // ele 树props
                 defaultProps: {
@@ -60,38 +60,38 @@
                 },
                 // 菜单列表
                 menuList: [],
-			}
-		},
+      }
+    },
 
-		methods: {
+    methods: {
 
-			//显示
-			open (){
-				this.visible = true
+      //显示
+      open (){
+        this.visible = true
                 this.loading = true
-				return this
-			},
+        return this
+      },
 
-			//表单提交方法
-			submit(){
-				this.$refs.dialogForm.validate(async (valid) => {
-					if (valid) {
-						this.isSaveing = true;
+      //表单提交方法
+      submit(){
+        this.$refs.dialogForm.validate(async (valid) => {
+          if (valid) {
+            this.isSaveing = true;
                         this.form.menu_ids = this.getTreeSelectNodes()
-						let res = await this.$API.role.update(this.form.id, this.form)
-						this.isSaveing = false;
-						if(res.success){
-							this.visible = false;
-							this.$message.success(res.message)
-						}else{
-							this.$alert(res.message, "提示", { type: 'error' })
-						}
-					}else{
-						return false;
-					}
-				})
+            let res = await this.$API.role.update(this.form.id, this.form)
+            this.isSaveing = false;
+            if(res.success){
+              this.visible = false;
+              this.$message.success(res.message)
+            }else{
+              this.$alert(res.message, "提示", { type: 'error' })
+            }
+          }else{
+            return false;
+          }
+        })
 
-			},
+      },
 
             // 获取所选节点
             getTreeSelectNodes () {
@@ -115,11 +115,11 @@
                 this.$refs.tree.setCheckedNodes(value ? this.menuList : [])
             },
 
-			//表单注入数据
-			async setData(data){
-				this.form.id = data.id
-				this.form.name = data.name
-				this.form.code = data.code
+      //表单注入数据
+      async setData(data){
+        this.form.id = data.id
+        this.form.name = data.name
+        this.form.code = data.code
 
                 await this.$API.menu.tree(data.id).then(res=> {
                     this.menuList = res.data
@@ -134,7 +134,7 @@
                 })
 
                 this.loading = false
-			}
-		}
-	}
+      }
+    }
+  }
 </script>

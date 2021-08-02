@@ -84,6 +84,7 @@
 			hideDo: { type: Boolean, default: false },
 			stripe: { type: Boolean, default: false },
 			highlightCurrentRow: { type: Boolean, default: false },
+			autoLoad: { type: Boolean, default: true},
 			paginationLayout: { type: String, default: "total, prev, pager, next, jumper" },
 			showRecycle: { type: Boolean, default: false},
 		},
@@ -100,6 +101,7 @@
 		},
 		data() {
 			return {
+				isFisrt: true,
 				emptyText: "暂无数据",
 				toggleIndex: 0,
 				tableData: [],
@@ -144,6 +146,12 @@
 			},
 			//获取数据
 			async getData(){
+
+				if (! this.autoLoad && this.isFisrt) {
+					this.isFisrt = false
+					return
+				}
+
 				this.loading = true;
 
 				var requestData = {
@@ -274,6 +282,10 @@
 	.scTable-do {white-space: nowrap;}
 
 	.scTable-pagination {height: 50px;}
+
+	:deep(.el-pagination) {
+		margin-top: 10px;
+	}
 
 	:deep(.el-table__header > thead tr){
 		background-color: #f8fafe!important; color: #5a657c;
