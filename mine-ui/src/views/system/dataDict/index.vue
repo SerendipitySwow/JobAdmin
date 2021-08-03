@@ -6,7 +6,18 @@
           <el-input placeholder="输入关键字进行过滤" v-model="dicFilterText" clearable></el-input>
         </el-header>
         <el-main class="nopadding">
-          <el-tree ref="dictType" class="menu" node-key="id" :data="dictTypeList" :props="dicProps" :highlight-current="true" :expand-on-click-node="false" :filter-node-method="dicFilterNode" @node-click="dicClick">
+
+          <el-tree
+            ref="dictType"
+            class="menu"
+            node-key="id"
+            :data="dictTypeList"
+            :props="dicProps"
+            :highlight-current="true"
+            :expand-on-click-node="false"
+            :filter-node-method="dicFilterNode"
+            @node-click="dicClick"
+          >
             <template #default="{node, data}">
               <span class="custom-tree-node">
                 <span class="label">{{ node.label }}</span>
@@ -17,9 +28,8 @@
                     effect="dark"
                     content="恢复数据"
                     placement="top"
-                    v-auth="'system:dictType:recovery'"
                   >
-                    <i class="el-icon-refresh-left" @click.stop="dictTypeRecoverys(data)"></i>
+                    <i class="el-icon-refresh-left" v-auth="'system:dictType:recovery'" @click.stop="dictTypeRecoverys(data)"></i>
                   </el-tooltip>
 
                   <el-tooltip
@@ -27,9 +37,8 @@
                     effect="dark"
                     content="物理删除"
                     placement="top"
-                    v-auth="'system:dictType:realDelete'"
                   >
-                    <i class="el-icon-delete" @click.stop="dictTypeDelete(node, data)"></i>
+                    <i class="el-icon-delete" v-auth="'system:dictType:realDelete'" @click.stop="dictTypeDelete(node, data)"></i>
                   </el-tooltip>
                 </span>
                 <span class="do" v-else>
@@ -38,9 +47,8 @@
                     effect="dark"
                     content="编辑字典类型"
                     placement="top"
-                    v-auth="'system:dictType:update'"
                   >
-                    <i class="el-icon-edit" @click.stop="dictTypeEdit(data)"></i>
+                    <i class="el-icon-edit" v-auth="'system:dictType:update'" @click.stop="dictTypeEdit(data)"></i>
                   </el-tooltip>
 
                   <el-tooltip
@@ -48,9 +56,8 @@
                     effect="dark"
                     content="删除字典类型"
                     placement="top"
-                    v-auth="'system:dictType:delete'"
                   >
-                    <i class="el-icon-delete" @click.stop="dictTypeDelete(node, data)"></i>
+                    <i class="el-icon-delete" v-auth="'system:dictType:delete'" @click.stop="dictTypeDelete(node, data)"></i>
                   </el-tooltip>
                 </span>
               </span>
@@ -81,8 +88,68 @@
     <el-container class="is-vertical">
       <el-header>
         <div class="left-panel">
-          <el-button type="primary" v-if="!showTypeRecycle" icon="el-icon-plus" @click="addDataDict"></el-button>
-          <el-button type="danger" plain icon="el-icon-delete" :disabled="selection.length==0" @click="dataDictBatchDelete"></el-button>
+
+          <el-button
+            type="primary"
+            v-if="!showTypeRecycle"
+            icon="el-icon-plus"
+            @click="addDataDict"
+          >新增</el-button>
+
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            :disabled="selection.length==0"
+            @click="dataDictBatchDelete"
+          >删除</el-button>
+
+        </div>
+
+        <div class="right-panel">
+          <div class="right-panel-search">
+            <el-input v-model="dataQueryParams.label" placeholder="字典标签" clearable></el-input>
+
+            <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+              <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+              <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
+            </el-tooltip>
+
+            <el-popover placement="bottom-end" :width="450" trigger="click" >
+              <template #reference>
+                <el-button type="text" @click="povpoerShow = ! povpoerShow">
+                  更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+              </template>
+              <el-form label-width="80px">
+
+                <el-form-item label="状态" prop="status">
+                  <el-select size="small" v-model="dataQueryParams.status" style="width:100%" clearable placeholder="状态">
+                    <el-option label="启用" value="0">启用</el-option>
+                    <el-option label="停用" value="1">停用</el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="创建时间">
+                  <el-date-picker
+                    clearable
+                    size="small"
+                    v-model="dateRange"
+                    type="daterange"
+                    range-separator="至"
+                    @change="handleDateChange"
+                    value-format="YYYY-MM-DD"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                  ></el-date-picker>
+                </el-form-item>
+
+              </el-form>
+            </el-popover>
+          </div>
         </div>
       </el-header>
       <el-main class="nopadding">
@@ -90,21 +157,18 @@
           ref="table"
           :api="api"
           row-key="id"
-          :params="listParams"
+          :params="dataQueryParams"
+          :showRecycle="true"
           :autoLoad="false"
           @selection-change="selectionChange"
+          @switch-data="switchData"
           stripe :paginationLayout="'prev, pager, next'"
         >
           <el-table-column type="selection" width="50"></el-table-column>
-          <el-table-column label="" width="50">
-            <template #default>
-              <el-tag class="move" style="cursor: move;"><i class="el-icon-d-caret"></i></el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="字典标签" prop="label" width="150"></el-table-column>
-          <el-table-column label="键值" prop="value" width="150"></el-table-column>
-          <el-table-column label="排序" prop="sort" width="150"></el-table-column>
-          <el-table-column label="状态" prop="status" width="100">
+          <el-table-column label="字典标签" prop="label" width="180"></el-table-column>
+          <el-table-column label="键值" prop="value" width="220"></el-table-column>
+          <el-table-column label="排序" prop="sort" width="160"></el-table-column>
+          <el-table-column label="状态" prop="status" width="160">
             <template #default="scope">
               <el-switch
                 v-if="scope.row.status"
@@ -116,14 +180,40 @@
             </template>
           </el-table-column>
           <el-table-column label="创建时间" prop="created_at" width="200"></el-table-column>
-          <el-table-column label="操作" fixed="right" align="right" width="140">
+          <el-table-column label="操作" fixed="right" align="right" width="140" v-if="isDataRecycle">
             <template #default="scope">
-              <el-button type="text" size="small" @click="dataDictEdit(scope.row, scope.$index)">编辑</el-button>
-              <el-popconfirm title="确定删除吗？" @confirm="dataDictDelete(scope.row, scope.$index)">
-                <template #reference>
-                  <el-button type="text" size="small">删除</el-button>
-                </template>
-              </el-popconfirm>
+              <el-button
+                type="text"
+                size="small"
+                @click="dataDictRecovery(scope.row.id)"
+                v-auth="['system:dictData:recovery']"
+              >恢复</el-button>
+
+              <el-button
+                type="text"
+                size="small"
+                @click="dataDictDelete(scope.row.id)"
+                v-auth="['system:dictData:realDelete']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="操作" fixed="right" align="right" width="140" v-else>
+            <template #default="scope">
+              <el-button
+                type="text"
+                size="small"
+                @click="dataDictEdit(scope.row, scope.$index)"
+                v-auth="['system:dictData:update']"
+              >编辑</el-button>
+
+              <el-button
+                type="text"
+                size="small"
+                @click="dataDictDelete(scope.row.id)"
+                v-auth="['system:dictData:delete']"
+              >删除</el-button>
+                
             </template>
           </el-table-column>
         </maTable>
@@ -131,30 +221,31 @@
     </el-container>
   </el-container>
 
-  <dic-dialog v-if="dialog.dictType" ref="dicDialog" @success="handleDicSuccess" @closed="dialog.dictType=false"></dic-dialog>
+  <type-dialog v-if="dialog.dictType" ref="typeDialog" @success="handleTypeSuccess" @closed="dialog.dictType=false"></type-dialog>
 
-  <list-dialog v-if="dialog.list" ref="listDialog" @success="handleListSuccess" @closed="dialog.list=false"></list-dialog>
+  <data-dialog v-if="dialog.dictData" ref="dataDialog" @success="handleDataSuccess" @closed="dialog.dictData=false"></data-dialog>
 
 </template>
 
 <script>
-  import dicDialog from './dic'
-  import listDialog from './list'
-  import Sortable from 'sortablejs'
+  import typeDialog from './type'
+  import dataDialog from './data'
 
   export default {
     name: 'system:dataDict',
     components: {
-      dicDialog,
-      listDialog
+      typeDialog,
+      dataDialog
     },
     data() {
       return {
         dialog: {
-          dic: false,
-          info: false
+          dictType: false,
+          dictData: false
         },
+        dateRange:'',
         showTypeRecycle: false,
+        isDataRecycle: false,
         showDicloading: true,
         dictTypeList: [],
         dicFilterText: '',
@@ -163,7 +254,7 @@
           list: this.$API.dataDict.getPageList,
           recycleList: this.$API.dataDict.getRecyclePageList,
         },
-        listParams: {},
+        dataQueryParams: {},
         selection: []
       }
     },
@@ -182,7 +273,6 @@
 
     mounted() {
       this.getDictTypeList()
-      this.rowDrop()
     },
 
     methods: {
@@ -206,10 +296,10 @@
           this.$nextTick(() => {
             this.$refs.dictType.setCurrentKey(this.dictTypeList[0].id)
           })
-          this.listParams = {
+          this.dataQueryParams = {
             code: this.dictTypeList[0].code
           }
-          await this.$refs.table.upData(this.listParams)
+          await this.$refs.table.upData(this.dataQueryParams)
         }
       },
 
@@ -223,7 +313,7 @@
       addDictType(){
         this.dialog.dictType = true
         this.$nextTick(() => {
-          this.$refs.dicDialog.open()
+          this.$refs.typeDialog.open()
         })
       },
 
@@ -234,7 +324,7 @@
           var editNode = this.$refs.dictType.getNode(data.id);
           var editNodeParentId =  editNode.level==1?undefined:editNode.parent.data.id
           data.parentId = editNodeParentId
-          this.$refs.dicDialog.open('edit').setData(data)
+          this.$refs.typeDialog.open('edit').setData(data)
         })
       },
 
@@ -277,50 +367,52 @@
         })
       },
 
-      //行拖拽
-      rowDrop(){
-        const _this = this
-        const tbody = this.$refs.table.$el.querySelector('.el-table__body-wrapper tbody')
-        Sortable.create(tbody, {
-          handle: ".move",
-          animation: 300,
-          ghostClass: "ghost",
-          onEnd({ newIndex, oldIndex }) {
-            const tableData = _this.$refs.table.tableData
-            const currRow = tableData.splice(oldIndex, 1)[0]
-            tableData.splice(newIndex, 0, currRow)
-            _this.$message.success("排序成功")
-          }
-        })
-      },
-      
       //添加字典
       addDataDict(){
-        this.dialog.list = true
+        this.dialog.dictData = true
         this.$nextTick(() => {
-          var dicCurrentKey = this.$refs.dic.getCurrentKey();
-          const data = {
-            dic: dicCurrentKey
-          }
-          this.$refs.listDialog.open().setData(data)
+          let id = this.$refs.dictType.getCurrentKey();
+          let data = this.dictTypeList.filter(item => id == item.id)
+          this.$refs.dataDialog.open('add', data[0])
         })
       },
 
       //编辑字典
       dataDictEdit(row){
-        this.dialog.list = true
+        this.dialog.dictData = true
         this.$nextTick(() => {
-          this.$refs.listDialog.open('edit').setData(row)
+          this.$refs.dataDialog.open('edit').setData(row)
         })
       },
 
       //删除字典
-      async dataDictDelete(row, index){
-        var reqData = {id: row.id}
-        var res = await this.$API.user.del.post(reqData);
-        if(res.code == 200){
-          this.$refs.table.tableData.splice(index, 1);
-          this.$message.success("删除成功")
+      async dataDictDelete(id){
+
+        await this.$confirm(`确定删除选中的该字典项吗？`, '提示', {
+          type: 'warning'
+        }).then(() => {
+          const loading = this.$loading();
+          if (this.isDataRecycle) {
+            this.$API.dataDict.realDeletesDictData(id).then(() => {
+              this.$refs.table.upData(this.dataQueryParams)
+            })
+          } else {
+            this.$API.dataDict.deletesDictData(id).then(() => {
+              this.$refs.table.upData(this.dataQueryParams)
+            })
+          }
+          loading.close();
+          this.$message.success("操作成功")
+        })
+        
+      },
+
+      // 恢复字典项数据
+      async dataDictRecovery(id){
+        let res = await this.$API.dataDict.recoverysDictData(id)
+        if(res.success){
+          this.$refs.table.upData(this.dataQueryParams)
+          this.$message.success('恢复成功')
         }else{
           this.$alert(res.message, "提示", {type: 'error'})
         }
@@ -328,33 +420,58 @@
 
       //批量删除字典
       async dataDictBatchDelete(){
-        this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
+        await this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
           type: 'warning'
         }).then(() => {
           const loading = this.$loading();
-          this.selection.forEach(item => {
-            this.$refs.table.tableData.forEach((itemI, indexI) => {
-              if (item.id === itemI.id) {
-                this.$refs.table.tableData.splice(indexI, 1)
-              }
+          let ids = []
+          this.selection.map(item => ids.push(item.id))
+          if (this.isDataRecycle) {
+            this.$API.dataDict.realDeletesDictData(ids.join(',')).then(() => {
+              this.$refs.table.upData(this.dataQueryParams)
             })
-          })
+          } else {
+            this.$API.dataDict.deletesDictData(ids.join(',')).then(() => {
+              this.$refs.table.upData(this.dataQueryParams)
+            })
+          }
+          this.$refs.table.upData(this.dataQueryParams)
           loading.close();
           this.$message.success("操作成功")
-        }).catch(() => {
-
         })
+      },
+
+      // 切换数据类型回调
+      switchData(isDataRecycle) {
+        this.isDataRecycle = isDataRecycle
+      },
+
+      // 选择时间事件
+      handleDateChange (values) {
+        if (values !== null) {
+          this.dataQueryParams.minDate = values[0]
+          this.dataQueryParams.maxDate = values[1]
+        }
+      },
+
+      resetSearch() {
+        this.dataQueryParams = {
+          label: undefined,
+          maxDate: undefined,
+          minDate: undefined,
+          status: undefined
+        }
+        this.$refs.table.upData(this.dataQueryParams)
       },
 
       //提交明细
       saveList(){
-        this.$refs.listDialog.submit(async (formData) => {
+        this.$refs.dataDialog.submit(async (formData) => {
           this.isListSaveing = true;
           var res = await this.$API.user.save.post(formData);
           this.isListSaveing = false;
           if(res.code == 200){
             //这里选择刷新整个表格 OR 插入/编辑现有表格数据
-            this.listDialogVisible = false;
             this.$message.success("操作成功")
           }else{
             this.$alert(res.message, "提示", {type: 'error'})
@@ -383,44 +500,20 @@
           row.status = row.status === '0' ? '1' : '0'
         })
       },
-      //本地更新数据
-      handleDicSuccess(data, mode){
-        if(mode=='add'){
-          data.id = new Date().getTime()
-          if(this.dictTypeList.length > 0){
-            this.$refs.table.upData({
-              code: data.code
-            })
-          }else{
-            this.listParams = {
-              code: data.code
-            }
-            this.dictList = this.$API.dic.info;
-          }
-          this.$refs.dic.append(data, data.parentId[0])
-          this.$refs.dic.setCurrentKey(data.id)
-        }else if(mode=='edit'){
-          var editNode = this.$refs.dic.getNode(data.id);
-          //判断是否移动？
-          var editNodeParentId =  editNode.level==1?undefined:editNode.parent.data.id
-          if(editNodeParentId != data.parentId){
-            var obj = editNode.data;
-            this.$refs.dic.remove(data.id)
-            this.$refs.dic.append(obj, data.parentId[0])
-          }
-          Object.assign(editNode.data, data)
-        }
+
+      //搜索
+      handlerSearch(){
+        this.handleDataSuccess()
       },
+
       //本地更新数据
-      handleListSuccess(data, mode){
-        if(mode=='add'){
-          data.id = new Date().getTime()
-          this.$refs.table.tableData.push(data)
-        }else if(mode=='edit'){
-          this.$refs.table.tableData.filter(item => item.id===data.id ).forEach(item => {
-            Object.assign(item, data)
-          })
-        }
+      handleTypeSuccess(){
+        this.getDictTypeList()
+      },
+
+      //本地更新数据
+      handleDataSuccess(){
+        this.$refs.table.upData(this.dataQueryParams)
       },
 
       switchTypeData () {

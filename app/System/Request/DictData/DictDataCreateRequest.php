@@ -20,7 +20,7 @@ class DictDataCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'label' => 'required',
             'code' => 'required',
             'value' => 'required',
         ];

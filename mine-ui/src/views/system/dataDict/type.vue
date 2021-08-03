@@ -1,14 +1,24 @@
 <template>
-  <el-dialog :title="titleMap[mode]" v-model="visible" :width="330" destroy-on-close @closed="$emit('closed')">
+  <el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px" label-position="left">
-      <el-form-item label="编码" prop="code">
-        <el-input v-model="form.code" clearable placeholder="字典编码"></el-input>
+      <el-form-item label="类型名称" prop="name">
+        <el-input v-model="form.name" size="small" placeholder="请输入类型名称"></el-input>
       </el-form-item>
-      <el-form-item label="字典名称" prop="name">
-        <el-input v-model="form.name" clearable placeholder="字典显示名称"></el-input>
+
+      <el-form-item label="类型标识" prop="code">
+        <el-input v-model="form.code" size="small" placeholder="请输入类型标识"></el-input>
       </el-form-item>
-      <el-form-item label="父路径" prop="parentId">
-        <el-cascader v-model="form.parentId" :options="dic" :props="dicProps" :show-all-levels="false" clearable></el-cascader>
+
+      <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
+        <el-radio-group v-model="form.status">
+          <el-radio label="0">启用</el-radio>
+          <el-radio label="1">停用</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-form-item label="备注" prop="remark">
+        <el-input type="textarea" size="small" :rows="3" placeholder="备注信息" v-model="form.remark">
+        </el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -25,30 +35,21 @@
       return {
         mode: "add",
         titleMap: {
-          add: '新增字典',
-          edit: '编辑字典'
+          add: '新增字典类型',
+          edit: '编辑字典类型'
         },
         visible: false,
         isSaveing: false,
         form: {
-          id:"",
-          name: "",
-          code: "",
-          parentId: ""
+          id: null,
+          name: null,
+          code: null,
+          status: '0',
+          remark: null
         },
         rules: {
-          code: [
-            {required: true, message: '请输入编码'}
-          ],
-          name: [
-            {required: true, message: '请输入字典名称'}
-          ]
-        },
-        dic: [],
-        dicProps: {
-          value: "id",
-          label: "name",
-          checkStrictly: true
+          name: [{ required: true, message: '请输入类型名称', trigger: 'blur' }],
+          code: [{ required: true, message: '请输入类型标识', trigger: 'blur' }]
         }
       }
     },
@@ -72,9 +73,14 @@
         this.$refs.dialogForm.validate(async (valid) => {
           if (valid) {
             this.isSaveing = true;
-            var res = await this.$API.user.save.post(this.form);
+            let res
+            if (this.mode == 'add') {
+              res = await this.$API.dictType.save(this.form)
+            } else {
+              res = await this.$API.dictType.update(this.form.id, this.form)
+            }
             this.isSaveing = false;
-            if(res.code == 200){
+            if(res.success){
               this.$emit('success', this.form, this.mode)
               this.visible = false;
               this.$message.success("操作成功")
@@ -89,7 +95,8 @@
         this.form.id = data.id
         this.form.name = data.name
         this.form.code = data.code
-        this.form.parentId = data.parentId
+        this.form.status = data.status
+        this.form.remark = data.remark
 
         //可以和上面一样单个注入，也可以像下面一样直接合并进去
         //Object.assign(this.form, data)
