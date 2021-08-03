@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
  * 文件管理控制器
  * Class UploadFileController
  * @package App\System\Controller\DataCenter
- * @Controller(prefix="system/uploadfile")
+ * @Controller(prefix="system/attachment")
  * @Auth
  */
 class UploadFileController extends MineController
