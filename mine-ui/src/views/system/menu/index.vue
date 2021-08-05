@@ -45,10 +45,10 @@
                   <!-- 正常数据显示按钮 -->
                   <span class="do" v-else>
 
-                    <el-tag v-if="data.type == 'M'">菜单</el-tag>
-                    <el-tag v-if="data.type == 'B'" type="success">按钮</el-tag>
-                    <el-tag v-if="data.type == 'L'" type="warning">外链</el-tag>
-                    <el-tag v-if="data.type == 'I'" type="danger">Iframe</el-tag>
+                    <el-tag v-if="data.type === 'M'">菜单</el-tag>
+                    <el-tag v-if="data.type === 'B'" type="success">按钮</el-tag>
+                    <el-tag v-if="data.type === 'L'" type="warning">外链</el-tag>
+                    <el-tag v-if="data.type === 'I'" type="danger">Iframe</el-tag>
 
                     <el-tooltip class="item" effect="dark" content="新增子菜单" placement="top">
                       <i
@@ -57,7 +57,7 @@
                         @click.stop="add(node, data)"
                       ></i>
                     </el-tooltip>
-                    
+
                     <el-tooltip class="item" effect="dark" content="移动回收站" placement="top">
                       <i
                         class="el-icon-delete"
@@ -158,11 +158,11 @@
       },
       //树点击
       menuClick(data, node){
-        let pid = node.level==1?undefined:node.parent.data.id;
+        let pid = node.level===1?undefined:node.parent.data.id;
         if (! pid ) {
           data.top = 1
         }
-        if (data.type == 'B') {
+        if (data.type === 'B') {
           data.isBtn = true
         }
         this.$refs.save.setData(data, pid)
@@ -194,7 +194,7 @@
             this.$message.error('请先保存上级菜单后，再新增菜单')
             return
           } else {
-            if (node.data.type == 'B') {
+            if (node.data.type === 'B') {
               this.$message.error('按钮不允许创建子菜单')
               return
             }
@@ -202,7 +202,7 @@
             if (level.length > 3) {
               this.$message.error('菜单最大为 4 层')
               return
-            } else if(level.length == 3) {
+            } else if(level.length === 3) {
               newMenuData.type = 'B'
             }
           }
