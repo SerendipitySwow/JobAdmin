@@ -39,7 +39,8 @@
 			width: {type: Number, default: 120},
 			modelValue: { type: String, default: "" },
 			action: { type: String, default: "" },
-			apiObj: { type: Object, default: () => {} },
+			api: { type: Object, default: () => {} },
+			type: { type: String, default: 'image'},
 			accept: { type: String, default: "image/gif, image/jpeg, image/png" },
 			maxSize: { type: Number, default: config.maxSize },
 			title: { type: String, default: "" },
@@ -150,14 +151,14 @@
 				this.img = ""
 			},
 			request(param){
-				var apiObj = config.apiObj;
-				if(this.apiObj){
-					apiObj = this.apiObj;
+				let api = config.api;
+				if(this.api){
+					api = this.api;
 				}
 				const data = new FormData();
 				var file = this.cropper ? this.cropperUploadFile : param.file
-				data.append("file", file);
-				apiObj.post(data).then(res => {
+				data.append(this.type, file);
+				api.uploadImage(data).then(res => {
 					param.onSuccess(res)
 				}).catch(err => {
 					param.onError(err)

@@ -85,7 +85,7 @@
           :show-overflow-tooltip="true"
         ></el-table-column>
 
-        <el-table-column prop="storage_mode" width="140" sortable='custom' label="存储模式">
+        <el-table-column prop="storage_mode" sortable='custom' label="存储模式">
           <template #default="scope">
             {{ getLable(scope.row.storage_mode) }}
           </template>
@@ -100,10 +100,17 @@
         ></el-table-column>
 
         <el-table-column
+          label="存储目录"
+          prop="storage_path"
+          sortable='custom'
+          width="140"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+
+        <el-table-column
           label="扩展名"
           prop="suffix"
           width="80"
-          :show-overflow-tooltip="true"
         ></el-table-column>
 
         <el-table-column
@@ -118,7 +125,6 @@
           label="文件大小"
           prop="size_info"
           sortable='custom'
-          width="160"
           :show-overflow-tooltip="true"
         ></el-table-column>
 
@@ -130,13 +136,13 @@
         ></el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" v-if="!isRecycle">
           <template #default="scope">
 
             <el-button
               type="text"
               size="small"
-              @click="tableEdit(scope.row, scope.$index)"
+              @click="review(scope.row)"
               v-auth="['system:post:update']"
             >预览</el-button>
 
@@ -173,6 +179,23 @@
 
       </maTable>
     </el-main>
+
+    <el-dialog
+      title="图片预览"
+      v-model="dialogVisible"
+      destroy-on-close
+      @closed="dialogVisible = false"
+      width="50%"
+    >
+
+      <el-image :src="record.url" lazy></el-image>
+
+      <template #footer class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </template>
+
+    </el-dialog>
+
   </el-container>
 
 </template>
@@ -187,6 +210,7 @@
         dialog: {
           save: false
         },
+        dialogVisible: false,
         column: [],
         povpoerShow: false,
         dateRange:'',
@@ -209,6 +233,9 @@
           minDate: undefined
         },
         isRecycle: false,
+
+        // 当前记录
+        record: { url: '' }
       }
     },
     methods: {
@@ -226,13 +253,18 @@
           this.$refs.saveDialog.open('edit').setData(row)
         })
       },
-      //查看
-      tableShow(row){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open('show').setData(row)
-        })
+      
+      // 预览图片
+      review (row) {
+        this.record = row
+        if (!/png|jpeg|jpg|png|bmp/.test(row.mime_type)) {
+          this.error('非图片，无法预览')
+          return false
+        } else {
+          this.dialogVisible = true
+        }
       },
+
       //批量删除
       async batchDel(){
         await this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
@@ -242,9 +274,9 @@
           let ids = []
           this.selection.map(item => ids.push(item.id))
           if (this.isRecycle) {
-            this.$API.post.realDeletes(ids.join(',')).then()
+            this.$API.attachment.realDeletes(ids.join(',')).then()
           } else {
-            this.$API.post.deletes(ids.join(',')).then()
+            this.$API.attachment.deletes(ids.join(',')).then()
           }
           this.$refs.table.upData(this.queryParams)
           loading.close();
@@ -259,11 +291,11 @@
         }).then(() => {
           const loading = this.$loading();
           if (this.isRecycle) {
-            this.$API.post.realDeletes(id).then(() => {
+            this.$API.attachment.realDeletes(id).then(() => {
               this.$refs.table.upData(this.queryParams)
             })
           } else {
-            this.$API.post.deletes(id).then(() => {
+            this.$API.attachment.deletes(id).then(() => {
               this.$refs.table.upData(this.queryParams)
             })
           }
@@ -274,7 +306,7 @@
 
       // 恢复数据
       async recovery (id) {
-        await this.$API.post.recoverys(id).then(res => {
+        await this.$API.attachment.recoverys(id).then(res => {
           this.$message.success(res.message)
           this.$refs.table.upData(this.queryParams)
         })
@@ -313,18 +345,16 @@
         this.$refs.table.upData(this.queryParams)
       },
 
+      // 字段映射标签
+      getLable (value) {
+        return (this.storageMode.filter(item => item.value == value))[0].label
+      },
+
       //本地更新数据
       handleSuccess(){
         this.$refs.table.upData(this.queryParams)
       }
     },
-
-    computed: {
-      // 字段映射标签
-      getLable (value) {
-        return (this.storageMode.filter(item => item.value == value))[0].label
-      },
-    }
   }
 </script>
 

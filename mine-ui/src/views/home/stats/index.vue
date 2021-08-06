@@ -10,7 +10,7 @@
 						<div class="main">
 							<h2>欢迎使用MineAdmin 后台管理系统</h2>
 							<p>高性能 / 精致 / 优雅。后台基于Swoole的Hyperf框架，前端Vue3 + Element-Plus 的中后台前端解决方案，如果喜欢就点个星星支持一下。</p>
-                            <p>
+              <p>
 								<a href='https://gitee.com/xmo/MineAdmin' target="_blank">
 									<img src='https://gitee.com/xmo/MineAdmin/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
 								</a>
