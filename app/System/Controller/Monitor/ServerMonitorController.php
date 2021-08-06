@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Annotation\GetMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\Permission;
 use Mine\MineController;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class ServerMonitorController
@@ -34,11 +35,21 @@ class ServerMonitorController extends MineController
      */
     public function getServerInfo(): \Psr\Http\Message\ResponseInterface
     {
+        $channel = new Channel();
+        co(function () use($channel) {
+            $channel->push(['cpu' => $this->service->getCpuInfo()]);
+        });
+        co(function () use($channel) {
+            $channel->push(['net' => $this->service->getNetInfo()]);
+        });
+
+        $result = $channel->pop();
+
         return $this->success([
-            'cpu' => $this->service->getCpuInfo(),
+            'cpu' => $result['cpu'] ?? $channel->pop()['cpu'],
             'memory' => $this->service->getMemInfo(),
             'phpenv' => $this->service->getPhpAndEnvInfo(),
-            'net'    => $this->service->getNetInfo(),
+            'net'    => $result['net'] ?? $channel->pop()['net'],
             'disk'   => $this->service->getDiskInfo()
         ]);
     }
