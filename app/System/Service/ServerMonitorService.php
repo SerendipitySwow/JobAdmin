@@ -148,9 +148,9 @@ class ServerMonitorService
 
         return [
             'receive_total' => $secondsAfter['receive_total'],
-            'receive_pack'  => $secondsAfter['receive_total'] - $secondsBefore['receive_total'],
+            'receive_pack'  => sprintf('%.2f', $secondsAfter['receive_total'] - $secondsBefore['receive_total']),
             'send_total'    => $secondsAfter['send_total'],
-            'send_pack'     => $secondsAfter['send_total'] - $secondsBefore['send_total'],
+            'send_pack'     => sprintf('%.2f', $secondsAfter['send_total'] - $secondsBefore['send_total']),
         ];
     }
 

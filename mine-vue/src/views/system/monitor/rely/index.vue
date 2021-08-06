@@ -60,7 +60,7 @@
       <el-table v-loading="detailsLoading" :data="details">
         <el-table-column prop="name" label="名称" width="120" fixed ></el-table-column>
         <el-table-column prop="value" label="值" :show-overflow-tooltip="true">
-          <template slot-scope="scope">
+          <template #default="scope">
             <div v-html="scope.row.value"></div>
           </template>
         </el-table-column>
