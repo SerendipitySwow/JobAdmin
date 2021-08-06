@@ -147,4 +147,21 @@ function typeColor (type = 'default') {
 	return color
 }
 
+tool.formatData = function (data) {
+	if (typeof data == 'undefined') {
+		return '0';
+	}
+	if (data < (1024 * 1024)) {
+		return parseInt(data / 1024 / 1024) + 'K'
+	} else if (data < (1024 * 1024 * 1024)) {
+		return parseInt(data / 1024 / 1024 / 1024) + 'M'
+	} else if (data < (1024 * 1024 * 1024 * 1024)) {
+		return parseInt(data / 1024 / 1024 / 1024 / 1024) + 'G'
+	} else if (data < (1024 * 1024 * 1024 * 1024 * 1024)) {
+		return parseInt(data / 1024 / 1024 / 1024 / 1024 / 1024) + 'T'
+	} else {
+		return '文件太大'
+	}
+}
+
 export default tool

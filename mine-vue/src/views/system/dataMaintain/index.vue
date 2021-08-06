@@ -143,7 +143,7 @@
           <el-table-column prop="column_type" label="字段类型">
           </el-table-column>
 
-          <el-table-column prop="column_comment" label="字段注释">
+          <el-table-column prop="column_comment" label="字段注释" :show-overflow-tooltip="true">
           </el-table-column>
 
         </el-table>
@@ -250,9 +250,9 @@ export default {
 
     formatData (data) {
       if (data < (1024 * 1024)) {
-        return parseInt(data / 1024 / 1024) + 'Kb'
+        return parseInt(data / 1024 / 1024) + 'K'
       } else {
-        return parseInt(data / 1024 / 1024 / 1024) + 'Mb'
+        return parseInt(data / 1024 / 1024 / 1024) + 'M'
       }
     },
 

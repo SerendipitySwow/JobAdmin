@@ -93,15 +93,12 @@ class ServerMonitorService
         preg_match('/(\d+)/', $string, $total);
         $result['total'] = sprintf('%.2f', $total[1] / 1024 / 1024);
 
-        $string = shell_exec('cat /proc/meminfo | grep MemFree');
-        preg_match('/(\d+)/', $string, $free);
-
         $string = shell_exec('cat /proc/meminfo | grep MemAvailable');
         preg_match('/(\d+)/', $string, $available);
-        $free = $free[1] + $available[1];
-        $result['free'] = sprintf('%.2f', $free / 1024 / 1024);
 
-        $result['usage'] = sprintf('%.2f', ($total[1] - $free) / 1024 / 1024);
+        $result['free'] = sprintf('%.2f', $available[1] / 1024 / 1024);
+
+        $result['usage'] = sprintf('%.2f', ($total[1] - $available[1]) / 1024 / 1024);
 
         $result['php'] = round(memory_get_usage()/1024/1024, 2);
 
@@ -145,12 +142,28 @@ class ServerMonitorService
      */
     public function getNetInfo(): array
     {
+        $secondsBefore = $this->calculationNetInfo();
+        sleep(1);
+        $secondsAfter = $this->calculationNetInfo();
+
+        return [
+            'receive_total' => $secondsAfter['receive_total'],
+            'receive_pack'  => $secondsAfter['receive_total'] - $secondsBefore['receive_total'],
+            'send_total'    => $secondsAfter['send_total'],
+            'send_pack'     => $secondsAfter['send_total'] - $secondsBefore['send_total'],
+        ];
+    }
+
+    /**
+     * 网络数据信息
+     * @return array
+     */
+    protected function calculationNetInfo(): array
+    {
         preg_match_all('/(\d{2,})/', shell_exec('cat /proc/net/dev | grep eth0'), $net);
         return [
             'receive_total' => sprintf('%.2f', $net[0][0] / 1024 / 1024),
-            'receive_pack'  => sprintf('%.2f', $net[0][1] / 1024),
             'send_total'    => sprintf('%.2f', $net[0][2] / 1024 / 1024),
-            'send_pack'     => sprintf('%.2f', $net[0][3] / 1024),
         ];
     }
 

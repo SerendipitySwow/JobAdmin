@@ -198,30 +198,6 @@
 							[2246.96,2232.97,2221.38,2247.86]
 						]
 					}]
-				},
-				option6: {
-					title: {
-						text: 'Gauge Demo',
-						subtext: '基础仪表盘',
-					},
-					series: [{
-						center: ['50%', '60%'],
-						type: 'gauge',
-						anchor: {
-							show: true,
-							showAbove: true,
-							size: 20,
-							itemStyle: {
-								borderWidth: 5
-							}
-						},
-						progress: {
-							show: true
-						},
-						data: [{
-							value: 70
-						}]
-					}]
 				}
 			}
 		}
