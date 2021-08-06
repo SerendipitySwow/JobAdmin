@@ -3,14 +3,11 @@
 declare(strict_types=1);
 namespace App\System\Controller\DataCenter;
 
-use App\System\Request\DictType\DictTypeCreateRequest;
-use App\System\Service\SystemDictTypeService;
 use App\System\Service\SystemUploadFileService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
-use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
@@ -25,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
  * @Controller(prefix="system/attachment")
  * @Auth
  */
-class UploadFileController extends MineController
+class AttachmentController extends MineController
 {
     /**
      * 字典类型服务
