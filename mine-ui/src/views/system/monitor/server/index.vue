@@ -1,5 +1,11 @@
 <template>
-  <div class="diy-grid-layout">
+  <div
+    class="diy-grid-layout"
+    v-loading="loading"
+    element-loading-background="rgba(255, 255, 255, 0.8)"
+    element-loading-text="拼命加载中..."
+    style="height:100%; padding: 0"
+  >
 		<el-row :gutter="15">
 			<el-col :md="24" :xs="24">
         <el-card shadow="hover" style="margin-bottom:15px;">
@@ -146,35 +152,24 @@
           <template #header>
             <span>网络I/O数据</span>
           </template>
-          <el-row :gutter="15">
-            <el-col :md="8" :xs="24">
-              <div class="el-table el-table--enable-row-hover el-table--medium">
-                <table cellspacing="0" style="width: 100%;">
-                  <tbody>
-                    <tr>
-                      <td><div class="cell">接收总大小</div></td>
-                      <td><div class="cell" v-if="server.net">{{ server.net.receive_total }}M</div></td>
-                    </tr>
-                    <tr>
-                      <td><div class="cell">当前接收包大小</div></td>
-                      <td><div class="cell" v-if="server.net">{{ server.net.receive_pack }}K</div></td>
-                    </tr>
-                    <tr>
-                      <td><div class="cell">发送总大小</div></td>
-                      <td><div class="cell" v-if="server.net">{{ server.net.send_total }}M</div></td>
-                    </tr>
-                    <tr>
-                      <td><div class="cell">当前发送包大小</div></td>
-                      <td><div class="cell" v-if="server.net">{{ server.net.send_pack }}K</div></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </el-col>
-            <el-col :md="16" :xs="24">
-              <scEcharts height="200px" :option="net"></scEcharts>
-            </el-col>
-          </el-row>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td><div class="cell">接收总大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.receive_total }}M</div></td>
+                  <td><div class="cell">当前接收包大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.receive_pack }}K</div></td>
+                </tr>
+                <tr>
+                  <td><div class="cell">发送总大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.send_total }}M</div></td>
+                  <td><div class="cell">当前发送包大小</div></td>
+                  <td><div class="cell" v-if="server.net">{{ server.net.send_pack }}K</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </el-card>
 			</el-col>
 		</el-row>
@@ -191,7 +186,7 @@ export default {
 
   data () {
     return {
-      loading: [],
+      loading: true,
       server: [],
 
       cpu: {
@@ -215,68 +210,21 @@ export default {
         }]
 			},
 
-      memoryRate: 0,
-
-      net: {
-					grid: {
-						top: '15px'
-					},
-					tooltip: {
-						trigger: 'axis'
-					},
-					xAxis: {
-						boundaryGap: false,
-            type: 'category',
-            data: (function (){
-              var now = new Date();
-              var res = [];
-              var len = 30;
-              while (len--) {
-                res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
-                now = new Date(now - 2000);
-              }
-              return res;
-            })()
-					},
-					yAxis: {
-						type: 'value'
-          },
-					series: [{
-            name: '接收数据',
-						data: [120, 200, 150, 80, 70, 110, 130],
-						type: 'line',
-					},
-					{
-            name: '发送数据',
-						data: [110, 180, 120, 120, 60, 90, 110],
-						type: 'line',
-					}]
-				}
+      memoryRate: 0
     }
   },
 
-  created () {
-    this.openLoading()
-    this.getService()
+  async mounted () {
+    await this.getService()
+    this.loading = false
   },
 
   methods: {
-
     async getService () {
       await this.$API.monitor.getServerInfo().then(res => {
         this.server = res.data
         this.cpu.series[0].data[0].value = this.server.cpu.usage
-        this.memoryRate = this.server.memory.rate
-      })
-      this.loading.close()
-    },
-
-    openLoading () {
-      this.loading = this.$loading({
-        lock: true,
-        text: '拼命读取中',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        this.memoryRate = parseFloat(this.server.memory.rate)
       })
     }
   }
