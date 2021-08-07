@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Setting\Controller\Tools;
 
 use App\Setting\Request\Tool\SettingCrontabCreateRequest;
+use App\Setting\Service\SettingCrontabLogService;
 use App\Setting\Service\SettingCrontabService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -31,6 +32,12 @@ class CrontabController extends MineController
     protected $service;
 
     /**
+     * @Inject
+     * @var SettingCrontabLogService
+     */
+    protected $logService;
+
+    /**
      * 获取列表分页数据
      * @GetMapping("index")
      * @return ResponseInterface
@@ -52,6 +59,16 @@ class CrontabController extends MineController
     }
 
     /**
+     * 获取日志列表分页数据
+     * @GetMapping("logPageList")
+     * @return ResponseInterface
+     */
+    public function logPageList(): ResponseInterface
+    {
+        return $this->success($this->logService->getPageList($this->request->all()));
+    }
+
+    /**
      * 保存数据
      * @PostMapping("save")
      * @param SettingCrontabCreateRequest $request
@@ -62,6 +79,23 @@ class CrontabController extends MineController
     public function save(SettingCrontabCreateRequest $request): ResponseInterface
     {
         return $this->success(['id' => $this->service->save($request->all())]);
+    }
+
+    /**
+     * 立即执行定时任务
+     * @PostMapping("run")
+     * @Permission("setting:crontab:run")
+     * @OperationLog
+     */
+    public function run(): ResponseInterface
+    {
+        $id = $this->request->input('id', null);
+        if (is_null($id)) {
+            return $this->error();
+        } else {
+            $this->service->run($id);
+            return $this->success();
+        }
     }
 
     /**
@@ -83,6 +117,7 @@ class CrontabController extends MineController
      * @param SettingCrontabCreateRequest $request
      * @return ResponseInterface
      * @Permission("setting:crontab:update")
+     * @OperationLog
      */
     public function update(int $id, SettingCrontabCreateRequest $request): ResponseInterface
     {
@@ -95,6 +130,7 @@ class CrontabController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("setting:crontab:delete")
+     * @OperationLog
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -120,6 +156,7 @@ class CrontabController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("setting:crontab:recovery")
+     * @OperationLog
      */
     public function recovery(String $ids): ResponseInterface
     {

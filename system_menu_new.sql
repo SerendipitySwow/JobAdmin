@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
- Source Server Version : 50726
+ Source Server Version : 80012
  Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 50726
+ Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 01/08/2021 16:06:38
+ Date: 07/08/2021 23:45:43
 */
 
 SET NAMES utf8mb4;
@@ -182,5 +182,6 @@ INSERT INTO `system_menu` VALUES (3574831008928, 3574830936224, '0,3574830936224
 INSERT INTO `system_menu` VALUES (3574831017632, 3574830936224, '0,3574830936224', '系统设置真实删除', 'setting:realDelete', NULL, NULL, NULL, NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 19:58:57', '2021-07-31 20:00:57', '2021-07-31 20:00:57', NULL);
 INSERT INTO `system_menu` VALUES (3574831026336, 3574830936224, '0,3574830936224', '系统设置导入', 'setting:import', NULL, NULL, NULL, NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 19:58:57', '2021-07-31 19:58:57', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3574831040160, 3574830936224, '0,3574830936224', '系统设置导出', 'setting:export', NULL, NULL, NULL, NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 19:58:57', '2021-07-31 19:58:57', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3891405057696, 3574488593568, '0,3573128538272,3574488593568', '定时任务执行', 'setting:crontab:run', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-07 23:44:06', '2021-08-07 23:44:06', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

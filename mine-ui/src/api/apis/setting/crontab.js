@@ -14,6 +14,18 @@ export default {
   },
 
   /**
+   * 获取任务日志列表
+   * @returns
+   */
+    getLogPageList (params = {}) {
+    return request({
+      url: 'setting/crontab/logPageList',
+      method: 'get',
+      params
+    })
+  },
+
+  /**
    * 从回收站获取
    * @returns
    */
@@ -22,6 +34,18 @@ export default {
       url: 'setting/crontab/recycle',
       method: 'get',
       params
+    })
+  },
+
+  /**
+   * 立刻执行一次定时任务
+   * @returns
+   */
+   run (params = {}) {
+    return request({
+      url: 'setting/crontab/run',
+      method: 'post',
+      data: params
     })
   },
 

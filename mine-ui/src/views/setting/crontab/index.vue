@@ -3,15 +3,15 @@
 		<el-row :gutter="15">
 			<el-col :xl="6" :lg="6" :md="8" :sm="12" :xs="24" v-for="item in list" :key="item.id">
 				<el-card class="task task-item" shadow="hover">
-					<h2>{{item.title}}</h2>
+					<h2>{{item.name}} 【{{ getTypeLabel(item.type) }}】</h2>
 					<ul>
 						<li>
-							<h4>执行类</h4>
-							<p>{{item.handler}}</p>
+							<h4>调用目标</h4>
+							<p>{{item.target}}</p>
 						</li>
 						<li>
 							<h4>定时规则</h4>
-							<p>{{item.cron}}</p>
+							<p>{{item.rule}}</p>
 						</li>
 					</ul>
 					<div class="bottom">
@@ -61,15 +61,18 @@
 
 	export default {
 		name: 'setting:crontab',
+		
 		components: {
 			saveDialog,
 			logs
 		},
+
 		provide() {
 			return {
 				list: this.list
 			}
 		},
+
 		data() {
 			return {
 				dialog: {
@@ -78,12 +81,15 @@
 				},
 				queryParams: {},
 				isRecycle: false,
-				list: []
+				list: [],
+				types: ['', '命令任务', '类任务', 'URL任务', 'EVAL任务']
 			}
 		},
+
 		mounted() {
 			this.loadData()
 		},
+
 		methods: {
 
 			// 载入数据
@@ -99,18 +105,28 @@
 				}
 			},
 
+			// 获取类型标签
+			getTypeLabel(key) {
+				return this.types[key]
+			},
+
+			// 新增
 			add(){
 				this.dialog.save = true
 				this.$nextTick(() => {
 					this.$refs.saveDialog.open()
 				})
 			},
-			edit(task){
+
+			// 编辑
+			edit(row){
 				this.dialog.save = true
 				this.$nextTick(() => {
-					this.$refs.saveDialog.open('edit').setData(task)
+					this.$refs.saveDialog.open('edit').setData(row)
 				})
 			},
+
+			// 删除
 			del(task){
 				this.$confirm(`确认删除 ${task.title} 计划任务吗？`,'提示', {
 					type: 'warning',
@@ -125,19 +141,17 @@
 			logs(){
 				this.dialog.logsVisible = true
 			},
-			run(task){
-				this.$message.success(`已成功执行计划任务：${task.title}`)
+
+			// 立刻执行定时任务
+			run(row){
+				this.$API.crontab.run({id: row.id}).then(() => {
+					this.$message.success(`已成功执行计划任务：${row.name}`)
+				})
 			},
+
 			//本地更新数据
 			handleSuccess(data, mode){
-				if(mode=='add'){
-					data.id = new Date().getTime()
-					this.list.push(data)
-				}else if(mode=='edit'){
-					this.list.filter(item => item.id===data.id ).forEach(item => {
-						Object.assign(item, data)
-					})
-				}
+				this.loadData()
 			}
 		}
 	}

@@ -85,4 +85,13 @@ class SettingCrontabService extends AbstractService
 
         return $res;
     }
+
+    /**
+     * 立即执行一次定时任务
+     * @param $id
+     */
+    public function run($id)
+    {
+
+    }
 }
