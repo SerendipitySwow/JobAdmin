@@ -3,17 +3,13 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
-use App\Setting\Model\SettingCrontab;
 use App\Setting\Service\SettingCrontabService;
-use GuzzleHttp\Exception\GuzzleException;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Crontab\Parser;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\ClientFactory;
 use Hyperf\Redis\Redis;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * 定时任务管理器
@@ -89,7 +85,7 @@ class MineCrontabManage
             $crontab->setCallback($item['target']);
             $crontab->setType($item['type']);
             $crontab->setEnable(true);
-            $crontab->setCrontabId($item['crontab_id']);
+            $crontab->setCrontabId($item['id']);
             $crontab->setName($item['name']);
             $crontab->setParameter($item['parameter'] ?: '');
             $crontab->setRule($item['rule']);

@@ -34,7 +34,7 @@ class CrontabController extends MineController
      * 获取列表分页数据
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission("system:crontab:index")
+     * @Permission("setting:crontab:index")
      */
     public function index(): ResponseInterface
     {
@@ -44,7 +44,7 @@ class CrontabController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission("system:crontab:recycle")
+     * @Permission("setting:crontab:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -56,7 +56,7 @@ class CrontabController extends MineController
      * @PostMapping("save")
      * @param SettingCrontabCreateRequest $request
      * @return ResponseInterface
-     * @Permission("system:crontab:save")
+     * @Permission("setting:crontab:save")
      * @OperationLog
      */
     public function save(SettingCrontabCreateRequest $request): ResponseInterface
@@ -69,7 +69,7 @@ class CrontabController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission("system:crontab:read")
+     * @Permission("setting:crontab:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -82,7 +82,7 @@ class CrontabController extends MineController
      * @param int $id
      * @param SettingCrontabCreateRequest $request
      * @return ResponseInterface
-     * @Permission("system:crontab:update")
+     * @Permission("setting:crontab:update")
      */
     public function update(int $id, SettingCrontabCreateRequest $request): ResponseInterface
     {
@@ -94,7 +94,7 @@ class CrontabController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:crontab:delete")
+     * @Permission("setting:crontab:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -106,7 +106,7 @@ class CrontabController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:crontab:realDelete")
+     * @Permission("setting:crontab:realDelete")
      * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
@@ -119,7 +119,7 @@ class CrontabController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:crontab:recovery")
+     * @Permission("setting:crontab:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {
