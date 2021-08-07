@@ -67,7 +67,7 @@ class MineCrontabManage
 
         if ($data === false) {
             $data = $this->crontabService->getList([
-                'select' => 'name,type,target,rule,parameter',
+                'select' => 'id,name,type,target,rule,parameter',
                 'status' => '0',
             ]);
             $this->redis->set('MineAdmin:crontab', serialize($data));
