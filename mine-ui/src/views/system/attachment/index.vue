@@ -85,7 +85,7 @@
           :show-overflow-tooltip="true"
         ></el-table-column>
 
-        <el-table-column prop="storage_mode" sortable='custom' label="存储模式">
+        <el-table-column prop="storage_mode" label="存储模式">
           <template #default="scope">
             {{ getLable(scope.row.storage_mode) }}
           </template>
@@ -94,7 +94,6 @@
         <el-table-column
           label="资源类型"
           prop="mime_type"
-          sortable='custom'
           width="140"
           :show-overflow-tooltip="true"
         ></el-table-column>
@@ -102,7 +101,6 @@
         <el-table-column
           label="存储目录"
           prop="storage_path"
-          sortable='custom'
           width="140"
           :show-overflow-tooltip="true"
         ></el-table-column>
@@ -124,7 +122,6 @@
         <el-table-column
           label="文件大小"
           prop="size_info"
-          sortable='custom'
           :show-overflow-tooltip="true"
         ></el-table-column>
 
