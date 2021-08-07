@@ -86,7 +86,7 @@
 <script>
 
   export default {
-    name: 'system:loginLog:index',
+    name: 'system:loginLog',
 
     data() {
       return {
@@ -100,7 +100,9 @@
           username: undefined,
           status: undefined,
           maxDate: undefined,
-          minDate: undefined
+          minDate: undefined,
+          order_by: 'login_time',
+          order_type: 'desc',
         },
         column: [
 					{
@@ -187,7 +189,9 @@
           username: undefined,
           status: undefined,
           maxDate: undefined,
-          minDate: undefined
+          minDate: undefined,
+          order_by: 'login_time',
+          order_type: 'desc',
         }
         this.$refs.table.upData(this.queryParams)
       }

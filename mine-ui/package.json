@@ -15,6 +15,7 @@
 		"crypto-js": "4.0.0",
 		"echarts": "5.1.2",
 		"element-plus": "1.0.2-beta.54",
+		"highlight.js": "^11.2.0",
 		"lodash": "^4.17.21",
 		"nprogress": "0.2.0",
 		"qs": "^6.10.1",
@@ -45,8 +46,7 @@
 			"APP_CONFIG": true
 		},
 		"extends": [
-			"plugin:vue/vue3-essential",
-			"eslint:recommended"
+			"plugin:vue/vue3-essential"
 		],
 		"parserOptions": {
 			"parser": "babel-eslint"
