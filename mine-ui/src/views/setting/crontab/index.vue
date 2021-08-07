@@ -76,35 +76,29 @@
 					save: false,
 					logsVisible: false
 				},
-				list: [
-					{
-						id: "1",
-						title: "清理服务器缓存",
-						handler: "cleanUpCacheHandler",
-						cron: "59 59 23 * * ? *",
-						status: "0"
-					},
-					{
-						id: "2",
-						title: "自动审核",
-						handler: "automaticAuditHandler",
-						cron: "0 0 * * * ? *",
-						status: "0"
-					},
-					{
-						id: "3",
-						title: "清理未实名用户",
-						handler: "deleteUserHandler",
-						cron: "0 0 0 * * ? *",
-						status: "1"
-					}
-				]
+				queryParams: {},
+				isRecycle: false,
+				list: []
 			}
 		},
 		mounted() {
-
+			this.loadData()
 		},
 		methods: {
+
+			// 载入数据
+			async loadData() {
+				if (! this.isRecycle) {
+					await this.$API.crontab.getPageList(this.queryParams).then(res => {
+						this.list = res.data.items
+					})
+				} else {
+					await this.$API.crontab.getRecyclePageList(this.queryParams).then(res => {
+						this.list = res.data.items
+					})
+				}
+			},
+
 			add(){
 				this.dialog.save = true
 				this.$nextTick(() => {

@@ -14,7 +14,7 @@
         <el-input-number v-model="form.sort" size="small" :min="0" :max="999" label="排序"></el-input-number>
       </el-form-item>
 
-      <el-form-item label="状态" prop="status" v-if="form.type !== 'B'">
+      <el-form-item label="状态" prop="status">
         <el-radio-group v-model="form.status">
 
           <el-radio label="0">启用</el-radio>
