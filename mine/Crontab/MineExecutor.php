@@ -223,6 +223,7 @@ class MineExecutor
         }
         $logService = $this->container->get(SettingCrontabLogService::class);
         $data = [
+            'crontab_id' => $crontab->getCrontabId(),
             'name' => $crontab->getName(),
             'target' => $crontab->getCallback(),
             'parameter' => $crontab->getParameter(),

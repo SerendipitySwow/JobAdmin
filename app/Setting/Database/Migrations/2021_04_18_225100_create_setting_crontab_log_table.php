@@ -15,6 +15,7 @@ class CreateSettingCrontabLogTable extends Migration
             $table->engine = 'Innodb';
             $table->comment('定时任务执行日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
+            $table->addColumn('bigInteger', 'crontab_id', ['unsigned' => true, 'comment' => '任务ID']);
             $table->addColumn('string', 'name', ['length'=> 255, 'comment' => '任务名称'])->nullable();
             $table->addColumn('string', 'target', ['length'=> 500, 'comment' => '任务调用目标字符串'])->nullable();
             $table->addColumn('string', 'parameter', ['length'=> 1000, 'comment' => '任务调用参数'])->nullable();

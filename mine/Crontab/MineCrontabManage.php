@@ -89,6 +89,7 @@ class MineCrontabManage
             $crontab->setCallback($item['target']);
             $crontab->setType($item['type']);
             $crontab->setEnable(true);
+            $crontab->setCrontabId($item['crontab_id']);
             $crontab->setName($item['name']);
             $crontab->setParameter($item['parameter'] ?: '');
             $crontab->setRule($item['rule']);

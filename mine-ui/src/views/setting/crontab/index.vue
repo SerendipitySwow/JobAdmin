@@ -1,12 +1,3 @@
-<!--
- * @Descripttion: 系统计划任务配置
- * @version: 1.2
- * @Author: sakuya
- * @Date: 2021年7月7日09:28:32
- * @LastEditors: sakuya
- * @LastEditTime: 2021年7月10日20:56:47
--->
-
 <template>
 	<el-main>
 		<el-row :gutter="15">
@@ -25,8 +16,8 @@
 					</ul>
 					<div class="bottom">
 						<div class="state">
-							<el-tag v-if="item.state=='1'" size="mini">准备就绪</el-tag>
-							<el-tag v-if="item.state=='-1'" size="mini" type="info">停用</el-tag>
+							<el-tag v-if="item.status=='0'">正常</el-tag>
+							<el-tag v-if="item.status=='1'" type="info">停用</el-tag>
 						</div>
 						<div class="handler">
 							<el-popconfirm title="确定立即执行吗？" @confirm="run(item)">
@@ -69,7 +60,7 @@
 	import logs from './logs'
 
 	export default {
-		name: 'task',
+		name: 'setting:crontab',
 		components: {
 			saveDialog,
 			logs
@@ -91,21 +82,21 @@
 						title: "清理服务器缓存",
 						handler: "cleanUpCacheHandler",
 						cron: "59 59 23 * * ? *",
-						state: "1"
+						status: "0"
 					},
 					{
 						id: "2",
 						title: "自动审核",
 						handler: "automaticAuditHandler",
 						cron: "0 0 * * * ? *",
-						state: "1"
+						status: "0"
 					},
 					{
 						id: "3",
 						title: "清理未实名用户",
 						handler: "deleteUserHandler",
 						cron: "0 0 0 * * ? *",
-						state: "-1"
+						status: "1"
 					}
 				]
 			}

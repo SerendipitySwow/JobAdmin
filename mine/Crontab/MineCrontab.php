@@ -21,6 +21,12 @@ class MineCrontab extends Crontab
     protected $parameter;
 
     /**
+     * 任务ID
+     * @var integer
+     */
+    protected $crontab_id;
+
+    /**
      * @return string
      */
     public function getFailPolicy(): string
@@ -52,7 +58,19 @@ class MineCrontab extends Crontab
         $this->parameter = $parameter;
     }
 
+    /**
+     * @return int
+     */
+    public function getCrontabId(): int
+    {
+        return $this->crontab_id;
+    }
 
-
-
+    /**
+     * @param int $crontab_id
+     */
+    public function setCrontabId(int $crontab_id): void
+    {
+        $this->crontab_id = $crontab_id;
+    }
 }
