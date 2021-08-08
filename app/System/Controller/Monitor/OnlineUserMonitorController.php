@@ -41,8 +41,9 @@ class OnlineUserMonitorController extends MineController
      * @PostMapping("kick")
      * @Permission("system:onlineUser:kick")
      */
-    public function getDetail(): \Psr\Http\Message\ResponseInterface
+    public function kickUser(): \Psr\Http\Message\ResponseInterface
     {
-        return $this->success();
+        return $this->service->kickUser((string) $this->request->input('id')) ?
+            $this->success() : $this->error();
     }
 }

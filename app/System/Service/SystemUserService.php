@@ -19,6 +19,7 @@ use Mine\Exception\NormalStatusException;
 use Mine\Exception\UserBanException;
 use Mine\Helper\LoginUser;
 use Mine\Helper\MineCaptcha;
+use Mine\Helper\Str;
 use Mine\MineCollection;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
@@ -157,8 +158,10 @@ class SystemUserService extends AbstractService
                     ($userinfo['status'] == SystemUser::USER_BAN && $userinfo['id'] == env('SUPER_ADMIN'))
                 ) {
                     $userLoginAfter->message = __('jwt.login_success');
+                    $token = $this->loginUser->getToken($userLoginAfter->userinfo);
+                    $userLoginAfter->token = $token;
                     $this->evDispatcher->dispatch($userLoginAfter);
-                    return $this->loginUser->getToken($userLoginAfter->userinfo);
+                    return $token;
                 } else {
                     $userLoginAfter->loginStatus = false;
                     $userLoginAfter->message = __('jwt.user_ban');
@@ -311,7 +314,7 @@ class SystemUserService extends AbstractService
         // 从redis获取在线用户
         $redis = $this->container->get(Redis::class);
         $prefix = config('cache.default.prefix');
-        $users = $redis->keys("{$prefix}MineAdmin_jwt_default_*");
+        $users = $redis->keys("{$prefix}Token:*");
 
         $userIds = [];
 
@@ -321,10 +324,28 @@ class SystemUserService extends AbstractService
             }
         }
 
+        if (empty($userIds)) {
+            return [];
+        }
+
         return $this->getPageList(array_merge([
             'showDept' => 1,
             'userIds'  => $userIds
         ], $params));
+    }
+
+    /**
+     * 强制下线用户
+     * @param string $id
+     * @return bool
+     * @throws InvalidArgumentException
+     */
+    public function kickUser(string $id): bool
+    {
+        $redis = $this->container->get(Redis::class);
+        $prefix = config('cache.default.prefix');
+        $this->container->get(LoginUser::class)->getJwt()->logout($redis->get("{$prefix}Token:{$id}"));
+        return $redis->del("{$prefix}Token:{$id}") > 0;
     }
 
     /**

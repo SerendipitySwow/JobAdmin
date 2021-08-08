@@ -14,6 +14,8 @@ class UserLoginAfter
 
     public $message;
 
+    public $token;
+
     public function __construct(array $userinfo)
     {
         $this->userinfo = $userinfo;

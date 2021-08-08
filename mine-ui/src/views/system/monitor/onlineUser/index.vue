@@ -5,7 +5,7 @@
       </div>
       <div class="right-panel">
         <div class="right-panel-search">
-          <el-input v-model="queryParams.name" clearable placeholder="请输入表名"></el-input>
+          <el-input v-model="queryParams.username" clearable placeholder="请输入用户名"></el-input>
 
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -30,20 +30,27 @@
         <el-table-column
           label="用户名"
           prop="username"
-          width="260"
           :show-overflow-tooltip="true"
+        ></el-table-column>
+
+        <el-table-column
+          label="昵称"
+          prop="nickname"
+        ></el-table-column>
+
+        <el-table-column
+          label="部门"
+          prop="dept.name"
         ></el-table-column>
 
         <el-table-column
           label="登录IP"
           prop="login_ip"
-          width="100"
         ></el-table-column>
 
         <el-table-column
           label="登录时间"
           prop="login_time"
-          :show-overflow-tooltip="true"
         ></el-table-column>
 
         <el-table-column label="操作" fixed="right" align="right">
@@ -51,9 +58,9 @@
 
             <el-button
             type="text"
-            v-auth="['system:monitor:relyDetail']"
-            @click="handleDetail(scope.row.name)"
-          >详细</el-button>
+            v-auth="['setting:onlineUser:kick']"
+            @click="handleKick(scope.row)"
+          >强退用户</el-button>
             
           </template>
         </el-table-column>
@@ -96,23 +103,25 @@
     data() {
       return {
         dialogVisible: false,
-        detailsLoading: false,
         api: { list: this.$API.monitor.getOnlineUserPageList },
         queryParams: {
-          name: undefined,
+          username: undefined,
         }
       }
     },
     methods: {
 
-      // 显示表字段
-      handleDetail (name) {
-        this.dialogVisible = true
-        this.detailsLoading = true
-        this.$API.monitor.getPackageDetail(name).then(res => {
-          this.details = res.data
-          this.detailsLoading = false
-        })
+      // 强制下线某用户
+      handleKick (row) {
+        this.$confirm(`确认要强制退出 ${row.username} 用户吗？`, '提示', {
+          type: 'warning',
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(() => {
+          this.$API.monitor.kickUser({ id: row.id }).then(res => {
+            this.$message.success(res.message)
+          })
+        }).catch(() => {})
       },
 
       //搜索
@@ -122,7 +131,7 @@
 
       resetSearch() {
         this.queryParams = {
-          name: undefined,
+          username: undefined,
         }
         this.$refs.table.upData(this.queryParams)
       },

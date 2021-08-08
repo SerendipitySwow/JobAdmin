@@ -7,6 +7,7 @@ use App\System\Model\SystemUser;
 use App\System\Service\SystemLoginLogService;
 use Hyperf\Event\Annotation\Listener;
 use Hyperf\Event\Contract\ListenerInterface;
+use Hyperf\Redis\Redis;
 use Mine\Event\UserLoginAfter;
 use Mine\Helper\Str;
 use Mine\MineRequest;
@@ -22,10 +23,13 @@ class LoginListener implements ListenerInterface
 
     protected $sysLoginLogService;
 
+    protected $container;
+
     public function __construct(ContainerInterface $container)
     {
-        $this->request = $container->get(MineRequest::class);
-        $this->sysLoginLogService = $container->get(SystemLoginLogService::class);
+        $this->container = $container;
+        $this->request = $this->container->get(MineRequest::class);
+        $this->sysLoginLogService = $this->container->get(SystemLoginLogService::class);
     }
 
     public function listen(): array
@@ -52,6 +56,10 @@ class LoginListener implements ListenerInterface
             'message' => $event->message,
             'login_time' => date('Y-m-d H:i:s')
         ]);
+
+        $redis = $this->container->get(Redis::class);
+
+        $redis->set(config('cache.default.prefix') .'Token:'.$event->userinfo['id'], $event->token);
 
         if ($event->loginStatus) {
             $event->userinfo['login_ip'] = $ip;
