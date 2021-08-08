@@ -9,6 +9,7 @@ use Hyperf\Cache\Annotation\CacheEvict;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Redis\Redis;
 use Mine\Abstracts\AbstractService;
 use Mine\Event\UserLoginAfter;
 use Mine\Event\UploadAfter;
@@ -307,10 +308,23 @@ class SystemUserService extends AbstractService
      */
     public function getOnlineUserPageList(array $params = []): array
     {
-        $parameter = [
+        // 从redis获取在线用户
+        $redis = $this->container->get(Redis::class);
+        $prefix = config('cache.default.prefix');
+        $users = $redis->keys("{$prefix}MineAdmin_jwt_default_*");
+
+        $userIds = [];
+
+        foreach ($users as $user) {
+            if ( preg_match('/(\d+)$/', $user, $match)) {
+                $userIds[] = $match[0];
+            }
+        }
+
+        return $this->getPageList(array_merge([
             'showDept' => 1,
-        ];
-        return $this->getPageList(array_merge($parameter, $params));
+            'userIds'  => $userIds
+        ], $params));
     }
 
     /**

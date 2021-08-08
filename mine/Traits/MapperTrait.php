@@ -2,6 +2,7 @@
 
 namespace Mine\Traits;
 
+use Hyperf\Contract\LengthAwarePaginatorInterface;
 use Hyperf\Database\Model\Builder;
 use Mine\MineModel;
 
@@ -33,12 +34,23 @@ trait MapperTrait
         $paginate = $this->listQuerySetting($params)->paginate(
             $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
         );
+        return $this->setPaginate($paginate, ($params['pageSize'] ?? $this->model::PAGE_SIZE));
+    }
+
+    /**
+     * 设置数据库分页
+     * @param LengthAwarePaginatorInterface $paginate
+     * @param int $pageSize
+     * @return array
+     */
+    public function setPaginate(LengthAwarePaginatorInterface $paginate, int $pageSize): array
+    {
         return [
             'items' => $paginate->items(),
             'pageInfo' => [
                 'total' => $paginate->total(),
                 'currentPage' => $paginate->currentPage(),
-                'totalPage' => ceil($paginate->total() / ($params['pageSize'] ?? $this->model::PAGE_SIZE))
+                'totalPage' => ceil($paginate->total() / $pageSize)
             ]
         ];
     }
