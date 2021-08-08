@@ -45,7 +45,7 @@ class CrontabController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList($this->request->all()));
+        return $this->success($this->service->getList($this->request->all()));
     }
 
     /**
@@ -83,8 +83,7 @@ class CrontabController extends MineController
         if (is_null($id)) {
             return $this->error();
         } else {
-            $this->service->run($id);
-            return $this->success();
+            return $this->service->run($id) ? $this->success() : $this->error();
         }
     }
 

@@ -7,6 +7,8 @@ use App\Setting\Mapper\SettingCrontabMapper;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Redis\Redis;
 use Mine\Abstracts\AbstractService;
+use Mine\Crontab\MineCrontab;
+use Mine\Crontab\MineExecutor;
 use Psr\Container\ContainerInterface;
 
 class SettingCrontabService extends AbstractService
@@ -76,9 +78,22 @@ class SettingCrontabService extends AbstractService
     /**
      * 立即执行一次定时任务
      * @param $id
+     * @return bool|null
      */
-    public function run($id)
+    public function run($id): ?bool
     {
+        $crontab = new MineCrontab();
+        $model = $this->read($id);
+        $crontab->setCallback($model->target);
+        $crontab->setType($model->type);
+        $crontab->setEnable(true);
+        $crontab->setCrontabId($model->id);
+        $crontab->setName($model->name);
+        $crontab->setParameter($model->parameter ?: '');
+        $crontab->setRule($model->rule);
 
+        $executor = $this->container->get(MineExecutor::class);
+
+        return $executor->execute($crontab, true);
     }
 }

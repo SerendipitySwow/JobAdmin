@@ -5,6 +5,7 @@ namespace App\Setting\Mapper;
 
 use App\Setting\Model\SettingCrontab;
 use Hyperf\Database\Model\Builder;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 
 class SettingCrontabMapper extends AbstractMapper
@@ -17,6 +18,23 @@ class SettingCrontabMapper extends AbstractMapper
     public function assignModel()
     {
         $this->model = SettingCrontab::class;
+    }
+
+    public function delete(array $ids): bool
+    {
+        try {
+            Db::beginTransaction();
+            foreach ($ids as $id) {
+                $model = $this->model::find($id);
+                $model->logs()->delete();
+                $model->delete();
+            }
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
+        }
+        return true;
     }
 
     /**

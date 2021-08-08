@@ -80,7 +80,6 @@
 					logsVisible: false
 				},
 				queryParams: {},
-				isRecycle: false,
 				list: [],
 				types: ['', '命令任务', '类任务', 'URL任务', 'EVAL任务']
 			}
@@ -94,15 +93,9 @@
 
 			// 载入数据
 			async loadData() {
-				if (! this.isRecycle) {
-					await this.$API.crontab.getPageList(this.queryParams).then(res => {
-						this.list = res.data.items
-					})
-				} else {
-					await this.$API.crontab.getRecyclePageList(this.queryParams).then(res => {
-						this.list = res.data.items
-					})
-				}
+				await this.$API.crontab.getPageList(this.queryParams).then(res => {
+					this.list = res.data
+				})
 			},
 
 			// 获取类型标签
@@ -127,16 +120,21 @@
 			},
 
 			// 删除
-			del(task){
-				this.$confirm(`确认删除 ${task.title} 计划任务吗？`,'提示', {
+			del(row){
+				this.$confirm(`确认删除 ${row.name} 定时任务吗？`,'提示', {
 					type: 'warning',
 					confirmButtonText: '删除',
 					confirmButtonClass: 'el-button--danger'
 				}).then(() => {
-					this.list.splice(this.list.findIndex(item => item.id === task.id), 1)
-				}).catch(() => {
-					//取消
-				})
+					this.$API.crontab.deletes(row.id).then(res => {
+						if (res.success) {
+							this.$message.success(res.message)
+							this.loadData()
+						} else {
+							this.$message.success(res.message)
+						}
+					})
+				}).catch(() => {})
 			},
 			
 			// 定时任务日志

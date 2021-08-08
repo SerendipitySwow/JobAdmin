@@ -56,14 +56,16 @@ class MineExecutor
     /**
      * 执行定时任务
      * @param MineCrontab $crontab
+     * @param bool $run
      * @return bool|null
      */
-    public function execute(MineCrontab $crontab): ?bool
+    public function execute(MineCrontab $crontab, bool $run = false): ?bool
     {
-        if (! $crontab instanceof MineCrontab || ! $crontab->getExecuteTime()) {
+        if ((! $crontab instanceof MineCrontab || ! $crontab->getExecuteTime()) && !$run) {
             return null;
         }
-        $diff = $crontab->getExecuteTime()->diffInRealSeconds(new Carbon());
+        $diff = 0;
+        !$run && $diff = $crontab->getExecuteTime()->diffInRealSeconds(new Carbon());
         $callback = null;
         switch ($crontab->getType()) {
             case SettingCrontab::CLASS_CRONTAB:
