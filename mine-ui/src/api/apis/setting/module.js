@@ -29,7 +29,7 @@ export default {
    * 删除模块
    * @returns
    */
-  remove (name) {
+  deletes (name) {
     return request({
       url: 'setting/module/delete/' + name,
       method: 'delete'
