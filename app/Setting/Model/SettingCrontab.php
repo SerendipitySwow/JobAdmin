@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace App\Setting\Model;
 
-use Hyperf\Database\Model\SoftDeletes;
 use Mine\MineModel;
 /**
  * @property int $id 主键
@@ -18,18 +17,10 @@ use Mine\MineModel;
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
  * @property \Carbon\Carbon $updated_at 更新时间
- * @property string $deleted_at 删除时间
  * @property string $remark 备注
  */
 class SettingCrontab extends MineModel
 {
-    use SoftDeletes;
-    // 遇到错误执行，不建议
-    public const POLICY_TRY_RUN = '1';
-    // 遇到错误，再次尝试一次
-    public const POLICY_TRY_ONCE = '2';
-    // 遇到错误，放弃执行
-    public const POLICY_GIVE_UP = '3';
     // 命令任务
     public const COMMAND_CRONTAB = '1';
     // 类任务
@@ -38,6 +29,7 @@ class SettingCrontab extends MineModel
     public const URL_CRONTAB = '3';
     // EVAL 任务
     public const EVAL_CRONTAB = '4';
+
     public $incrementing = false;
     /**
      * The table associated with the model.
@@ -57,4 +49,13 @@ class SettingCrontab extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 关联字典任务日志表
+     * @return \Hyperf\Database\Model\Relations\HasMany
+     */
+    public function logs() : \Hyperf\Database\Model\Relations\HasMany
+    {
+        return $this->hasMany(SettingCrontabLog::class, 'crontab_id', 'id');
+    }
 }

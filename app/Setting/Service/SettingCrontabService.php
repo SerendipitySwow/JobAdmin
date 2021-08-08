@@ -74,19 +74,6 @@ class SettingCrontabService extends AbstractService
     }
 
     /**
-     * 恢复
-     * @param string $ids
-     * @return bool
-     */
-    public function recovery(string $ids): bool
-    {
-        $res = parent::recovery($ids);
-        $this->redis->del('MineAdmin:crontab');
-
-        return $res;
-    }
-
-    /**
      * 立即执行一次定时任务
      * @param $id
      */

@@ -17,21 +17,9 @@ export default {
    * 获取任务日志列表
    * @returns
    */
-    getLogPageList (params = {}) {
+  getLogPageList (params = {}) {
     return request({
       url: 'setting/crontab/logPageList',
-      method: 'get',
-      params
-    })
-  },
-
-  /**
-   * 从回收站获取
-   * @returns
-   */
-  getRecyclePageList (params = {}) {
-    return request({
-      url: 'setting/crontab/recycle',
       method: 'get',
       params
     })
@@ -62,34 +50,12 @@ export default {
   },
 
   /**
-   * 移到回收站
+   * 删除
    * @returns
    */
   deletes (ids) {
     return request({
       url: 'setting/crontab/delete/' + ids,
-      method: 'delete'
-    })
-  },
-
-  /**
-   * 恢复数据
-   * @returns
-   */
-  recoverys (ids) {
-    return request({
-      url: 'setting/crontab/recovery/' + ids,
-      method: 'put'
-    })
-  },
-
-  /**
-   * 真实删除
-   * @returns
-   */
-  realDeletes (ids) {
-    return request({
-      url: 'setting/crontab/realDelete/' + ids,
       method: 'delete'
     })
   },

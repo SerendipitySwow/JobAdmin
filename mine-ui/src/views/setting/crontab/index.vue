@@ -51,7 +51,7 @@
 	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
 
 	<el-drawer title="计划任务日志" v-model="dialog.logsVisible" :size="600" direction="rtl" destroy-on-close>
-		<logs></logs>
+		<logs ref="logList" />
 	</el-drawer>
 </template>
 
@@ -138,8 +138,13 @@
 					//取消
 				})
 			},
-			logs(){
+			
+			// 定时任务日志
+			logs(row){
 				this.dialog.logsVisible = true
+				this.$nextTick(() => {
+					this.$refs.logList.setData(row)
+				})
 			},
 
 			// 立刻执行定时任务

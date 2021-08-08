@@ -1,37 +1,34 @@
-<!--
- * @Descripttion: 系统计划任务配置
- * @version: 1.0
- * @Author: sakuya
- * @Date: 2021年7月7日09:28:32
- * @LastEditors:
- * @LastEditTime:
--->
-
 <template>
 	<el-container>
 		<el-main  style="padding:0 20px;">
-			<scTable ref="table" :data="data" stripe>
-				<el-table-column label="执行时间" prop="time" width="200"></el-table-column>
-				<el-table-column label="执行结果" prop="state" width="100">
+			<maTable
+				ref="table"
+				:api="api"
+				:autoLoad="false"
+				stripe
+			>
+				<el-table-column label="执行时间" prop="created_at" width="160"></el-table-column>
+				<el-table-column label="执行结果" prop="state" width="80">
 					<template #default="scope">
-						<span v-if="scope.row.state==200" style="color: #67C23A;"><i class="el-icon-success"></i> 成功</span>
+						<span v-if="scope.row.status=='0'" style="color: #67C23A;"><i class="el-icon-success"></i> 成功</span>
 						<span v-else style="color: #F56C6C;"><i class="el-icon-error"></i> 异常</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="执行日志" prop="logs" width="100" fixed="right">
+				<el-table-column label="执行目标" prop="target" width="200" :show-overflow-tooltip="true"></el-table-column>
+				<el-table-column label="异常信息" prop="logs" width="100" fixed="right">
 					<template #default="scope">
-						<el-button size="mini" @click="show(scope.row)" type="text">日志</el-button>
+						<el-button size="mini" @click="show(scope.row)" type="text">查看</el-button>
 					</template>
 				</el-table-column>
-			</scTable>
+			</maTable>
 		</el-main>
-	</el-container>
 
-	<el-drawer title="日志" v-model="logsVisible" :size="500" direction="rtl" destroy-on-close>
-		<el-main  style="padding:0 20px 20px 20px;">
-			<pre style="font-size: 12px;color: #999;padding:20px;background: #333;font-family: consolas;line-height: 1.5;overflow: auto;">{{demoLog}}</pre>
-		</el-main>
-	</el-drawer>
+		<el-drawer title="异常信息" v-model="logsVisible" :size="500" direction="rtl" destroy-on-close>
+			<el-main style="padding:0 20px 20px 20px;">
+				<pre>{{ log == '' ? '无异常信息' : log }}</pre>
+			</el-main>
+		</el-drawer>
+	</el-container>
 </template>
 
 <script>
@@ -39,70 +36,41 @@
 		data() {
 			return {
 				logsVisible: false,
-				demoLog: `2021-07-07 12:35:00 [com.xxl.job.core.thread.JobThread#run]-[124]-[Thread-308]
------------ xxl-job job execute start -----------
------------ Param:
-2021-07-07 12:35:00 [com.heronshn.reservation.jobhandler.AqshMasterDataSendHandler#execute]-[31]-[Thread-308] aqshMasterDataSendHandler start
-2021-07-07 12:35:00 [com.heronshn.reservation.data.service.impl.AqshVehicleServiceImpl#send]-[42]-[Thread-308] send 45
-2021-07-07 12:35:00 [com.heronshn.reservation.data.service.impl.AqshVehicleServiceImpl#send]-[45]-[Thread-308] webapi http://127.0.0.1:48080
-2021-07-07 12:35:00 [com.heronshn.reservation.jobhandler.AqshMasterDataSendHandler#execute]-[33]-[Thread-308] aqshMasterDataSendHandler vehicle end
-2021-07-07 12:35:00 [com.heronshn.reservation.jobhandler.AqshMasterDataSendHandler#execute]-[35]-[Thread-308] aqshMasterDataSendHandler stop
-2021-07-07 12:35:00 [com.xxl.job.core.thread.JobThread#run]-[158]-[Thread-308]
------------ xxl-job job execute end(finish) -----------
------------ ReturnT:ReturnT [code=200, msg=null, content=null]
-2021-07-07 12:35:00 [com.xxl.job.core.thread.TriggerCallbackThread#callbackLog]-[176]-[Thread-10]
------------ xxl-job job callback finish.
-
-[Load Log Finish]`,
-				data: [
-					{
-						time: "2021-07-07 00:00:00",
-						state: "500",
-						logs: ""
-					},
-					{
-						time: "2021-07-06 00:00:00",
-						state: "200",
-						logs: ""
-					},
-					{
-						time: "2021-07-05 00:00:00",
-						state: "200",
-						logs: ""
-					},
-					{
-						time: "2021-07-04 00:00:00",
-						state: "200",
-						logs: ""
-					},
-					{
-						time: "2021-07-03 00:00:00",
-						state: "200",
-						logs: ""
-					},
-					{
-						time: "2021-07-02 00:00:00",
-						state: "200",
-						logs: ""
-					},
-					{
-						time: "2021-07-01 00:00:00",
-						state: "200",
-						logs: ""
-					}
-				]
+				api: {
+					list: this.$API.crontab.getLogPageList
+				},
+				queryParams: {
+					crontab_id: undefined
+				},
+				log: '',
 			}
 		},
-		mounted() {
 
-		},
 		methods: {
-			show(){
+
+			show(row){
 				this.logsVisible = true;
+				this.log = row.exception_info
+			},
+
+			setData(row) {
+				this.queryParams.crontab_id = row.id
+				this.$refs.table.upData(this.queryParams)
 			}
+
 		}
 	}
 </script>
 
 <style>
+pre {
+	font-size: 12px;
+	color: #ccc;
+	padding:20px;
+	background: #333;
+	font-family: consolas; 
+	line-height: 1.5;
+	overflow: auto;
+	border-radius: 4px;
+}
 </style>

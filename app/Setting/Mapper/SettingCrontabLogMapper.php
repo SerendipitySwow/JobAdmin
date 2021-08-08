@@ -5,6 +5,7 @@ namespace App\Setting\Mapper;
 
 
 use App\Setting\Model\SettingCrontabLog;
+use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 class SettingCrontabLogMapper extends AbstractMapper
@@ -17,6 +18,20 @@ class SettingCrontabLogMapper extends AbstractMapper
     public function assignModel()
     {
         $this->model = SettingCrontabLog::class;
+    }
+
+    /**
+     * 搜索处理器
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function handleSearch(Builder $query, array $params): Builder
+    {
+        if ($params['crontab_id'] ?? false) {
+            $query->where('crontab_id', $params['crontab_id']);
+        }
+        return $query;
     }
 
 }

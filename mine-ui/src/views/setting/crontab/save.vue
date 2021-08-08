@@ -114,9 +114,7 @@
 				isSaveing: false,
 			}
 		},
-		mounted() {
 
-		},
 		methods: {
 			//显示
 			open(mode='add'){
