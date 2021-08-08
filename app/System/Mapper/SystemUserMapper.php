@@ -167,6 +167,18 @@ class SystemUserMapper extends AbstractMapper
                 [$params['minDate'] . ' 00:00:00', $params['maxDate'] . ' 23:59:59']
             );
         }
+        if (isset($params['userIds'])) {
+            $query->whereIn('id', $params['userIds']);
+        }
+
+        if (isset($params['showDept'])) {
+            $isAll = $params['showDeptAll'] ?? false;
+
+            $query->with(['dept' => function($query) use($isAll){
+                /* @var Builder $query*/
+                $isAll ? $query->select(['*']) : $query->select(['name']);
+            }]);
+        }
         return $query;
     }
 

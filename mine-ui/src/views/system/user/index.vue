@@ -186,8 +186,13 @@
 
                       <el-dropdown-item 
                         @click="setHomepage(scope.row)"
-                        v-auth="['system:user:dashboard']"
+                        v-auth="['system:user:homePage']"
                       >设置首页</el-dropdown-item>
+
+                      <el-dropdown-item 
+                        @click="clearCache(scope.row)"
+                        v-auth="['system:user:cache']"
+                      >更新缓存</el-dropdown-item>
 
                       <el-dropdown-item 
                         @click="initUserPassword(scope.row.id)"
@@ -397,6 +402,11 @@
       // 设置用户首页
       setHomepage(row) {
         console.log(row)
+      },
+
+      // 更新用户缓存
+      clearCache(row) {
+
       },
 
       // 选择时间事件

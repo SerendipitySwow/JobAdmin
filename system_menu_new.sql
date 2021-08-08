@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 08/08/2021 11:36:03
+ Date: 08/08/2021 18:34:56
 */
 
 SET NAMES utf8mb4;
@@ -140,9 +140,9 @@ INSERT INTO `system_menu` VALUES (3572567980192, 3572508067488, '0,3569857398944
 INSERT INTO `system_menu` VALUES (3572591917216, 3572508067488, '0,3569857398944,3572508067488', '数据表清理碎片', 'system:dataMaintain:clear', '', NULL, '', NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 18:46:04', '2021-07-31 18:46:04', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3572605641376, 3572508067488, '0,3569857398944,3572508067488', '数据表优化', 'system:dataMaintain:optimize', '', NULL, '', NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 18:46:31', '2021-07-31 18:46:31', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3572694110880, 0, '0', '系统监控', 'monitor', 'el-icon-aim', 'monitor', '', NULL, '1', 'M', '0', 97, 1937003305632, NULL, '2021-07-31 18:49:24', '2021-07-31 18:49:24', NULL, NULL);
-INSERT INTO `system_menu` VALUES (3572767832736, 3572694110880, '0,3572694110880', '依赖监控', 'system:monitor:rely', 'el-icon-discover', 'rely', 'system/monitor/rely/index', NULL, '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-31 18:51:48', '2021-07-31 18:51:48', NULL, NULL);
-INSERT INTO `system_menu` VALUES (3572797772448, 3572694110880, '0,3572694110880', '服务监控', 'system:monitor:server', 'el-icon-umbrella', 'server', 'system/monitor/server/index', NULL, '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-31 18:52:46', '2021-07-31 18:52:46', NULL, NULL);
-INSERT INTO `system_menu` VALUES (3572835937952, 3572694110880, '0,3572694110880', '日志监控', 'logs', 'el-icon-date', 'logs', '', NULL, '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-31 18:54:01', '2021-07-31 18:54:01', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3572767832736, 3572694110880, '0,3572694110880', '依赖监控', 'system:monitor:rely', 'el-icon-discover', 'rely', 'system/monitor/rely/index', NULL, '1', 'M', '0', 97, 1937003305632, NULL, '2021-07-31 18:51:48', '2021-07-31 18:51:48', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3572797772448, 3572694110880, '0,3572694110880', '服务监控', 'system:monitor:server', 'el-icon-umbrella', 'server', 'system/monitor/server/index', NULL, '1', 'M', '0', 99, 1937003305632, NULL, '2021-07-31 18:52:46', '2021-07-31 18:52:46', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3572835937952, 3572694110880, '0,3572694110880', '日志监控', 'logs', 'el-icon-date', 'logs', '', NULL, '1', 'M', '0', 95, 1937003305632, NULL, '2021-07-31 18:54:01', '2021-07-31 18:54:01', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3572863604384, 3572835937952, '0,3572694110880,3572835937952', '登录日志', 'system:loginLog', 'el-icon-notebook-2', 'loginLog', 'system/loginLog/index', NULL, '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-31 18:54:55', '2021-07-31 18:54:55', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3572886605472, 3572835937952, '0,3572694110880,3572835937952', '操作日志', 'system:operLog', 'el-icon-notebook-1', 'operLog', 'system/operLog/index', NULL, '1', 'M', '0', 0, 1937003305632, NULL, '2021-07-31 18:55:40', '2021-07-31 18:55:40', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3572906953376, 3572886605472, '0,3572694110880,3572835937952,3572886605472', '操作日志删除', 'system:operLog:delete', '', NULL, '', NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 18:56:19', '2021-07-31 18:56:19', NULL, NULL);
@@ -177,5 +177,10 @@ INSERT INTO `system_menu` VALUES (3574831000736, 3574830936224, '0,3574830936224
 INSERT INTO `system_menu` VALUES (3574831026336, 3574830936224, '0,3574830936224', '系统设置导入', 'setting:import', NULL, NULL, NULL, NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 19:58:57', '2021-07-31 19:58:57', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3574831040160, 3574830936224, '0,3574830936224', '系统设置导出', 'setting:export', NULL, NULL, NULL, NULL, '1', 'B', '0', 0, 1937003305632, NULL, '2021-07-31 19:58:57', '2021-07-31 19:58:57', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3891405057696, 3574488593568, '0,3573128538272,3574488593568', '定时任务执行', 'setting:crontab:run', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-07 23:44:06', '2021-08-07 23:44:06', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3925885823648, 3572694110880, '0,3572694110880', '在线用户', 'system:onlineUser', 'el-icon-paperclip', 'onlineUser', 'system/monitor/onlineUser/index', NULL, '1', 'M', '0', 98, 3094419583648, NULL, '2021-08-08 18:26:31', '2021-08-08 18:26:31', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3925897867936, 3925885823648, '0,3572694110880,3925885823648', '在线用户列表', 'system:onlineUser:index', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:26:55', '2021-08-08 18:26:55', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3925911398048, 3925885823648, '0,3572694110880,3925885823648', '强退用户', 'system:onlineUser:kick', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:27:21', '2021-08-08 18:27:21', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3926022139552, 3307299359904, '0,3307254619808,3307299359904', '更新用户缓存', 'system:user:cache', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:30:57', '2021-08-08 18:30:57', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3926130962080, 3307299359904, '0,3307254619808,3307299359904', '设置用户首页', 'system:user:homePage', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:34:30', '2021-08-08 18:34:30', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

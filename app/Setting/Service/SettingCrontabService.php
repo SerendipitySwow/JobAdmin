@@ -43,7 +43,8 @@ class SettingCrontabService extends AbstractService
     public function save(array $data): int
     {
         $id = parent::save($data);
-        $this->redis->del('MineAdmin:crontab');
+        $prefix = config('cache.default.prefix');
+        $this->redis->del($prefix . 'crontab');
 
         return $id;
     }
@@ -57,7 +58,8 @@ class SettingCrontabService extends AbstractService
     public function update(int $id, array $data): bool
     {
         $res = parent::update($id, $data);
-        $this->redis->del('MineAdmin:crontab');
+        $prefix = config('cache.default.prefix');
+        $this->redis->del($prefix . 'crontab');
 
         return $res;
     }
@@ -70,7 +72,8 @@ class SettingCrontabService extends AbstractService
     public function delete(string $ids): bool
     {
         $res = parent::delete($ids);
-        $this->redis->del('MineAdmin:crontab');
+        $prefix = config('cache.default.prefix');
+        $this->redis->del($prefix . 'crontab');
 
         return $res;
     }

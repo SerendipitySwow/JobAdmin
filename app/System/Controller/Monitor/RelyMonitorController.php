@@ -15,6 +15,7 @@ use Mine\MineController;
  * Class RelyMonitorController
  * @package App\System\Controller\Monitor
  * @Controller(prefix="system/rely")
+ * @Auth
  */
 class RelyMonitorController extends MineController
 {

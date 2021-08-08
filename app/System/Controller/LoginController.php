@@ -10,6 +10,7 @@ use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
+use Hyperf\Redis\Redis;
 use Mine\Annotation\Auth;
 use Mine\Crontab\MineCrontabManage;
 use Mine\Helper\LoginUser;
@@ -89,8 +90,10 @@ class LoginController extends MineController
      */
     public function test()
     {
-        /* @var MineCrontabManage $service */
-        $service = $this->app(MineCrontabManage::class);
-        $service->getCrontabList();
+        /* @var Redis $redis */
+        $redis = $this->app(Redis::class);
+        $prefix = config('cache.default.prefix');
+        $res = $redis->keys("{$prefix}MineAdmin_jwt_default_*");
+        print_r($res);
     }
 }

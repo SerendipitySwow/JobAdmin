@@ -206,10 +206,9 @@ class SystemUserService extends AbstractService
         return $this->getCacheInfo($this->loginUser, SystemUser::find((int) $this->loginUser->getId()));
     }
 
-//@Cacheable(prefix="login_info", ttl=0, value="userId_#{user.id}")
     /**
      * 获取缓存用户信息
-     *
+     * @Cacheable(prefix="loginInfo", ttl=0, value="userId_#{user.id}")
      * @param LoginUser $loginUser
      * @param SystemUser $user
      * @return array
@@ -267,7 +266,7 @@ class SystemUserService extends AbstractService
 
     /**
      * 更新用户信息
-     * @CacheEvict(prefix="login_info", value="userId_#{id}")
+     * @CacheEvict(prefix="loginInfo", value="userId_#{id}")
      * @param int $id
      * @param array $data
      * @return bool
@@ -299,6 +298,19 @@ class SystemUserService extends AbstractService
             $data['dept_id'] = array_pop($data['dept_id']);
         }
         return $data;
+    }
+
+    /**
+     * 获取在线用户
+     * @param array $params
+     * @return array
+     */
+    public function getOnlineUserPageList(array $params = []): array
+    {
+        $parameter = [
+            'showDept' => 1,
+        ];
+        return $this->getPageList(array_merge($parameter, $params));
     }
 
     /**

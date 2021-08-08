@@ -32,7 +32,7 @@ class TableCreateRequest extends FormRequest
             'autoTime' => 'required|boolean',
             'autoUser' => 'required|boolean',
             'softDelete' => 'required|boolean',
-            'migrate' => 'required|boolean',
+//            'migrate' => 'required|boolean',
         ];
     }
 }

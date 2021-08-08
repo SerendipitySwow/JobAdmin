@@ -69,6 +69,16 @@ class SystemUser extends MineModel
     {
         return $this->belongsToMany(SystemPost::class, 'system_user_post', 'user_id', 'post_id');
     }
+
+    /**
+     * 关联部门
+     * @return \Hyperf\Database\Model\Relations\HasOne
+     */
+    public function dept(): \Hyperf\Database\Model\Relations\HasOne
+    {
+        return $this->hasOne(SystemDept::class, 'id', 'dept_id');
+    }
+
     /**
      * @param $value
      * @return false|string|null
