@@ -9,7 +9,7 @@
 			</el-card>
 		</el-main>
 	</div>
-	<work v-if="dashboard=='1'" @on-mounted="onMounted"></work>
+	<work v-if="dashboard === 'work' " @on-mounted="onMounted"></work>
 	<stats v-else @on-mounted="onMounted"></stats>
 </template>
 
@@ -31,7 +31,7 @@
 			}
 		},
 		created(){
-			this.dashboard = this.$TOOL.data.get("user").dashboard;
+			this.dashboard = this.$TOOL.data.get("user").user.dashboard;
 		},
 		mounted(){
 

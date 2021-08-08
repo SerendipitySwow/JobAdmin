@@ -1,6 +1,6 @@
 const DEFAULT_CONFIG = {
 	//标题
-	APP_NAME: "MineAdmin后台管理系统",
+	APP_NAME: "MineAdmin",
 
 	//版本号
 	APP_VER: "0.0.1",

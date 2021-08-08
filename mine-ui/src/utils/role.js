@@ -7,7 +7,7 @@ let role = (data) => {
 		return false
 	}
 
-	if (roles[0] === 'super_admin') {
+	if (roles[0] === 'superAdmin') {
 		return true
 	}
 	

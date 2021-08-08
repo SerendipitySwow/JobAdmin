@@ -5,31 +5,17 @@
 				<el-card shadow="never">
 					<div class="user-info">
 						<div class="user-info-top">
-							<el-avatar :size="80" src="img/avatar.jpg"></el-avatar>
-							<h2>{{ form.name||'-' }}</h2>
-							<p>{{ form.about||'无签名' }}</p>
-							<el-button type="primary" round icon="el-icon-collection-tag" size="medium">Administrator</el-button>
+							<el-avatar :size="160" :src="userInfo.user.avatar"></el-avatar>
+							<h2>{{ userInfo.user.nickname||'-' }}</h2>
+							<el-button type="primary" round icon="el-icon-collection-tag" size="medium">{{ userInfo.user.username }}</el-button>
 						</div>
 						<div class="user-info-main">
 							<ul>
-								<li><label><i class="el-icon-user"></i></label><span>81883387@qq.com</span></li>
-								<li><label><i class="el-icon-present"></i></label><span>1988-05-07</span></li>
-								<li><label><i class="el-icon-male"></i></label><span>男</span></li>
-								<li><label><i class="el-icon-location-outline"></i></label><span>中国/上海/金山</span></li>
-								<li><label><i class="el-icon-office-building"></i></label><span>集团/上海分公司/软件研发部/摸鱼组</span></li>
-								<li><label><i class="el-icon-coin"></i></label><span>超级管理员</span></li>
+								<li><label><i class="el-icon-user"></i></label><span>{{ userInfo.user.email }}</span></li>
+								<li><label><i class="el-icon-present"></i></label><span> {{ userInfo.user.user_type == '100' ? '系统用户' : '其他类型' }}</span></li>
+								<li><label><i class="el-icon-mobile"></i></label><span>{{ userInfo.user.phone }}</span></li>
+								<li><label><i class="el-icon-coin"></i></label><span>{{ userInfo.roles[0] }}</span></li>
 							</ul>
-						</div>
-						<div class="user-info-bottom">
-							<h2>当前账号权限</h2>
-							<el-space wrap>
-								<el-tag v-auth="'user.add'">user.add</el-tag>
-								<el-tag v-auth="'user.edit'">user.edit</el-tag>
-								<el-tag v-if="$AUTH('user.delete')">user.delete</el-tag>
-								<el-tag v-if="$AUTH('list.add')">list.add</el-tag>
-								<el-tag v-if="$AUTH('list.edit')">list.edit</el-tag>
-								<el-tag v-if="$AUTH('list.delete')">list.delete</el-tag>
-							</el-space>
 						</div>
 					</div>
 				</el-card>
@@ -37,17 +23,7 @@
 			<el-col :lg="16">
 				<el-card shadow="never">
 					<el-tabs tab-position="top">
-						<el-tab-pane label="近期动态">
-							<el-timeline style="margin-top:20px;padding-left:10px;">
-								<el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp" placement="top">
-									<div class="activity-item">
-										<el-avatar class="avatar" :size="24" src="img/avatar.jpg"></el-avatar>
-										<label>{{activity.operate}}</label><el-tag v-if="activity.mod" size="mini">{{activity.mod}}</el-tag>{{activity.describe}}
-									</div>
-								</el-timeline-item>
-							</el-timeline>
-						</el-tab-pane>
-						<el-tab-pane label="基本信息">
+						<el-tab-pane label="基本资料">
 							<el-form ref="form" :model="form" label-width="80px" style="width: 460px;margin-top:20px;">
 								<el-form-item label="账号">
 									<el-input v-model="form.user" disabled></el-input>
@@ -71,7 +47,7 @@
 								</el-form-item>
 							</el-form>
 						</el-tab-pane>
-						<el-tab-pane label="个人设置">
+						<el-tab-pane label="修改密码">
 							<el-form ref="form" :model="form" label-width="120px" style="width: 460px;margin-top:20px;">
 								<el-form-item label="布局">
 									<el-select v-model="config.theme" placeholder="请选择">
@@ -155,6 +131,7 @@
 					sex: "1",
 					about: "正所谓富贵险中求"
 				},
+				userInfo: null,
 				config: {
 					theme: '1',
 					diy: true,
@@ -162,6 +139,9 @@
 					msg: true
 				}
 			}
+		},
+		created () {
+			this.userInfo = this.$TOOL.data.get('user')
 		}
 	}
 </script>

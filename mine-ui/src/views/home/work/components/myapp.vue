@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<ul class="myMods">
-			<li v-for="mod in myMods" :key="mod.path" :style="{background:mod.meta.color||'#909399'}">
+			<li v-for="mod in myMods" :key="mod.path" :style="{background:mod.meta.color||'#409EFF'}">
 				<a v-if="mod.meta.type=='link'" :href="mod.path" target="_blank">
 					<i :class="mod.meta.icon||'el-icon-menu'"></i>
 					<p>{{ mod.meta.title }}</p>
@@ -26,7 +26,7 @@
 							<h4>我的常用 ( {{myMods.length}} )</h4>
 							<draggable tag="ul" v-model="myMods" animation="200" item-key="path" group="people">
 								<template #item="{ element }">
-									<li :style="{background:element.meta.color||'#909399'}">
+									<li :style="{background:element.meta.color||'#409EFF'}">
 										<i :class="element.meta.icon||'el-icon-menu'"></i>
 										<p>{{element.meta.title}}</p>
 									</li>
@@ -80,8 +80,7 @@
 			getMods(){
 				//这里可用改为读取远程数据
 				this.myModsName = this.$TOOL.data.get("my-mods") || []
-				var menuTree = this.$TOOL.data.get("user").menuList
-				this.filterMenu(menuTree)
+				this.filterMenu(this.$TOOL.data.get("user").routers)
 				this.myMods = this.mods.filter(item => {
 					return this.myModsName.includes(item.name)
 				})

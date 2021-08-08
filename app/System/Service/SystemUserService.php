@@ -221,9 +221,8 @@ class SystemUserService extends AbstractService
     {
         $user->addHidden('deleted_at', 'password');
         $data['user'] = $user->toArray();
-        $collect = new MineCollection();
         if ($loginUser->isSuperAdmin()) {
-            $data['roles'] = ['super_admin'];
+            $data['roles'] = ['superAdmin'];
             $data['routers'] = $this->sysMenuService->mapper->getSuperAdminRouters();
             $data['codes'] = ['*'];
         } else {

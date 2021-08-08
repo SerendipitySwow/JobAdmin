@@ -23,8 +23,15 @@ const routes = [{
 							affix: true
 						},
 						component: () => import(/* webpackChunkName: "home" */ '@/views/home'),
-					},
-					{
+					},{
+						name: "userCenter",
+						path: "/usercenter",
+						meta: {
+							title: "个人信息",
+							icon: "el-icon-user"
+						},
+						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/userCenter'),
+					},{
 						name: "system",
 						path: "/system",
 						meta: {
@@ -32,28 +39,10 @@ const routes = [{
 							icon: "el-icon-setting",
 						},
 						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/setting/index'),
-					},
-					{
-						name: "userCenter",
-						path: "/usercenter",
-						meta: {
-							title: "个人信息",
-							icon: "el-icon-user",
-							hidden: true
-						},
-						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/userCenter'),
 					}
 				]
 			}
 		]
-	},
-	{
-		path: "/cmd",
-		name: 'cmd',
-		component: () => import(/* webpackChunkName: "cmd" */ '@/views/other/cmd'),
-		meta: {
-			title: "CMD"
-		}
 	},
 	{
 		path: "/login",
