@@ -6,7 +6,7 @@ export default {
      * @param {*} params
      * @returns
      */
-    getDicts(code) {
+    getDict(code) {
         return request({
             url: 'system/dataDict/list?code=' + code,
             method: 'get'

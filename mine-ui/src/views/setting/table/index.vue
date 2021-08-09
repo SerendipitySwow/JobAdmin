@@ -206,7 +206,7 @@ export default {
     await this.$API.table.getSystemInfo().then(res => {
       this.sysinfo = res.data
     })
-    await this.getDicts('table_engine').then(res => {
+    await this.getDict('table_engine').then(res => {
       this.engines = res.data
     })
     this.handleAddColumn()

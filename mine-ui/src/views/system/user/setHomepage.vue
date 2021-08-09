@@ -98,7 +98,7 @@
         this.form.id = data.id
         this.form.dashboard = data.dashboard
 
-        await this.getDicts('dashboard').then(res => {
+        await this.getDict('dashboard').then(res => {
           this.dashboardList = res.data
         })
 

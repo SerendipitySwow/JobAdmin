@@ -33,7 +33,7 @@ app.config.globalProperties.$AUTH = hasPermission
 app.config.globalProperties.$ROLE = hasRole
 
 // 全局挂载获取字典数据方法
-app.config.globalProperties.getDicts = api.dataDict.getDicts
+app.config.globalProperties.getDict = api.dataDict.getDict
 
 app.use(store)
 app.use(router)
