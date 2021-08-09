@@ -30,7 +30,7 @@ class SystemUserPasswordRequest extends FormRequest
             'oldPassword' => ['required', function ($attribute, $value, $fail) {
                 $service = $this->container->get(SystemUserService::class);
                 $loginUser = new LoginUser;
-                $model = $service->mapper->read((int) $loginUser->getId());
+                $model = $service->mapper->getModel()::find((int) $loginUser->getId());
                 if (! $service->mapper->checkPass($value, $model->password)) {
                     $fail(__('system_user.valid_password'));
                 }
