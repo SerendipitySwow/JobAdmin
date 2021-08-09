@@ -15,6 +15,7 @@ class CreateSettingConfigTable extends Migration
             $table->engine = 'Innodb';
             $table->comment('参数配置信息表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
+            $table->addColumn('string', 'group_name', ['length'=> 100, 'comment' => '配置名称'])->nullable();
             $table->addColumn('string', 'name', ['length'=> 255, 'comment' => '配置名称'])->nullable();
             $table->addColumn('string', 'key', ['length'=> 255, 'comment' => '配置键名'])->nullable();
             $table->addColumn('string', 'value', ['length'=> 255, 'comment' => '配置值'])->nullable();
