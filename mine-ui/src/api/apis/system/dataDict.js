@@ -8,7 +8,7 @@ export default {
      */
     getDicts(code) {
         return request({
-            url: 'system/dictData/list?code=' + code,
+            url: 'system/dataDict/list?code=' + code,
             method: 'get'
         })
     },
@@ -19,7 +19,7 @@ export default {
      */
     getPageList(params = {}) {
         return request({
-            url: 'system/dictData/index',
+            url: 'system/dataDict/index',
             method: 'get',
             params
         })
@@ -31,7 +31,7 @@ export default {
      */
     getRecyclePageList(params = {}) {
         return request({
-            url: 'system/dictData/recycle',
+            url: 'system/dataDict/recycle',
             method: 'get',
             params
         })
@@ -43,7 +43,7 @@ export default {
      */
     saveDictData(params = {}) {
         return request({
-            url: 'system/dictData/save',
+            url: 'system/dataDict/save',
             method: 'post',
             data: params
         })
@@ -55,7 +55,7 @@ export default {
      */
     deletesDictData(ids) {
         return request({
-            url: 'system/dictData/delete/' + ids,
+            url: 'system/dataDict/delete/' + ids,
             method: 'delete'
         })
     },
@@ -66,7 +66,7 @@ export default {
      */
     recoverysDictData(ids) {
         return request({
-            url: 'system/dictData/recovery/' + ids,
+            url: 'system/dataDict/recovery/' + ids,
             method: 'put'
         })
     },
@@ -77,7 +77,7 @@ export default {
      */
     realDeletesDictData(ids) {
         return request({
-            url: 'system/dictData/realDelete/' + ids,
+            url: 'system/dataDict/realDelete/' + ids,
             method: 'delete'
         })
     },
@@ -88,7 +88,7 @@ export default {
      */
     updateDictData(id, params = {}) {
         return request({
-            url: 'system/dictData/update/' + id,
+            url: 'system/dataDict/update/' + id,
             method: 'put',
             data: params
         })

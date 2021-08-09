@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 80012
+ Source Server Version : 50726
  Source Host           : localhost:3306
  Source Schema         : mineadmin
 
  Target Server Type    : MySQL
- Target Server Version : 80012
+ Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 08/08/2021 21:05:32
+ Date: 09/08/2021 11:54:21
 */
 
 SET NAMES utf8mb4;
@@ -182,5 +182,9 @@ INSERT INTO `system_menu` VALUES (3925897867936, 3925885823648, '0,3572694110880
 INSERT INTO `system_menu` VALUES (3925911398048, 3925885823648, '0,3572694110880,3925885823648', '强退用户', 'system:onlineUser:kick', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:27:21', '2021-08-08 18:27:21', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3926022139552, 3307299359904, '0,3307254619808,3307299359904', '更新用户缓存', 'system:user:cache', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:30:57', '2021-08-08 18:30:57', NULL, NULL);
 INSERT INTO `system_menu` VALUES (3926130962080, 3307299359904, '0,3307254619808,3307299359904', '设置用户首页', 'system:user:homePage', '', NULL, '', NULL, '1', 'B', '0', 0, 3094419583648, NULL, '2021-08-08 18:34:30', '2021-08-08 18:34:30', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3957767568032, 3572767832736, '0,3572694110880,3572767832736', '依赖包详细', 'system:monitor:relyDetail', '', NULL, '', NULL, '1', 'B', '0', 0, 3697515475616, NULL, '2021-08-09 11:44:20', '2021-08-09 11:44:20', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3957893716128, 3574058790560, '0,3573128538272,3574058790560', '模块列表', 'setting:module:index', '', NULL, '', NULL, '1', 'B', '0', 0, 3697515475616, NULL, '2021-08-09 11:48:27', '2021-08-09 11:48:27', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3958019812000, 3308140529824, '0,3307254619808,3308140529824', '更新菜单权限', 'system:role:menuPermission', '', NULL, '', NULL, '1', 'B', '0', 0, 3697515475616, NULL, '2021-08-09 11:52:33', '2021-08-09 11:52:33', NULL, NULL);
+INSERT INTO `system_menu` VALUES (3958029448352, 3308140529824, '0,3307254619808,3308140529824', '更新数据权限', 'system:role:dataPermission', '', NULL, '', NULL, '1', 'B', '0', 0, 3697515475616, NULL, '2021-08-09 11:52:52', '2021-08-09 11:52:52', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

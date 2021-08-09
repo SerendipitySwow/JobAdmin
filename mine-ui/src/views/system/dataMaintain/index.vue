@@ -118,7 +118,7 @@
 
             <el-button
             type="text"
-            v-auth="['system:dataMaintain:columnList']"
+            v-auth="['system:dataMaintain:detailed']"
             @click="handleDetail(scope.row.name)"
           >查看</el-button>
             
@@ -184,7 +184,7 @@
 
       // 显示表字段
       handleDetail (name) {
-        this.$API.dataMaintain.getColumnList(name).then(res => {
+        this.$API.dataMaintain.getDetailed(name).then(res => {
           this.columnList = res.data
           this.dialogVisible = true
         })

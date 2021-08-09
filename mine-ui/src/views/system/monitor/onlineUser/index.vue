@@ -58,7 +58,7 @@
 
             <el-button
             type="text"
-            v-auth="['setting:onlineUser:kick']"
+            v-auth="['system:onlineUser:kick']"
             @click="handleKick(scope.row)"
           >强退用户</el-button>
             
@@ -67,29 +67,6 @@
 
       </maTable>
     </el-main>
-
-    <el-dialog
-      title="依赖包详细"
-      v-model="dialogVisible"
-      destroy-on-close
-      @closed="dialogVisible = false"
-      width="50%"
-    >
-
-      <el-table v-loading="detailsLoading" :data="details">
-        <el-table-column prop="name" label="名称" width="120" fixed ></el-table-column>
-        <el-table-column prop="value" label="值" :show-overflow-tooltip="true">
-          <template #deault="scope">
-            <div v-html="scope.row.value"></div>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <template #footer class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </template>
-
-    </el-dialog>
 
   </el-container>
 

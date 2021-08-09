@@ -406,7 +406,9 @@
 
       // 更新用户缓存
       clearCache(row) {
-
+        this.$API.user.clearCache({id: row.id}).then(() => {
+          this.$message.success('该用户缓存已清空')
+        })
       },
 
       // 选择时间事件

@@ -98,10 +98,22 @@ export default {
      * 更改用户状态
      * @returns
      */
-     changeStatus (params = {}) {
+    changeStatus (params = {}) {
         return request({
             url: 'system/user/changeStatus',
             method: 'put',
+            data: params
+        })
+    },
+
+    /**
+     * 清除用户缓存
+     * @returns
+     */
+    clearCache (params = {}) {
+        return request({
+            url: 'system/user/clearCache',
+            method: 'post',
             data: params
         })
     },

@@ -863,16 +863,16 @@
         },
         {
             "name": "hyperf/amqp",
-            "version": "v2.2.0",
+            "version": "v2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/amqp.git",
-                "reference": "55ce4128e74f579d7b2ae1c31fc150275b88d7f0"
+                "reference": "beb4c3f0d6668ce63e7afac1e84df4a86ddc061c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/amqp/zipball/55ce4128e74f579d7b2ae1c31fc150275b88d7f0",
-                "reference": "55ce4128e74f579d7b2ae1c31fc150275b88d7f0",
+                "url": "https://api.github.com/repos/hyperf/amqp/zipball/beb4c3f0d6668ce63e7afac1e84df4a86ddc061c",
+                "reference": "beb4c3f0d6668ce63e7afac1e84df4a86ddc061c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -928,7 +928,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-07-18T06:50:14+00:00"
+            "time": "2021-08-05T05:08:28+00:00"
         },
         {
             "name": "hyperf/cache",
@@ -2369,16 +2369,16 @@
         },
         {
             "name": "hyperf/process",
-            "version": "v2.2.0",
+            "version": "v2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/process.git",
-                "reference": "7eb4e7fa974d3a703c60a1478813a9027409db7f"
+                "reference": "5a10e322c05f9329ec84ff2255eb5fe9dea304fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/process/zipball/7eb4e7fa974d3a703c60a1478813a9027409db7f",
-                "reference": "7eb4e7fa974d3a703c60a1478813a9027409db7f",
+                "url": "https://api.github.com/repos/hyperf/process/zipball/5a10e322c05f9329ec84ff2255eb5fe9dea304fa",
+                "reference": "5a10e322c05f9329ec84ff2255eb5fe9dea304fa",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2430,7 +2430,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-07-18T06:50:14+00:00"
+            "time": "2021-08-05T06:20:33+00:00"
         },
         {
             "name": "hyperf/redis",

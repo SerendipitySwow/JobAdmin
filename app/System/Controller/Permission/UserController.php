@@ -147,6 +147,17 @@ class UserController extends MineController
     }
 
     /**
+     * 清除用户缓存
+     * @PostMapping("clearCache")
+     * @return ResponseInterface
+     * @Permission("system:user:cache")
+     */
+    public function clearCache(): ResponseInterface
+    {
+        return $this->success($this->service->clearCache((string) $this->request->input('id', null)));
+    }
+
+    /**
      * 初始化用户密码
      * @PutMapping("initUserPassword/{id}")
      * @param int $id

@@ -21,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
  * 字典类型控制器
  * Class LogsController
  * @package App\System\Controller\DataCenter
- * @Controller(prefix="system/dictData")
+ * @Controller(prefix="system/dataDict")
  * @Auth
  */
 class DictDataController extends MineController
@@ -36,7 +36,7 @@ class DictDataController extends MineController
     /**
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission("system:dictData:index")
+     * @Permission("system:dataDict:index")
      */
     public function index(): ResponseInterface
     {
@@ -55,7 +55,7 @@ class DictDataController extends MineController
     /**
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission("system:dictData:recycle")
+     * @Permission("system:dataDict:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -67,7 +67,7 @@ class DictDataController extends MineController
      * @PostMapping("save")
      * @param DictDataCreateRequest $request
      * @return ResponseInterface
-     * @Permission("system:dictData:save")
+     * @Permission("system:dataDict:save")
      * @OperationLog
      */
     public function save(DictDataCreateRequest $request): ResponseInterface
@@ -80,7 +80,7 @@ class DictDataController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission("system:dictData:read")
+     * @Permission("system:dataDict:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -93,7 +93,7 @@ class DictDataController extends MineController
      * @param int $id
      * @param DictDataCreateRequest $request
      * @return ResponseInterface
-     * @Permission("system:dictData:update")
+     * @Permission("system:dataDict:update")
      */
     public function update(int $id, DictDataCreateRequest $request): ResponseInterface
     {
@@ -105,7 +105,7 @@ class DictDataController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:dictData:delete")
+     * @Permission("system:dataDict:delete")
      */
     public function delete(String $ids): ResponseInterface
     {
@@ -117,7 +117,7 @@ class DictDataController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:dictData:realDelete")
+     * @Permission("system:dataDict:realDelete")
      * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
@@ -130,7 +130,7 @@ class DictDataController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:dictData:recovery")
+     * @Permission("system:dataDict:recovery")
      */
     public function recovery(String $ids): ResponseInterface
     {

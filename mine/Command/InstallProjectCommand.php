@@ -287,6 +287,7 @@ class InstallProjectCommand extends MineCommand
             'user_type' => '100',
             'nickname' => '创始人',
             'email' => 'admin@adminmine.com',
+            'phone' => '16858888988',
             'dashboard' => 'statistics',
             'created_by' => 0,
             'updated_by' => 0,

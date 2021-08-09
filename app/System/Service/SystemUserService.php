@@ -357,4 +357,16 @@ class SystemUserService extends AbstractService
     {
         return $this->mapper->initUserPassword($id, $password);
     }
+
+    /**
+     * 清除用户缓存
+     * @param string $id
+     * @return bool
+     */
+    public function clearCache(string $id): bool
+    {
+        $redis = $this->container->get(Redis::class);
+        $prefix = config('cache.default.prefix');
+        return $redis->del("{$prefix}loginInfo:userId_{$id}") > 0;
+    }
 }

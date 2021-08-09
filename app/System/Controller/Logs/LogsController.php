@@ -40,7 +40,7 @@ class LogsController extends MineController
     /**
      * 获取登录日志列表
      * @GetMapping("getLoginLogPageList")
-     * @Permission("system:loginLog:index")
+     * @Permission("system:loginLog")
      */
     public function getLoginLogPageList(): \Psr\Http\Message\ResponseInterface
     {
@@ -50,7 +50,7 @@ class LogsController extends MineController
     /**
      * 获取操作日志列表
      * @GetMapping("getOperLogPageList")
-     * @Permission("system:operLog:index")
+     * @Permission("system:operLog")
      */
     public function getOperLogPageList(): \Psr\Http\Message\ResponseInterface
     {

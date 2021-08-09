@@ -32,7 +32,7 @@ class DataMaintainController extends MineController
     /**
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:dataMaintain:index")
      */
     public function index(): ResponseInterface
     {
@@ -40,11 +40,11 @@ class DataMaintainController extends MineController
     }
 
     /**
-     * @GetMapping("columnList")
+     * @GetMapping("detailed")
      * @return ResponseInterface
-     * @Permission
+     * @Permission("system:dataMaintain:detailed")
      */
-    public function columnList(): ResponseInterface
+    public function detailed(): ResponseInterface
     {
         return $this->success($this->service->getColumnList($this->request->input('table', null)));
     }

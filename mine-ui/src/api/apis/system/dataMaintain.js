@@ -17,9 +17,9 @@ export default {
    * 获取表字段列表
    * @returns
    */
-  getColumnList (table) {
+  getDetailed (table) {
     return request({
-      url: 'system/dataMaintain/columnList?table=' + table,
+      url: 'system/dataMaintain/detailed?table=' + table,
       method: 'get'
     })
   },
