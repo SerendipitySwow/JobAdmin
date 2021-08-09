@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 12/07/2021 16:26:38
+ Date: 09/08/2021 12:55:47
 */
 
 SET NAMES utf8mb4;
@@ -50,6 +50,11 @@ INSERT INTO `system_dict_data` VALUES (2058957471392, 2058928973472, '阿里云O
 INSERT INTO `system_dict_data` VALUES (2058963571360, 2058928973472, '腾讯云COS', 'cos', 'upload_mode', 0, '0', 1937003305632, NULL, '2021-06-27 13:34:19', '2021-06-27 13:34:19', NULL, NULL);
 INSERT INTO `system_dict_data` VALUES (2059041780384, 2059023428768, '正常', '0', 'data_status', 0, '0', 1937003305632, NULL, '2021-06-27 13:36:51', '2021-06-27 13:37:01', NULL, '0为正常');
 INSERT INTO `system_dict_data` VALUES (2059051223200, 2059023428768, '停用', '1', 'data_status', 0, '0', 1937003305632, NULL, '2021-06-27 13:37:10', '2021-06-27 13:37:10', NULL, '1为停用');
+INSERT INTO `system_dict_data` VALUES (3959904132768, 3959885616288, '统计页面', 'statistics', 'dashboard', 0, '0', 3697515475616, NULL, '2021-08-09 12:53:53', '2021-08-09 12:53:53', NULL, '管理员用');
+INSERT INTO `system_dict_data` VALUES (3959916887200, 3959885616288, '工作台', 'work', 'dashboard', 0, '0', 3697515475616, NULL, '2021-08-09 12:54:18', '2021-08-09 12:54:18', NULL, '员工使用');
+INSERT INTO `system_dict_data` VALUES (3959938423968, 3959928216736, '男', '0', 'sex', 0, '0', 3697515475616, NULL, '2021-08-09 12:55:00', '2021-08-09 12:55:00', NULL, NULL);
+INSERT INTO `system_dict_data` VALUES (3959942491808, 3959928216736, '女', '1', 'sex', 0, '0', 3697515475616, NULL, '2021-08-09 12:55:08', '2021-08-09 12:55:08', NULL, NULL);
+INSERT INTO `system_dict_data` VALUES (3959946307744, 3959928216736, '未知', '2', 'sex', 0, '0', 3697515475616, NULL, '2021-08-09 12:55:16', '2021-08-09 12:55:16', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for system_dict_type
@@ -75,5 +80,7 @@ CREATE TABLE `system_dict_type`  (
 INSERT INTO `system_dict_type` VALUES (2035075124896, '数据表引擎', 'table_engine', '0', 1897686194336, NULL, '2021-06-27 00:36:42', '2021-06-27 13:33:29', NULL, '数据表引擎字典');
 INSERT INTO `system_dict_type` VALUES (2058928973472, '存储模式', 'upload_mode', '0', 1937003305632, NULL, '2021-06-27 13:33:11', '2021-06-27 13:33:11', NULL, '上传文件存储模式');
 INSERT INTO `system_dict_type` VALUES (2059023428768, '数据状态', 'data_status', '0', 1937003305632, NULL, '2021-06-27 13:36:16', '2021-06-27 13:36:34', NULL, '通用数据状态');
+INSERT INTO `system_dict_type` VALUES (3959885616288, '后台首页', 'dashboard', '0', 3697515475616, NULL, '2021-08-09 12:53:17', '2021-08-09 12:53:17', NULL, NULL);
+INSERT INTO `system_dict_type` VALUES (3959928216736, '性别', 'sex', '0', 3697515475616, NULL, '2021-08-09 12:54:40', '2021-08-09 12:54:40', NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

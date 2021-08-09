@@ -47,7 +47,6 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="uc">个人设置</el-dropdown-item>
-					<el-dropdown-item command="cmd">CMD</el-dropdown-item>
 					<el-dropdown-item divided command="outLogin">退出登录</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -67,28 +66,19 @@
 						id: 1,
 						type: 'user',
 						avatar: "img/avatar.jpg",
-						title: "Skuya",
+						title: "superAdmin",
 						describe: "如果喜欢就点个星星支持一下哦",
-						link: "https://gitee.com/lolicode/scui",
+						link: "https://gitee.com/xmo/MineAdmin",
 						time: "5分钟前"
-					},
-					{
-						id: 2,
-						type: 'user',
-						avatar: "img/avatar2.gif",
-						title: "Lolowan",
-						describe: "点进去Gitee获取最新开源版本",
-						link: "https://gitee.com/lolicode/scui",
-						time: "14分钟前"
 					},
 					{
 						id: 3,
 						type: 'system',
-						avatar: "img/logo.png",
-						title: "感谢登录SCUI Admin",
-						describe: "Vue 3.0 + Vue-Router 4.0 + ElementPlus + Axios 后台管理系统。",
-						link: "https://gitee.com/lolicode/scui",
-						time: "2020年7月24日"
+						avatar: "img/avatar.jpg",
+						title: "感谢登录MineAdmin",
+						describe: "Swoole + Hyperf + Vue 3.0 + Vue-Router 4.0 + ElementPlus + Axios 后台管理系统。",
+						link: "https://gitee.com/xmo/MineAdmin",
+						time: "2020年8月1日"
 					}
 				]
 			}
@@ -112,8 +102,13 @@
 						type: 'warning',
 						confirmButtonText: '退出',
 						confirmButtonClass: 'el-button--danger'
-					}).then(() => {
-						this.$router.replace({path: '/login'});
+					}).then(async () => {
+						await this.$API.login.Logout().then(res => {
+							if (res.success) {
+								this.$TOOL.data.set('token', null)
+								this.$router.replace({path: '/login'})
+							}
+						})
 					}).catch(() => {
 						//取消退出
 					})
