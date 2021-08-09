@@ -17,6 +17,12 @@
 								<li><label><i class="el-icon-coin"></i></label><span>{{ userInfo.roles[0] }}</span></li>
 							</ul>
 						</div>
+						<div class="user-info-bottom">
+							<h2>个人签名</h2>
+							<el-space wrap>
+								{{ userInfo.user.signed == null ? '这家伙很懒，什么都没有留下。' : userInfo.user.signed }}
+							</el-space>
+						</div>
 					</div>
 				</el-card>
 			</el-col>
@@ -24,49 +30,60 @@
 				<el-card shadow="never">
 					<el-tabs tab-position="top">
 						<el-tab-pane label="基本资料">
-							<el-form ref="form" :model="form" label-width="80px" style="width: 460px;margin-top:20px;">
+							<el-form ref="formUser" :model="formUser" label-width="80px" style="width: 600px; margin-top:20px;">
+
 								<el-form-item label="账号">
-									<el-input v-model="form.user" disabled></el-input>
+									<el-input v-model="formUser.username" disabled></el-input>
 									<div class="el-form-item-msg">账号信息用于登录，系统不允许修改</div>
 								</el-form-item>
-								<el-form-item label="姓名">
-									<el-input v-model="form.name"></el-input>
+
+								<el-form-item label="昵称">
+									<el-input v-model="formUser.nickname"></el-input>
 								</el-form-item>
-								<el-form-item label="性别">
-									<el-select v-model="form.sex" placeholder="请选择">
-										<el-option label="保密" value="0"></el-option>
-										<el-option label="男" value="1"></el-option>
-										<el-option label="女" value="2"></el-option>
-									</el-select>
+
+								<el-form-item label="手机">
+									<el-input v-model="formUser.phone"></el-input>
 								</el-form-item>
+
+								<el-form-item label="邮箱">
+									<el-input v-model="formUser.email"></el-input>
+								</el-form-item>
+
 								<el-form-item label="个性签名">
-									<el-input v-model="form.about" type="textarea"></el-input>
+									<el-input
+										v-model="formUser.signed"
+										type="textarea"
+										:rows="3"
+										maxlength="255"
+										show-word-limit
+									/>
 								</el-form-item>
+
 								<el-form-item>
-									<el-button type="primary">保存</el-button>
+									<el-button type="primary" @click="updateInfo" :loading="infoLoading">保存</el-button>
 								</el-form-item>
+
 							</el-form>
 						</el-tab-pane>
 						<el-tab-pane label="修改密码">
-							<el-form ref="form" :model="form" label-width="120px" style="width: 460px;margin-top:20px;">
-								<el-form-item label="布局">
-									<el-select v-model="config.theme" placeholder="请选择">
-										<el-option label="常规" value="0"></el-option>
-										<el-option label="分栏" value="1"></el-option>
-									</el-select>
+							<el-form ref="formPassword" :rules="passwordRule" :model="formPassword" label-width="80px" style="width: 600px;margin-top:20px;">
+
+								<el-form-item label="旧密码">
+									<el-input v-model="formPassword.oldPassword" type="password" clearable show-password></el-input>
 								</el-form-item>
-								<el-form-item label="控制台自由布局">
-									<el-switch v-model="config.diy"></el-switch>
+
+								<el-form-item label="新密码">
+									<el-input v-model="formPassword.newPassword"></el-input>
 								</el-form-item>
-								<el-form-item label="多标签">
-									<el-switch v-model="config.tags"></el-switch>
+
+								<el-form-item label="确认密码">
+									<el-input v-model="formPassword.newPassword_confirmation "></el-input>
 								</el-form-item>
-								<el-form-item label="系统通知">
-									<el-switch v-model="config.msg"></el-switch>
-								</el-form-item>
+
 								<el-form-item>
-									<el-button type="primary">保存</el-button>
+									<el-button type="primary" @click="modifyPassword" :loading="passwordLoading">保存</el-button>
 								</el-form-item>
+
 							</el-form>
 						</el-tab-pane>
 					</el-tabs>
@@ -81,67 +98,78 @@
 		name: 'userCenter',
 		data() {
 			return {
-				activities: [
-					{
-						operate: '更改了',
-						mod: '系统配置',
-						describe: 'systemName 为 SCUI',
-						type: 'edit',
-						timestamp: '刚刚'
-					},
-					{
-						operate: '删除了',
-						mod: '用户',
-						describe: 'USER',
-						type: 'del',
-						timestamp: '5分钟前'
-					},
-					{
-						operate: '禁用了',
-						mod: '用户',
-						describe: 'USER',
-						type: 'del',
-						timestamp: '5分钟前'
-					},
-					{
-						operate: '创建了',
-						mod: '用户',
-						describe: 'USER',
-						type: 'add',
-						timestamp: '5分钟前'
-					},
-					{
-						operate: '审核了',
-						mod: '用户',
-						describe: 'lolowan 为 通过',
-						type: 'add',
-						timestamp: '10分钟前'
-					},
-					{
-						operate: '登录',
-						mod: '',
-						describe: '成功',
-						type: 'do',
-						timestamp: '1小时前'
-					},
-				],
-				form: {
-					user: "81883387@qq.com",
-					name: "Sakuya",
-					sex: "1",
-					about: "正所谓富贵险中求"
+
+				infoLoading: false,
+				passwordLoading: false,
+				avatarLoading: false,
+
+				formUser: {
+					id: '',
+					avatar: '',
+					username: '',
+					nickname: '',
+					signed: '',
+					phone: '',
+					email: ''
 				},
+
+				formPassword: {
+					'oldPassword': '',
+					'newPassword': '',
+					'newPassword_confirmation ' : '',
+				},
+
+				passwordRule: {
+					oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
+					newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+					newPassword_confirmation: [{ required: true, message: '请输入确认密码', trigger: 'blur' }]
+				},
+
 				userInfo: null,
-				config: {
-					theme: '1',
-					diy: true,
-					tags: true,
-					msg: true
-				}
 			}
 		},
+
 		created () {
 			this.userInfo = this.$TOOL.data.get('user')
+			this.formUser = this.userInfo.user
+		},
+
+		methods: {
+			
+			// 更新用户资料
+			updateInfo() {
+				this.$refs.formUser.validate( async (valid) => {
+					if (valid) {
+						this.formUser.avatar = undefined
+						this.infoLoading = true
+						let res = await this.$API.user.updateInfo(this.formUser)
+						this.infoLoading = false
+						if ( res.success ) {
+							this.$TOOL.data.set('user', this.userInfo)
+							this.$message.success(res.message)
+            }else{
+              this.$alert(res.message, "提示", { type: 'error' })
+            }
+					}
+				})
+			},
+
+			// 修改密码
+			modifyPassword() {
+				this.$refs.formPassword.validate( async (valid) => {
+					if (valid) {
+						this.passwordLoading = true
+						let res = await this.$API.user.modifyPassword(this.formPassword)
+						this.passwordLoading = false
+						if (res.success) {
+							this.$message.success(res.message)
+            }else{
+              this.$alert(res.message, "提示", { type: 'error' })
+            }
+					}
+				})
+			}
+
 		}
 	}
 </script>

@@ -26,8 +26,7 @@ use Mine\MineModel;
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
  * @property-read \Hyperf\Database\Model\Collection|SystemPost[] $posts 
- * @property-read \Hyperf\Database\Model\Collection|SystemRole[] $roles 
- * @property-write mixed $password 密码
+ * @property-read \Hyperf\Database\Model\Collection|SystemRole[] $roles
  */
 class SystemUser extends MineModel
 {

@@ -122,7 +122,7 @@ export default {
      * 设置用户首页
      * @returns
      */
-     setHomePage (params = {}) {
+    setHomePage (params = {}) {
         return request({
             url: 'system/user/setHomePage',
             method: 'post',
@@ -138,6 +138,30 @@ export default {
         return request({
             url: 'system/user/initUserPassword/' + id,
             method: 'put'
+        })
+    },
+
+    /**
+     * 用户更新个人资料
+     * @returns
+     */
+     updateInfo (params = {}) {
+        return request({
+            url: 'system/user/updateInfo',
+            method: 'post',
+            data: params
+        })
+    },
+
+    /**
+     * 用户修改密码
+     * @returns
+     */
+    modifyPassword (params = {}) {
+        return request({
+            url: 'system/user/modifyPassword',
+            method: 'post',
+            data: params
         })
     }
 }

@@ -381,7 +381,38 @@ class SystemUserService extends AbstractService
             ->where('id', $params['id'])
             ->update(['dashboard' => $params['dashboard']]) > 0;
 
-        $this->clearCache($params['id']);
+        $this->clearCache((string) $params['id']);
         return $res;
+    }
+
+    /**
+     * 用户更新个人资料
+     * @param array $params
+     * @return bool
+     */
+    public function updateInfo(array $params): bool
+    {
+        unset($params['password']);
+
+        if (!isset($params['id'])) {
+            return false;
+        }
+
+        $res = ($this->mapper->getModel())::query()
+            ->where('id', $params['id'])
+            ->update($params) > 0;
+
+        $this->clearCache((string) $params['id']);
+        return $res;
+    }
+
+    /**
+     * 用户修改密码
+     * @param array $params
+     * @return bool
+     */
+    public function modifyPassword(array $params): bool
+    {
+        return $this->mapper->initUserPassword((int) (make(LoginUser::class))->getId(), $params['newPassword']);
     }
 }

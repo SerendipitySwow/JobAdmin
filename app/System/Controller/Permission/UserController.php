@@ -5,6 +5,7 @@ namespace App\System\Controller\Permission;
 
 use App\System\Request\User\SystemUserCreateRequest;
 use App\System\Request\User\SystemUserHompPageRequest;
+use App\System\Request\User\SystemUserPasswordRequest;
 use App\System\Request\User\SystemUserStatusRequest;
 use App\System\Request\User\SystemUserUpdateRequest;
 use App\System\Service\SystemUserService;
@@ -181,5 +182,26 @@ class UserController extends MineController
     public function initUserPassword(int $id): ResponseInterface
     {
         return $this->service->initUserPassword($id) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 更改用户资料，含修改头像 (不验证权限)
+     * @PostMapping("updateInfo")
+     * @return ResponseInterface
+     */
+    public function updateInfo(): ResponseInterface
+    {
+        return $this->success($this->service->updateInfo($this->request->all()));
+    }
+
+    /**
+     * 修改密码 (不验证权限)
+     * @PostMapping("modifyPassword")
+     * @param SystemUserPasswordRequest $request
+     * @return ResponseInterface
+     */
+    public function modifyPassword(SystemUserPasswordRequest $request): ResponseInterface
+    {
+        return $this->service->modifyPassword($request->validated()) ? $this->success() : $this->error();
     }
 }

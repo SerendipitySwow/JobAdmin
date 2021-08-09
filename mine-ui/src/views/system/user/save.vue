@@ -105,7 +105,7 @@
           show: '查看'
         },
         // 用户选择器数据
-            deptTree: [],
+        deptTree: [],
         // 岗位列表
         postData: [],
         // 角色列表
