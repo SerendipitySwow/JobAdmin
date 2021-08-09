@@ -97,6 +97,7 @@
         }).then(() => {
           this.$API.monitor.kickUser({ id: row.id }).then(res => {
             this.$message.success(res.message)
+            this.$refs.table.upData(this.queryParams)
           })
         }).catch(() => {})
       },

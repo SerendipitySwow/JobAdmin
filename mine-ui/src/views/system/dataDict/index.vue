@@ -94,6 +94,7 @@
             v-if="!showTypeRecycle"
             icon="el-icon-plus"
             @click="addDataDict"
+            v-auth="['system:dataDict:save']"
           >新增</el-button>
 
           <el-button
@@ -102,6 +103,7 @@
             icon="el-icon-delete"
             :disabled="selection.length==0"
             @click="dataDictBatchDelete"
+            v-auth="['system:dataDict:delete']"
           >删除</el-button>
 
         </div>
@@ -166,9 +168,9 @@
         >
           <el-table-column type="selection" width="50"></el-table-column>
           <el-table-column label="字典标签" prop="label" width="180"></el-table-column>
-          <el-table-column label="键值" prop="value" width="220"></el-table-column>
-          <el-table-column label="排序" prop="sort" width="160"></el-table-column>
-          <el-table-column label="状态" prop="status" width="160">
+          <el-table-column label="键值" prop="value" width="180"></el-table-column>
+          <el-table-column label="排序" prop="sort" width="100"></el-table-column>
+          <el-table-column label="状态" prop="status" width="100">
             <template #default="scope">
               <el-switch
                 v-if="scope.row.status"
@@ -179,21 +181,21 @@
                 ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="created_at" width="200"></el-table-column>
-          <el-table-column label="操作" fixed="right" align="right" width="140" v-if="isDataRecycle">
+          <el-table-column label="创建时间" prop="created_at" width="180"></el-table-column>
+          <el-table-column label="操作" fixed="right" align="right" width="80" v-if="isDataRecycle">
             <template #default="scope">
               <el-button
                 type="text"
                 size="small"
                 @click="dataDictRecovery(scope.row.id)"
-                v-auth="['system:dictData:recovery']"
+                v-auth="['system:dataDict:recovery']"
               >恢复</el-button>
 
               <el-button
                 type="text"
                 size="small"
                 @click="dataDictDelete(scope.row.id)"
-                v-auth="['system:dictData:realDelete']"
+                v-auth="['system:dataDict:realDelete']"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -204,14 +206,14 @@
                 type="text"
                 size="small"
                 @click="dataDictEdit(scope.row, scope.$index)"
-                v-auth="['system:dictData:update']"
+                v-auth="['system:dataDict:update']"
               >编辑</el-button>
 
               <el-button
                 type="text"
                 size="small"
                 @click="dataDictDelete(scope.row.id)"
-                v-auth="['system:dictData:delete']"
+                v-auth="['system:dataDict:delete']"
               >删除</el-button>
                 
             </template>
