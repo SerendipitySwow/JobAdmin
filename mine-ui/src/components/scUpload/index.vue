@@ -34,6 +34,7 @@
 
 
 	export default {
+		emits: ['success', 'update:modelValue'],
 		props: {
 			height: {type: Number, default: 120},
 			width: {type: Number, default: 120},
@@ -159,6 +160,7 @@
 				var file = this.cropper ? this.cropperUploadFile : param.file
 				data.append(this.type, file);
 				api.uploadImage(data).then(res => {
+					this.$emit('success', res.data)
 					param.onSuccess(res)
 				}).catch(err => {
 					param.onError(err)

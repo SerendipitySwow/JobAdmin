@@ -41,7 +41,7 @@
 		</div>
 		<el-dropdown trigger="click" @command="handleUser" style="height: 100%;">
 			<div class="user panel-item">
-				<el-avatar :size="30">{{ userNameF }}</el-avatar>
+				<el-avatar :size="30" :src="avatar">{{ userNameF }}</el-avatar>
 				<label>{{ userName }}<i class="el-icon-arrow-down el-icon--right"></i></label>
 			</div>
 			<template #dropdown>
@@ -60,6 +60,7 @@
 			return {
 				userName: "",
 				userNameF: "",
+				avatar: 'img/avatar.jpg',
 				msg: false,
 				msgList: [
 					{
@@ -84,9 +85,14 @@
 			}
 		},
 		created() {
-			var userInfo = this.$TOOL.data.get("user").user;
+			let userInfo = this.$TOOL.data.get('user').user;
+
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0,1);
+			this.avatar = userInfo.avatar
+			if (this.avatar == '' || this.avatar == null) {
+				this.avatar = 'img/avatar.jpg'
+			}
 		},
 		methods: {
 			//个人信息

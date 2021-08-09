@@ -5,7 +5,16 @@
         <el-card shadow="never">
           <div class="user-info">
             <div class="user-info-top">
-              <el-avatar :size="160" :src="userInfo.user.avatar"></el-avatar>
+
+              <sc-upload
+                v-model="avatar"
+                title="上传头像"
+                :cropper="true"
+                :compress="1"
+                :aspectRatio="1/1"
+                @success="uploadSuccess"
+               />
+
               <h2>{{ userInfo.user.nickname||'-' }}</h2>
               <el-button type="primary" round icon="el-icon-collection-tag" size="medium">{{ userInfo.user.username }}</el-button>
             </div>
@@ -99,19 +108,22 @@ export default {
   data() {
     return {
 
+      uploadShow: false,
+
       infoLoading: false,
       passwordLoading: false,
       avatarLoading: false,
 
       formUser: {
         id: '',
-        avatar: '',
         username: '',
         nickname: '',
         signed: '',
         phone: '',
         email: ''
       },
+
+      avatar: '',
 
       formPassword: {
         'oldPassword': '',
@@ -132,6 +144,10 @@ export default {
   created () {
     this.userInfo = this.$TOOL.data.get('user')
     this.formUser = this.userInfo.user
+    this.avatar = this.userInfo.user.avatar
+    if (this.avatar == '' || this.avatar == null) {
+      this.avatar = '/img/avatar.jpg'
+    }
   },
 
   methods: {
@@ -154,6 +170,23 @@ export default {
 
         }
       })
+    },
+
+    // 上传头像
+    async uploadSuccess(res) {
+      if (res.url) {
+        let data = {
+          id: this.formUser.id,
+          avatar: res.url
+        }
+        this.avatar = res.url
+        await this.$API.user.updateInfo(data).then(res => {
+            this.$nextTick(() => {
+              this.$TOOL.data.set('user', this.userInfo)
+              this.$message.success(res.message)
+            })
+        })
+      }
     },
 
     // 修改密码
@@ -183,4 +216,35 @@ export default {
   .activity-item label {color: #333;margin-right:10px;}
   .activity-item .el-avatar {margin-right:10px;}
   .activity-item .el-tag {margin-right:10px;}
+
+  .user-avatar {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    line-height: 110px;
+    height: 160px;
+    width: 160px;
+  }
+
+  .user-avatar:hover:after {
+    content: '+';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: #eee;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 48px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: pointer;
+    border-radius: 50%;
+    line-height: 150px;
+  }
+  .user-avatar > img {
+    width: 160px;
+    border-radius: 50%;
+  }
 </style>
