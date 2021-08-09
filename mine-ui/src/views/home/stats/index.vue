@@ -18,7 +18,7 @@
 						</div>
 						<div class="icons hidden-sm-and-down">
 							<div class="avatar-list">
-								<el-tooltip content="Sakuya" placement="top">
+								<el-tooltip content="X.Mo" placement="top">
 									<el-avatar class="avatar" :size="30" src="img/avatar.jpg"></el-avatar>
 								</el-tooltip>
 								<el-tooltip content="Lolowan" placement="top">
@@ -107,9 +107,7 @@
 </script>
 
 <style scoped>
-	.el-row {}
 	.el-tag+.el-tag {margin-left: 10px;}
-
 
 	.welTop {display: flex;}
 	.welTop .main {margin-left:20px;}
@@ -119,7 +117,6 @@
 	.welTop .icons p {font-size: 12px;}
 	.avatar-list .avatar {margin-left: -10px;border: 3px solid #fff;cursor: pointer;}
 
-	.data-box {}
 	.data-box .el-card {margin-bottom: 15px;}
 	.data-box .item-background {background: #409EFF;color: #fff;}
 	.data-box .item-background .item h2 {color: #fff;}

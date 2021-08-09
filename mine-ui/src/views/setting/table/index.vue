@@ -15,7 +15,7 @@
 
       <el-row :gutter="15">
 
-        <el-col :xs="24" :md="6" :xl="6">
+        <el-col :xs="24" :md="7" :xl="7">
           <el-form-item label="表名称" prop="name" style="width:100%">
             <el-input v-model="form.name" placeholder="请输入表名称" clearable>
               <template #prepend>{{sysinfo.tablePrefix === '' ? '无前缀' : sysinfo.tablePrefix}} {{currentModule === '' ? ''  : currentModule + '_'}}</template>
