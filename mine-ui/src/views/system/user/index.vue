@@ -240,22 +240,26 @@
   </el-container>
 
   <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
+  <homepage-dialog v-if="dialog.homepage" ref="homepageDialog" @success="handleSuccess" @closed="dialog.homepage=false"></homepage-dialog>
 
 </template>
 
 <script>
   import saveDialog from './save'
+  import homepageDialog from './setHomepage'
 
   export default {
     name: 'system:user',
     components: {
-      saveDialog
+      saveDialog,
+      homepageDialog
     },
 
     data() {
       return {
         dialog: {
-          save: false
+          save: false,
+          homepage: false
         },
         column: [
           { label: '用户ID', prop: 'id', width: '150', hide: true },
@@ -401,7 +405,10 @@
 
       // 设置用户首页
       setHomepage(row) {
-        console.log(row)
+        this.dialog.homepage = true
+        this.$nextTick(() => {
+          this.$refs.homepageDialog.open().setData(row)
+        })
       },
 
       // 更新用户缓存

@@ -128,7 +128,6 @@
         },
         //验证规则
         rules: {
-          avatar:[{ required: true, message: '请上传头像' }],
           username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
           nickname: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
           password: [{ required: true, message: '请输入用户密码', trigger: 'blur' }],

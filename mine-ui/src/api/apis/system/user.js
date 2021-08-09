@@ -117,6 +117,18 @@ export default {
             data: params
         })
     },
+
+    /**
+     * 设置用户首页
+     * @returns
+     */
+     setHomePage (params = {}) {
+        return request({
+            url: 'system/user/setHomePage',
+            method: 'post',
+            data: params
+        })
+    },
     
     /**
      * 初始化用户密码

@@ -369,4 +369,19 @@ class SystemUserService extends AbstractService
         $prefix = config('cache.default.prefix');
         return $redis->del("{$prefix}loginInfo:userId_{$id}") > 0;
     }
+
+    /**
+     * 设置用户首页
+     * @param array $params
+     * @return bool
+     */
+    public function setHomePage(array $params): bool
+    {
+        $res = ($this->mapper->getModel())::query()
+            ->where('id', $params['id'])
+            ->update(['dashboard' => $params['dashboard']]) > 0;
+
+        $this->clearCache($params['id']);
+        return $res;
+    }
 }

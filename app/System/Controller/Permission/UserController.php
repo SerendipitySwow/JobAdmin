@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Controller\Permission;
 
 use App\System\Request\User\SystemUserCreateRequest;
+use App\System\Request\User\SystemUserHompPageRequest;
 use App\System\Request\User\SystemUserStatusRequest;
 use App\System\Request\User\SystemUserUpdateRequest;
 use App\System\Service\SystemUserService;
@@ -155,6 +156,18 @@ class UserController extends MineController
     public function clearCache(): ResponseInterface
     {
         return $this->success($this->service->clearCache((string) $this->request->input('id', null)));
+    }
+
+    /**
+     * 设置用户首页
+     * @PostMapping("setHomePage")
+     * @param SystemUserHompPageRequest $request
+     * @return ResponseInterface
+     * @Permission("system:user:homePage")
+     */
+    public function setHomePage(SystemUserHompPageRequest $request): ResponseInterface
+    {
+        return $this->service->setHomePage($request->validated()) ? $this->success() : $this->error();
     }
 
     /**

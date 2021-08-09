@@ -9,8 +9,8 @@
 			</el-card>
 		</el-main>
 	</div>
-	<work v-if="dashboard === 'work' " @on-mounted="onMounted"></work>
-	<stats v-else @on-mounted="onMounted"></stats>
+	<stats v-if="dashboard === 'statistics' " @on-mounted="onMounted"></stats>
+	<work v-else @on-mounted="onMounted"></work>
 </template>
 
 <script>
