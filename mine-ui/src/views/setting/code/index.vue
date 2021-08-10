@@ -1,0 +1,225 @@
+<template>
+  <el-container>
+    <el-header>
+      <div class="left-panel">
+
+        <el-button
+          size="small"
+          icon="el-icon-download"
+          v-hasPermission="['setting:code:generate']"
+          :disabled="selection.length > 0"
+          @click="handleGenCodes"
+        >生成代码</el-button>
+
+        <el-button
+          size="small"
+          icon="el-icon-delete"
+          v-hasPermission="['setting:code:delete']"
+          :disabled="selection.length > 0"
+          @click="handleDeletes"
+        >删除</el-button>
+
+        <el-button
+          size="small"
+          icon="el-icon-upload2"
+          v-hasPermission="['setting:code:loadTable']"
+          @click="$refs.table.show()"
+        >装载数据表</el-button>
+
+      </div>
+      <div class="right-panel">
+        <div class="right-panel-search">
+          <el-input v-model="queryParams.table_name" placeholder="表名称" clearable></el-input>
+
+          <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+            <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
+          </el-tooltip>
+
+          <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+            <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
+          </el-tooltip>
+        </div>
+      </div>
+    </el-header>
+    <el-main class="nopadding">
+      <maTable
+        ref="table"
+        :api="api"
+        @selection-change="selectionChange"
+        stripe
+      >
+        
+        <el-table-column
+          label="表名称"
+          prop="table_name"
+          width="150"
+        ></el-table-column>
+
+        <el-table-column
+          label="表描述"
+          prop="table_comment"
+          width="180"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+
+        <el-table-column
+          label="生成类型"
+          prop="type"
+          width="100"
+        >
+          <template #default="scope">
+            <el-tag size="small" v-if="scope.row.type === 'single'">单表CRUD</el-tag>
+            <el-tag size="small" v-if="scope.row.type === 'tree'">树表CRUD</el-tag>
+            <el-tag size="small" v-if="scope.row.type === 'parent_sub'">父子表CRUD</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="创建时间"
+          prop="created_at"
+          width="160"
+        />
+
+        <el-table-column
+          label="更新时间"
+          prop="updated_at"
+          width="160"
+        />
+
+        <el-table-column label="操作" fixed="right" align="right" width="130" >
+
+          <template #default="scope">
+            <el-button type="text" 
+              v-hasPermission="['setting:code:preview']" 
+              @click="$refs.preview.show(scope.row.id)"
+            >预览</el-button>
+
+            <el-button type="text" 
+              v-hasPermission="['setting:code:edit']" 
+              @click="$refs.editForm.show(scope.row)"
+            >编辑</el-button>
+
+            <el-button type="text" 
+              v-hasPermission="['setting:code:sync']" 
+              @click="handleSync(scope.row.id)"
+            >同步</el-button>
+            
+            <el-button type="text" 
+              v-hasPermission="['setting:code:delete']" 
+              @click="handleDelete(scope.row.id)"
+            >删除</el-button>
+
+            <el-button type="text" 
+              v-hasPermission="['setting:code:generate']" 
+              @click="handleDelete(scope.row.id)"
+            >生成代码</el-button>
+          </template>
+            
+        </el-table-column>
+
+      </maTable>
+    </el-main>
+  </el-container>
+
+  <table-list ref="table" @confirm="confirm" />
+
+  <edit-form ref="editForm" />
+
+  <preview ref="preview" />
+
+</template>
+
+<script>
+  import editForm from './edit'
+  import tableList from './table'
+  import preview from './preview'
+
+  export default {
+    name: 'setting:code',
+    components: {
+      tableList,
+      editForm,
+      preview
+    },
+
+    data() {
+      return {
+        api: {
+          list: this.$API.generate.getPageList
+        },
+
+        queryParams: {
+          table_name: undefined,
+        },
+
+        selection: []
+      }
+    },
+    methods: {
+      //添加
+      add(){
+        this.dialog.save = true
+        this.$nextTick(() => {
+          this.$refs.saveDialog.open()
+        })
+      },
+
+      //表格选择后回调事件
+      selectionChange(selection){
+        this.selection = selection;
+      },
+
+      // 装载数据表后处理方法
+      confirm () {
+        this.handleSuccess()
+      },
+
+      // 删除
+      handleDelete (id) {
+        this.$confirm('此操作会将数据物理删除？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$API.generate.deletes(id).then(res => {
+            this.success(res.message)
+            this.handleSuccess()
+          })
+        })
+      },
+
+      // 同步数据表
+      handleSync (id) {
+        this.$confirm('此操作会导致字段设置信息丢失，确定同步吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$API.generate.sync(id).then(res => {
+            res.success && this.success(res.message)
+          })
+        })
+      },
+
+      //搜索
+      handlerSearch(){
+        this.handleSuccess()
+      },
+
+      resetSearch() {
+        this.queryParams = {
+          table_name: undefined,
+        }
+        this.handleSuccess()
+      },
+
+      //本地更新数据
+      handleSuccess(){
+        this.$refs.table.upData(this.queryParams)
+      }
+    }
+  }
+</script>
+
+<style>
+</style>
