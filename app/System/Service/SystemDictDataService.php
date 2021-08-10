@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemDictDataMapper;
+use Hyperf\Config\Annotation\Value;
+use Hyperf\Redis\Redis;
 use Mine\Abstracts\AbstractService;
+use Psr\Container\ContainerInterface;
 
 /**
  * 字典类型业务
@@ -18,23 +21,70 @@ class SystemDictDataService extends AbstractService
      */
     public $mapper;
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
-    public function __construct(SystemDictDataMapper $mapper)
+    /**
+     * @var Redis
+     */
+    protected $redis;
+
+    /**
+     * @Value("cache.default.prefix")
+     * @var string
+     */
+    protected $prefix;
+
+
+    public function __construct(SystemDictDataMapper $mapper, ContainerInterface $container)
     {
         $this->mapper = $mapper;
+        $this->container = $container;
+        $this->redis = $this->container->get(Redis::class);
     }
 
+    /**
+     * 缓存字典
+     * @param array|null $params
+     * @return array
+     */
     public function getList(?array $params = null): array
     {
         if (!isset($params['code'])) {
             return [];
         }
+
+        $key = $this->prefix . 'Dict:' . $params['code'];
+
+        if ($data = $this->redis->get($key)) {
+            return unserialize($data);
+        }
+
         $args = [
             'select' => 'id, label, value',
             'status' => '0',
             'orderBy' => 'sort',
             'orderType' => 'desc'
         ];
-        return parent::getList(array_merge($args, $params));
+        $data = parent::getList(array_merge($args, $params));
+
+        $this->redis->set($key, serialize($data));
+
+        return $data;
+    }
+
+    /**
+     * 清除缓存
+     * @return bool
+     */
+    public function clearCache(): bool
+    {
+        $key = $this->prefix . 'Dict:*';
+        foreach ($this->redis->keys($key) as $item) {
+            $this->redis->del($item);
+        }
+        return true;
     }
 }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Mine;
 
+use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\ModelCache\Cacheable;
@@ -41,8 +42,21 @@ class MineModel extends Model
     public const PAGE_SIZE = 15;
 
     /**
+     * MineModel constructor.
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // 注册自定义方法
+        $this->registerMethods();
+    }
+
+    /**
      * 生成一个主键 ID
      * @return int
+     * @throws \Exception
      */
     public function genId(): int
     {
@@ -83,6 +97,17 @@ class MineModel extends Model
     public function newCollection(array $models = []): MineCollection
     {
         return new MineCollection($models);
+    }
+
+    /**
+     * 注册自定义方法
+     */
+    private function registerMethods()
+    {
+        // 数据权限方法
+        Builder::macro('mineDataScope', function() {
+
+        });
     }
 
 }

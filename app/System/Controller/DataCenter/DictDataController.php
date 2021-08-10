@@ -53,6 +53,17 @@ class DictDataController extends MineController
     }
 
     /**
+     * @PostMapping("clearCache")
+     * @Permission("system:dataDict:clearCache")
+     * @OperationLog
+     * @return ResponseInterface
+     */
+    public function clearCache(): ResponseInterface
+    {
+        return $this->service->clearCache() ? $this->success() : $this->error();
+    }
+
+    /**
      * @GetMapping("recycle")
      * @return ResponseInterface
      * @Permission("system:dataDict:recycle")

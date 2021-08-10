@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingCrontabMapper;
+use Hyperf\Config\Annotation\Value;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Redis\Redis;
 use Mine\Abstracts\AbstractService;
@@ -29,6 +30,12 @@ class SettingCrontabService extends AbstractService
      */
     protected $redis;
 
+    /**
+     * @Value("cache.default.prefix")
+     * @var string
+     */
+    protected $prefix;
+
     public function __construct(SettingCrontabMapper $mapper)
     {
         $this->mapper = $mapper;
@@ -43,8 +50,7 @@ class SettingCrontabService extends AbstractService
     public function save(array $data): int
     {
         $id = parent::save($data);
-        $prefix = config('cache.default.prefix');
-        $this->redis->del($prefix . 'crontab');
+        $this->redis->del($this->prefix . 'crontab');
 
         return $id;
     }
@@ -58,8 +64,7 @@ class SettingCrontabService extends AbstractService
     public function update(int $id, array $data): bool
     {
         $res = parent::update($id, $data);
-        $prefix = config('cache.default.prefix');
-        $this->redis->del($prefix . 'crontab');
+        $this->redis->del($this->prefix . 'crontab');
 
         return $res;
     }
@@ -72,8 +77,7 @@ class SettingCrontabService extends AbstractService
     public function delete(string $ids): bool
     {
         $res = parent::delete($ids);
-        $prefix = config('cache.default.prefix');
-        $this->redis->del($prefix . 'crontab');
+        $this->redis->del($this->prefix . 'crontab');
 
         return $res;
     }
