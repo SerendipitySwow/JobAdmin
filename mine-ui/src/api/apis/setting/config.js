@@ -27,7 +27,7 @@ export default {
    * 清除缓存
    * @returns
    */
-   clearCache (params = {}) {
+  clearCache (params = {}) {
     return request({
       url: 'setting/config/clearCache',
       method: 'post',
@@ -39,9 +39,44 @@ export default {
    * 保存系统组配置
    * @returns
    */
-   saveSystemConfig (params = {}) {
+  saveSystemConfig (params = {}) {
     return request({
       url: 'setting/config/saveSystemConfig',
+      method: 'post',
+      data: params
+    })
+  },
+
+  /**
+   * 删除配置
+   * @returns
+   */
+  delete (key) {
+    return request({
+      url: 'setting/config/delete/' + key,
+      method: 'delete',
+    })
+  },
+
+  /**
+   * 保存配置
+   * @returns
+   */
+  save (params = {}) {
+    return request({
+      url: 'setting/config/save',
+      method: 'post',
+      data: params
+    })
+  },
+
+  /**
+   * 保存配置
+   * @returns
+   */
+  update (params = {}) {
+    return request({
+      url: 'setting/config/update',
       method: 'post',
       data: params
     })

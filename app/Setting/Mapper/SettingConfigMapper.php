@@ -52,4 +52,11 @@ class SettingConfigMapper extends AbstractMapper
     {
         return $this->model::query()->where('key', $key)->update(['value' => $value]) > 0;
     }
+
+    public function save(array $data): int
+    {
+        $this->filterExecuteAttributes($data);
+        $model = $this->model::create($data);
+        return ($model->{$model->getKeyName()}) ? 1 : 0;
+    }
 }

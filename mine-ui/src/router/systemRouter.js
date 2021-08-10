@@ -35,7 +35,7 @@ const routes = [{
 						name: "system",
 						path: "/system",
 						meta: {
-							title: "系统设置",
+							title: "系统配置",
 							icon: "el-icon-setting",
 						},
 						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/setting/index'),

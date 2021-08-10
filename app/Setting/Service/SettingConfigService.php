@@ -152,6 +152,18 @@ class SettingConfigService extends AbstractService
     }
 
     /**
+     * 更新配置
+     * @param $data
+     * @return bool
+     */
+    public function updated($data): bool
+    {
+        $key = $data['key'];
+        unset($data['key']);
+        return $this->mapper->getModel()::query()->where('key', $key)->update($data);
+    }
+
+    /**
      * @return string
      */
     public function getCacheGroupName(): string

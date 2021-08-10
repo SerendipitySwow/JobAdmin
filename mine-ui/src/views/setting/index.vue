@@ -4,7 +4,7 @@
 			<el-button type="success" plain @click="clearCache">清除缓存</el-button>
 			<el-tabs tab-position="top">
 
-				<el-tab-pane label="系统设置">
+				<el-tab-pane label="系统组配置">
 					<el-form ref="systemForm" :model="systemForm" label-width="100px" style="margin-top: 20px; width: 600px;">
 
 						<el-form-item
@@ -40,7 +40,7 @@
 					</el-form>
 				</el-tab-pane>
 
-				<el-tab-pane label="扩展配置">
+				<el-tab-pane label="扩展组配置">
 
 					<el-alert
 						title="扩展配置为系统业务所有的配置，应该由系统管理员操作，如需用户配置应另起业务配置页面。"
@@ -50,44 +50,42 @@
 					<el-button
 						type="primary"
 						icon="el-icon-plus"
-						@click="table_add"
+						@click="add"
 					>新增配置</el-button>
 
 					<el-table :data="extendConfig" stripe>
 						<el-table-column label="#" type="index" width="50"></el-table-column>
 						<el-table-column label="配置Key" prop="key" width="150">
 							<template #default="scope">
-								<el-input v-if="scope.row.isSet" v-model="scope.row.key" placeholder="请输入内容"></el-input>
+								<el-input v-if="scope.row.isSet" v-model="scope.row.key" placeholder="请输入配置Key"></el-input>
 								<span v-else>{{scope.row.key}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="配置Value" prop="value" width="350">
 							<template #default="scope">
 								<template v-if="scope.row.isSet">
-									<el-switch v-if="typeof scope.row.value==='boolean'" v-model="scope.row.value"></el-switch>
-									<el-input v-else v-model="scope.row.value" placeholder="请输入内容"></el-input>
+									<el-input v-model="scope.row.value" placeholder="请输入配置Value"></el-input>
 								</template>
 								<span v-else>{{scope.row.value}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="组名称" prop="category" width="150">
+						<el-table-column label="配置名称" prop="name" width="350">
 							<template #default="scope">
-								<el-input v-if="scope.row.isSet" v-model="scope.row.category" placeholder="请输入内容"></el-input>
-								<span v-else>{{scope.row.category}}</span>
+								<el-input v-if="scope.row.isSet" v-model="scope.row.name" placeholder="请输入配置名称"></el-input>
+								<span v-else>{{scope.row.name}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="配置名称" prop="title" width="350">
+						<el-table-column label="备注说明" prop="remark" width="150">
 							<template #default="scope">
-								<el-input v-if="scope.row.isSet" v-model="scope.row.title" placeholder="请输入内容"></el-input>
-								<span v-else>{{scope.row.title}}</span>
+								<el-input v-if="scope.row.isSet" v-model="scope.row.remark" placeholder="请输入备注说明"></el-input>
+								<span v-else>{{scope.row.remark}}</span>
 							</template>
 						</el-table-column>
 						<el-table-column min-width="1"></el-table-column>
 						<el-table-column label="操作" fixed="right" width="100">
 							<template #default="scope">
-								<el-button @click="table_edit(scope.row, scope.$index)" type="text" size="small">{{scope.row.isSet?'保存':"修改"}}</el-button>
-								<el-button v-if="scope.row.isSet" @click="scope.row.isSet=false" type="text" size="small">取消</el-button>
-								<el-popconfirm v-if="!scope.row.isSet" title="确定删除吗？" @confirm="table_del(scope.row, scope.$index)">
+								<el-button @click="save(scope.row, scope.$index)" type="text" size="small">{{scope.row.isSet ? '保存' : '修改' }}</el-button>
+								<el-popconfirm title="确定删除吗？" @confirm="del(scope.row, scope.$index)">
 									<template #reference>
 										<el-button type="text" size="small">删除</el-button>
 									</template>
@@ -162,26 +160,52 @@
 				})
 			},
 
-			table_add(){
-				var newRow = {
-					key: "",
-					value: "",
-					title: "",
+			add(){
+				this.extendConfig.push({
+					key: '',
+					value: '',
+					name: '',
+					remark: '',
+					isVirtual: true,
 					isSet: true
-				}
-				this.extendConfig.push(newRow)
+				})
 			},
 
-			table_edit(row){
+			save(row){
+				console.log(row.isSet)
+				// 保存
 				if(row.isSet){
 					row.isSet = false
+					// 编辑
+					if (row.isEdit) {
+						this.$API.config.update(row).then(res => {
+							this.$message.success(res.message)
+							this.getExtendConfig()
+						})
+					} else {
+					// 保存
+						row.group_name = 'extend'
+						this.$API.config.save(row).then(res => {
+							this.$message.success(res.message)
+							this.getExtendConfig()
+						})
+					}
 				}else{
 					row.isSet = true
+					row.isEdit = true
 				}
 			},
 
-			table_del(row, index){
-				this.extendConfig.splice(index, 1)
+			del(row, index){
+				// 虚拟字段，未保存的直接删除
+				if (row.isVirtual) {
+					this.extendConfig.splice(index, 1)
+				} else {
+					this.$API.config.delete(row.key).then(res => {
+						this.$message.success(res.message)
+						this.getExtendConfig()
+					})
+				}
 			},
 		}
 	}

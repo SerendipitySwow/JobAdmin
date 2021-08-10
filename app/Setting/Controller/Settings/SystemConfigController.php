@@ -3,9 +3,11 @@
 declare(strict_types=1);
 namespace App\Setting\Controller\Settings;
 
+use App\Setting\Request\Setting\SettingConfigCreateRequest;
 use App\Setting\Service\SettingConfigService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
@@ -75,6 +77,45 @@ class SystemConfigController extends MineController
     public function saveSystemConfig(): \Psr\Http\Message\ResponseInterface
     {
         return $this->service->saveSystemConfig($this->request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 保存配置
+     * @PostMapping("save")
+     * @Permission("setting:config:save")
+     * @OperationLog
+     * @param SettingConfigCreateRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function save(SettingConfigCreateRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->success($this->service->save($request->validated()));
+    }
+
+    /**
+     * 更新配置
+     * @PostMapping("update")
+     * @Permission("setting:config:update")
+     * @OperationLog
+     * @param SettingConfigCreateRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function update(SettingConfigCreateRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->success($this->service->updated($request->validated()));
+    }
+
+    /**
+     * 删除配置
+     * @DeleteMapping("delete/{key}")
+     * @Permission("setting:config:delete")
+     * @OperationLog
+     * @param string $key
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function delete(string $key): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->service->delete($key) ? $this->success() : $this->error();
     }
 
     /**
