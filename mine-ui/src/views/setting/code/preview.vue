@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     title="预览代码"
-    :visible="dialogVisible"
+    v-model="dialogVisible"
     width="80%"
     :before-close="handleDialogClose"
   >
@@ -29,7 +29,12 @@
   </el-dialog>
 </template>
 <script>
+import maHighlight from '@/components/maHighlight'
 export default {
+
+  components: {
+    maHighlight
+  },
 
   data () {
     return {

@@ -6,7 +6,7 @@
         <el-button
           size="small"
           icon="el-icon-download"
-          v-hasPermission="['setting:code:generate']"
+          v-auth="['setting:code:generate']"
           :disabled="selection.length > 0"
           @click="handleGenCodes"
         >生成代码</el-button>
@@ -14,7 +14,7 @@
         <el-button
           size="small"
           icon="el-icon-delete"
-          v-hasPermission="['setting:code:delete']"
+          v-auth="['setting:code:delete']"
           :disabled="selection.length > 0"
           @click="handleDeletes"
         >删除</el-button>
@@ -22,8 +22,8 @@
         <el-button
           size="small"
           icon="el-icon-upload2"
-          v-hasPermission="['setting:code:loadTable']"
-          @click="$refs.table.show()"
+          v-auth="['setting:code:loadTable']"
+          @click="$refs.tableList.show()"
         >装载数据表</el-button>
 
       </div>
@@ -48,24 +48,24 @@
         @selection-change="selectionChange"
         stripe
       >
+        <el-table-column type="selection" width="50"></el-table-column>
         
         <el-table-column
           label="表名称"
           prop="table_name"
-          width="150"
+          width="180"
         ></el-table-column>
 
         <el-table-column
           label="表描述"
           prop="table_comment"
-          width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
 
         <el-table-column
           label="生成类型"
           prop="type"
-          width="100"
+          width="150"
         >
           <template #default="scope">
             <el-tag size="small" v-if="scope.row.type === 'single'">单表CRUD</el-tag>
@@ -90,29 +90,46 @@
 
           <template #default="scope">
             <el-button type="text" 
-              v-hasPermission="['setting:code:preview']" 
+              v-auth="['setting:code:preview']" 
               @click="$refs.preview.show(scope.row.id)"
             >预览</el-button>
 
-            <el-button type="text" 
-              v-hasPermission="['setting:code:edit']" 
-              @click="$refs.editForm.show(scope.row)"
-            >编辑</el-button>
+            <el-dropdown v-if="scope.row.username !== 'superAdmin'">
 
-            <el-button type="text" 
-              v-hasPermission="['setting:code:sync']" 
-              @click="handleSync(scope.row.id)"
-            >同步</el-button>
-            
-            <el-button type="text" 
-              v-hasPermission="['setting:code:delete']" 
-              @click="handleDelete(scope.row.id)"
-            >删除</el-button>
+              <el-button
+                type="text" size="small"
+              >
+                更多<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
 
-            <el-button type="text" 
-              v-hasPermission="['setting:code:generate']" 
-              @click="handleDelete(scope.row.id)"
-            >生成代码</el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+
+                  <el-dropdown-item
+                    @click="$refs.editForm.show(scope.row)"
+                    v-auth="['setting:code:edit']" 
+                  >编辑</el-dropdown-item>
+
+                  <el-dropdown-item 
+                    @click="handleSync(scope.row.id)"
+                    v-auth="['setting:code:sync']" 
+                  >同步</el-dropdown-item>
+
+                  <el-dropdown-item 
+                    @click="handleDelete(scope.row.id)"
+                    v-auth="['setting:code:generate']" 
+                  >生成代码</el-dropdown-item>
+
+                  <el-dropdown-item
+                    @click="handleDelete(scope.row.id)"
+                    divided
+                    v-auth="['setting:code:delete']"
+                  >删除</el-dropdown-item>
+
+                </el-dropdown-menu>
+              </template>
+
+            </el-dropdown>
           </template>
             
         </el-table-column>
@@ -121,7 +138,7 @@
     </el-main>
   </el-container>
 
-  <table-list ref="table" @confirm="confirm" />
+  <table-list ref="tableList" @confirm="confirm" />
 
   <edit-form ref="editForm" />
 
@@ -156,13 +173,6 @@
       }
     },
     methods: {
-      //添加
-      add(){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open()
-        })
-      },
 
       //表格选择后回调事件
       selectionChange(selection){
@@ -172,6 +182,20 @@
       // 装载数据表后处理方法
       confirm () {
         this.handleSuccess()
+      },
+
+      // 多选生成
+      handleGenCodes () {
+
+      },
+
+      // 生成代码
+      genCode () {
+
+      },
+
+      handleDeletes() {
+
       },
 
       // 删除

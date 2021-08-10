@@ -1,8 +1,8 @@
 <template>
   <el-dialog
     title="装载数据表"
-    :visible="dialogVisible"
-    width="50%"
+    v-model="dialogVisible"
+    width="800px"
     :before-close="handleDialogClose"
   >
     <el-form
@@ -26,7 +26,7 @@
       ref="table"
       :api="api"
       rowKey="name"
-      :column="column"
+      :hideDo="true"
       @selection-change="selectionChange"
       stripe
       remoteSort
@@ -42,46 +42,8 @@
       ></el-table-column>
 
       <el-table-column
-        label="表引擎"
-        prop="engine"
-      ></el-table-column>
-
-      <el-table-column
-        label="总行数"
-        prop="rows"
-      ></el-table-column>
-
-      <el-table-column
-        label="碎片大小"
-        prop="data_free"
-      >
-        <template #default="scope">
-          {{formatData(scope.row.data_free)}}
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        label="数据大小"
-        prop="data_length"
-      >
-        <template #default="scope">
-          {{ formatData(scope.row.data_length) }}
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        label="索引大小"
-        prop="index_length"
-      >
-        <template #default="scope">
-          {{formatData(scope.row.index_length)}}
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        label="字符集"
-        prop="collation"
-        width="180"
+        prop="comment"
+        label="表注释"
         :show-overflow-tooltip="true"
       ></el-table-column>
 
@@ -95,24 +57,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        prop="comment"
-        label="表注释"
-        :show-overflow-tooltip="true"
-      ></el-table-column>
-
-      <el-table-column label="操作" fixed="right" align="right">
-        <template #default="scope">
-
-          <el-button
-          type="text"
-          v-auth="['system:dataMaintain:detailed']"
-          @click="handleDetail(scope.row.name)"
-        >查看</el-button>
-          
-        </template>
-      </el-table-column>
-
     </maTable>
 
     <template #footer class="dialog-footer">
@@ -123,9 +67,11 @@
 </template>
 <script>
 export default {
+  emits: ['confirm'],
 
   data () {
     return {
+      
       api: { list: this.$API.dataMaintain.getPageList },
       // 搜索
       queryParams: {
@@ -162,7 +108,7 @@ export default {
     },
 
     // 多选
-    handleSelectionChange (items) {
+    selectionChange (items) {
       if (items.length > 0) {
         this.names = items.map(item => {
           return { name: item.name, comment: item.comment }
@@ -174,7 +120,7 @@ export default {
 
     // 搜索
     handleSearch () {
-      this.$refs.table.upDate(this.queryParams)
+      this.$refs.table.upData(this.queryParams)
     },
 
     // 重置搜索

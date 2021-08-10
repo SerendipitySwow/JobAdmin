@@ -2,10 +2,8 @@
 
   <el-drawer
     title="修改生成配置"
-    :visible="drawer"
-    :closeDrawer="handleClose"
+    v-model="drawer"
     size="80%"
-    class="drawer"
   >
     <el-form
       ref="form"
