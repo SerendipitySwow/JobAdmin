@@ -168,6 +168,14 @@
                   @click="show(scope.row, scope.$index)"
                 >查看</el-button>
 
+                <el-button
+                  v-if="scope.row.username === 'superAdmin'"
+                  type="text"
+                  size="small"
+                  @click="clearCache(scope.row)"
+                  v-auth="['system:user:cache']"
+                >更新缓存</el-button>
+
                 <el-dropdown v-if="scope.row.username !== 'superAdmin'">
 
                   <el-button
