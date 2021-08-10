@@ -18,6 +18,7 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $created_at 创建时间
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $remark 备注
+ * @property-read \Hyperf\Database\Model\Collection|SettingCrontabLog[] $logs 
  */
 class SettingCrontab extends MineModel
 {
@@ -29,7 +30,6 @@ class SettingCrontab extends MineModel
     public const URL_CRONTAB = '3';
     // EVAL 任务
     public const EVAL_CRONTAB = '4';
-
     public $incrementing = false;
     /**
      * The table associated with the model.
@@ -42,14 +42,13 @@ class SettingCrontab extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'type', 'target', 'parameter', 'rule', 'singleton', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'name', 'type', 'target', 'parameter', 'rule', 'singleton', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 关联字典任务日志表
      * @return \Hyperf\Database\Model\Relations\HasMany

@@ -1,44 +1,67 @@
 <template>
 	<el-main>
 		<el-card shadow="never">
+			<el-button type="success" plain @click="clearCache">清除缓存</el-button>
 			<el-tabs tab-position="top">
 
 				<el-tab-pane label="系统设置">
-					<el-form ref="form" :model="systemConfig" label-width="100px" style="margin-top: 20px;">
-						<el-form-item label="系统名称">
-							<el-input v-model="systemConfig.name"></el-input>
+					<el-form ref="systemForm" :model="systemForm" label-width="100px" style="margin-top: 20px; width: 600px;">
+
+						<el-form-item
+							:label="item.name"
+							:prop="item.key"
+							v-for="(item, index) in systemConfig"
+							:key="index"
+						>
+							<!-- 文本框类 -->
+							<el-input
+								v-model="systemForm[item.key]"
+								v-if="item.key !== 'site_storage_mode'"
+								:type="item.key == 'site_desc' || item.key == 'site_copyright' ? 'textarea' : 'text'"
+								:rows="3"
+								maxlength="255"
+								show-word-limit
+								clearable
+							/>
+							<!-- 下拉框类 -->
+							<el-select v-model="systemForm[item.key]" v-else style="width: 100%;">
+								<el-option
+									v-for="(mode, index) in uploadMode"
+									:key="index"
+									:value="mode.value"
+									:label="mode.label"
+								/>
+							</el-select>
 						</el-form-item>
-						<el-form-item label="LogoUrl">
-							<el-input v-model="systemConfig.logoUrl"></el-input>
-						</el-form-item>
-						<el-form-item label="登录开关">
-							<el-switch v-model="systemConfig.login"></el-switch>
-							<div class="el-form-item-msg" data-v-b33b3cf8="">关闭后普通用户无法登录，仅允许管理员角色登录</div>
-						</el-form-item>
-						<el-form-item label="密码验证规则">
-							<el-input v-model="systemConfig.passwordRules"></el-input>
-						</el-form-item>
-						<el-form-item label="版权信息">
-							<el-input type="textarea" :autosize="{minRows: 4}" v-model="systemConfig.copyright"></el-input>
-						</el-form-item>
+
 						<el-form-item>
-							<el-button type="primary">保存</el-button>
+							<el-button type="primary" @click="saveSystemConfig">保 存</el-button>
 						</el-form-item>
 					</el-form>
 				</el-tab-pane>
 
 				<el-tab-pane label="扩展配置">
-					<el-alert title="扩展配置为系统业务所有的配置，应该由系统管理员操作，如需用户配置应另起业务配置页面。" type="warning" style="margin-bottom: 15px;"></el-alert>
+
+					<el-alert
+						title="扩展配置为系统业务所有的配置，应该由系统管理员操作，如需用户配置应另起业务配置页面。"
+						type="warning" style="margin-bottom: 15px;"
+					/>
+
+					<el-button
+						type="primary"
+						icon="el-icon-plus"
+						@click="table_add"
+					>新增配置</el-button>
 
 					<el-table :data="extendConfig" stripe>
 						<el-table-column label="#" type="index" width="50"></el-table-column>
-						<el-table-column label="KEY" prop="key" width="150">
+						<el-table-column label="配置Key" prop="key" width="150">
 							<template #default="scope">
 								<el-input v-if="scope.row.isSet" v-model="scope.row.key" placeholder="请输入内容"></el-input>
 								<span v-else>{{scope.row.key}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="VALUE" prop="value" width="350">
+						<el-table-column label="配置Value" prop="value" width="350">
 							<template #default="scope">
 								<template v-if="scope.row.isSet">
 									<el-switch v-if="typeof scope.row.value==='boolean'" v-model="scope.row.value"></el-switch>
@@ -47,13 +70,13 @@
 								<span v-else>{{scope.row.value}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="CATEGORY" prop="category" width="150">
+						<el-table-column label="组名称" prop="category" width="150">
 							<template #default="scope">
 								<el-input v-if="scope.row.isSet" v-model="scope.row.category" placeholder="请输入内容"></el-input>
 								<span v-else>{{scope.row.category}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="TITLE" prop="title" width="350">
+						<el-table-column label="配置名称" prop="title" width="350">
 							<template #default="scope">
 								<el-input v-if="scope.row.isSet" v-model="scope.row.title" placeholder="请输入内容"></el-input>
 								<span v-else>{{scope.row.title}}</span>
@@ -72,7 +95,6 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<el-button type="primary" icon="el-icon-plus" @click="table_add" style="margin-top: 20px;"></el-button>
 				</el-tab-pane>
 
 			</el-tabs>
@@ -87,12 +109,18 @@
 			return {
 				systemConfig: [],
 				extendConfig: [],
+
+				uploadMode: [],
+
+				systemForm: {},
+				extendForm: {},
 			}
 		},
 
 		created () {
 			this.getSystemConfig()
 			this.getExtendConfig()
+			this.getDictData()
 		},
 
 		methods: {
@@ -101,6 +129,9 @@
 			async getSystemConfig () {
 				await this.$API.config.getSystemConfig().then(res => {
 					this.systemConfig = res.data
+					this.systemConfig.map(item => {
+						this.systemForm[item.key] = item.value
+					})
 				})
 			},
 
@@ -111,6 +142,26 @@
 				})
 			},
 
+			// 字典
+			async getDictData() {
+				await this.getDict('upload_mode').then(res => {
+					this.uploadMode = res.data
+				})
+			},
+
+			// 保存系统类配置
+			saveSystemConfig() {
+				this.$API.config.saveSystemConfig(this.systemForm).then(res => {
+					res.success && this.$message.success(res.message)
+				})
+			},
+
+			clearCache () {
+				this.$API.config.clearCache().then(() => {
+					this.$message.success('缓存已清除')
+				})
+			},
+
 			table_add(){
 				var newRow = {
 					key: "",
@@ -118,8 +169,9 @@
 					title: "",
 					isSet: true
 				}
-				this.setting.push(newRow)
+				this.extendConfig.push(newRow)
 			},
+
 			table_edit(row){
 				if(row.isSet){
 					row.isSet = false
@@ -127,8 +179,9 @@
 					row.isSet = true
 				}
 			},
+
 			table_del(row, index){
-				this.setting.splice(index, 1)
+				this.extendConfig.splice(index, 1)
 			},
 		}
 	}

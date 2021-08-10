@@ -124,6 +124,7 @@ class SettingConfigService extends AbstractService
     public function clearCache(): bool
     {
         $groupCache = $this->redis->keys($this->getCacheGroupName().'*');
+        print_r($groupCache);
         $keyCache = $this->redis->keys($this->getCacheName().'*');
         foreach ($groupCache as $item) {
             $this->redis->del($item);
@@ -133,6 +134,20 @@ class SettingConfigService extends AbstractService
             $this->redis->del($item);
         }
 
+        return true;
+    }
+
+    /**
+     * 保存系统配置组
+     * @param array $data
+     * @return bool
+     */
+    public function saveSystemConfig(array $data): bool
+    {
+        foreach ($data as $key => $value) {
+            $this->mapper->updateConfig($key, $value);
+        }
+        $this->clearCache();
         return true;
     }
 

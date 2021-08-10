@@ -67,6 +67,17 @@ class SystemConfigController extends MineController
     }
 
     /**
+     * 保存系统配置组数据
+     * @PostMapping("saveSystemConfig")
+     * @Permission("setting:config:saveSystemConfig")
+     * @OperationLog
+     */
+    public function saveSystemConfig(): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->service->saveSystemConfig($this->request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
      * 清除配置缓存
      * @PostMapping("clearCache")
      * @Permission("setting:config:clearCache")
