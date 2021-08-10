@@ -25,6 +25,30 @@ export default {
   },
 
   /**
+   * 编辑生成信息
+   * @returns
+   */
+  update (data = {}) {
+    return request({
+      url: 'setting/code/update',
+      method: 'post',
+      data
+    })
+  },
+
+  /**
+   * 生成代码
+   * @returns
+   */
+  generate (data = {}) {
+    return request({
+      url: 'setting/code/generate',
+      method: 'post',
+      data
+    })
+  },
+
+  /**
    * 装载数据表
    * @returns
    */

@@ -86,6 +86,8 @@ class SettingGenerateTablesService extends AbstractService
 
     /**
      * 同步数据表
+     * @param int $id
+     * @return bool
      */
     public function sync(int $id): bool
     {
@@ -169,8 +171,8 @@ class SettingGenerateTablesService extends AbstractService
                 'lang' => 'vue',
             ],
             [
-                'tab_name' => 'Form.vue',
-                'name' => 'form',
+                'tab_name' => 'Save.vue',
+                'name' => 'save',
                 'code' => '',
                 'lang' => 'vue',
             ],

@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 namespace App\Setting\Controller\Tools;
 
+use App\Setting\Request\Tool\GenerateUpdateRequest;
 use App\Setting\Request\Tool\LoadTableRequest;
 use App\Setting\Service\SettingGenerateColumnsService;
 use App\Setting\Service\SettingGenerateTablesService;
@@ -67,6 +68,19 @@ class GenerateCodeController extends MineController
     public function preview(): \Psr\Http\Message\ResponseInterface
     {
         return $this->success($this->tableService->preview((int) $this->request->input('id', 0)));
+    }
+
+    /**
+     * 更新业务表信息
+     * @PostMapping("update")
+     * @Permission("setting:code:update")
+     * @param GenerateUpdateRequest $request
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function update(GenerateUpdateRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        print_r($request->validated());
+        return $this->success();
     }
 
     /**

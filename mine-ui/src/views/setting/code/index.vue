@@ -7,7 +7,7 @@
           size="small"
           icon="el-icon-download"
           v-auth="['setting:code:generate']"
-          :disabled="selection.length > 0"
+          :disabled="selection.length < 1"
           @click="handleGenCodes"
         >生成代码</el-button>
 
@@ -15,7 +15,7 @@
           size="small"
           icon="el-icon-delete"
           v-auth="['setting:code:delete']"
-          :disabled="selection.length > 0"
+          :disabled="selection.length < 1"
           @click="handleDeletes"
         >删除</el-button>
 
@@ -220,7 +220,7 @@
           type: 'warning'
         }).then(() => {
           this.$API.generate.sync(id).then(res => {
-            res.success && this.success(res.message)
+            res.success && this.$message.success(res.message)
           })
         })
       },

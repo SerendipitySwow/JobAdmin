@@ -9,7 +9,8 @@
       ref="form"
       :model="form"
       :rules="rules"
-      label-width="90px"
+      label-width="110px"
+      class="form"
     >
       <el-tabs v-model="activeName">
 
@@ -19,38 +20,39 @@
 
             <el-row :gutter="24">
 
-              <el-col :span="12">
+              <el-col :xs="24" :md="12" :xl="12">
                 <el-form-item label="表名称" prop="table_name">
-                  <el-input size="small" v-model="form.table_name" :disabled="true"></el-input>
+                  <el-input v-model="form.table_name" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :md="12" :xl="12">
                 <el-form-item label="表描述" prop="table_comment">
-                  <el-input size="small" v-model="form.table_comment"></el-input>
+                  <el-input v-model="form.table_comment"></el-input>
                 </el-form-item>
               </el-col>
 
             </el-row>
 
             <el-row :gutter="0">
-              <el-form-item label="备注信息" size="small" prop="remark">
-                <el-input
-                  type="textarea"
-                  :rows="3"
-                  placeholder="备注内容"
-                  v-model="form.remark">
-                </el-input>
-              </el-form-item>
-
+              <el-col :span="24">
+                <el-form-item label="备注信息" prop="remark">
+                  <el-input
+                    type="textarea"
+                    :rows="3"
+                    placeholder="备注内容"
+                    v-model="form.remark">
+                  </el-input>
+                </el-form-item>
+              </el-col>
             </el-row>
 
             <el-divider content-position="left">生成配置</el-divider>
 
             <el-row :gutter="24">
 
-              <el-col :span="12">
-                <el-form-item size="small" class="ma-inline-form-item" prop="module_name">
+              <el-col :xs="24" :md="12" :xl="12">
+                <el-form-item class="ma-inline-form-item" prop="module_name">
 
                   <template #label>
                     所属模块
@@ -79,7 +81,7 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :md="12" :xl="12">
                 <el-form-item prop="belong_menu_id">
                   <template #label>
                     所属菜单
@@ -90,7 +92,7 @@
                   
                   <el-cascader
                     v-model="form.belong_menu_id"
-                    size="small" clearable
+                   clearable
                     style="width:100%"
                     :options="menus"
                     :props="{ checkStrictly: true }"
@@ -103,8 +105,8 @@
 
             <el-row :gutter="24">
 
-              <el-col :span="12">
-                <el-form-item prop="type" size="small" label="生成类型">
+              <el-col :xs="24" :md="12" :xl="12">
+                <el-form-item prop="type" label="生成类型">
                   <el-select
                     v-model="form.type"
                     placeholder="请选择生成类型"
@@ -117,8 +119,8 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
-                <el-form-item size="small" class="ma-inline-form-item" prop="menu_name">
+              <el-col :xs="24" :md="12" :xl="12">
+                <el-form-item class="ma-inline-form-item" prop="menu_name">
 
                   <template #label>
                     菜单名称
@@ -126,7 +128,7 @@
                       <i class="el-icon-question"></i>
                     </el-tooltip>
                   </template>
-                  <el-input size="small" v-model="form.menu_name"></el-input>
+                  <el-input v-model="form.menu_name"></el-input>
                   
                 </el-form-item>
               </el-col>
@@ -135,8 +137,8 @@
 
             <el-row :gutter="24">
 
-              <el-col :span="12">
-                <el-form-item prop="package_name" size="small">
+              <el-col :xs="24" :md="12" :xl="12">
+                <el-form-item prop="package_name">
                   <template #label>
                     包名
                     <el-tooltip content="控制器文件所在目录名，比如：permission">
@@ -144,12 +146,12 @@
                     </el-tooltip>
                   </template>
 
-                  <el-input size="small" v-model="form.package_name"></el-input>
+                  <el-input v-model="form.package_name"></el-input>
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
-                <el-form-item prop="generate_type" size="small">
+              <el-col :xs="24" :md="12" :xl="12">
+                <el-form-item prop="generate_type">
                   <template #label>
                     生成方式
                     <el-tooltip content="后端文件直接生成到所属模块下。建议以下载方式生成，vue文件需要手动部署">
@@ -157,7 +159,7 @@
                     </el-tooltip>
                   </template>
 
-                  <el-radio-group v-model="form.generate_type" size="small">
+                  <el-radio-group v-model="form.generate_type">
                     <el-radio-button label="0">压缩包下载</el-radio-button>
                     <el-radio-button label="1">生成到模块</el-radio-button>
                   </el-radio-group>
@@ -169,10 +171,8 @@
             <el-row v-if="currentType === 'tree'">
               <el-divider content-position="left">生成类型配置</el-divider>
 
-              <el-row :gutter="24">
-
-                <el-col :span="8">
-                  <el-form-item prop="tree_id" size="small">
+                <el-col :xs="24" :md="8" :xl="8">
+                  <el-form-item prop="tree_id">
                     <template #label>
                       树主ID
                       <el-tooltip content="一般为主键ID">
@@ -195,8 +195,8 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
-                  <el-form-item prop="tree_parent_id" size="small">
+                <el-col :xs="24" :md="8" :xl="8">
+                  <el-form-item prop="tree_parent_id">
                     <template #label>
                       树父ID
                       <el-tooltip content="树节点的父ID，比如：parent_id">
@@ -219,8 +219,8 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="8">
-                  <el-form-item prop="tree_name" size="small">
+                <el-col :xs="24" :md="8" :xl="8">
+                  <el-form-item prop="tree_name">
                     <template #label>
                       树名称
                       <el-tooltip content="树显示的名称字段，比如：name">
@@ -243,7 +243,6 @@
                   </el-form-item>
                 </el-col>
 
-              </el-row>
             </el-row>
 
           </el-tab-pane>
@@ -254,7 +253,7 @@
 
               <el-table-column prop="sort" label="排序">
                 <template v-slot="scope">
-                  <el-input v-model="scope.row.sort" size="small" clearable placeholder="排序"></el-input>
+                  <el-input v-model="scope.row.sort" clearable placeholder="排序"></el-input>
                 </template>
               </el-table-column>
 
@@ -262,7 +261,7 @@
               
               <el-table-column prop="column_comment" label="字段描述">
                 <template v-slot="scope">
-                  <el-input v-model="scope.row.column_comment" size="small" clearable placeholder="注释"></el-input>
+                  <el-input v-model="scope.row.column_comment" clearable placeholder="注释"></el-input>
                 </template>
               </el-table-column>
 
@@ -338,6 +337,7 @@
                     v-model="scope.row.dict_type"
                     placeholder="请选择数据字典"
                     style="width: 100%"
+                    clearable
                   >
                     <el-option
                       v-for="(item, index) in dict"
@@ -354,8 +354,8 @@
           </el-tab-pane>
       </el-tabs>
 
-      <div class="mt-20" style="text-align:center; margin-bottom: 20px;">
-        <el-button type="primary">提交</el-button>
+      <div style="text-align:center; margin-bottom: 20px; margin-top: 20px;">
+        <el-button type="primary" @click="handleSubmit" :loading="saveLoading">提交</el-button>
         <el-button @click="handleClose">关闭</el-button>
       </div>
     </el-form>
@@ -371,10 +371,9 @@ export default {
       drawer: false,
       // 默认激活
       activeName: '',
-      // 验证规则
-      rules: {},
       // 表单字段
       form: {
+        id: '',
         table_name: '',
         module_name: '',
         table_comment: '',
@@ -386,6 +385,19 @@ export default {
         namespace: '',
         generate_type: '',
         options: {},
+        columns: [],
+      },
+
+      // 保存loading
+      saveLoading: false,
+
+      // 验证规则
+      rules: {
+        table_comment: [{ required: true, message: '请填写表描述', trigger: 'blur' }],
+        module_name: [{ required: true, message: '请选择所属模块（注意对应表模块前缀）', trigger: 'change' }],
+        belong_menu_id: [{ required: true, message: '请选择所属菜单', trigger: 'change' }],
+        menu_name: [{ required: true, message: '请选择所属菜单', trigger: 'blur' }],
+        package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }],
       },
 
       // 当前记录
@@ -472,8 +484,27 @@ export default {
       })
     },
 
+    // 提交数据
+    handleSubmit () {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+            this.form.columns = this.columns
+            this.saveLoading = true
+            let res = await this.$API.generate.update(this.form)
+            this.saveLoading = false
+            if (res.success) {
+              this.$message.success(res.message)
+              this.drawer = false
+            } else {
+              this.$alert(res.message, "提示", { type: 'error' })
+            }
+        }
+      })
+    },
+
     // 为form赋值
     setFormValue () {
+      this.form.id = this.record.id
       this.form.table_name = this.record.table_name
       this.form.table_comment = this.record.table_comment
       this.form.module_name = this.record.module_name
@@ -497,3 +528,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.form {
+  padding: 0 30px;
+}
+</style>
