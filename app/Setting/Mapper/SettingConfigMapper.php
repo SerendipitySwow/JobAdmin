@@ -26,7 +26,7 @@ class SettingConfigMapper extends AbstractMapper
     public function getConfigByGroup(string $groupName): array
     {
         return $this->model::query()->where('group_name', $groupName)->get([
-            'group_name', 'name', 'key', 'value', 'remark'
+            'group_name', 'name', 'key', 'value', 'sort', 'remark'
         ])->toArray();
     }
 
@@ -38,7 +38,7 @@ class SettingConfigMapper extends AbstractMapper
     public function getConfigByKey(string $key): array
     {
         return $this->model::query()->find($key, [
-            'group_name', 'name', 'key', 'value', 'remark'
+            'group_name', 'name', 'key', 'value', 'sort', 'remark'
         ])->toArray();
     }
 
