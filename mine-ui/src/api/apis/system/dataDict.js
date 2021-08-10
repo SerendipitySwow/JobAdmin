@@ -92,5 +92,17 @@ export default {
             method: 'put',
             data: params
         })
+    },
+
+    /**
+     * 清空缓存
+     * @returns
+     */
+    clearCache() {
+        return request({
+            url: 'system/dataDict/clearCache',
+            method: 'post'
+        })
     }
+
 }

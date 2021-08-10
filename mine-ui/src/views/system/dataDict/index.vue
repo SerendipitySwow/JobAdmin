@@ -106,6 +106,14 @@
             v-auth="['system:dataDict:delete']"
           >删除</el-button>
 
+          <el-button
+            type="success"
+            plain
+            icon="el-icon-delete"
+            @click="clearCache"
+            v-auth="['system:dataDict:clearCache']"
+          >清除缓存</el-button>
+
         </div>
 
         <div class="right-panel">
@@ -516,6 +524,13 @@
       //本地更新数据
       handleDataSuccess(){
         this.$refs.table.upData(this.dataQueryParams)
+      },
+
+      // 清空缓存
+      clearCache() {
+        this.$API.dataDict.clearCache().then(res => {
+          res.success && this.$message.success('字典缓存已清除')
+        })
       },
 
       switchTypeData () {

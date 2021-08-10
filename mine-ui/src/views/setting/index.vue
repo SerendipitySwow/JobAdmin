@@ -1,7 +1,14 @@
 <template>
 	<el-main>
 		<el-card shadow="never">
-			<el-button type="success" plain @click="clearCache">清除缓存</el-button>
+			
+			<el-button
+				type="success"
+				plain
+				@click="clearCache"
+				icon="el-icon-delete"
+			>清除缓存</el-button>
+
 			<el-tabs tab-position="top">
 
 				<el-tab-pane label="系统组配置">

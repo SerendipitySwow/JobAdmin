@@ -4,6 +4,7 @@
 namespace Mine;
 
 
+use App\Setting\Service\SettingConfigService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Filesystem\FilesystemFactory;
 use League\Flysystem\Filesystem;
@@ -188,7 +189,7 @@ class MineUpload
      */
     public function getStorageMode(): string
     {
-        return config('file.default', 'local');
+        return $this->container->get(SettingConfigService::class)->getConfigByKey('site_storage_mode')['value'] ?? 'local';
     }
 
     /**
