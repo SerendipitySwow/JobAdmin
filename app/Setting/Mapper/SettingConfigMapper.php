@@ -25,7 +25,9 @@ class SettingConfigMapper extends AbstractMapper
      */
     public function getConfigByGroup(string $groupName): array
     {
-        return $this->model::query()->where('group_name', $groupName)->get([
+        return $this->model::query()
+            ->where('group_name', $groupName)
+            ->orderByDesc('sort')->get([
             'group_name', 'name', 'key', 'value', 'sort', 'remark'
         ])->toArray();
     }
