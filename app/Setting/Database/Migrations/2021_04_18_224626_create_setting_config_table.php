@@ -18,6 +18,7 @@ class CreateSettingConfigTable extends Migration
             $table->addColumn('string', 'value', ['length'=> 255, 'comment' => '配置值'])->nullable();
             $table->addColumn('string', 'name', ['length'=> 255, 'comment' => '配置名称'])->nullable();
             $table->addColumn('string', 'group_name', ['length'=> 100, 'comment' => '组名称'])->nullable();
+            $table->addColumn('tinyInteger', 'sort', ['unsigned' => true, 'default' => 0, 'comment' => '排序'])->nullable();
             $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
             $table->primary('key');
             $table->index('group_name');
