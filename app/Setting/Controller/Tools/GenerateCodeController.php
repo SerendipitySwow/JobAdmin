@@ -79,8 +79,7 @@ class GenerateCodeController extends MineController
      */
     public function update(GenerateUpdateRequest $request): \Psr\Http\Message\ResponseInterface
     {
-        print_r($request->validated());
-        return $this->success();
+        return $this->success($this->tableService->updateTableAndColumns($request->validated()));
     }
 
     /**

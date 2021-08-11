@@ -174,9 +174,9 @@ class SystemUserMapper extends AbstractMapper
         if (isset($params['showDept'])) {
             $isAll = $params['showDeptAll'] ?? false;
 
-            $query->with(['dept' => function($q) use($isAll){
-                /* @var Builder $q*/
-                return $isAll ? $q->select(['*']) : $q->select(['id', 'name']);
+            $query->with(['dept' => function($query) use($isAll){
+                /* @var Builder $query*/
+                return $isAll ? $query->select(['*']) : $query->select(['id', 'name']);
             }]);
         }
         return $query;

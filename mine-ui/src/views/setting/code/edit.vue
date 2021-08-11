@@ -365,6 +365,7 @@
 </template>
 <script>
 export default {
+  emits: ['confirm'],
   data () {
     return {
       // 显示抽屉
@@ -493,6 +494,7 @@ export default {
             let res = await this.$API.generate.update(this.form)
             this.saveLoading = false
             if (res.success) {
+              this.$emit('confirm')
               this.$message.success(res.message)
               this.drawer = false
             } else {

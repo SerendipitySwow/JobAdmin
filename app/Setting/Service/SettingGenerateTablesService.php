@@ -10,6 +10,8 @@ use Mine\Abstracts\AbstractService;
 use Mine\Generator\ControllerGenerator;
 use Mine\Generator\ModelGenerator;
 use Mine\Generator\ServiceGenerator;
+use Mine\Helper\Str;
+use function _PHPStan_8f2e45ccf\React\Promise\Stream\first;
 
 /**
  * 业务生成信息表业务处理类
@@ -105,6 +107,44 @@ class SettingGenerateTablesService extends AbstractService
                 $column['table_id'] = $id;
             }
             $this->settingGenerateColumnsService->save($columns);
+            Db::commit();
+        } catch (\RuntimeException $e) {
+            Db::rollBack();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 更新业务表
+     * @param array $data
+     * @return bool
+     */
+    public function updateTableAndColumns(array $data): bool
+    {
+        $id = $data['id'];
+        $columns = $data['columns'];
+
+        unset($data['columns']);
+
+        if (is_array($data['belong_menu_id'])) {
+            $data['belong_menu_id'] = array_pop($data['belong_menu_id']);
+        }
+
+        $data['package_name'] = Str::title($data['package_name']);
+        $data['namespace'] = "App\\{$data['module_name']}" . (empty($data['package_name']) ? '' : "\\{$data['package_name']}");
+        $data['options'] = serialize($data['options']);
+
+        try {
+            Db::beginTransaction();
+            // 更新业务表
+            $this->update($id, $data);
+
+            // 更新业务字段表
+            foreach ($columns as $column) {
+                $this->settingGenerateColumnsService->update($column['id'], $column);
+            }
+
             Db::commit();
         } catch (\RuntimeException $e) {
             Db::rollBack();

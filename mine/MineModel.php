@@ -91,6 +91,16 @@ class MineModel extends Model
     }
 
     /**
+     * @param array $attributes
+     * @param array $options
+     * @return bool
+     */
+    public function update(array $attributes = [], array $options = []): bool
+    {
+        return parent::update($attributes, $options);
+    }
+
+    /**
      * @param array $models
      * @return MineCollection
      */

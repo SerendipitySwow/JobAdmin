@@ -4,7 +4,8 @@
       <div class="left-panel">
 
         <el-button
-          size="small"
+          type="primary"
+          plain
           icon="el-icon-download"
           v-auth="['setting:code:generate']"
           :disabled="selection.length < 1"
@@ -12,15 +13,8 @@
         >生成代码</el-button>
 
         <el-button
-          size="small"
-          icon="el-icon-delete"
-          v-auth="['setting:code:delete']"
-          :disabled="selection.length < 1"
-          @click="handleDeletes"
-        >删除</el-button>
-
-        <el-button
-          size="small"
+          type="danger"
+          plain
           icon="el-icon-upload2"
           v-auth="['setting:code:loadTable']"
           @click="$refs.tableList.show()"
@@ -68,9 +62,9 @@
           width="150"
         >
           <template #default="scope">
-            <el-tag size="small" v-if="scope.row.type === 'single'">单表CRUD</el-tag>
-            <el-tag size="small" v-if="scope.row.type === 'tree'">树表CRUD</el-tag>
-            <el-tag size="small" v-if="scope.row.type === 'parent_sub'">父子表CRUD</el-tag>
+            <el-tag  v-if="scope.row.type === 'single'">单表CRUD</el-tag>
+            <el-tag  v-if="scope.row.type === 'tree'">树表CRUD</el-tag>
+            <el-tag  v-if="scope.row.type === 'parent_sub'">父子表CRUD</el-tag>
           </template>
         </el-table-column>
 
@@ -97,7 +91,7 @@
             <el-dropdown v-if="scope.row.username !== 'superAdmin'">
 
               <el-button
-                type="text" size="small"
+                type="text" 
               >
                 更多<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
@@ -116,7 +110,7 @@
                   >同步</el-dropdown-item>
 
                   <el-dropdown-item 
-                    @click="handleDelete(scope.row.id)"
+                    @click="generateCode(scope.row.id)"
                     v-auth="['setting:code:generate']" 
                   >生成代码</el-dropdown-item>
 
@@ -140,7 +134,7 @@
 
   <table-list ref="tableList" @confirm="confirm" />
 
-  <edit-form ref="editForm" />
+  <edit-form ref="editForm" @confirm="confirm" />
 
   <preview ref="preview" />
 
@@ -184,17 +178,13 @@
         this.handleSuccess()
       },
 
-      // 多选生成
+      // 批量生成
       handleGenCodes () {
 
       },
 
       // 生成代码
-      genCode () {
-
-      },
-
-      handleDeletes() {
+      generateCode () {
 
       },
 
