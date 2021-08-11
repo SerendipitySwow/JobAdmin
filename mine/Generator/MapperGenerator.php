@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpIllegalStringOffsetInspection */
 /** @noinspection PhpSignatureMismatchDuringInheritanceInspection */
 
 declare(strict_types=1);
@@ -200,9 +201,8 @@ UseNamespace;
     protected function getFieldIdName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = unserialize($this->model->options);
-            if ( $options['tree_id'] ?? false ) {
-                return $options['tree_id'];
+            if ( $this->model->options['tree_id'] ?? false ) {
+                return $this->model->options['tree_id'];
             } else {
                 return 'id';
             }
@@ -217,9 +217,8 @@ UseNamespace;
     protected function getFieldPidName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = unserialize($this->model->options);
-            if ( $options['tree_pid'] ?? false ) {
-                return $options['tree_pid'];
+            if ( $this->model->options['tree_pid'] ?? false ) {
+                return $this->model->options['tree_pid'];
             } else {
                 return 'parent_id';
             }
@@ -234,9 +233,8 @@ UseNamespace;
     protected function getFieldName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = unserialize($this->model->options);
-            if ( $options['tree_name'] ?? false ) {
-                return $options['tree_name'];
+            if ( $this->model->options['tree_name'] ?? false ) {
+                return $this->model->options['tree_name'];
             } else {
                 return 'name';
             }

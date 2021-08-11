@@ -47,12 +47,23 @@ class SettingGenerateTables extends MineModel
     /**
      * 获取options参数
      *
-     * @param string $value
+     * @param string|null $value
+     * @return array|null
+     */
+    public function getOptionsAttribute(?string $value): array
+    {
+        return is_null($value) ? [] : unserialize($value);
+    }
+
+    /**
+     * 设置options参数
+     *
+     * @param string|null $value
      * @return string
      */
-    public function getOptionsAttribute(string $value): string
+    public function setOptionsAttribute(?string $value): ?string
     {
-        return unserialize($value);
+        return empty($value) ? null : serialize($value);
     }
 
     /**

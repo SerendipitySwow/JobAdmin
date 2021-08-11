@@ -1,6 +1,4 @@
-<?php
-
-/** @noinspection PhpSignatureMismatchDuringInheritanceInspection */
+<?php /** @noinspection PhpIllegalStringOffsetInspection */
 
 declare(strict_types=1);
 namespace Mine\Generator;
@@ -192,9 +190,8 @@ UseNamespace;
     protected function getFieldIdName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = json_decode($this->model->options);
-            if ( $options->tree_id ?? false ) {
-                return $options->tree_id;
+            if ( $this->model->options['tree_id'] ?? false ) {
+                return $this->model->options['tree_id'];
             } else {
                 return 'id';
             }
@@ -209,9 +206,8 @@ UseNamespace;
     protected function getFieldPidName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = json_decode($this->model->options);
-            if ( $options->tree_pid ?? false ) {
-                return $options->tree_pid;
+            if ( $this->model->options['tree_pid'] ?? false ) {
+                return $this->model->options['tree_pid'];
             } else {
                 return 'parent_id';
             }

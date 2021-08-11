@@ -196,7 +196,7 @@
           type: 'warning'
         }).then(() => {
           this.$API.generate.deletes(id).then(res => {
-            this.success(res.message)
+            this.$message.success(res.message)
             this.handleSuccess()
           })
         })

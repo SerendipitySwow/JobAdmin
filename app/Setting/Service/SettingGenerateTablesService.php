@@ -133,8 +133,8 @@ class SettingGenerateTablesService extends AbstractService
 
         $data['package_name'] = ucfirst($data['package_name']);
         $data['namespace'] = "App\\{$data['module_name']}";
-        $data['options'] = serialize($data['options']);
-        print_r($columns);
+        $data['options'] = empty($data['options']) ? null : serialize($data['options']);
+
         try {
             Db::beginTransaction();
             // 更新业务表
