@@ -33,6 +33,11 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     protected $filesystem;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * 设置生成信息
      * @param SettingGenerateTables $model
      * @param string $type
@@ -41,6 +46,7 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     public function setGenInfo(SettingGenerateTables $model, string $type): RequestGenerator
     {
         $this->model = $model;
+        $this->type  = $type;
         $this->filesystem = make(Filesystem::class);
         if (empty($model->module_name) || empty($model->menu_name)) {
             throw new NormalStatusException('请先编辑配置生成信息');
@@ -115,20 +121,8 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
         return [
             '{NAMESPACE}',
             '{COMMENT}',
-            '{USE}',
             '{CLASS_NAME}',
-            '{SERVICE}',
-            '{CONTROLLER_ROUTE}',
-            '{INDEX_PERMISSION}',
-            '{RECYCLE_PERMISSION}',
-            '{SAVE_PERMISSION}',
-            '{READ_PERMISSION}',
-            '{UPDATE_PERMISSION}',
-            '{DELETE_PERMISSION}',
-            '{REAL_DELETE_PERMISSION}',
-            '{RECOVERY_PERMISSION}',
-            '{CREATE_REQUEST}',
-            '{UPDATE_REQUEST}'
+            '{RULES}'
         ];
     }
 
@@ -144,14 +138,6 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
             $this->getClassName(),
             $this->getServiceName(),
             $this->getControllerRoute(),
-            $this->getMethodRoute('index'),
-            $this->getMethodRoute('recycle'),
-            $this->getMethodRoute('save'),
-            $this->getMethodRoute('read'),
-            $this->getMethodRoute('update'),
-            $this->getMethodRoute('delete'),
-            $this->getMethodRoute('realDelete'),
-            $this->getMethodRoute('recovery'),
             $this->getCreateRequestName(),
             $this->getUpdateRequestName(),
         ];
