@@ -397,10 +397,7 @@ export default {
         module_name: [{ required: true, message: '请选择所属模块（注意对应表模块前缀）', trigger: 'change' }],
         belong_menu_id: [{ required: true, message: '请选择所属菜单', trigger: 'change' }],
         menu_name: [{ required: true, message: '请选择所属菜单', trigger: 'blur' }],
-        package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }],
-        tree_id: [{ required: true, message: '请选择树表ID', trigger: 'change' }],
-        tree_parent_id: [{ required: true, message: '请选择树表父ID', trigger: 'change' }],
-        tree_name: [{ required: true, message: '请选择树表名称', trigger: 'change' }],
+        package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }]
       },
 
       // 当前记录
@@ -517,6 +514,10 @@ export default {
       this.form.remark = this.record.remark
       this.form.type = this.record.type
       this.form.generate_type = this.record.generate_type
+
+      if (this.form.type == 'single') {
+        this.form.options = {}
+      }
 
       if (this.form.type == 'tree') {
         this.form.options = this.record.options
