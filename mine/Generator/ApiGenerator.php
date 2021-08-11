@@ -13,11 +13,11 @@ use Mine\Exception\NormalStatusException;
 use Mine\Helper\Str;
 
 /**
- * 验证器生成
+ * JS API文件生成
  * Class RequestGenerator
  * @package Mine\Generator
  */
-class RequestGenerator extends MineGenerator implements CodeGenerator
+class ApiGenerator extends MineGenerator implements CodeGenerator
 {
     /**
      * @var SettingGenerateTables
@@ -35,25 +35,17 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     protected $filesystem;
 
     /**
-     * @var string
-     */
-    protected $type;
-
-    /**
      * 设置生成信息
      * @param SettingGenerateTables $model
-     * @param string $type
-     * @return RequestGenerator
+     * @return ApiGenerator
      */
-    public function setGenInfo(SettingGenerateTables $model, string $type): RequestGenerator
+    public function setGenInfo(SettingGenerateTables $model): ApiGenerator
     {
         $this->model = $model;
-        $this->type  = $type;
         $this->filesystem = make(Filesystem::class);
         if (empty($model->module_name) || empty($model->menu_name)) {
             throw new NormalStatusException('请先编辑配置生成信息');
         }
-        $this->setNamespace($this->model->namespace);
         return $this;
     }
 
@@ -61,7 +53,7 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
      * 生成代码
      * @return $this
      */
-    public function generator(): RequestGenerator
+    public function generator(): ApiGenerator
     {
         return $this;
     }
@@ -80,7 +72,7 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getTemplatePath(): string
     {
-        return $this->getStubDir().'/request.stub';
+        return $this->getStubDir().'/api.stub';
     }
 
     /**
@@ -95,7 +87,7 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     /**
      * 占位符替换
      */
-    protected function placeholderReplace(): RequestGenerator
+    protected function placeholderReplace(): ApiGenerator
     {
         $this->setCodeContent(str_replace(
             $this->getPlaceHolderContent(),
@@ -112,10 +104,9 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     protected function getPlaceHolderContent(): array
     {
         return [
-            '{NAMESPACE}',
             '{COMMENT}',
-            '{CLASS_NAME}',
-            '{RULES}'
+            '{BUSINESS_NAME}',
+            '{REQUEST_ROUTE}',
         ];
     }
 
@@ -125,24 +116,10 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
     protected function getReplaceContent(): array
     {
         return [
-            $this->initNamespace(),
             $this->getComment(),
-            $this->getClassName(),
-            $this->getRules(),
+            $this->getBusinessName(),
+            $this->getRequestRoute(),
         ];
-    }
-
-    /**
-     * 初始化控制器命名空间
-     * @return string
-     */
-    protected function initNamespace(): string
-    {
-        $namespace = $this->getNamespace() . "\\Request";
-        if (!empty($this->model->package_name)) {
-            return $namespace . "\\" . $this->model->package_name;
-        }
-        return $namespace;
     }
 
     /**
@@ -151,61 +128,26 @@ class RequestGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getComment(): string
     {
-        return $this->model->menu_name. '验证数据类 ('.$this->type.')';
+        return $this->getBusinessName(). ' API JS';
     }
 
     /**
-     * 获取类名称
+     * 获取请求路由
      * @return string
      */
-    protected function getClassName(): string
+    protected function getRequestRoute(): string
     {
-        return $this->getBusinessName().$this->type.'Request';
-    }
-
-    /**
-     * 获取验证数据规则
-     * @return string
-     */
-    protected function getRules(): string
-    {
-        /* @var SettingGenerateColumns $model */
-        $model = make(SettingGenerateColumnsService::class)->mapper->getModel();
-        $query = $model->newQuery()->where('table_id', $this->model->id);
-
-        if ($this->type == 'Create') {
-            $query = $query->where('is_insert', 1)->where('is_required', 1);
-        } else {
-            $query = $query->where('is_edit', 1)->where('is_required', 1);
-        }
-
-        $columns = $query->get(['column_name', 'column_comment', 'query_type'])->toArray();
-
-        $phpContent = '';
-        foreach ($columns as $column) {
-            $phpContent .= $this->getRuleCode($column);
-        }
-
-        return $phpContent;
-    }
-
-    protected function getRuleCode(array $column): string
-    {
-        return <<<php
-
-            // {$column['column_comment']} 验证
-            '{$column['column_name']}' => 'required',
-
-php;
+        return Str::lower($this->model->module_name) . '/' .
+            Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
     }
 
     /**
      * 获取业务名称
      * @return string
      */
-    public function getBusinessName(): string
+    protected function getBusinessName(): string
     {
-        return Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
+        return $this->model->menu_name;
     }
 
     /**

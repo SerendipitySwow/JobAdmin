@@ -8,9 +8,11 @@ use App\Setting\Model\SettingGenerateTables;
 use App\System\Service\DataMaintainService;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
+use Mine\Generator\ApiGenerator;
 use Mine\Generator\ControllerGenerator;
 use Mine\Generator\MapperGenerator;
 use Mine\Generator\ModelGenerator;
+use Mine\Generator\RequestGenerator;
 use Mine\Generator\ServiceGenerator;
 
 /**
@@ -191,19 +193,19 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'CreateRequest.php',
                 'name' => 'create_request',
-                'code' => make(MapperGenerator::class)->setGenInfo($model, 'Create')->preview(),
+                'code' => make(RequestGenerator::class)->setGenInfo($model, 'Create')->preview(),
                 'lang' => 'php',
             ],
             [
                 'tab_name' => 'UpdateRequest.php',
                 'name' => 'update_request',
-                'code' => make(MapperGenerator::class)->setGenInfo($model, 'Update')->preview(),
+                'code' => make(RequestGenerator::class)->setGenInfo($model, 'Update')->preview(),
                 'lang' => 'php',
             ],
             [
                 'tab_name' => 'Api.js',
                 'name' => 'api',
-                'code' => '',
+                'code' => make(ApiGenerator::class)->setGenInfo($model, 'Update')->preview(),
                 'lang' => 'javascript',
             ],
             [

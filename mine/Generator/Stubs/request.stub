@@ -4,7 +4,9 @@ namespace {NAMESPACE};
 
 use Hyperf\Validation\Request\FormRequest;
 
-{COMMENT}
+/**
+ * {COMMENT}
+ */
 class {CLASS_NAME} extends FormRequest
 {
     /**

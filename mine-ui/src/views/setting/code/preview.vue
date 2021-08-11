@@ -2,7 +2,7 @@
   <el-dialog
     title="预览代码"
     v-model="dialogVisible"
-    width="80%"
+    width="1220px"
     :before-close="handleDialogClose"
   >
     <el-tabs v-model="activeName">
