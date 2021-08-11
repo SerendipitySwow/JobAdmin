@@ -33,7 +33,7 @@ class {CLASS_NAME} extends AbstractService
             $params['select'] = explode(',', $params['select']);
         }
         $params['recycle'] = false;
-        return $this->mapper->getTreeList($params, {FIELD_ID}, {FIELD_PID});
+        return $this->mapper->getTreeList($params, '{FIELD_ID}', '{FIELD_PID}');
     }
 
     /**
@@ -47,7 +47,7 @@ class {CLASS_NAME} extends AbstractService
             $params['select'] = explode(',', $params['select']);
         }
         $params['recycle'] = true;
-        return $this->mapper->getTreeList($params, {FIELD_ID}, {FIELD_PID});
+        return $this->mapper->getTreeList($params, '{FIELD_ID}', '{FIELD_PID}');
     }
 
     /**

@@ -269,31 +269,31 @@
 
               <el-table-column prop="is_required" label="必填" width="60">
                 <template v-slot="scope">
-                  <el-checkbox true-label="1" v-model="scope.row.is_required"></el-checkbox>
+                  <el-checkbox true-label="1" false-label="0" v-model="scope.row.is_required"></el-checkbox>
                 </template>
               </el-table-column>
 
               <el-table-column prop="is_insert" label="插入" width="60">
                 <template v-slot="scope">
-                  <el-checkbox true-label="1" v-model="scope.row.is_insert"></el-checkbox>
+                  <el-checkbox true-label="1" false-label="0" v-model="scope.row.is_insert"></el-checkbox>
                 </template>
               </el-table-column>
 
               <el-table-column prop="is_edit" label="编辑" width="60">
                 <template v-slot="scope">
-                  <el-checkbox true-label="1" v-model="scope.row.is_edit"></el-checkbox>
+                  <el-checkbox true-label="1" false-label="0" v-model="scope.row.is_edit"></el-checkbox>
                 </template>
               </el-table-column>
 
               <el-table-column prop="is_list" label="列表" width="60">
                 <template v-slot="scope">
-                  <el-checkbox true-label="1" v-model="scope.row.is_list"></el-checkbox>
+                  <el-checkbox true-label="1" false-label="0" v-model="scope.row.is_list"></el-checkbox>
                 </template>
               </el-table-column>
 
               <el-table-column prop="is_query" label="查询" width="60">
                 <template v-slot="scope">
-                  <el-checkbox true-label="1" v-model="scope.row.is_query"></el-checkbox>
+                  <el-checkbox true-label="1" false-label="0" v-model="scope.row.is_query"></el-checkbox>
                 </template>
               </el-table-column>
 

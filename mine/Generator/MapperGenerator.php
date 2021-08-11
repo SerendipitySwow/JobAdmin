@@ -9,6 +9,7 @@ use App\Setting\Model\SettingGenerateTables;
 use App\Setting\Service\SettingGenerateColumnsService;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Exception\NormalStatusException;
+use Mine\Generator\Traits\MapperGeneratorTraits;
 use Mine\Helper\Str;
 
 /**
@@ -18,6 +19,8 @@ use Mine\Helper\Str;
  */
 class MapperGenerator extends MineGenerator implements CodeGenerator
 {
+    use MapperGeneratorTraits;
+
     /**
      * @var SettingGenerateTables
      */
@@ -120,6 +123,7 @@ class MapperGenerator extends MineGenerator implements CodeGenerator
             '{MODEL}',
             '{FIELD_ID}',
             '{FIELD_PID}',
+            '{FIELD_NAME}',
             '{SEARCH}'
         ];
     }
@@ -137,6 +141,8 @@ class MapperGenerator extends MineGenerator implements CodeGenerator
             $this->getModelName(),
             $this->getFieldIdName(),
             $this->getFieldPidName(),
+            $this->getFieldName(),
+            $this->getSearch()
         ];
     }
 
@@ -146,7 +152,7 @@ class MapperGenerator extends MineGenerator implements CodeGenerator
      */
     protected function initNamespace(): string
     {
-        return $this->getNamespace() . "\\Service";
+        return $this->getNamespace() . "\\Mapper";
     }
 
     /**
@@ -194,9 +200,9 @@ UseNamespace;
     protected function getFieldIdName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = json_decode($this->model->options);
-            if ( $options->tree_id ?? false ) {
-                return $options->tree_id;
+            $options = unserialize($this->model->options);
+            if ( $options['tree_id'] ?? false ) {
+                return $options['tree_id'];
             } else {
                 return 'id';
             }
@@ -211,11 +217,28 @@ UseNamespace;
     protected function getFieldPidName(): string
     {
         if ($this->getType() == 'Tree') {
-            $options = json_decode($this->model->options);
-            if ( $options->tree_pid ?? false ) {
-                return $options->tree_pid;
+            $options = unserialize($this->model->options);
+            if ( $options['tree_pid'] ?? false ) {
+                return $options['tree_pid'];
             } else {
                 return 'parent_id';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * 获取树表显示名称
+     * @return string
+     */
+    protected function getFieldName(): string
+    {
+        if ($this->getType() == 'Tree') {
+            $options = unserialize($this->model->options);
+            if ( $options['tree_name'] ?? false ) {
+                return $options['tree_name'];
+            } else {
+                return 'name';
             }
         }
         return '';
@@ -229,14 +252,17 @@ UseNamespace;
     {
         /* @var SettingGenerateColumns $model */
         $model = make(SettingGenerateColumnsService::class)->mapper->getModel();
-        $data = $model->newQuery()
+        $columns = $model->newQuery()
             ->where('table_id', $this->model->id)
             ->where('is_query', '1')
-            ->get()->toArray();
+            ->get(['column_name', 'column_comment', 'query_type'])->toArray();
 
-        //TODO...
+        $phpContent = '';
+        foreach ($columns as $column) {
+            $phpContent .= $this->getSearchCode($column);
+        }
 
-        return '';
+        return $phpContent;
     }
 
     /**

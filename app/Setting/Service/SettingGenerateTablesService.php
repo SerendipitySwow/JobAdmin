@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace App\Setting\Service;
 
 use App\Setting\Mapper\SettingGenerateTablesMapper;
+use App\Setting\Model\SettingGenerateTables;
 use App\System\Service\DataMaintainService;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractService;
 use Mine\Generator\ControllerGenerator;
+use Mine\Generator\MapperGenerator;
 use Mine\Generator\ModelGenerator;
 use Mine\Generator\ServiceGenerator;
-use Mine\Helper\Str;
-use function _PHPStan_8f2e45ccf\React\Promise\Stream\first;
 
 /**
  * 业务生成信息表业务处理类
@@ -131,10 +131,10 @@ class SettingGenerateTablesService extends AbstractService
             $data['belong_menu_id'] = array_pop($data['belong_menu_id']);
         }
 
-        $data['package_name'] = Str::title($data['package_name']);
-        $data['namespace'] = "App\\{$data['module_name']}" . (empty($data['package_name']) ? '' : "\\{$data['package_name']}");
+        $data['package_name'] = ucfirst($data['package_name']);
+        $data['namespace'] = "App\\{$data['module_name']}";
         $data['options'] = serialize($data['options']);
-
+        print_r($columns);
         try {
             Db::beginTransaction();
             // 更新业务表
@@ -160,7 +160,9 @@ class SettingGenerateTablesService extends AbstractService
      */
     public function preview(int $id): array
     {
+        /** @var SettingGenerateTables $model */
         $model = $this->read($id);
+
         return [
             [
                 'tab_name' => 'Controller.php',
@@ -183,7 +185,7 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Mapper.php',
                 'name' => 'mapper',
-                'code' => '',
+                'code' => make(MapperGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'php',
             ],
             [
