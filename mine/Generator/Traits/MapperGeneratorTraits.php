@@ -8,45 +8,35 @@ trait MapperGeneratorTraits
     /**
      * 获取搜索代码
      * @param $column
+     * @return string
      */
-    protected function getSearchCode($column)
+    protected function getSearchCode($column): string
     {
         switch ($column['query_type']) {
-            // 等于
-            case 'eq':
-                return $this->getSearchPHPString($column['column_name'], '=', $column['column_comment']);
-            // 不等
             case 'neq':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '!=', $column['column_comment']);
             // 大于
             case 'gt':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '<', $column['column_comment']);
             // 大于等于
             case 'gte':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '<=', $column['column_comment']);
             // 小于
             case 'lt':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '>', $column['column_comment']);
             // 小于等于
             case 'lte':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '>=', $column['column_comment']);
             // LIKE
             case 'like':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], 'like', $column['column_comment']);
             // LIKE
             case 'BETWEEN':
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], 'between', $column['column_comment']);
             // 都没有按相等方式处理
+            case 'eq':
             default:
-
-                break;
+                return $this->getSearchPHPString($column['column_name'], '=', $column['column_comment']);
         }
     }
 
@@ -55,18 +45,40 @@ trait MapperGeneratorTraits
      * @param $mark
      * @param $comment
      * @return string
+     * @noinspection PhpUndefinedVariableInspection
      */
     protected function getSearchPHPString($name, $mark, $comment): string
     {
+        if ($mark == 'like') {
+            return <<<php
+
+        // {$comment}
+        if (isset(\$params['{$name}'])) {
+            \$query->where('{$name}', 'like', '%'.\$params['{$name}'].'%');
+        }
+
+php;
+
+        }
+
+        if ($mark == 'between') {
+            return <<<php
+
+        // {$comment}
+        if (isset(\$params['{$name}'])) {
+            \$query->whereBetween('{$name}', \$params['{$name}_min'], \$params['{$name}_max']);
+        }
+
+php;
+        }
+
         return <<<php
 
         // {$comment}
         if (isset(\$params['{$name}'])) {
-            \$query->where('{$name}', '{$mark}', \$params['{$name}'])
+            \$query->where('{$name}', '{$mark}', \$params['{$name}']);
         }
 
 php;
-    }
-
-
+    } // 该方法结束位置
 }
