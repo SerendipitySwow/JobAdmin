@@ -110,7 +110,6 @@
                   <el-select
                     v-model="form.type"
                     placeholder="请选择生成类型"
-                    @change="hanldeTypeChange"
                     style="width: 100%"
                   >
                     <el-option label="单表（增删改查）" value="single">单表（增删改查）</el-option>
@@ -168,7 +167,7 @@
 
             </el-row>
 
-            <el-row v-if="currentType === 'tree'">
+            <el-row v-if="form.type === 'tree'">
               <el-divider content-position="left">生成类型配置</el-divider>
 
                 <el-col :xs="24" :md="8" :xl="8">
@@ -412,8 +411,6 @@ export default {
       dict: [],
       // 模块信息
       sysinfo: {},
-      // 选择的当前生成类型
-      currentType: '',
       // 查询类型
       queryType: [
         { label: '=', value: 'eq' },
@@ -495,6 +492,7 @@ export default {
             this.saveLoading = false
             if (res.success) {
               this.$emit('confirm')
+              this.record = null
               this.$message.success(res.message)
               this.drawer = false
             } else {
@@ -516,11 +514,10 @@ export default {
       this.form.remark = this.record.remark
       this.form.type = this.record.type
       this.form.generate_type = this.record.generate_type
-    },
 
-    // 选择生成类型处理
-    hanldeTypeChange (val) {
-      this.currentType = val
+      if (this.form.type == 'tree') {
+        console.log(this.record.options)
+      }
     },
 
     // 选择模块处理

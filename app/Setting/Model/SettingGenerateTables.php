@@ -45,6 +45,17 @@ class SettingGenerateTables extends MineModel
     protected $casts = ['id' => 'integer', 'belong_menu_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
 
     /**
+     * 获取options参数
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getOptionsAttribute(string $value): string
+    {
+        return unserialize($value);
+    }
+
+    /**
      * 关联生成业务字段信息表
      * @return \Hyperf\Database\Model\Relations\HasMany
      */
