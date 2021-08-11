@@ -31,7 +31,7 @@ trait MapperGeneratorTraits
             case 'like':
                 return $this->getSearchPHPString($column['column_name'], 'like', $column['column_comment']);
             // LIKE
-            case 'BETWEEN':
+            case 'between':
                 return $this->getSearchPHPString($column['column_name'], 'between', $column['column_comment']);
             // 都没有按相等方式处理
             case 'eq':
