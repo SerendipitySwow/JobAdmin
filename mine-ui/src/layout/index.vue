@@ -202,7 +202,7 @@
 		created() {
 			this.onLayoutResize();
 			window.addEventListener('resize', this.onLayoutResize);
-			let menu = this.$TOOL.data.get("user").routers;
+			let menu = this.$TOOL.data.get('user').routers
 			let home = this.$router.options.routes[0].children[0];
 			// 根据权限动态删除系统配置菜单
 			if ( !this.$TOOL.data.get("user").codes.includes('setting:config') && this.$TOOL.data.get("user").codes[0] != '*') {

@@ -39,6 +39,7 @@
 									:label="mode.label"
 								/>
 							</el-select>
+							<div class="el-form-item-msg">{{ item.remark }}</div>
 						</el-form-item>
 
 						<el-form-item>

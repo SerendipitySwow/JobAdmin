@@ -86,7 +86,6 @@
 		},
 		created() {
 			let userInfo = this.$TOOL.data.get('user').user;
-
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0,1);
 			this.avatar = userInfo.avatar
@@ -100,9 +99,6 @@
 				if(command == "uc"){
 					this.$router.push({path: '/usercenter'});
 				}
-				if(command == "cmd"){
-					this.$router.push({path: '/cmd'});
-				}
 				if(command == "outLogin"){
 					this.$confirm('确认是否退出当前用户？','提示', {
 						type: 'warning',
@@ -111,6 +107,7 @@
 					}).then(async () => {
 						await this.$API.login.Logout().then(res => {
 							if (res.success) {
+								this.$store.commit('SET_ROUTERS', null)
 								this.$TOOL.data.set('token', null)
 								this.$router.replace({path: '/login'})
 							}

@@ -79,12 +79,13 @@
 			},
 			getMods(){
 				//这里可用改为读取远程数据
-				this.myModsName = this.$TOOL.data.get("my-mods") || []
-				this.filterMenu(this.$TOOL.data.get("user").routers)
+				this.myModsName = this.$TOOL.data.get('my-mods') || []
+				this.filterMenu(this.$TOOL.data.get('user').routers)
+
 				this.myMods = this.mods.filter(item => {
 					return this.myModsName.includes(item.name)
 				})
-				this.filterMods =  this.mods.filter(item => {
+				this.filterMods = this.mods.filter(item => {
 					return !this.myModsName.includes(item.name)
 				})
 			},
@@ -105,7 +106,7 @@
 			},
 			saveMods(){
 				const myModsName = this.myMods.map(v => v.name)
-				this.$TOOL.data.set("my-mods", myModsName)
+				this.$TOOL.data.set('my-mods', myModsName)
 				this.$message.success("设置常用成功")
 				this.modsDrawer = false
 			}
