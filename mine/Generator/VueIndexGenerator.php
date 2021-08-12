@@ -5,20 +5,18 @@
 declare(strict_types=1);
 namespace Mine\Generator;
 
+use App\Setting\Model\SettingGenerateColumns;
 use App\Setting\Model\SettingGenerateTables;
-use App\System\Model\SystemMenu;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Exception\NormalStatusException;
-use Mine\Helper\Id;
-use Mine\Helper\LoginUser;
 use Mine\Helper\Str;
 
 /**
- * 菜单SQL文件生成
- * Class SqlGenerator
+ * Vue index文件生成
+ * Class VueIndexGenerator
  * @package Mine\Generator
  */
-class SqlGenerator extends MineGenerator implements CodeGenerator
+class VueIndexGenerator extends MineGenerator implements CodeGenerator
 {
     /**
      * @var SettingGenerateTables
@@ -38,9 +36,9 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
     /**
      * 设置生成信息
      * @param SettingGenerateTables $model
-     * @return SqlGenerator
+     * @return VueIndexGenerator
      */
-    public function setGenInfo(SettingGenerateTables $model): SqlGenerator
+    public function setGenInfo(SettingGenerateTables $model): VueIndexGenerator
     {
         $this->model = $model;
         $this->filesystem = make(Filesystem::class);
@@ -54,14 +52,13 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
      * 生成代码
      * @return $this
      */
-    public function generator(): SqlGenerator
+    public function generator(): VueIndexGenerator
     {
         return $this;
     }
 
     /**
      * 预览代码
-     * @throws \Exception
      */
     public function preview(): string
     {
@@ -74,7 +71,7 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getTemplatePath(): string
     {
-        return $this->getStubDir().'/sql.stub';
+        return $this->getStubDir().'/Vue/index.stub';
     }
 
     /**
@@ -88,9 +85,8 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 占位符替换
-     * @throws \Exception
      */
-    protected function placeholderReplace(): SqlGenerator
+    protected function placeholderReplace(): VueIndexGenerator
     {
         $this->setCodeContent(str_replace(
             $this->getPlaceHolderContent(),
@@ -107,77 +103,32 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
     protected function getPlaceHolderContent(): array
     {
         return [
-            '{ID}',
-            '{PARENT_ID}',
-            '{TABLE_NAME}',
-            '{LEVEL}',
-            '{NAME}',
             '{CODE}',
-            '{ROUTE}',
-            '{VUE_TEMPLATE}',
-            '{ADMIN_ID}'
+            '{FIRST_SEARCH}',
+            '{SEARCH_LIST}',
+            '{COLUMN_LIST}',
+            '{BUSINESS_EN_NAME}',
+            '{QUERY_PARAMS}',
         ];
     }
 
     /**
      * 获取要替换占位符的内容
-     * @throws \Exception
      */
     protected function getReplaceContent(): array
     {
         return [
-            $this->getId(),
-            $this->getParentId(),
-            $this->getTableName(),
-            $this->getLevel(),
-            $this->model->menu_name,
             $this->getCode(),
-            $this->getRoute(),
-            $this->getVueTemplate(),
-            $this->getAdminId()
+            $this->getFirstSearch(),
+            $this->getSearchList(),
+            $this->getColumnList(),
+            $this->getBusinessEnName(),
+            $this->getQueryParams(),
         ];
     }
 
     /**
-     * 获取菜单ID
-     * @return int
-     * @throws \Exception
-     */
-    protected function getId(): int
-    {
-        return (new Id())->getId();
-    }
-
-    /**
-     * 获取菜单父ID
-     * @return int
-     */
-    protected function getParentId(): int
-    {
-        return $this->model->belong_menu_id;
-    }
-
-    /**
-     * 获取菜单表表名
-     * @return string
-     */
-    protected function getTableName(): string
-    {
-        return (SystemMenu::getModel())->getTable();
-    }
-
-    /**
-     * 获取菜单层级value
-     * @return string
-     */
-    protected function getLevel(): string
-    {
-        $model = SystemMenu::find($this->model->belong_menu_id, ['id', 'level']);
-        return $model->level . ',' . $model->id;
-    }
-
-    /**
-     * 获取菜单标识代码
+     * 获取标识代码
      * @return string
      */
     protected function getCode(): string
@@ -188,33 +139,50 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 获取vue router地址
+     * 获取第一个搜索
      * @return string
      */
-    protected function getRoute(): string
+    protected function getFirstSearch(): string
+    {
+        return '';
+    }
+
+    /**
+     * 获取其余搜索列表
+     * @return string
+     */
+    protected function getSearchList(): string
+    {
+        return '';
+    }
+
+    /**
+     * 获取表格显示列
+     * @return string
+     */
+    protected function getColumnList(): string
+    {
+        $model = SettingGenerateColumns::getModel();
+
+        return '';
+    }
+
+    /**
+     * 获取业务英文名
+     * @return string
+     */
+    protected function getBusinessEnName(): string
     {
         return Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
     }
 
     /**
-     * 获取Vue模板路径
+     * 获取需要搜索的字段列表
      * @return string
      */
-    protected function getVueTemplate(): string
+    protected function getQueryParams(): string
     {
-        return Str::lower($this->model->module_name)
-            . '/' .
-            Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name))
-            . '/index';
-    }
-
-    /**
-     * 获取当前登陆人ID
-     * @return string
-     */
-    protected function getAdminId(): string
-    {
-        return (new LoginUser)->getId();
+        return '';
     }
 
     /**

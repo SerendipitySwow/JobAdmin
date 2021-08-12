@@ -15,6 +15,8 @@ use Mine\Generator\ModelGenerator;
 use Mine\Generator\RequestGenerator;
 use Mine\Generator\ServiceGenerator;
 use Mine\Generator\SqlGenerator;
+use Mine\Generator\VueIndexGenerator;
+use Mine\Generator\VueSaveGenerator;
 
 /**
  * 业务生成信息表业务处理类
@@ -160,6 +162,7 @@ class SettingGenerateTablesService extends AbstractService
      * 预览代码
      * @param int $id
      * @return array
+     * @throws \Exception
      */
     public function preview(int $id): array
     {
@@ -212,13 +215,13 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Index.vue',
                 'name' => 'index',
-                'code' => '',
+                'code' => make(VueIndexGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'vue',
             ],
             [
                 'tab_name' => 'Save.vue',
                 'name' => 'save',
-                'code' => '',
+                'code' => make(VueSaveGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'vue',
             ],
             [

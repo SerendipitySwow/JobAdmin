@@ -180,12 +180,12 @@
 
       // 批量生成
       handleGenCodes () {
-
+        this.$message.info('未开放此功能');
       },
 
       // 生成代码
       generateCode () {
-
+        this.$message.info('未开放此功能');
       },
 
       // 删除
