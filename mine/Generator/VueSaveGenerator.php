@@ -1,4 +1,6 @@
 <?php
+/** @noinspection ThisExpressionReferencesGlobalObjectJS */
+/** @noinspection JSValidateTypes */
 /** @noinspection PhpExpressionResultUnusedInspection */
 /** @noinspection PhpSignatureMismatchDuringInheritanceInspection */
 
@@ -34,6 +36,11 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     protected $filesystem;
 
     /**
+     * @var array
+     */
+    protected $columns;
+
+    /**
      * 设置生成信息
      * @param SettingGenerateTables $model
      * @return VueSaveGenerator
@@ -45,6 +52,11 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
         if (empty($model->module_name) || empty($model->menu_name)) {
             throw new NormalStatusException('请先编辑配置生成信息');
         }
+        $this->columns = SettingGenerateColumns::query()
+            ->where('table_id', $model->id)->orderByDesc('sort')
+            ->get([
+            'column_name', 'column_comment', 'is_required', 'is_insert', 'is_edit', 'view_type', 'dict_type',
+        ]);
         return $this;
     }
 
@@ -103,12 +115,12 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     protected function getPlaceHolderContent(): array
     {
         return [
-            '{CODE}',
-            '{FIRST_SEARCH}',
-            '{SEARCH_LIST}',
-            '{COLUMN_LIST}',
             '{BUSINESS_EN_NAME}',
-            '{QUERY_PARAMS}',
+            '{BUSINESS_NAME}',
+            '{FORM_LIST}',
+            '{FORM_DATA}',
+            '{REQUIRED_LIST}',
+            '{SET_FORM_DATA}',
         ];
     }
 
@@ -118,53 +130,81 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     protected function getReplaceContent(): array
     {
         return [
-            $this->getCode(),
-            $this->getFirstSearch(),
-            $this->getSearchList(),
-            $this->getColumnList(),
             $this->getBusinessEnName(),
-            $this->getQueryParams(),
+            $this->getBusinessName(),
+            $this->getFormList(),
+            $this->getFormData(),
+            $this->getRequiredList(),
+            $this->getSetFormData(),
         ];
-    }
-
-    /**
-     * 获取标识代码
-     * @return string
-     */
-    protected function getCode(): string
-    {
-        return Str::lower($this->model->module_name)
-                . ':' .
-                Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
-    }
-
-    /**
-     * 获取第一个搜索
-     * @return string
-     */
-    protected function getFirstSearch(): string
-    {
-        return '';
     }
 
     /**
      * 获取其余搜索列表
      * @return string
      */
-    protected function getSearchList(): string
+    protected function getFormList(): string
     {
         return '';
+    }
+
+    /**
+     * 获取第一个搜索
+     * @return string
+     * @noinspection CommaExpressionJS
+     */
+    protected function getFormData(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_insert === '1' || $column->is_edit === '1') {
+                $code = <<<js
+
+           this.form.{$column->column_name} = '',
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取其余搜索列表
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getRequiredList(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_required === '1') {
+                $code = <<<js
+
+            {$column->column_name}: [{required: true, message: '{$column->column_comment}必填', trigger: 'blur' }],
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
     }
 
     /**
      * 获取表格显示列
      * @return string
      */
-    protected function getColumnList(): string
+    protected function getSetFormData(): string
     {
-        $model = SettingGenerateColumns::getModel();
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_insert === '1' || $column->is_edit === '1') {
+                $code = <<<js
 
-        return '';
+           this.form.{$column->column_name} = data.{$column->column_name};
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
     }
 
     /**
@@ -177,12 +217,12 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
-     * 获取需要搜索的字段列表
+     * 获取业务名
      * @return string
      */
-    protected function getQueryParams(): string
+    protected function getBusinessName(): string
     {
-        return '';
+        return str_replace('管理', '', $this->model->menu_name);
     }
 
     /**

@@ -40,7 +40,6 @@
               </el-button>
             </template>
             <el-form label-width="80px">
-
               {SEARCH_LIST}
 
             </el-form>

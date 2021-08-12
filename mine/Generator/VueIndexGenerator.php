@@ -34,6 +34,11 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     protected $filesystem;
 
     /**
+     * @var array
+     */
+    protected $columns;
+
+    /**
      * 设置生成信息
      * @param SettingGenerateTables $model
      * @return VueIndexGenerator
@@ -45,6 +50,11 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         if (empty($model->module_name) || empty($model->menu_name)) {
             throw new NormalStatusException('请先编辑配置生成信息');
         }
+        $this->columns = SettingGenerateColumns::query()
+            ->where('table_id', $model->id)->orderByDesc('sort')
+            ->get([
+                'column_name', 'column_comment', 'is_query', 'is_list', 'view_type', 'dict_type',
+        ]);
         return $this;
     }
 
@@ -159,12 +169,24 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     /**
      * 获取表格显示列
      * @return string
+     * @noinspection CheckTagEmptyBody
      */
     protected function getColumnList(): string
     {
-        $model = SettingGenerateColumns::getModel();
-
-        return '';
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_list === '1') {
+                $code = <<<js
+ 
+         <el-table-column
+            label="{$column->column_comment}"
+            prop="{$column->column_name}"
+         />
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
     }
 
     /**
@@ -179,10 +201,21 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     /**
      * 获取需要搜索的字段列表
      * @return string
+     * @noinspection BadExpressionStatementJS
      */
     protected function getQueryParams(): string
     {
-        return '';
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_query === '1') {
+                $code = <<<js
+
+           {$column->column_name}: undefined,
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
     }
 
     /**
