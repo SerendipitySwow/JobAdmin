@@ -14,6 +14,7 @@ use Mine\Generator\MapperGenerator;
 use Mine\Generator\ModelGenerator;
 use Mine\Generator\RequestGenerator;
 use Mine\Generator\ServiceGenerator;
+use Mine\Generator\SqlGenerator;
 
 /**
  * 业务生成信息表业务处理类
@@ -205,7 +206,7 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Api.js',
                 'name' => 'api',
-                'code' => make(ApiGenerator::class)->setGenInfo($model, 'Update')->preview(),
+                'code' => make(ApiGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'javascript',
             ],
             [
@@ -223,7 +224,7 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Menu.sql',
                 'name' => 'sql',
-                'code' => '',
+                'code' => make(SqlGenerator::class)->setGenInfo($model)->preview(),
                 'lang' => 'sql',
             ],
         ];

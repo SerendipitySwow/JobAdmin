@@ -14,7 +14,7 @@ use Mine\Helper\Str;
 
 /**
  * JS API文件生成
- * Class RequestGenerator
+ * Class ApiGenerator
  * @package Mine\Generator
  */
 class ApiGenerator extends MineGenerator implements CodeGenerator

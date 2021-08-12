@@ -3,15 +3,33 @@
 declare(strict_types=1);
 namespace Mine\Generator;
 
+use Psr\Container\ContainerInterface;
+
 abstract class MineGenerator
 {
+    /**
+     * @var string
+     */
     protected $stubDir;
 
+    /**
+     * @var string
+     */
     protected $namespace;
 
-    public function __construct()
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * MineGenerator constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
     {
         $this->setStubDir(BASE_PATH . '/mine/Generator/Stubs/');
+        $this->container = $container;
     }
 
     public function getStubDir(): string
