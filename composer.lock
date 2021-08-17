@@ -1359,16 +1359,16 @@
         },
         {
             "name": "hyperf/di",
-            "version": "v2.2.1",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/di.git",
-                "reference": "4b99ecd9c9ed31b305e9657050fdf9a7f6dde08e"
+                "reference": "ac4813b0b5cf677dcce479ebd8dd441ef79b361b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/di/zipball/4b99ecd9c9ed31b305e9657050fdf9a7f6dde08e",
-                "reference": "4b99ecd9c9ed31b305e9657050fdf9a7f6dde08e",
+                "url": "https://api.github.com/repos/hyperf/di/zipball/ac4813b0b5cf677dcce479ebd8dd441ef79b361b",
+                "reference": "ac4813b0b5cf677dcce479ebd8dd441ef79b361b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1424,7 +1424,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-07-20T05:46:13+00:00"
+            "time": "2021-08-14T02:40:30+00:00"
         },
         {
             "name": "hyperf/dispatcher",
@@ -1930,16 +1930,16 @@
         },
         {
             "name": "hyperf/http-server",
-            "version": "v2.2.1",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/http-server.git",
-                "reference": "026c14052e6a85ca7fd0ee27153ab7b7dc79c6a6"
+                "reference": "4b40dab7d30670c8d77bc44698b4904ee100a8a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/http-server/zipball/026c14052e6a85ca7fd0ee27153ab7b7dc79c6a6",
-                "reference": "026c14052e6a85ca7fd0ee27153ab7b7dc79c6a6",
+                "url": "https://api.github.com/repos/hyperf/http-server/zipball/4b40dab7d30670c8d77bc44698b4904ee100a8a0",
+                "reference": "4b40dab7d30670c8d77bc44698b4904ee100a8a0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1996,7 +1996,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-07-25T14:14:58+00:00"
+            "time": "2021-08-10T02:20:43+00:00"
         },
         {
             "name": "hyperf/logger",
@@ -2625,16 +2625,16 @@
         },
         {
             "name": "hyperf/utils",
-            "version": "v2.2.0",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/utils.git",
-                "reference": "c9635afa0d975783b7b4708030de2c3e2766e3e3"
+                "reference": "66690ad9e8535aeacdf476fb882e4a55ba8ea4a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/utils/zipball/c9635afa0d975783b7b4708030de2c3e2766e3e3",
-                "reference": "c9635afa0d975783b7b4708030de2c3e2766e3e3",
+                "url": "https://api.github.com/repos/hyperf/utils/zipball/66690ad9e8535aeacdf476fb882e4a55ba8ea4a5",
+                "reference": "66690ad9e8535aeacdf476fb882e4a55ba8ea4a5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2692,7 +2692,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-07-18T06:50:14+00:00"
+            "time": "2021-08-15T01:45:16+00:00"
         },
         {
             "name": "hyperf/validation",
@@ -4258,16 +4258,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.9",
+            "version": "3.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "a127a5133804ff2f47ae629dd529b129da616ad7"
+                "reference": "62fcc5a94ac83b1506f52d7558d828617fac9187"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/a127a5133804ff2f47ae629dd529b129da616ad7",
-                "reference": "a127a5133804ff2f47ae629dd529b129da616ad7",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/62fcc5a94ac83b1506f52d7558d828617fac9187",
+                "reference": "62fcc5a94ac83b1506f52d7558d828617fac9187",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -4355,7 +4355,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.9"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.10"
             },
             "funding": [
                 {
@@ -4371,7 +4371,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-14T06:54:45+00:00"
+            "time": "2021-08-16T04:24:45+00:00"
         },
         {
             "name": "psr/cache",
