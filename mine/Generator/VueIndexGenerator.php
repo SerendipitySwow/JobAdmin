@@ -178,17 +178,16 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         $jsCode = '';
         foreach ($this->columns as $k => $column) {
             if ($column->is_query === '1') {
-                if ($k === 0) {
-                    continue;
-                }
-                $code = <<<js
+                if ($k != 0) {
+                    $code = <<<js
 
-        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
-            {$this->getHtmlType($column)};
-        </el-form-item>
+            <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+                {$this->getHtmlType($column)}
+            </el-form-item>
         
 js;
-                $jsCode .= $code;
+                    $jsCode .= $code;
+                }
             }
         }
         return $jsCode;
@@ -204,14 +203,14 @@ js;
         if (!empty($column->dict_type)) {
             return <<<js
         
-        <el-select v-model="queryParams.{$column->column_name}" style="width:100%" clearable placeholder="{$column->column_comment}">
-          <el-option
-            v-for="(item, index) in {$column->dict_type}_data"
-            :key="index"
-            :label="item.label"
-            :value="item.value"
-          >{{item.label}}</el-option>
-        </el-select>
+            <el-select v-model="queryParams.{$column->column_name}" style="width:100%" clearable placeholder="{$column->column_comment}">
+                <el-option
+                    v-for="(item, index) in {$column->dict_type}_data"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
 js;
         }
 

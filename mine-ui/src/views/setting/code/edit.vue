@@ -397,7 +397,7 @@ export default {
         module_name: [{ required: true, message: '请选择所属模块（注意对应表模块前缀）', trigger: 'change' }],
         belong_menu_id: [{ required: true, message: '请选择所属菜单', trigger: 'change' }],
         menu_name: [{ required: true, message: '请选择所属菜单', trigger: 'blur' }],
-        package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }]
+        // package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }]
       },
 
       // 当前记录

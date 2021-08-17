@@ -136,7 +136,7 @@ class SettingGenerateTablesService extends AbstractService
             $data['belong_menu_id'] = array_pop($data['belong_menu_id']);
         }
 
-        $data['package_name'] = ucfirst($data['package_name']);
+        $data['package_name'] = empty($data['package_name']) ? null : ucfirst($data['package_name']);
         $data['namespace'] = "App\\{$data['module_name']}";
         $data['options'] = empty($data['options']) ? null : serialize($data['options']);
 

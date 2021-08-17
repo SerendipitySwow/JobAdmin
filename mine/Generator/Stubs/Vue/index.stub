@@ -41,7 +41,6 @@
             </template>
             <el-form label-width="80px">
               {SEARCH_LIST}
-
             </el-form>
           </el-popover>
         </div>

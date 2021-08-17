@@ -27,7 +27,7 @@ class GenerateUpdateRequest extends FormRequest
             'generate_type' => 'required',
             'menu_name' => 'required',
             'module_name' => 'required',
-            'package_name' => 'regex:/^[A-Za-z]{2,}$/i',
+            'package_name' => '',
             'table_comment' => 'required',
             'table_name' => 'required',
             'type' => 'required',
