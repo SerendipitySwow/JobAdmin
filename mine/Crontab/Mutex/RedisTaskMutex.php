@@ -20,6 +20,8 @@ class RedisTaskMutex implements TaskMutex
 
     /**
      * Attempt to obtain a task mutex for the given crontab.
+     * @param MineCrontab $crontab
+     * @return bool
      */
     public function create(MineCrontab $crontab): bool
     {
@@ -32,6 +34,8 @@ class RedisTaskMutex implements TaskMutex
 
     /**
      * Determine if a task mutex exists for the given crontab.
+     * @param MineCrontab $crontab
+     * @return bool
      */
     public function exists(MineCrontab $crontab): bool
     {
@@ -42,6 +46,7 @@ class RedisTaskMutex implements TaskMutex
 
     /**
      * Clear the task mutex for the given crontab.
+     * @param MineCrontab $crontab
      */
     public function remove(MineCrontab $crontab)
     {

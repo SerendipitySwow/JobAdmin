@@ -1,4 +1,5 @@
 <?php
+/** @noinspection ThisExpressionReferencesGlobalObjectJS */
 /** @noinspection PhpExpressionResultUnusedInspection */
 /** @noinspection PhpSignatureMismatchDuringInheritanceInspection */
 
@@ -119,6 +120,8 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             '{COLUMN_LIST}',
             '{BUSINESS_EN_NAME}',
             '{QUERY_PARAMS}',
+            '{DICT_LIST}',
+            '{DICT_DATA}',
         ];
     }
 
@@ -134,6 +137,8 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             $this->getColumnList(),
             $this->getBusinessEnName(),
             $this->getQueryParams(),
+            $this->getDictList(),
+            $this->getDictData(),
         ];
     }
 
@@ -154,7 +159,14 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getFirstSearch(): string
     {
-        return '';
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_query === '1') {
+                $jsCode .= $this->getHtmlType($column);
+                break;
+            }
+        }
+        return $jsCode;
     }
 
     /**
@@ -163,7 +175,49 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getSearchList(): string
     {
-        return '';
+        $jsCode = '';
+        foreach ($this->columns as $k => $column) {
+            if ($column->is_query === '1') {
+                if ($k === 0) {
+                    continue;
+                }
+                $code = <<<js
+
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            {$this->getHtmlType($column)};
+        </el-form-item>
+        
+js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取html类型
+     * @param $column
+     * @return string
+     */
+    protected function getHtmlType($column): string
+    {
+        if (!empty($column->dict_type)) {
+            return <<<js
+        
+        <el-select v-model="queryParams.{$column->column_name}" style="width:100%" clearable placeholder="{$column->column_comment}">
+          <el-option
+            v-for="(item, index) in {$column->dict_type}_data"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          >{{item.label}}</el-option>
+        </el-select>
+js;
+        }
+
+        return <<<js
+<el-input v-model="queryParams.{$column->column_name}" placeholder="{$column->column_comment}" clearable></el-input>
+js;
     }
 
     /**
@@ -211,6 +265,48 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
                 $code = <<<js
 
            {$column->column_name}: undefined,
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取字典数据
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getDictList(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if (!empty($column->dict_type)) {
+                $code = <<<js
+
+           this.getDict('{$column->dict_type}').then(res => {
+               this.{$column->dict_type}_data = res.data
+           })
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取字典变量
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getDictData(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if (!empty($column->dict_type)) {
+                $code = <<<js
+ 
+         {$column->dict_type}_data: [],
  js;
                 $jsCode .= $code;
             }

@@ -130,11 +130,16 @@
       saveDialog
     },
 
+    async created() {
+        await this.getDictData();
+    },
+
     data() {
       return {
         dialog: {
           save: false
         },
+        {DICT_DATA}
         column: [],
         povpoerShow: false,
         dateRange:'',
@@ -252,6 +257,11 @@
       //本地更新数据
       handleSuccess(){
         this.$refs.table.upData(this.queryParams)
+      },
+
+      // 获取字典数据
+      getDictData() {
+        {DICT_LIST}
       }
     }
   }
