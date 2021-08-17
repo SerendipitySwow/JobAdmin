@@ -16,6 +16,7 @@ class SystemDeptSeeder extends Seeder
      */
     public function run()
     {
+        Db::table('system_dept')->truncate();
         $id = (new Id())->getId();
         Db::table('system_dept')->insert(
             [
