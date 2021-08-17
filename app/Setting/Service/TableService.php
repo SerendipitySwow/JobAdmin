@@ -28,6 +28,6 @@ class TableService
      */
     public function createTable(array $data): bool
     {
-        return (new TableGenerator)->setTableInfo($data)->createTable();
+        return make(TableGenerator::class)->setTableInfo($data)->createTable();
     }
 }

@@ -80,7 +80,9 @@ class TableGenerator extends MineGenerator
                 if ($column['isNull']) {
                     $currentTable->nullable();
                 }
-                if (!empty($column['index'])) {
+                if (!empty($column['index']) && $column['index'] == 'NORMAL') {
+                    $table->index($column['name']);
+                } else if (!empty($column['index'])) {
                     $table->index($column['name'], null, $column['index']);
                 }
             }

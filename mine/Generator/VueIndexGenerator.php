@@ -176,9 +176,10 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     protected function getSearchList(): string
     {
         $jsCode = '';
-        foreach ($this->columns as $k => $column) {
+        $k = 0;
+        foreach ($this->columns as $column) {
             if ($column->is_query === '1') {
-                if ($k != 0) {
+                if ($k > 0) {
                     $code = <<<js
 
             <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
@@ -187,6 +188,9 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         
 js;
                     $jsCode .= $code;
+
+                } else {
+                    $k = 1;
                 }
             }
         }
@@ -216,11 +220,11 @@ js;
 
         if ($column->view_type == 'date') {
             return <<<js
-<el-date-picker
-    v-model="queryParams.{$column->column_name}"
-    type="date"
-    placeholder="选择{$column->column_comment}">
-</el-date-picker>
+                <el-date-picker
+                    v-model="queryParams.{$column->column_name}"
+                    type="date"
+                    placeholder="选择{$column->column_comment}">
+                </el-date-picker>
 js;
 
         }
