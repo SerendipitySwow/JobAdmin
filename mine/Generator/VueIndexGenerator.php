@@ -214,6 +214,17 @@ js;
 js;
         }
 
+        if ($column->view_type == 'date') {
+            return <<<js
+<el-date-picker
+    v-model="queryParams.{$column->column_name}"
+    type="date"
+    placeholder="选择{$column->column_comment}">
+</el-date-picker>
+js;
+
+        }
+
         return <<<js
 <el-input v-model="queryParams.{$column->column_name}" placeholder="{$column->column_comment}" clearable></el-input>
 js;
