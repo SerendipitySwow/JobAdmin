@@ -84,16 +84,4 @@ class LoginController extends MineController
     {
         return $this->success(['token' => $user->refresh()]);
     }
-
-    /**
-     * @GetMapping("test")
-     */
-    public function test()
-    {
-        /* @var Redis $redis */
-        $redis = $this->app(Redis::class);
-        $prefix = config('cache.default.prefix');
-        $res = $redis->keys("{$prefix}MineAdmin_jwt_default_*");
-        print_r($res);
-    }
 }
