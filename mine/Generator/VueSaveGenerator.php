@@ -11,6 +11,7 @@ use App\Setting\Model\SettingGenerateColumns;
 use App\Setting\Model\SettingGenerateTables;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Exception\NormalStatusException;
+use Mine\Generator\Traits\VueSaveGeneratorTraits;
 use Mine\Helper\Str;
 
 /**
@@ -20,6 +21,8 @@ use Mine\Helper\Str;
  */
 class VueSaveGenerator extends MineGenerator implements CodeGenerator
 {
+    use VueSaveGeneratorTraits;
+
     /**
      * @var SettingGenerateTables
      */
