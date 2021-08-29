@@ -148,7 +148,13 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getFormList(): string
     {
-        return '';
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if ($column->is_insert === '1' || $column->is_edit === '1') {
+                $jsCode .= $this->getFormListCode($column);
+            }
+        }
+        return $jsCode;
     }
 
     /**

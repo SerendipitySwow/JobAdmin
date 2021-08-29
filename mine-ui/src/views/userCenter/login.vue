@@ -183,7 +183,7 @@
 	.demo-user-item .info p {color: #666;margin-top: 6px;}
 
 	@media (max-height: 650px){
-		.login_container {position: static;transform: none;margin:50px auto;}
+		.login_container {position: static; transform: none;margin:50px auto;}
 	}
 	@media (max-width: 1200px){
 		.login-form {padding:15px 30px;}

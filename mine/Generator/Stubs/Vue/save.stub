@@ -2,7 +2,6 @@
   <el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
       {FORM_LIST}
-
     </el-form>
     <template #footer>
       <el-button @click="visible=false" >取 消</el-button>
