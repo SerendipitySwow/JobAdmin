@@ -124,6 +124,10 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
             '{FORM_DATA}',
             '{REQUIRED_LIST}',
             '{SET_FORM_DATA}',
+            '{DICT_LIST}',
+            '{DICT_DATA}',
+            '{UPLOAD_IMAGE}',
+            '{UPLOAD_FILE}',
         ];
     }
 
@@ -139,6 +143,10 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
             $this->getFormData(),
             $this->getRequiredList(),
             $this->getSetFormData(),
+            $this->getDictList(),
+            $this->getDictData(),
+            $this->getUploadImage(),
+            $this->getUploadFile(),
         ];
     }
 
@@ -209,6 +217,98 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
                 $code = <<<js
 
            this.form.{$column->column_name} = data.{$column->column_name};
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取字典数据
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getDictList(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if (!empty($column->dict_type)) {
+                $code = <<<js
+
+           this.getDict('{$column->dict_type}').then(res => {
+               this.{$column->dict_type}_data = res.data
+           })
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取字典变量
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getDictData(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            if (!empty($column->dict_type)) {
+                $code = <<<js
+ 
+         {$column->dict_type}_data: [],
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取图片上传处理代码
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getUploadImage(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            $name = Str::studly($column->column_name);
+            if ($column->view_type == 'image') {
+                $code = <<<js
+ 
+        handlerUploadImage{$name} (res) {
+            if (res.success) {
+                this.form.{$column->column_name} = res.url
+            }
+        },
+ js;
+                $jsCode .= $code;
+            }
+        }
+        return $jsCode;
+    }
+
+    /**
+     * 获取文件上传处理代码
+     * @return string
+     * @noinspection BadExpressionStatementJS
+     */
+    protected function getUploadFile(): string
+    {
+        $jsCode = '';
+        foreach ($this->columns as $column) {
+            $name = Str::studly($column->column_name);
+            if ($column->view_type == 'file') {
+                $code = <<<js
+ 
+        handlerUploadFile{$name} (res) {
+            if (res.success) {
+                this.form.{$column->column_name} = res.url
+            }
+        },
  js;
                 $jsCode .= $code;
             }

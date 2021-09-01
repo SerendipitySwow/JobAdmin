@@ -11,8 +11,13 @@
 </template>
 
 <script>
+  const editor = defineAsyncComponent(() => import('@/components/scEditor'));
+
   export default {
     emits: ['success', 'closed'],
+    components: {
+      editor
+    },
     data() {
       return {
         mode: "add",
@@ -28,6 +33,7 @@
         },
         visible: false,
         isSaveing: false
+        {DICT_DATA}
       }
     },
     methods: {
@@ -59,10 +65,20 @@
           }
         })
       },
+
       //表单注入数据
       setData(data){
         {SET_FORM_DATA}
-      }
+      },
+
+      // 获取字典数据
+      getDictData() {
+        {DICT_LIST}
+      },
+
+      {UPLOAD_IMAGE}
+
+      {UPLOAD_FILE}
     }
   }
 </script>

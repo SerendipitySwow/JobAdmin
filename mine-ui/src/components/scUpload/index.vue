@@ -42,7 +42,7 @@
 			action: { type: String, default: "" },
 			api: { type: Object, default: () => {} },
 			type: { type: String, default: 'image'},
-			accept: { type: String, default: "image/gif, image/jpeg, image/png" },
+			accept: { type: String, default: "image/gif, image/jpeg, image/png, image/bmp, image/jpg" },
 			maxSize: { type: Number, default: config.maxSize },
 			title: { type: String, default: "" },
 			icon: { type: String, default: "el-icon-plus" },
@@ -159,12 +159,21 @@
 				const data = new FormData();
 				var file = this.cropper ? this.cropperUploadFile : param.file
 				data.append(this.type, file);
-				api.uploadImage(data).then(res => {
-					this.$emit('success', res.data)
-					param.onSuccess(res)
-				}).catch(err => {
-					param.onError(err)
-				})
+				if (this.type === 'image') {
+					api.uploadImage(data).then(res => {
+						this.$emit('success', res.data)
+						param.onSuccess(res)
+					}).catch(err => {
+						param.onError(err)
+					})
+				} else {
+					api.uploadFile(data).then(res => {
+						this.$emit('success', res.data)
+						param.onSuccess(res)
+					}).catch(err => {
+						param.onError(err)
+					})
+				}
 			}
 		}
 	}

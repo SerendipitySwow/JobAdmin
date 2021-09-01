@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Mine\Generator\Traits;
 
 use App\Setting\Model\SettingGenerateColumns;
+use Mine\Helper\Str;
 
 trait VueSaveGeneratorTraits
 {
@@ -32,7 +33,7 @@ trait VueSaveGeneratorTraits
             case 'file':
                 return $this->fileCode($column);
             case 'editor':
-                return $this->editor($column);
+                return $this->editorCode($column);
             default:
                 return $this->textCode($column);
         }
@@ -47,8 +48,8 @@ trait VueSaveGeneratorTraits
     {
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-input v-model="form.{$column->column_name}" clearable placeholder="请输入{$column->column_comment}" />
         </el-form-item>
 
 VUE;
@@ -63,8 +64,8 @@ VUE;
     {
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" show-password clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-input v-model="form.{$column->column_name}" show-password clearable placeholder="请输入{$column->column_comment}" />
         </el-form-item>
 
 VUE;
@@ -79,8 +80,8 @@ VUE;
     {
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-input v-model="form.{$column->column_name}" type="textarea" :rows="3" clearable placeholder="请输入{$column->column_comment}" />
         </el-form-item>
 
 VUE;
@@ -93,13 +94,30 @@ VUE;
      */
     protected function selectCode(SettingGenerateColumns $column): string
     {
-        return <<<VUE
+        if ($column->dict_type) {
+            return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-select v-model="form.{$column->column_name}" style="width:100%" clearable placeholder="请选择{$column->column_comment}">
+                <el-option
+                    v-for="(item, index) in {$column->dict_type}_data"
+                    :key="index" :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
         </el-form-item>
 
 VUE;
+        } else {
+            return <<<VUE
+
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-select v-model="form.{$column->column_name}" style="width:100%" clearable placeholder="请选择{$column->column_comment}">
+            </el-select>
+        </el-form-item>
+
+VUE;
+        }
     }
 
     /**
@@ -109,13 +127,33 @@ VUE;
      */
     protected function radioCode(SettingGenerateColumns $column): string
     {
-        return <<<VUE
+        if ($column->dict_type) {
+            return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-radio-group v-model="form.{$column->column_name}">
+                <el-radio
+                    v-for="(item, index) in {$column->dict_type}_data"
+                    :key="index"
+                    :label="item.value"
+                >{{item.label}}</el-radio>
+            </el-select>
         </el-form-item>
 
 VUE;
+
+        } else {
+            return <<<VUE
+
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-radio-group v-model="form.{$column->column_name}">
+                <el-radio label="0">是</el-radio>
+                <el-radio label="1">否</el-radio>
+            </el-radio-group>
+        </el-form-item>
+
+VUE;
+        }
     }
 
     /**
@@ -125,13 +163,30 @@ VUE;
      */
     protected function checkboxCode(SettingGenerateColumns $column): string
     {
-        return <<<VUE
+        if ($column->dict_type) {
+            return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-checkbox-group v-model="form.{$column->column_name}">
+                <el-checkbox
+                    v-for="(item, index) in {$column->dict_type}_data"
+                    :key="index"
+                    :label="item.value"
+                >{{item.label}}</el-checkbox>
+            </el-checkbox-group>
         </el-form-item>
 
 VUE;
+        } else {
+            return <<<VUE
+
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-checkbox-group v-model="form.{$column->column_name}">
+            </el-checkbox-group>
+        </el-form-item>
+
+VUE;
+        }
     }
 
     /**
@@ -143,8 +198,13 @@ VUE;
     {
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <el-date-picker
+                type="date"
+                placeholder="请选择{$column->column_comment}"
+                v-model="form.{$column->column_name}"
+                style="width: 100%;"
+            ></el-date-picker>
         </el-form-item>
 
 VUE;
@@ -157,10 +217,17 @@ VUE;
      */
     protected function imageCode(SettingGenerateColumns $column): string
     {
+        $name = Str::studly($column->column_name);
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <sc-upload
+                v-model="form.{$column->column_name}"
+                title="上传{$column->column_name}"
+                :compress="1"
+                :aspectRatio="1/1"
+                @success="handlerUploadImage{$name}"
+            />
         </el-form-item>
 
 VUE;
@@ -173,10 +240,18 @@ VUE;
      */
     protected function fileCode(SettingGenerateColumns $column): string
     {
+        $name = Str::studly($column->column_name);
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <sc-upload
+                v-model="form.{$column->column_name}"
+                title="上传{$column->column_name}"
+                type="file"
+                :compress="1"
+                :aspectRatio="1/1"
+                @success="handlerUploadFile{$name}"
+            />
         </el-form-item>
 
 VUE;
@@ -191,8 +266,8 @@ VUE;
     {
         return <<<VUE
 
-        <el-form-item label="{$column['column_comment']}" prop="{$column['column_name']}">
-            <el-input v-model="form.{$column['column_name']}" type="textarea" :rows="3" clearable placeholder="请输入{$column['column_comment']}" />
+        <el-form-item label="{$column->column_comment}" prop="{$column->column_name}">
+            <editor v-model="form.{$column->column_name}" placeholder="请输入{$column->column_comment}" :height="400"></editor>
         </el-form-item>
 
 VUE;

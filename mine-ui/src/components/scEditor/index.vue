@@ -70,12 +70,12 @@
 					content_style: "",
 					images_upload_handler: async (blobInfo, success, failure) => {
 						const data = new FormData();
-						data.append("file", blobInfo.blob() ,blobInfo.filename());
+						data.append('image', blobInfo.blob() ,blobInfo.filename());
 						try {
-							const res = await API.default.upload.post(data)
-							success(res.data.src)
+							const res = await API.upload.uploadImage(data)
+							success(res.data.url)
 						}catch (error) {
-							failure("Image upload failed")
+							failure("图片上传失败")
 						}
 					},
 					setup: function(editor) {
