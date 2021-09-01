@@ -268,7 +268,7 @@ js;
      */
     protected function getBusinessEnName(): string
     {
-        return Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
+        return Str::camel(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
     }
 
     /**

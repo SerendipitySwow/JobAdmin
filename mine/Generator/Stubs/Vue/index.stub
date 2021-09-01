@@ -70,13 +70,6 @@
             <el-button
               type="text"
               size="small"
-              @click="tableShow(scope.row, scope.$index)"
-              v-auth="['{CODE}:read']"
-            >查看</el-button>
-
-            <el-button
-              type="text"
-              size="small"
               @click="tableEdit(scope.row, scope.$index)"
               v-auth="['{CODE}:update']"
             >编辑</el-button>

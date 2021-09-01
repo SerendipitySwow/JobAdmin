@@ -213,7 +213,7 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
     {
         return Str::lower($this->model->module_name)
             . '/' .
-            Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name))
+            Str::camel(str_replace(env('DB_PREFIX'), '', $this->model->table_name))
             . '/index';
     }
 

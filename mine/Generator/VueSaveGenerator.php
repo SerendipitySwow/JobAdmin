@@ -182,7 +182,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
             if ($column->is_insert === '1' || $column->is_edit === '1') {
                 $code = <<<js
 
-           this.form.{$column->column_name} = '',
+            {$column->column_name}: '',
  js;
                 $jsCode .= $code;
             }
@@ -327,7 +327,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getBusinessEnName(): string
     {
-        return Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
+        return Str::camel(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
     }
 
     /**

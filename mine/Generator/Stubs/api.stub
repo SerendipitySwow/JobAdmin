@@ -10,7 +10,7 @@ export default {
    * 获取{BUSINESS_NAME}分页列表
    * @returns
    */
-  getPageList (params = {}) {
+  getList (params = {}) {
     return request({
       url: '{REQUEST_ROUTE}/index',
       method: 'get',
@@ -22,7 +22,7 @@ export default {
    * 从回收站获取{BUSINESS_NAME}数据列表
    * @returns
    */
-  getRecyclePageList (params = {}) {
+  getRecycleList (params = {}) {
     return request({
       url: '{REQUEST_ROUTE}/recycle',
       method: 'get',

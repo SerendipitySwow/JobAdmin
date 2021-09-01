@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  const editor = defineAsyncComponent(() => import('@/components/scEditor'));
+  import editor from '@/components/scEditor'
 
   export default {
     emits: ['success', 'closed'],
@@ -32,9 +32,12 @@
           {REQUIRED_LIST}
         },
         visible: false,
-        isSaveing: false
+        isSaveing: false,
         {DICT_DATA}
       }
+    },
+    async created() {
+        await this.getDictData();
     },
     methods: {
       //显示
