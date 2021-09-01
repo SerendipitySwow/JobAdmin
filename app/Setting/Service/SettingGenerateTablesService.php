@@ -178,14 +178,14 @@ class SettingGenerateTablesService extends AbstractService
      */
     public function generate(string $ids): string
     {
-        $ids = explode(',', $ids);
-        $this->initGenerateSetting();
-        $adminId = (new LoginUser)->getId();
-        foreach ($ids as $id) {
-            co(function() use($id, $adminId){
-                $this->generateCodeFile((int) $id, $adminId);
-            });
-        }
+//        $ids = explode(',', $ids);
+//        $this->initGenerateSetting();
+//        $adminId = (new LoginUser)->getId();
+//        foreach ($ids as $id) {
+//            co(function() use($id, $adminId){
+//                $this->generateCodeFile((int) $id, $adminId);
+//            });
+//        }
 
         return $this->packageCodeFile();
     }
@@ -229,10 +229,40 @@ class SettingGenerateTablesService extends AbstractService
 
     /**
      * 打包代码文件
+     * @throws \Hyperf\Utils\Filesystem\FileNotFoundException
      */
     protected function packageCodeFile(): string
     {
+        $zipFileName = BASE_PATH. '/runtime/mineadmin.zip';
+        // 删除老的压缩包
+        @unlink($zipFileName);
+        $zip = new \ZipArchive();
+        $zip->open($zipFileName, \ZipArchive::CREATE);
+        $zip->addFile(BASE_PATH . '/runtime/generate/menu.sql', basename('menu.sql'));
+        $this->addZipFile($zip, BASE_PATH . '/runtime/generate');
+        $zip->close();
+        $fs = $this->container->get(Filesystem::class);
         return '';
+    }
+
+    protected function addZipFile(\ZipArchive $archive, string $path): void
+    {
+        $fs = $this->container->get(Filesystem::class);
+        foreach ($fs->directories($path) as $directory) {
+            if ($fs->isDirectory($directory)) {
+                $archive->addEmptyDir(str_replace(BASE_PATH. '/runtime/generate/', '', $directory));
+                $files = $fs->files($directory);
+                foreach ($files as $file) {
+                    $archive->addFile(
+                        $directory . '/' . $file->getFilename(),
+                        str_replace(
+                            BASE_PATH. '/runtime/generate/', '', $directory
+                        ) . '/' . $file->getFilename()
+                    );
+                }
+                $this->addZipFile($archive, $directory);
+            }
+        }
     }
 
     /**

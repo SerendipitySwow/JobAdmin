@@ -91,10 +91,11 @@ class GenerateCodeController extends MineController
      * @return ResponseInterface
      * @Permission("setting:code:generate")
      * @OperationLog
+     * @throws \Exception
      */
     public function generate(string $ids): ResponseInterface
     {
-        return $this->success($this->tableService->generate($ids));
+        return $this->success(['file' => $this->tableService->generate($ids)]);
     }
 
     /**

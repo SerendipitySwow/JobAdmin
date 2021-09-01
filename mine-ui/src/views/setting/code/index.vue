@@ -185,10 +185,10 @@
 
       // 生成代码
       async generateCode (id) {
-        this.$message.info('未开放此功能');
-        // await this.$API.generate.generate(id).then(res => {
-        //   console.log(res)
-        // })
+        // this.$message.info('未开放此功能');
+        await this.$API.generate.generate(id).then(res => {
+          this.$TOOL.download(res)
+        })
       },
 
       // 删除
