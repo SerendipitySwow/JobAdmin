@@ -10,6 +10,8 @@ use App\Setting\Service\SettingGenerateColumnsService;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\Str;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * 模型生成
@@ -51,12 +53,34 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
+     * @throws \Exception
      */
     public function generator(): void
     {
         $module = Str::title($this->model->module_name);
         $path = BASE_PATH . "/runtime/generate/php/app/{$module}/Model/";
         $this->filesystem->makeDirectory($path, 0755, false, true);
+
+        $command = [
+            'command'  => 'mine:model-gen',
+            '--module' => $this->model->module_name,
+            '--table'  => str_replace(env('DB_PREFIX'), '', $this->model->table_name)
+        ];
+
+        $input = new ArrayInput($command);
+        $output = new NullOutput();
+
+        /** @var \Symfony\Component\Console\Application $application */
+        $application = $this->container->get(\Hyperf\Contract\ApplicationInterface::class);
+        $application->setAutoExit(false);
+
+        if ($application->run($input, $output) === 0) {
+            $moduleName = Str::title($this->model->module_name);
+            $modelName  = Str::studly($this->model->table_name);
+            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+            $toPath     = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
+            $this->filesystem->move($sourcePath, $toPath);
+        }
     }
 
     /**

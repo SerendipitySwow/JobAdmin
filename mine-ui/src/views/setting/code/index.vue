@@ -181,14 +181,18 @@
       // 批量生成
       async handleGenCodes () {
         let ids = this.selection.map(item => item.id)
+        this.$message.info('代码生成下载中，请稍后')
         await this.$API.generate.generate(ids).then(res => {
+          this.$message.success('代码生成成功')
           this.$TOOL.download(res)
         })
       },
 
       // 生成代码
       async generateCode (id) {
+        this.$message.info('代码生成下载中，请稍后')
         await this.$API.generate.generate(id).then(res => {
+          this.$message.success('代码生成成功')
           this.$TOOL.download(res)
         })
       },
