@@ -55,11 +55,13 @@ class MapperGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
-     * @return $this
      */
-    public function generator(): MapperGenerator
+    public function generator(): void
     {
-        return $this;
+        $module = Str::title($this->model->module_name);
+        $path = BASE_PATH . "/runtime/generate/php/app/{$module}/Mapper/{$this->getClassName()}.php";
+        $this->filesystem->makeDirectory(BASE_PATH . "/runtime/generate/php/app/{$module}/Mapper/", 0755, false, true);
+        $this->filesystem->put($path, $this->placeholderReplace()->getCodeContent());
     }
 
     /**

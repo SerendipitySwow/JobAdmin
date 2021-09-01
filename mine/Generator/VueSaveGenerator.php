@@ -65,11 +65,16 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
-     * @return $this
      */
-    public function generator(): VueSaveGenerator
+    public function generator(): void
     {
-        return $this;
+        $module = Str::lower($this->model->module_name);
+        $path = BASE_PATH . "/runtime/generate/vue/src/views/{$module}/{$this->getBusinessEnName()}/save.vue";
+        $this->filesystem->makeDirectory(
+            BASE_PATH . "/runtime/generate/vue/src/views/{$module}/{$this->getBusinessEnName()}",
+            0755, true, false
+        );
+        $this->filesystem->put($path, $this->placeholderReplace()->getCodeContent());
     }
 
     /**

@@ -50,11 +50,17 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
-     * @return $this
      */
-    public function generator(): ControllerGenerator
+    public function generator(): void
     {
-        return $this;
+        $module = Str::title($this->model->module_name);
+        $path = BASE_PATH . "/runtime/generate/php/app/{$module}/Controller/";
+        if (!empty($this->model->package_name)) {
+            $path .= Str::title($this->model->package_name) . '/';
+        }
+        $this->filesystem->makeDirectory($path, 0755, true);
+        $path .= $this->getClassName().'.php';
+        $this->filesystem->put($path, $this->placeholderReplace()->getCodeContent());
     }
 
     /**

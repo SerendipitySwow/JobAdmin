@@ -184,8 +184,11 @@
       },
 
       // 生成代码
-      generateCode () {
+      async generateCode (id) {
         this.$message.info('未开放此功能');
+        // await this.$API.generate.generate(id).then(res => {
+        //   console.log(res)
+        // })
       },
 
       // 删除

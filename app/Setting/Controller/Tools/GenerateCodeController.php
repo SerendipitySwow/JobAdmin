@@ -17,6 +17,7 @@ use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * 代码生成器控制器
@@ -46,7 +47,7 @@ class GenerateCodeController extends MineController
      * @GetMapping("index")
      * @Permission("setting:code:index")
      */
-    public function index(): \Psr\Http\Message\ResponseInterface
+    public function index(): ResponseInterface
     {
         return $this->success($this->tableService->getPageList($this->request->All()));
     }
@@ -55,7 +56,7 @@ class GenerateCodeController extends MineController
      * 获取业务表字段信息
      * @GetMapping("getTableColumns")
      */
-    public function getTableColumns(): \Psr\Http\Message\ResponseInterface
+    public function getTableColumns(): ResponseInterface
     {
         return $this->success($this->columnService->getList($this->request->all()));
     }
@@ -64,8 +65,9 @@ class GenerateCodeController extends MineController
      * 预览代码
      * @GetMapping("preview")
      * @Permission("setting:code:preview")
+     * @throws \Exception
      */
-    public function preview(): \Psr\Http\Message\ResponseInterface
+    public function preview(): ResponseInterface
     {
         return $this->success($this->tableService->preview((int) $this->request->input('id', 0)));
     }
@@ -75,22 +77,24 @@ class GenerateCodeController extends MineController
      * @PostMapping("update")
      * @Permission("setting:code:update")
      * @param GenerateUpdateRequest $request
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function update(GenerateUpdateRequest $request): \Psr\Http\Message\ResponseInterface
+    public function update(GenerateUpdateRequest $request): ResponseInterface
     {
         return $this->success($this->tableService->updateTableAndColumns($request->validated()));
     }
 
     /**
      * 生成代码
-     * @PostMapping("generate")
+     * @PostMapping("generate/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
      * @Permission("setting:code:generate")
      * @OperationLog
      */
-    public function generate()
+    public function generate(string $ids): ResponseInterface
     {
-
+        return $this->success($this->tableService->generate($ids));
     }
 
     /**
@@ -99,9 +103,9 @@ class GenerateCodeController extends MineController
      * @Permission("setting:code:loadTable")
      * @OperationLog
      * @param LoadTableRequest $request
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function loadTable(LoadTableRequest $request): \Psr\Http\Message\ResponseInterface
+    public function loadTable(LoadTableRequest $request): ResponseInterface
     {
         return $this->tableService->loadTable($request->input('names')) ? $this->success() : $this->error();
     }
@@ -112,9 +116,9 @@ class GenerateCodeController extends MineController
      * @Permission("setting:code:delete")
      * @OperationLog
      * @param string $ids
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function delete(string $ids): \Psr\Http\Message\ResponseInterface
+    public function delete(string $ids): ResponseInterface
     {
         return $this->success($this->tableService->delete($ids));
     }
@@ -125,9 +129,9 @@ class GenerateCodeController extends MineController
      * @Permission("setting:code:sync")
      * @OperationLog
      * @param int $id
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
-    public function sync(int $id): \Psr\Http\Message\ResponseInterface
+    public function sync(int $id): ResponseInterface
     {
         return $this->success($this->tableService->sync($id));
     }

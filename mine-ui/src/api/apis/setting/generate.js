@@ -40,11 +40,10 @@ export default {
    * 生成代码
    * @returns
    */
-  generate (data = {}) {
+  generate (ids = {}) {
     return request({
-      url: 'setting/code/generate',
+      url: 'setting/code/generate/' + ids,
       method: 'post',
-      data
     })
   },
 

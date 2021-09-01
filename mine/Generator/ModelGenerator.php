@@ -51,11 +51,12 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
-     * @return ModelGenerator
      */
-    public function generator(): ModelGenerator
+    public function generator(): void
     {
-        return $this;
+        $module = Str::title($this->model->module_name);
+        $path = BASE_PATH . "/runtime/generate/php/app/{$module}/Model/";
+        $this->filesystem->makeDirectory($path, 0755, false, true);
     }
 
     /**

@@ -33,7 +33,6 @@ class TableGenerator extends MineGenerator
      */
     public function createTable(bool $init = true): bool
     {
-        $result = true;
         $init && $this->init();
 
         if (Schema::hasTable($this->getTableName())) {
@@ -44,16 +43,12 @@ class TableGenerator extends MineGenerator
         }
 
         // 创建数据表
-        if ($result) {
-            $result = $this->execSchemaSql();
-        }
-
         // 创建数据表迁移文件, 暂未开发。
         // if ($this->tableInfo['migrate'] && $result) {
         //     $result = $this->createMigrateFile();
         // }
 
-        return $result;
+        return $this->execSchemaSql();
     }
 
     protected function init(): void

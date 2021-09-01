@@ -36,13 +36,20 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
     protected $filesystem;
 
     /**
+     * @var string
+     */
+    protected $adminId;
+
+    /**
      * 设置生成信息
      * @param SettingGenerateTables $model
+     * @param string $adminId
      * @return SqlGenerator
      */
-    public function setGenInfo(SettingGenerateTables $model): SqlGenerator
+    public function setGenInfo(SettingGenerateTables $model, string $adminId): SqlGenerator
     {
         $this->model = $model;
+        $this->adminId = $adminId;
         $this->filesystem = make(Filesystem::class);
         if (empty($model->module_name) || empty($model->menu_name)) {
             throw new NormalStatusException('请先编辑配置生成信息');
@@ -52,11 +59,13 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
 
     /**
      * 生成代码
-     * @return $this
+     * @throws \Exception
      */
-    public function generator(): SqlGenerator
+    public function generator(): void
     {
-        return $this;
+        $path = BASE_PATH . "/runtime/generate/menu.sql";
+        $this->filesystem->makeDirectory(BASE_PATH . "/runtime/generate/");
+        $this->filesystem->put($path, $this->placeholderReplace()->getCodeContent());
     }
 
     /**
@@ -214,7 +223,7 @@ class SqlGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getAdminId(): string
     {
-        return (new LoginUser)->getId();
+        return (string) $this->adminId;
     }
 
     /**
