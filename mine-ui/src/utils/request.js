@@ -21,6 +21,9 @@ function createService () {
 	// HTTP response 拦截器
 	service.interceptors.response.use(
 		response => {
+			if (response.headers['content-disposition'] && response.status === 200) {
+				return response
+			}
 			if (response.data.code !== 200 || ! response.data.success) {
 				ElNotification.error({
 					title: '请求错误',

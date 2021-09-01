@@ -90,12 +90,11 @@ class GenerateCodeController extends MineController
      * @param String $ids
      * @return ResponseInterface
      * @Permission("setting:code:generate")
-     * @OperationLog
      * @throws \Exception
      */
     public function generate(string $ids): ResponseInterface
     {
-        return $this->success(['file' => $this->tableService->generate($ids)]);
+        return $this->_download($this->tableService->generate($ids), 'mineadmin.zip');
     }
 
     /**

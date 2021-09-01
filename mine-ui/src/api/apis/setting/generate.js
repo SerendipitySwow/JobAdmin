@@ -44,6 +44,7 @@ export default {
     return request({
       url: 'setting/code/generate/' + ids,
       method: 'post',
+      responseType: 'blob',
     })
   },
 

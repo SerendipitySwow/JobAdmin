@@ -178,14 +178,12 @@ class SettingGenerateTablesService extends AbstractService
      */
     public function generate(string $ids): string
     {
-//        $ids = explode(',', $ids);
-//        $this->initGenerateSetting();
-//        $adminId = (new LoginUser)->getId();
-//        foreach ($ids as $id) {
-//            co(function() use($id, $adminId){
-//                $this->generateCodeFile((int) $id, $adminId);
-//            });
-//        }
+        $ids = explode(',', $ids);
+        $this->initGenerateSetting();
+        $adminId = (new LoginUser)->getId();
+        foreach ($ids as $id) {
+            $this->generateCodeFile((int) $id, $adminId);
+        }
 
         return $this->packageCodeFile();
     }
@@ -229,20 +227,26 @@ class SettingGenerateTablesService extends AbstractService
 
     /**
      * 打包代码文件
-     * @throws \Hyperf\Utils\Filesystem\FileNotFoundException
      */
     protected function packageCodeFile(): string
     {
+        $fs = $this->container->get(Filesystem::class);
         $zipFileName = BASE_PATH. '/runtime/mineadmin.zip';
+        $path = BASE_PATH . '/runtime/generate';
         // 删除老的压缩包
         @unlink($zipFileName);
-        $zip = new \ZipArchive();
-        $zip->open($zipFileName, \ZipArchive::CREATE);
-        $zip->addFile(BASE_PATH . '/runtime/generate/menu.sql', basename('menu.sql'));
-        $this->addZipFile($zip, BASE_PATH . '/runtime/generate');
-        $zip->close();
-        $fs = $this->container->get(Filesystem::class);
-        return '';
+        $archive = new \ZipArchive();
+        $archive->open($zipFileName, \ZipArchive::CREATE);
+        $files = $fs->files($path);
+        foreach ($files as $file) {
+            $archive->addFile(
+                $path . '/' . $file->getFilename(),
+                $file->getFilename()
+            );
+        }
+        $this->addZipFile($archive, $path);
+        $archive->close();
+        return $zipFileName;
     }
 
     protected function addZipFile(\ZipArchive $archive, string $path): void
@@ -275,8 +279,8 @@ class SettingGenerateTablesService extends AbstractService
         $fs = $this->container->get(Filesystem::class);
 
         // 先删除再创建
-        $fs->deleteDirectory($genDirectory, true);
-//        $fs->makeDirectory($genDirectory, 0755, false, false);
+        $fs->cleanDirectory($genDirectory);
+        $fs->deleteDirectory($genDirectory);
     }
 
     /**
@@ -348,7 +352,7 @@ class SettingGenerateTablesService extends AbstractService
             [
                 'tab_name' => 'Menu.sql',
                 'name' => 'sql',
-                'code' => make(SqlGenerator::class)->setGenInfo($model)->preview(),
+                'code' => make(SqlGenerator::class)->setGenInfo($model, (new LoginUser)->getId())->preview(),
                 'lang' => 'sql',
             ],
         ];

@@ -179,13 +179,15 @@
       },
 
       // 批量生成
-      handleGenCodes () {
-        this.$message.info('未开放此功能');
+      async handleGenCodes () {
+        let ids = this.selection.map(item => item.id)
+        await this.$API.generate.generate(ids).then(res => {
+          this.$TOOL.download(res)
+        })
       },
 
       // 生成代码
       async generateCode (id) {
-        // this.$message.info('未开放此功能');
         await this.$API.generate.generate(id).then(res => {
           this.$TOOL.download(res)
         })
