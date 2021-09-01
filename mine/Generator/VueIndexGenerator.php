@@ -120,6 +120,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             '{CODE}',
+            '{HIDE_PAGE}',
             '{FIRST_SEARCH}',
             '{SEARCH_LIST}',
             '{COLUMN_LIST}',
@@ -137,6 +138,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             $this->getCode(),
+            $this->getHidePage(),
             $this->getFirstSearch(),
             $this->getSearchList(),
             $this->getColumnList(),
@@ -145,6 +147,15 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             $this->getDictList(),
             $this->getDictData(),
         ];
+    }
+
+    /**
+     * 获取是否隐藏分页
+     * @return string
+     */
+    protected function getHidePage(): string
+    {
+        return $this->model->type === 'single' ? 'false' : 'true';
     }
 
     /**

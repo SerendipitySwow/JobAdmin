@@ -53,7 +53,7 @@
         :column="column"
         :showRecycle="true"
         row-key="id"
-        :hidePagination="true"
+        :hidePagination="{HIDE_PAGE}"
         @selection-change="selectionChange"
         @switch-data="switchData"
         stripe

@@ -58,7 +58,8 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
         $this->columns = SettingGenerateColumns::query()
             ->where('table_id', $model->id)->orderByDesc('sort')
             ->get([
-            'column_name', 'column_comment', 'is_required', 'is_insert', 'is_edit', 'view_type', 'dict_type',
+                'column_name', 'column_comment', 'is_required',
+                'is_pk', 'is_insert', 'is_edit', 'view_type', 'dict_type',
         ]);
         return $this;
     }
@@ -179,7 +180,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     {
         $jsCode = '';
         foreach ($this->columns as $column) {
-            if ($column->is_insert === '1' || $column->is_edit === '1') {
+            if ($column->is_pk === '1' || $column->is_insert === '1' || $column->is_edit === '1') {
                 $code = <<<js
 
             {$column->column_name}: '',
@@ -218,7 +219,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     {
         $jsCode = '';
         foreach ($this->columns as $column) {
-            if ($column->is_insert === '1' || $column->is_edit === '1') {
+            if ($column->is_pk === '1' || $column->is_insert === '1' || $column->is_edit === '1') {
                 $code = <<<js
 
            this.form.{$column->column_name} = data.{$column->column_name};
