@@ -74,12 +74,19 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
         $application = $this->container->get(\Hyperf\Contract\ApplicationInterface::class);
         $application->setAutoExit(false);
 
+        $moduleName = Str::title($this->model->module_name);
+        $modelName  = Str::studly($this->model->table_name);
+        $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+        $toPath     = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
+
+        $isFile = is_file($sourcePath);
+
         if ($application->run($input, $output) === 0) {
-            $moduleName = Str::title($this->model->module_name);
-            $modelName  = Str::studly($this->model->table_name);
-            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
-            $toPath     = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
-            $this->filesystem->move($sourcePath, $toPath);
+            if ($isFile) {
+                $this->filesystem->copy($sourcePath, $toPath);
+            } else {
+                $this->filesystem->move($sourcePath, $toPath);
+            }
         }
     }
 
