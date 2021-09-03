@@ -3,20 +3,19 @@
 declare(strict_types=1);
 namespace Mine;
 
-use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Model\Model;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\ModelCache\Cacheable;
 use Mine\Helper\Id;
+use Mine\Traits\ModelMacroTrait;
 
 /**
  * Class MineModel
  * @package Mine
- * @method static onlyTrashed()
  */
 class MineModel extends Model
 {
-    use Cacheable;
+    use Cacheable, ModelMacroTrait;
 
     /**
      * @Inject
@@ -49,8 +48,8 @@ class MineModel extends Model
     {
         parent::__construct($attributes);
 
-        // 注册自定义方法
-        $this->registerMethods();
+        // 注册用户数据权限方法
+        $this->registerUserDataScope();
     }
 
     /**
@@ -108,16 +107,4 @@ class MineModel extends Model
     {
         return new MineCollection($models);
     }
-
-    /**
-     * 注册自定义方法
-     */
-    private function registerMethods()
-    {
-        // 数据权限方法
-        Builder::macro('mineDataScope', function() {
-
-        });
-    }
-
 }
