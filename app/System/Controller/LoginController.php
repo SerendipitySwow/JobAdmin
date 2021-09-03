@@ -3,16 +3,13 @@
 declare(strict_types=1);
 namespace App\System\Controller;
 
-use App\Setting\Service\SettingCrontabService;
 use App\System\Request\User\SystemUserLoginRequest;
 use App\System\Service\SystemUserService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
-use Hyperf\Redis\Redis;
 use Mine\Annotation\Auth;
-use Mine\Crontab\MineCrontabManage;
 use Mine\Helper\LoginUser;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
