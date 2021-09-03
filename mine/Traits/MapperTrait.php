@@ -98,6 +98,8 @@ trait MapperTrait
             $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
         }
 
+        $query->userDataScope();
+
         return $this->handleSearch($query, $params);
     }
 
