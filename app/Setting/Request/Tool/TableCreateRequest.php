@@ -23,7 +23,7 @@ class TableCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|regex:/^[A-Za-z]{2,}$/i',
+            'name' => 'required|regex:/^[A-Za-z0-9_]{2,}$/i',
             'module' => 'required|regex:/^[A-Za-z]{2,}$/i',
             'pk' => 'required|regex:/^[A-Za-z]{2,}$/i',
             'engine' => ['required', Rule::in(['InnoDB', 'MyISAM'])],
