@@ -76,7 +76,12 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
 
         $moduleName = Str::title($this->model->module_name);
         $modelName  = Str::studly($this->model->table_name);
-        $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+        if ($modelName[strlen($modelName) - 1] == 's') {
+            $newName = Str::substr($modelName, 0, (strlen($modelName) - 1));
+            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$newName}.php";
+        } else {
+            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+        }
         $toPath     = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
 
         $isFile = is_file($sourcePath);
