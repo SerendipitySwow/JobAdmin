@@ -3,13 +3,10 @@ const DEFAULT_CONFIG = {
 	APP_NAME: "MineAdmin",
 
 	//版本号
-	APP_VER: "0.0.1",
+	APP_VER: "0.2.0",
 
 	//官网地址
 	APP_URL: "www.mineadmin.com",
-
-	//接口地址
-	API_URL: "/api",
 
 	//Token前缀，注意最后有个空格，如不需要需设置空字符串
 	TOKEN_PREFIX: "Bearer ",
