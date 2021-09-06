@@ -52,7 +52,7 @@
         :api="api"
         :column="column"
         :showRecycle="true"
-        row-key="id"
+        row-key="{PK}"
         :hidePagination="{HIDE_PAGE}"
         @selection-change="selectionChange"
         @switch-data="switchData"
@@ -77,7 +77,7 @@
             <el-button
               type="text"
               size="small"
-              @click="deletes(scope.row.id)"
+              @click="deletes(scope.row.{PK})"
               v-auth="['{CODE}:delete']"
             >删除</el-button>
 
@@ -92,14 +92,14 @@
               type="text"
               size="small"
               v-auth="['{CODE}:recovery']"
-              @click="recovery(scope.row.id)"
+              @click="recovery(scope.row.{PK})"
             >恢复</el-button>
 
             <el-button
               type="text"
               size="small"
               v-auth="['{CODE}:realDelete']"
-              @click="deletes(scope.row.id)"
+              @click="deletes(scope.row.{PK})"
             >删除</el-button>
 
           </template>
@@ -179,7 +179,7 @@
         }).then(() => {
           const loading = this.$loading();
           let ids = []
-          this.selection.map(item => ids.push(item.id))
+          this.selection.map(item => ids.push(item.{PK}))
           if (this.isRecycle) {
             this.$API.{BUSINESS_EN_NAME}.realDeletes(ids.join(','))
             this.$refs.table.upData(this.queryParams)

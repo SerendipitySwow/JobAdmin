@@ -76,17 +76,25 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
 
         $moduleName = Str::title($this->model->module_name);
         $modelName  = Str::studly($this->model->table_name);
-        if ($modelName[strlen($modelName) - 1] == 's') {
-            $newName = Str::substr($modelName, 0, (strlen($modelName) - 1));
-            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$newName}.php";
-        } else {
-            $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
-        }
-        $toPath     = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
-
-        $isFile = is_file($sourcePath);
 
         if ($application->run($input, $output) === 0) {
+
+            if ($modelName[strlen($modelName) - 1] == 's') {
+                $oldName = Str::substr($modelName, 0, (strlen($modelName) - 1));
+                $oldPath = BASE_PATH . "/app/{$moduleName}/Model/{$oldName}.php";
+                $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+                $this->filesystem->put($sourcePath,
+                    str_replace($oldName, $modelName, $this->filesystem->sharedGet($oldPath))
+                );
+                @unlink($oldPath);
+            } else {
+                $sourcePath = BASE_PATH . "/app/{$moduleName}/Model/{$modelName}.php";
+            }
+
+            $toPath = BASE_PATH . "/runtime/generate/php/app/{$moduleName}/Model/{$modelName}.php";
+
+            $isFile = is_file($sourcePath);
+
             if ($isFile) {
                 $this->filesystem->copy($sourcePath, $toPath);
             } else {

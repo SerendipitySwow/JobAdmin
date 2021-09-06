@@ -134,6 +134,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
             '{DICT_DATA}',
             '{UPLOAD_IMAGE}',
             '{UPLOAD_FILE}',
+            '{PK}',
         ];
     }
 
@@ -153,6 +154,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
             $this->getDictData(),
             $this->getUploadImage(),
             $this->getUploadFile(),
+            $this->getPk(),
         ];
     }
 
@@ -338,6 +340,20 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     protected function getBusinessName(): string
     {
         return str_replace('管理', '', $this->model->menu_name);
+    }
+
+    /**
+     * 返回主键
+     * @return string
+     */
+    protected function getPk(): string
+    {
+        foreach ($this->columns as $column) {
+            if ($column->is_pk == '1') {
+                return $column->column_name;
+            }
+        }
+        return '';
     }
 
     /**
