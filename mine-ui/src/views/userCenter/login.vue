@@ -54,9 +54,9 @@
 		</div>
 		<div class="login-footer">Copyright © 2021-2022 mineadmin.com All Rights Reserved.</div>
 
-		<ul class="circles">
+		<!-- <ul class="circles">
 			<li v-for="n in 10" :key="n"></li>
-		</ul>
+		</ul> -->
 	</div>
 </template>
 
