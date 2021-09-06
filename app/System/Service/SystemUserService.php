@@ -334,6 +334,44 @@ class SystemUserService extends AbstractService
     }
 
     /**
+     * 删除用户
+     * @param string $ids
+     * @return bool
+     */
+    public function delete(string $ids): bool
+    {
+        if (!empty($ids)) {
+            $userIds = explode(',', $ids);
+            if ($key = array_search(env('SUPER_ADMIN'), $userIds) !== false) {
+                unset($userIds[$key]);
+            }
+
+            return $this->mapper->delete($userIds);
+        }
+
+        return false;
+    }
+
+    /**
+     * 真实删除用户
+     * @param string $ids
+     * @return bool
+     */
+    public function realDelete(string $ids): bool
+    {
+        if (!empty($ids)) {
+            $userIds = explode(',', $ids);
+            if ($key = array_search(env('SUPER_ADMIN'), $userIds) !== false) {
+                unset($userIds[$key]);
+            }
+
+            return $this->mapper->realDelete($userIds);
+        }
+
+        return false;
+    }
+
+    /**
      * 强制下线用户
      * @param string $id
      * @return bool
