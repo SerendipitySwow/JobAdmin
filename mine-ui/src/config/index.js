@@ -8,6 +8,9 @@ const DEFAULT_CONFIG = {
 	//官网地址
 	APP_URL: "www.mineadmin.com",
 
+	//接口地址
+	API_URL: "/api",
+
 	//Token前缀，注意最后有个空格，如不需要需设置空字符串
 	TOKEN_PREFIX: "Bearer ",
 
