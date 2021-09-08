@@ -1,5 +1,13 @@
 # 项目介绍
 
+<center>
+<a href="https://www.mineadmin.com" target="_blank">官网</a> |
+<a href="https://doc.mineadmin.com" target="_blank">文档</a> | 
+<a href="https://demo.mineadmin.com" target="_blank">演示</a> |
+<a href="https://hyperf.wiki/2.2/#/" target="_blank">Hyperf官方文档</a> 
+</center>
+
+
 PHP有很多优秀的后台管理系统，但基于Swoole的后台管理系统没找到合适我自己的。
 所以就开发了一套后台管理系统。系统可以用于网站管理后台、CMS、CRM、OA、ERP等。
 
