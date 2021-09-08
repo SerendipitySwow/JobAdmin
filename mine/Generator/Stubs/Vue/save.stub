@@ -55,7 +55,7 @@
             if (this.mode == 'add') {
               res = await this.$API.{BUSINESS_EN_NAME}.save(this.form)
             } else {
-              res = await this.$API.{BUSINESS_EN_NAME}.update(this.form.id, this.form)
+              res = await this.$API.{BUSINESS_EN_NAME}.update(this.form.{PK}, this.form)
             }
             this.isSaveing = false;
             if(res.success){

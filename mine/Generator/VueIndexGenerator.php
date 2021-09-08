@@ -54,7 +54,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
         $this->columns = SettingGenerateColumns::query()
             ->where('table_id', $model->id)->orderByDesc('sort')
             ->get([
-                'column_name', 'column_comment', 'is_query', 'is_list', 'view_type', 'dict_type',
+                'column_name', 'column_comment', 'is_query', 'is_pk', 'is_list', 'view_type', 'dict_type',
         ]);
         return $this;
     }
@@ -128,6 +128,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             '{QUERY_PARAMS}',
             '{DICT_LIST}',
             '{DICT_DATA}',
+            '{PK}',
         ];
     }
 
@@ -146,6 +147,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
             $this->getQueryParams(),
             $this->getDictList(),
             $this->getDictData(),
+            $this->getPk(),
         ];
     }
 
@@ -342,6 +344,20 @@ js;
             }
         }
         return $jsCode;
+    }
+
+    /**
+     * 返回主键
+     * @return string
+     */
+    protected function getPk(): string
+    {
+        foreach ($this->columns as $column) {
+            if ($column->is_pk == '1') {
+                return $column->column_name;
+            }
+        }
+        return '';
     }
 
     /**
