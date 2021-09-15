@@ -70,7 +70,10 @@ export default {
             form.append('file', param.file)
             console.log(this.uploadApi)
             await this.uploadApi(form).then( res => {
-
+                if (res.success) {
+                    this.$message.success(res.message)
+                    this.$emit('success')
+                }
             })
         }
     }

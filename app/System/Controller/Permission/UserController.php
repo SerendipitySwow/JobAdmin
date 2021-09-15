@@ -223,6 +223,7 @@ class UserController extends MineController
      * @PostMapping("import")
      * @Permission("system:user:import")
      * @return ResponseInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function import(): ResponseInterface
     {

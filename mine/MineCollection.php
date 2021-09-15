@@ -145,33 +145,67 @@ class MineCollection extends Collection
      * 数据导入
      * @param string $dto
      * @param \Mine\MineModel $model
-     * @param \Closure|array|null $closure
+     * @param \Closure|null $closure
      * @return bool
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function import(string $dto, MineModel $model, $closure = ''): bool
+    public function import(string $dto, MineModel $model, ?\Closure $closure = null): bool
     {
-        $initData = $this->excelDataInit($dto, $closure);
+        $annMate = AnnotationCollector::get($dto);
+        $annName = 'Mine\Annotation\ExcelProperty';
 
-        // 从上传里解析excel
+        if (! (new $dto) instanceof MineModelExcel) {
+            throw new \RuntimeException();
+        }
+
+        if (!isset($annMate['_c'])) {
+            throw new \RuntimeException();
+        }
+
+        $property = &$annMate['_p'];
+
+        $fields = [];
+
+        foreach ($property as $name => $item) {
+            $fields[ $item[$annName]->index ] = [
+                'name'  => $name,
+                'value' => $item[$annName]->value
+            ];
+        }
+        ksort($fields);
+
         $request = ApplicationContext::getContainer()->get(MineRequest::class);
-
         $data = [];
-
-        if (!empty($initData['data'])) {
-            echo 1111;
-        } else if ($request->hasFile('file')) {
-//            $fs = ApplicationContext::getContainer()->get(FilesystemFactory::class)->get('local');
-//            $fs->get
+        if ($request->hasFile('file')) {
             $file = $request->file('file');
             $tempFileName = 'temp_'.time().'.'.$file->getExtension();
             $tempFilePath = BASE_PATH . '/runtime/'. $tempFileName;
             file_put_contents($tempFilePath, $file->getStream()->getContents());
             $reader = IOFactory::createReader(IOFactory::identify($tempFilePath));
-            print_r($reader);
-//            @unlink($tempFilePath);
+            $reader->setReadDataOnly(true);
+            $sheet = $reader->load($tempFilePath);
+            foreach ($sheet->getActiveSheet()->getRowIterator(2) as $k => $row) {
+                $temp = [];
+                foreach ($row->getCellIterator() as $index => $item) {
+                    if (isset($fields[ (ord($index) - 65 ) ])) {
+                        $temp[$fields[(ord($index) - 65)]['name']] = $item->getFormattedValue();
+                    }
+                }
+                if (! empty($temp)) {
+                    $data[] = $temp;
+                }
+            }
+            @unlink($tempFilePath);
         } else {
             return false;
+        }
+
+        if (! is_null($closure) && $closure instanceof \Closure) {
+            return $closure($model, $data);
+        }
+
+        foreach ($data as $datum) {
+            $model::create($datum);
         }
 
         return true;
@@ -187,7 +221,6 @@ class MineCollection extends Collection
     {
         $annMate = AnnotationCollector::get($dto);
         $annName = 'Mine\Annotation\ExcelProperty';
-        $data = [];
 
         if (! (new $dto) instanceof MineModelExcel) {
             throw new \RuntimeException();

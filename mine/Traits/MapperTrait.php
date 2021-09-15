@@ -4,6 +4,9 @@ namespace Mine\Traits;
 
 use Hyperf\Contract\LengthAwarePaginatorInterface;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Utils\Collection;
+use Mine\Annotation\Transaction;
+use Mine\MineCollection;
 use Mine\MineModel;
 
 trait MapperTrait
@@ -269,5 +272,18 @@ trait MapperTrait
     public function getModel(): MineModel
     {
         return new $this->model;
+    }
+
+    /**
+     * 数据导入
+     * @param string $dto
+     * @param \Closure|null $closure
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @Transaction
+     */
+    public function import(string $dto, ?\Closure $closure = null): bool
+    {
+        return (new MineCollection())->import($dto, $this->getModel(), $closure);
     }
 }

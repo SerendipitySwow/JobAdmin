@@ -239,13 +239,14 @@ trait ServiceTrait
     /**
      * 数据导入
      * @param string $dto
-     * @param \Closure|array|null $closure
+     * @param \Closure|null $closure
      * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      * @Transaction
      */
-    public function import(string $dto, $closure = ''): bool
+    public function import(string $dto, ?\Closure $closure = null): bool
     {
-        return (new MineCollection())->import($dto, $this->mapper->getModel(), $closure);
+        return $this->mapper->import($dto, $closure);
     }
 
     /**

@@ -50,6 +50,7 @@
               :auth="['system:user:import']"
               :upload-api="$API.user.importExcel"
               :download-tpl-api="$API.user.downloadTemplate"
+              @success="handleSuccess()"
             />
 
           </div>
