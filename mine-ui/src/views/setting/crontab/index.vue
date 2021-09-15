@@ -50,7 +50,7 @@
 
 	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
 
-	<el-drawer title="计划任务日志" v-model="dialog.logsVisible" :size="600" direction="rtl" destroy-on-close>
+	<el-drawer title="计划任务日志" v-model="dialog.logsVisible" :size="1000" direction="rtl" destroy-on-close>
 		<logs ref="logList" />
 	</el-drawer>
 </template>

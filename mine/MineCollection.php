@@ -9,6 +9,7 @@ use Hyperf\Utils\ApplicationContext;
 use Mine\Interfaces\MineModelExcel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Mine\MineModel;
 
 class MineCollection extends Collection
 {
@@ -83,17 +84,20 @@ class MineCollection extends Collection
     }
 
     /**
-     * 数据导出
+     * 导出数据
+     * @param string $dto
+     * @param string $filename
+     * @param null|Closure|array $closure
+     * @return object|\Psr\Http\Message\ResponseInterface|null
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function export(string $excel, string $filename, $result = null)
+    public function export(string $dto, string $filename, $closure = '')
     {
-        $data = $this->excelExportDataInit($excel, $result);
+        $data = $this->excelDataInit($dto, $closure);
         $spread = new Spreadsheet();
         $sheet  = $spread->getActiveSheet();
         $filename .= date('Y-m-d_H_i_s'). '.xlsx';
-        $filepath = BASE_PATH . '/runtime/' . $filename;
-        
+
         // 表头
         $titleStart = 'A';
         foreach ($data['field'] as $item) {
@@ -138,24 +142,37 @@ class MineCollection extends Collection
 
     /**
      * 数据导入
+     * @param string $dto
+     * @param \Mine\MineModel $model
+     * @param \Closure|array|null $closure
+     * @return bool
      */
-    public function import(string $excel, $result = null)
+    public function import(string $dto, MineModel $model, $closure = ''): bool
     {
+        $data = $this->excelDataInit($dto, $closure);
+
+        $field = $data['field'];
+
+        // 从上传里解析excel
+        $request = ApplicationContext::getContainer()->get(MineRequest::class);
+        if (empty($data['data'])) {
+
+        }
     }
 
     /**
      * excel 数据导出初始化
-     * @param string $excel
-     * @param null $result
+     * @param string $dto
+     * @param null|Closure|array $closure
      * @return array
      */
-    protected function excelExportDataInit(string $excel, $result = null): array
+    protected function excelDataInit(string $dto, $closure = null): array
     {
-        $annMate = AnnotationCollector::get($excel);
+        $annMate = AnnotationCollector::get($dto);
         $annName = 'Mine\Annotation\ExcelProperty';
         $data = [];
 
-        if (! (new $excel) instanceof MineModelExcel) {
+        if (! (new $dto) instanceof MineModelExcel) {
             throw new \RuntimeException();
         }
 
@@ -163,12 +180,14 @@ class MineCollection extends Collection
             throw new \RuntimeException();
         }
 
-        if ($result instanceof \Closure) {
-            $data = $result();
-        } else if (empty($result)) {
+        if ($closure instanceof \Closure) {
+            $data = $closure();
+        } else if (is_null($closure)) {
             $data = $this->toArray();
-        } else if (is_array($result)) {
-            $data = &$result;
+        } else if (is_array($closure)) {
+            $data = &$closure;
+        } else {
+            $data = [];
         }
 
         $property = &$annMate['_p'];
@@ -181,10 +200,9 @@ class MineCollection extends Collection
                 'value' => $item[$annName]->value
             ];
         }
-
+        ksort($fields);
         return ['field' => &$fields, 'data' => &$data];
     }
-
 
     private function yieldExcelData(array &$data, array &$field): \Generator
     {

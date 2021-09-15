@@ -16,6 +16,11 @@ class UserDto implements MineModelExcel
     public $username;
 
     /**
+     * @ExcelProperty(value="密码", index="3")
+     */
+    public $password;
+
+    /**
      * @ExcelProperty(value="昵称", index="1")
      */
     public $nickname;

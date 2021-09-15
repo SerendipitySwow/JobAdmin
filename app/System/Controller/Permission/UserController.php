@@ -18,6 +18,7 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
+use Mine\MineCollection;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -215,5 +216,16 @@ class UserController extends MineController
     public function export(): ResponseInterface
     {
         return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class);
+    }
+
+    /**
+     * 下载导入模板
+     * @PostMapping("downloadTemplate")
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @return ResponseInterface
+     */
+    public function downloadTemplate(): ResponseInterface
+    {
+        return (new MineCollection)->export(\App\System\Dto\UserDto::class, '模板下载', []);
     }
 }
