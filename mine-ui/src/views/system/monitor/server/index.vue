@@ -148,7 +148,7 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="15">
+      <el-row :gutter="15" v-if="server.net">
         <el-col :md="24" :xs="24">
           <el-card shadow="hover">
             <template #header>

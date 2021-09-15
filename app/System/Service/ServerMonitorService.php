@@ -11,8 +11,15 @@ class ServerMonitorService
      */
     public function getCpuInfo(): array
     {
-        $cpu = $this->getCpuUsage();
-        preg_match('/(\d+)/', shell_exec('cat /proc/cpuinfo | grep "cache size"'), $cache);
+        if (PHP_OS == 'Linux') {
+            $cpu = $this->getCpuUsage();
+            preg_match('/(\d+)/', shell_exec('cat /proc/cpuinfo | grep "cache size"'), $cache);
+        } else {
+            preg_match('/(\d+\.\d+)%\suser/', shell_exec('top -l 1 | head -n 10 | grep CPU'), $cpu);
+            $cpu = $cpu[1];
+            preg_match('/(\d+)/', shell_exec('system_profiler SPHardwareDataType | grep L2'), $cache);
+            $cache = $cache[1];
+        }
         return [
             'name'  => $this->getCpuName(),
             'cores' => '物理核心数：'.$this->getCpuPhysicsCores().'个，逻辑核心数：'.$this->getCpuLogicCores().'个',
@@ -28,8 +35,12 @@ class ServerMonitorService
      */
     public function getCpuName(): string
     {
-        preg_match('/^\s+\d\s+(.+)/', shell_exec('cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c'), $matches);
-        return $matches[1];
+        if (PHP_OS == 'Linux') {
+            preg_match('/^\s+\d\s+(.+)/', shell_exec('cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c'), $matches);
+            return $matches[1];
+        } else {
+            return shell_exec('sysctl -n machdep.cpu.brand_string');
+        }
     }
 
     /**
@@ -37,7 +48,11 @@ class ServerMonitorService
      */
     public function getCpuPhysicsCores(): string
     {
-        return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "physical id"|sort |uniq|wc -l'));
+        if (PHP_OS == 'Linux') {
+            return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "physical id"|sort |uniq|wc -l'));
+        } else {
+            return shell_exec('sysctl hw.physicalcpu');
+        }
     }
 
     /**
@@ -45,7 +60,11 @@ class ServerMonitorService
      */
     public function getCpuLogicCores(): string
     {
-        return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "processor"|wc -l'));
+        if (PHP_OS == 'Linux') {
+            return str_replace("\n", '', shell_exec('cat /proc/cpuinfo |grep "processor"|wc -l'));
+        } else {
+            return shell_exec('sysctl hw.logicalcpu');
+        }
     }
 
     /**
@@ -89,22 +108,34 @@ class ServerMonitorService
      */
     public function getMemInfo(): array
     {
-        $string = shell_exec('cat /proc/meminfo | grep MemTotal');
-        preg_match('/(\d+)/', $string, $total);
-        $result['total'] = sprintf('%.2f', $total[1] / 1024 / 1024);
+        if (PHP_OS == 'Linux') {
+            $string = shell_exec('cat /proc/meminfo | grep MemTotal');
+            preg_match('/(\d+)/', $string, $total);
+            $result['total'] = sprintf('%.2f', $total[1] / 1024 / 1024);
 
-        $string = shell_exec('cat /proc/meminfo | grep MemAvailable');
-        preg_match('/(\d+)/', $string, $available);
+            $string = shell_exec('cat /proc/meminfo | grep MemAvailable');
+            preg_match('/(\d+)/', $string, $available);
 
-        $result['free'] = sprintf('%.2f', $available[1] / 1024 / 1024);
+            $result['free'] = sprintf('%.2f', $available[1] / 1024 / 1024);
 
-        $result['usage'] = sprintf('%.2f', ($total[1] - $available[1]) / 1024 / 1024);
+            $result['usage'] = sprintf('%.2f', ($total[1] - $available[1]) / 1024 / 1024);
 
-        $result['php'] = round(memory_get_usage()/1024/1024, 2);
+            $result['php'] = round(memory_get_usage() / 1024 / 1024, 2);
 
-        $result['rate'] = sprintf(
-            '%.2f', (sprintf('%.2f', $result['usage']) / sprintf('%.2f', $result['total'])) * 100
-        );
+            $result['rate'] = sprintf(
+                '%.2f', (sprintf('%.2f', $result['usage']) / sprintf('%.2f', $result['total'])) * 100
+            );
+        } else {
+            preg_match('/(\d+)/', shell_exec('system_profiler SPHardwareDataType | grep Memory'), $total);
+            $result['total'] = $total[1];
+            preg_match('/(\d+)[G|M]\sused/', shell_exec('system_profiler SPHardwareDataType | grep Memory'), $usage);
+            $result['usage'] = $usage[1];
+            $result['free']  = $result['total'] - $result['usage'];
+            $result['php'] = round(memory_get_usage() / 1024 / 1024, 2);
+            $result['rate'] = sprintf(
+                '%.2f', (sprintf('%.2f', $result['usage']) / sprintf('%.2f', $result['total'])) * 100
+            );
+        }
 
         return $result;
     }
@@ -142,16 +173,25 @@ class ServerMonitorService
      */
     public function getNetInfo(): array
     {
-        $secondsBefore = $this->calculationNetInfo();
-        sleep(1);
-        $secondsAfter = $this->calculationNetInfo();
+        if (PHP_OS == 'Linux') {
+            $secondsBefore = $this->calculationNetInfo();
+            sleep(1);
+            $secondsAfter = $this->calculationNetInfo();
 
-        return [
-            'receive_total' => $secondsAfter['receive_total'],
-            'receive_pack'  => sprintf('%.2f', $secondsAfter['receive_total'] - $secondsBefore['receive_total']),
-            'send_total'    => $secondsAfter['send_total'],
-            'send_pack'     => sprintf('%.2f', $secondsAfter['send_total'] - $secondsBefore['send_total']),
-        ];
+            return [
+                'receive_total' => $secondsAfter['receive_total'],
+                'receive_pack' => sprintf('%.2f', $secondsAfter['receive_total'] - $secondsBefore['receive_total']),
+                'send_total' => $secondsAfter['send_total'],
+                'send_pack' => sprintf('%.2f', $secondsAfter['send_total'] - $secondsBefore['send_total']),
+            ];
+        } else {
+            return [
+                'receive_total' => 0,
+                'receive_pack' => 0,
+                'send_total' => 0,
+                'send_pack' => 0,
+            ];
+        }
     }
 
     /**
