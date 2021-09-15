@@ -169,12 +169,36 @@ export default {
      * 导出
      * @returns
      */
-     exportExcel (params = {}) {
+    exportExcel (params = {}) {
         return request({
             url: 'system/user/export',
             method: 'post',
             responseType: 'blob',
             params
+        })
+    },
+
+    /**
+     * 导入
+     * @returns
+     */
+    importExcel (data = {}) {
+        return request({
+            url: 'system/user/import',
+            method: 'post',
+            data
+        })
+    },
+
+    /**
+     * 下载模板
+     * @returns
+     */
+    downloadTemplate () {
+        return request({
+            url: 'system/user/downloadTemplate',
+            method: 'post',
+            responseType: 'blob'
         })
     },
 }

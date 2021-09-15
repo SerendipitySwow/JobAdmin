@@ -4,6 +4,7 @@ namespace Mine\Traits;
 
 use Hyperf\Database\Model\Collection;
 use Mine\Abstracts\AbstractMapper;
+use Mine\Annotation\Transaction;
 use Mine\MineCollection;
 use Mine\MineModel;
 use Mine\MineResponse;
@@ -233,6 +234,18 @@ trait ServiceTrait
         $collection = new MineCollection();
 
         return $collection->export($dto, $filename, $this->mapper->getList($params));
+    }
+
+    /**
+     * 数据导入
+     * @param string $dto
+     * @param \Closure|array|null $closure
+     * @return bool
+     * @Transaction
+     */
+    public function import(string $dto, $closure = ''): bool
+    {
+        return (new MineCollection())->import($dto, $this->mapper->getModel(), $closure);
     }
 
     /**

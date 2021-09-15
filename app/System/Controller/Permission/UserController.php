@@ -215,14 +215,25 @@ class UserController extends MineController
      */
     public function export(): ResponseInterface
     {
-        return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class);
+        return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class, '用户列表');
+    }
+
+    /**
+     * 用户导入
+     * @PostMapping("import")
+     * @Permission("system:user:import")
+     * @return ResponseInterface
+     */
+    public function import(): ResponseInterface
+    {
+        return $this->service->import(\App\System\Dto\UserDto::class) ? $this->success() : $this->error();
     }
 
     /**
      * 下载导入模板
      * @PostMapping("downloadTemplate")
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      * @return ResponseInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function downloadTemplate(): ResponseInterface
     {

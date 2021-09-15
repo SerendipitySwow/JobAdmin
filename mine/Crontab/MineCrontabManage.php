@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Mine\Crontab;
 
+use App\Setting\Model\SettingCrontab;
 use App\Setting\Service\SettingCrontabService;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Crontab\Parser;
@@ -37,11 +38,6 @@ class MineCrontabManage
     protected $clientFactory;
 
     /**
-     * @var SettingCrontabService
-     */
-    protected $crontabService;
-
-    /**
      * @var Redis
      */
     protected $redis;
@@ -52,8 +48,6 @@ class MineCrontabManage
      */
     public function __construct()
     {
-        $this->crontabService = $this->container->get(SettingCrontabService::class);
-
         $this->redis = $this->container->get(Redis::class);
     }
 
@@ -67,10 +61,9 @@ class MineCrontabManage
         $data = $this->redis->get($prefix . 'crontab');
 
         if ($data === false) {
-            $data = $this->crontabService->getList([
-                'select' => 'id,name,type,target,rule,parameter',
-                'status' => '0',
-            ]);
+            $data = SettingCrontab::query()
+                ->where('status', '0')
+                ->get(explode(',', 'id,name,type,target,rule,parameter'));
             $this->redis->set($prefix . 'crontab', serialize($data));
         } else {
             $data = unserialize($data);

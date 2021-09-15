@@ -4,6 +4,7 @@ namespace Mine;
 
 use Hyperf\Database\Model\Collection;
 use Hyperf\Di\Annotation\AnnotationCollector;
+use Hyperf\Filesystem\FilesystemFactory;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\Utils\ApplicationContext;
 use Mine\Interfaces\MineModelExcel;
@@ -146,18 +147,34 @@ class MineCollection extends Collection
      * @param \Mine\MineModel $model
      * @param \Closure|array|null $closure
      * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function import(string $dto, MineModel $model, $closure = ''): bool
     {
-        $data = $this->excelDataInit($dto, $closure);
-
-        $field = $data['field'];
+        $initData = $this->excelDataInit($dto, $closure);
 
         // 从上传里解析excel
         $request = ApplicationContext::getContainer()->get(MineRequest::class);
-        if (empty($data['data'])) {
 
+        $data = [];
+
+        if (!empty($initData['data'])) {
+            echo 1111;
+        } else if ($request->hasFile('file')) {
+//            $fs = ApplicationContext::getContainer()->get(FilesystemFactory::class)->get('local');
+//            $fs->get
+            $file = $request->file('file');
+            $tempFileName = 'temp_'.time().'.'.$file->getExtension();
+            $tempFilePath = BASE_PATH . '/runtime/'. $tempFileName;
+            file_put_contents($tempFilePath, $file->getStream()->getContents());
+            $reader = IOFactory::createReader(IOFactory::identify($tempFilePath));
+            print_r($reader);
+//            @unlink($tempFilePath);
+        } else {
+            return false;
         }
+
+        return true;
     }
 
     /**
