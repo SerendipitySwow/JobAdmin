@@ -40,17 +40,17 @@
               @click="batchDel"
             >删除</el-button>
 
-            <el-button
+            <!-- <el-button
               icon="el-icon-upload2"
               v-auth="['system:user:export']"
               @click="exportImport"
-            >导入</el-button>
+            >导入</el-button> -->
 
-            <!-- <el-button
+            <el-button
               icon="el-icon-download"
               v-auth="['system:user:export']"
               @click="exportExcel"
-            >导出</el-button> -->
+            >导出</el-button>
 
           </div>
           <div class="right-panel">

@@ -216,11 +216,11 @@ trait ServiceTrait
      * 导出数据
      * @param array $params
      * @param string|null $dto
-     * @param string $filename
+     * @param string|null $filename
      * @return ResponseInterface
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function export(array $params, ?string $dto, string $filename):ResponseInterface
+    public function export(array $params, ?string $dto, string $filename = null):ResponseInterface
     {
         if (empty($dto)) {
             return make(MineResponse::class)->error('导出未指定DTO');

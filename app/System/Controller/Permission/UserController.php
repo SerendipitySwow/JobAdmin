@@ -214,6 +214,6 @@ class UserController extends MineController
      */
     public function export(): ResponseInterface
     {
-        return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class, '用户列表');
+        return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class);
     }
 }
