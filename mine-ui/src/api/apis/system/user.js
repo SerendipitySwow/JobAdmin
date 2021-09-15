@@ -163,5 +163,18 @@ export default {
             method: 'post',
             data: params
         })
-    }
+    },
+
+    /**
+     * 导出
+     * @returns
+     */
+     exportExcel (params = {}) {
+        return request({
+            url: 'system/user/export',
+            method: 'post',
+            responseType: 'blob',
+            params
+        })
+    },
 }

@@ -40,6 +40,18 @@
               @click="batchDel"
             >删除</el-button>
 
+            <el-button
+              icon="el-icon-upload2"
+              v-auth="['system:user:export']"
+              @click="exportImport"
+            >导入</el-button>
+
+            <!-- <el-button
+              icon="el-icon-download"
+              v-auth="['system:user:export']"
+              @click="exportExcel"
+            >导出</el-button> -->
+
           </div>
           <div class="right-panel">
             <div class="right-panel-search">
@@ -408,6 +420,13 @@
           this.$API.user.initUserPassword(id).then(() => {
             this.$message.success('用户密码初始化成功')
           })
+        })
+      },
+
+      // 导出用户
+      exportExcel () {
+        this.$API.user.exportExcel(this.queryParams).then(res => {
+          this.$TOOL.download(res)
         })
       },
 

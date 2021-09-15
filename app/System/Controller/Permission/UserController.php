@@ -204,4 +204,16 @@ class UserController extends MineController
     {
         return $this->service->modifyPassword($request->validated()) ? $this->success() : $this->error();
     }
+
+    /**
+     * 用户导出
+     * @PostMapping("export")
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @Permission("system:user:export")
+     * @return ResponseInterface
+     */
+    public function export(): ResponseInterface
+    {
+        return $this->service->export($this->request->all(), \App\System\Dto\UserDto::class, '用户列表');
+    }
 }

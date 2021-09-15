@@ -4,7 +4,10 @@ namespace Mine\Traits;
 
 use Hyperf\Database\Model\Collection;
 use Mine\Abstracts\AbstractMapper;
+use Mine\MineCollection;
 use Mine\MineModel;
+use Mine\MineResponse;
+use Psr\Http\Message\ResponseInterface;
 
 trait ServiceTrait
 {
@@ -210,6 +213,29 @@ trait ServiceTrait
     }
 
     /**
+     * 导出数据
+     * @param array $params
+     * @param string|null $dto
+     * @param string $filename
+     * @return ResponseInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function export(array $params, ?string $dto, string $filename):ResponseInterface
+    {
+        if (empty($dto)) {
+            return make(MineResponse::class)->error('导出未指定DTO');
+        }
+
+        if (empty($filename)) {
+            $filename = $this->mapper->getModel()->getTable();
+        }
+
+        $collection = new MineCollection();
+
+        return $collection->export($dto, $filename, $this->mapper->getList($params));
+    }
+
+    /**
      * 数组数据转分页数据显示
      * @param array|null $params
      * @param string $pageName
@@ -240,7 +266,6 @@ trait ServiceTrait
                 'totalPage' => ceil($collect->count() / $pageSize)
             ]
         ];
-
     }
 
     /**
