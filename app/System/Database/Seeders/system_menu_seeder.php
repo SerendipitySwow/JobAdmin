@@ -22,7 +22,7 @@ class SystemMenuSeeder extends Seeder
 
     protected function getData(): array
     {
-        $model = \App\System\Model\SystemMenu::getModel()->getTable();
+        $model = env('DB_PREFIX') . \App\System\Model\SystemMenu::getModel()->getTable();
         return [
             "INSERT INTO `{$model}` VALUES (1000, 0, '0', '权限管理', 'permission', 'sc-icon-shield-flash-line', 'permission', '', NULL, '1', 'M', '0', 99, NULL, NULL, '2021-07-25 18:48:47', '2021-07-25 18:48:47', NULL, NULL)",
             "INSERT INTO `{$model}` VALUES (1100, 1000, '0,1000', '用户管理', 'system:user', 'sc-icon-user-settings-line', 'user', 'system/user/index', NULL, '1', 'M', '0', 99, NULL, NULL, '2021-07-25 18:50:15', '2021-07-25 18:50:15', NULL, NULL)",

@@ -15,7 +15,7 @@ class SettingConfigSeeder extends Seeder
     public function run()
     {
         Db::table('setting_config')->truncate();
-        $tableName = \App\Setting\Model\SettingConfig::getModel()->getTable();
+        $tableName = env('DB_PREFIX') . \App\Setting\Model\SettingConfig::getModel()->getTable();
         $sql = [
             "INSERT INTO `{$tableName}` VALUES ('web_close', '1', '网站是否关闭', 'extend', 0, '关闭网站后将无法访问')",
             "INSERT INTO `{$tableName}` VALUES ('site_copyright', NULL, '版权信息', 'system', 96, NULL)",

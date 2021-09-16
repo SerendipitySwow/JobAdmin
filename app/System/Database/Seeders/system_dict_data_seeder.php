@@ -23,7 +23,7 @@ class SystemDictDataSeeder extends Seeder
 
     protected function getData(): array
     {
-        $tableName = \App\System\Model\SystemDictData::getModel()->getTable();
+        $tableName = env('DB_PREFIX') . \App\System\Model\SystemDictData::getModel()->getTable();
         return [
             "INSERT INTO `{$tableName}` VALUES (2035090111136, 2035075124896, 'InnoDB', 'InnoDB', 'table_engine', 0, '0', NULL, NULL, '2021-06-27 00:37:11', '2021-06-27 13:33:29', NULL, NULL)",
             "INSERT INTO `{$tableName}` VALUES (2035095441568, 2035075124896, 'MyISAM', 'MyISAM', 'table_engine', 0, '0', NULL, NULL, '2021-06-27 00:37:21', '2021-06-27 13:33:29', NULL, NULL)",

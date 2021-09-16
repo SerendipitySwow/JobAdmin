@@ -22,7 +22,7 @@ class SettingCrontab extends Seeder
 
     public function getData(): array
     {
-        $tableName = \App\Setting\Model\SettingCrontab::getModel()->getTable();
+        $tableName = env('DB_PREFIX').\App\Setting\Model\SettingCrontab::getModel()->getTable();
         return [
             "INSERT INTO `{$tableName}` VALUES (3890924964000, 'urlCrontab', '3', 'http://127.0.0.1:9501/', '', '59 */1 * * * *', '1', '1', NULL, NULL, '2021-08-07 23:28:28', '2021-08-07 23:44:55', '请求127.0.0.1')"
         ];
