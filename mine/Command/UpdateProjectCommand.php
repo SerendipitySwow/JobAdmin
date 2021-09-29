@@ -52,6 +52,8 @@ class UpdateProjectCommand extends MineCommand
                 $this->seed->run([$path]);
             }
         }
+
+        $this->line($this->getGreenText('updated successfully...'));
     }
 
 
