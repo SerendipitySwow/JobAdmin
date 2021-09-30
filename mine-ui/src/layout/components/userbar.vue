@@ -47,6 +47,7 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="uc">个人设置</el-dropdown-item>
+					<el-dropdown-item command="clearSelfCache">清除缓存</el-dropdown-item>
 					<el-dropdown-item divided command="outLogin">退出登录</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -98,6 +99,11 @@
 			handleUser(command) {
 				if(command == "uc"){
 					this.$router.push({path: '/usercenter'});
+				}
+				if(command == "clearSelfCache"){
+					this.$API.user.clearSelfCache().then(res => {
+						this.$message.success('缓存清除完毕')
+					})
 				}
 				if(command == "outLogin"){
 					this.$confirm('确认是否退出当前用户？','提示', {

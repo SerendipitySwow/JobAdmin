@@ -201,4 +201,16 @@ export default {
             responseType: 'blob'
         })
     },
+
+    /**
+     * 清除自身缓存
+     * @returns
+     */
+    clearSelfCache (params = {}) {
+        return request({
+            url: 'system/user/clearSelfCache',
+            method: 'post',
+            data: params
+        })
+    },
 }

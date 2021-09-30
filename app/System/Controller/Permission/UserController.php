@@ -18,6 +18,7 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
+use Mine\Helper\LoginUser;
 use Mine\MineCollection;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -239,5 +240,15 @@ class UserController extends MineController
     public function downloadTemplate(): ResponseInterface
     {
         return (new MineCollection)->export(\App\System\Dto\UserDto::class, '模板下载', []);
+    }
+
+    /**
+     * 清除自己缓存
+     * @PostMapping("clearSelfCache")
+     * @return ResponseInterface
+     */
+    public function clearSelfCache(): ResponseInterface
+    {
+        return $this->success($this->service->clearCache((new LoginUser())->getId()));
     }
 }

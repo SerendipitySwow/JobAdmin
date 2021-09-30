@@ -403,6 +403,7 @@ class SystemUserService extends AbstractService
     {
         $redis = $this->container->get(Redis::class);
         $prefix = config('cache.default.prefix');
+        echo "{$prefix}loginInfo:userId_{$id}";
         return $redis->del("{$prefix}loginInfo:userId_{$id}") > 0;
     }
 
