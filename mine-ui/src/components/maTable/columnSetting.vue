@@ -1,5 +1,5 @@
 <template>
-	<div v-if="usercolumn.length>0" class="setting-column">
+	<div v-if="usercolumn.length>0" class="setting-column" v-loading="isSave">
 		<div class="setting-column__title">
 			<span class="move_b"></span>
 			<span class="show_b">显示</span>
@@ -8,7 +8,7 @@
 			<span class="sortable_b">排序</span>
 			<span class="fixed_b">固定</span>
 		</div>
-		<div class="setting-column__list" ref="list" v-loading="isSave">
+		<div class="setting-column__list" ref="list">
 			<ul>
 				<li v-for="item in usercolumn" :key="item.prop">
 					<span class="move_b">
@@ -32,7 +32,7 @@
 		</div>
 		<div class="setting-column__bottom">
 			<el-button @click="backDefaul" :disabled="isSave">重置</el-button>
-			<el-button @click="save" :loading="isSave" type="primary">保存</el-button>
+			<el-button @click="save" type="primary">保存</el-button>
 		</div>
 	</div>
 	<el-empty v-else description="暂无可配置的列" :image-size="80"></el-empty>
@@ -63,7 +63,7 @@
 			}
 		},
 		mounted() {
-			this.usercolumn.length > 0 && this.rowDrop()
+			this.usercolumn.length>0 && this.rowDrop()
 		},
 		methods: {
 			rowDrop(){
@@ -81,7 +81,7 @@
 				})
 			},
 			backDefaul(){
-				this.usercolumn = JSON.parse(JSON.stringify(this.column||[]))
+				this.$emit('back', this.usercolumn)
 			},
 			save(){
 				this.$emit('save', this.usercolumn)
@@ -91,6 +91,7 @@
 </script>
 
 <style scoped>
+	.setting-column {}
 
 	.setting-column__title {border-bottom: 1px solid #EBEEF5;padding-bottom:15px;}
 	.setting-column__title span {display: inline-block;font-weight: bold;color: #909399;font-size: 12px;}

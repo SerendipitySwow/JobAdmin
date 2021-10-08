@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css'
 import tool from '@/utils/tool';
 import store from '@/store/index'
 import systemRouter from './systemRouter';
+import {beforeEach, afterEach} from './scrollBehavior';
 
 //系统路由
 const routes = systemRouter
@@ -17,7 +18,7 @@ const defaultRoutePath = '/dashboard'
 const routes_404 = {
 	path: "/:pathMatch(.*)*",
 	hidden: true,
-	component: () => import('@/views/other/404'),
+	component: () => import(/* webpackChunkName: "404" */ '@/views/other/404'),
 }
 
 const router = createRouter({
@@ -74,7 +75,8 @@ router.beforeEach(async (to, from, next) => {
 	}
 });
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
+	afterEach(to, from)
 	NProgress.done()
 });
 
@@ -121,7 +123,7 @@ function filterAsyncRouter(routerMap) {
 
 function loadComponent(component){
 	if(component){
-		return () => import(`@/views/${component}`)
+		return () => import(/* webpackChunkName: "[request]" */ `@/views/${component}`)
 	}else{
 		return () => import(`@/views/other/empty`)
 	}

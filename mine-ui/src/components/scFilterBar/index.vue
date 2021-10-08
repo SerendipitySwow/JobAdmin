@@ -204,6 +204,25 @@
 			},
 			//选择常用过滤
 			selectMyfilter(item){
+				//常用过滤回显当前过滤项
+				this.filter = []
+				this.fields.forEach((field) => {
+					var filterValue = item.filterObj[field.value]
+					if(filterValue){
+						var operator = filterValue.split("|")[1]
+						var value = filterValue.split("|")[0]
+						if(field.type=='select' && field.extend.multiple){
+							value = value.split(",")
+						}else if(field.type=='daterange'){
+							value = value.split(",")
+						}
+						this.filter.push({
+							field: field,
+							operator: operator,
+							value:  value
+						})
+					}
+				})
 				this.filterObjLength = Object.keys(item.filterObj).length
 				this.$emit('filterChange',item.filterObj)
 				this.drawer = false
@@ -272,14 +291,14 @@
 	.sc-filter-main table td .del {background: #fff;color: #999;width: 32px;height: 32px;line-height: 32px;text-align: center;border-radius:50%;font-size: 12px;cursor: pointer;}
 	.sc-filter-main table td .del:hover {background: #F56C6C;color: #fff;}
 
-
-
-	.root {
-		display: flex;
-		height: 100%;
-		flex-direction: column
-	}
+	.root {display: flex;height: 100%;flex-direction: column}
 	.root:deep(.el-tabs__header) {margin: 0;}
 	.root:deep(.el-tabs__content) {flex: 1;background: #f6f8f9;}
 	.root:deep(.el-tabs__content) .el-tab-pane{overflow: auto;height:100%;}
+
+	[data-theme='dark'] .root:deep(.el-tabs__content) {background: none;}
+	[data-theme='dark'] .sc-filter-main {background: none;border-color:var(--el-border-color-base);}
+	[data-theme='dark'] .sc-filter-main table td .del {background: none;}
+	[data-theme='dark'] .sc-filter-main table td .del:hover {background: #F56C6C;}
+	[data-theme='dark'] .nodata {border-color:var(--el-border-color-base);}
 </style>

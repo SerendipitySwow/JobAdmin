@@ -1,7 +1,7 @@
 import ElementPlus from 'element-plus'
-import locale from 'element-plus/lib/locale/lang/zh-cn'
-import 'element-plus/lib/theme-chalk/index.css'
-import 'element-plus/lib/theme-chalk/display.css'
+import i18n from './locales'
+import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/display.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import config from "./config"
@@ -21,8 +21,12 @@ import scUploadMultiple from './components/scUpload/multiple'
 import scFormTable from './components/scFormTable'
 import scTableSelect from './components/scTableSelect'
 import scPageHeader from './components/scPageHeader'
+import scSelect from './components/scSelect'
+import scDialog from './components/scDialog'
 import auth from './directives/auth'
 import role from './directives/role'
+import time from './directives/time'
+import copy from './directives/copy'
 
 const app = createApp(App)
 
@@ -38,7 +42,8 @@ app.config.globalProperties.getDict = api.dataDict.getDict
 
 app.use(store)
 app.use(router)
-app.use(ElementPlus, {size: 'small', locale: locale})
+app.use(ElementPlus, {size: 'small'})
+app.use(i18n)
 
 //注册全局组件
 app.component('maTable', maTable)
@@ -54,6 +59,8 @@ app.component('scPageHeader', scPageHeader)
 //注册全局指令
 app.directive('auth', auth)
 app.directive('role', role)
+app.directive('time', time)
+app.directive('copy', copy)
 
 //全局代码错误捕捉
 app.config.errorHandler = errorHandler

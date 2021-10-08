@@ -27,15 +27,21 @@ const DEFAULT_CONFIG = {
 	//是否开启多标签
 	LAYOUT_TAGS: true,
 
+	//语言
+	LANG: 'zh-cn',
+
+	//主题颜色
+	COLOR: '',
+
 	//控制台首页默认布局
 	DEFAULT_GRID: {
 		//默认分栏数量和宽度 例如 [24] [18,6] [8,8,8] [6,12,6]
-		layout: [18, 6],
+		layout: [12, 6, 6],
 		//小组件分布，com取值:views/home/components 文件名
 		copmsList: [
-			[{ title: "实时收入", com: 'C1' },{ title: "周收入对比", com: 'C3' }],
-			[{ title: "版本更新", com: 'C2' }],
-			[]
+			['welcome'],
+			['about', 'ver'],
+			['time', 'progress']
 		]
 	}
 }

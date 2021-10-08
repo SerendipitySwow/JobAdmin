@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<ul class="myMods">
-			<li v-for="mod in myMods" :key="mod.path" :style="{background:mod.meta.color||'#409EFF'}">
+			<li v-for="mod in myMods" :key="mod.path" :style="{background:mod.meta.color||'#909399'}">
 				<a v-if="mod.meta.type=='link'" :href="mod.path" target="_blank">
 					<i :class="mod.meta.icon||'el-icon-menu'"></i>
 					<p>{{ mod.meta.title }}</p>
@@ -26,7 +26,7 @@
 							<h4>我的常用 ( {{myMods.length}} )</h4>
 							<draggable tag="ul" v-model="myMods" animation="200" item-key="path" group="people">
 								<template #item="{ element }">
-									<li :style="{background:element.meta.color||'#409EFF'}">
+									<li :style="{background:element.meta.color||'#909399'}">
 										<i :class="element.meta.icon||'el-icon-menu'"></i>
 										<p>{{element.meta.title}}</p>
 									</li>
@@ -122,7 +122,7 @@
 	.myMods li i {font-size: 26px;color: #fff;}
 	.myMods li p {font-size: 12px;color: #fff;margin-top: 10px;width: 100%;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;}
 
-	.modItem-add {background: #fff;border: 1px dashed #ddd;cursor: pointer;}
+	.modItem-add {border: 1px dashed #ddd;cursor: pointer;}
 	.modItem-add i {font-size: 30px;color: #999!important;}
 	.modItem-add:hover,.modItem-add:hover i {border-color: #409EFF;color: #409EFF!important;}
 

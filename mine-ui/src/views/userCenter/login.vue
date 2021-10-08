@@ -140,7 +140,7 @@
 	}
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 	.container {
 		position: absolute; z-index:2;
 		width: 100%; height: 100%;

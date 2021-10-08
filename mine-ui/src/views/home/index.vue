@@ -9,20 +9,20 @@
 			</el-card>
 		</el-main>
 	</div>
-	<stats v-if="dashboard === 'statistics' " @on-mounted="onMounted"></stats>
+	<widgets v-if="dashboard === 'statistics' " @on-mounted="onMounted"></widgets>
 	<work v-else @on-mounted="onMounted"></work>
 </template>
 
 <script>
 	import { defineAsyncComponent } from 'vue';
-	const stats = defineAsyncComponent(() => import('./stats'));
 	const work = defineAsyncComponent(() => import('./work'));
+	const widgets = defineAsyncComponent(() => import('./widgets'));
 
 	export default {
 		name: "dashboard",
 		components: {
-			stats,
-			work
+			work,
+			widgets
 		},
 		data(){
 			return {

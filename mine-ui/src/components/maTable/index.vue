@@ -51,11 +51,11 @@
 					<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
 				</el-tooltip>
 
-				<el-popover placement="top" title="显示列设置" :width="500" trigger="click">
+				<el-popover v-if="column" placement="top" title="显示列设置" :width="500" trigger="click" @show="customColumnShow=true" @after-leave="customColumnShow=false">
 					<template #reference>
 						<el-button icon="el-icon-setting" circle style="margin-left:15px"></el-button>
 					</template>
-					<columnSetting ref="columnSetting" @userChange="columnSettingChange" @save="columnSettingSave" :column="column"></columnSetting>
+					<columnSetting v-if="customColumnShow" ref="columnSetting" @userChange="columnSettingChange" @save="columnSettingSave" @back="columnSettingBack" :column="userColumn"></columnSetting>
 				</el-popover>
 			</div>
 		</div>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-	import config from "@/config/table";
+	import config from "@/config/ma-table";
 	import columnSetting from './columnSetting'
 
 	export default {
@@ -113,7 +113,8 @@
 				loading: false,
 				tableHeight:'100%',
 				tableParams: this.params,
-				userColumn: this.column,
+				userColumn: [],
+				customColumnShow: false,
 				isRecycle: false
 			}
 		},
@@ -123,6 +124,12 @@
 			})
 		},
 		mounted() {
+			//判断是否开启自定义列
+			if(this.column){
+				this.getCustomColumn()
+			}else{
+				this.userColumn = this.column
+			}
 			if(this.api){
 				this.getData();
 			}else if(this.data){
@@ -143,6 +150,11 @@
 			//更新表格高度
 			upTableHeight(){
 				this.tableHeight = (this.$refs.scTableMain.offsetHeight - 50 ) + "px"
+			},
+			//获取列
+			async getCustomColumn(){
+				const userColumn = await config.columnSettingGet(this.tableName, this.column)
+				this.userColumn = userColumn
 			},
 			//获取数据
 			async getData(){
@@ -196,7 +208,7 @@
 				this.$refs.scTable.$el.querySelector('.el-table__body-wrapper').scrollTop = 0
 			},
 			//分页点击
-			reload(){
+			paginationChange(){
 				this.getData();
 			},
 			//刷新数据
@@ -204,10 +216,20 @@
 				this.$refs.scTable.clearSelection();
 				this.getData();
 			},
-			//更新数据
-			upData(params){
-				this.currentPage = 1;
+			//更新数据 合并上一次params
+			upData(params, page = 1){
+				this.currentPage = page;
+				this.$refs.scTable.clearSelection();
 				Object.assign(this.tableParams, params || {})
+				this.getData()
+			},
+			//重载数据 替换params
+			reload(params, page=1){
+				this.currentPage = page;
+				this.tableParams = params || {}
+				this.$refs.scTable.clearSelection();
+				this.$refs.scTable.clearSort()
+				this.$refs.scTable.clearFilter()
 				this.getData()
 			},
 			//自定义变化事件
@@ -216,8 +238,29 @@
 				this.toggleIndex += 1;
 			},
 			//自定义列保存
-			columnSettingSave(userColumn){
-				config.columnSettingSave(this.tableName, userColumn, this.$refs.columnSetting)
+			async columnSettingSave(userColumn){
+				this.$refs.columnSetting.isSave = true
+				try {
+					await config.columnSettingSave(this.tableName, userColumn)
+				}catch(error){
+					this.$message.error('保存失败')
+					this.$refs.columnSetting.isSave = false
+				}
+				this.$message.success('保存成功')
+				this.$refs.columnSetting.isSave = false
+			},
+			//自定义列重置
+			async columnSettingBack(){
+				this.$refs.columnSetting.isSave = true
+				try {
+					const column = await config.columnSettingReset(this.tableName, this.column)
+					this.userColumn = column
+					this.$refs.columnSetting.usercolumn = JSON.parse(JSON.stringify(this.userColumn||[]))
+				}catch(error){
+					this.$message.error('重置失败')
+					this.$refs.columnSetting.isSave = false
+				}
+				this.$refs.columnSetting.isSave = false
 			},
 			//排序事件
 			sortChange(obj){
@@ -248,15 +291,33 @@
 				})
 				this.upData(filters)
 			},
-			//转发原装方法&事件
-			selectionChange(selection){
-				this.$emit('selection-change', selection)
+			//原生方法转发
+			clearSelection(){
+				this.$refs.scTable.clearSelection()
 			},
-			currentChange(selection){
-				this.$emit('current-change', selection)
+			toggleRowSelection(row, selected){
+				this.$refs.scTable.toggleRowSelection(row, selected)
 			},
-			rowClick(row, column, event){
-				this.$emit('row-click', row, column, event)
+			toggleAllSelection(){
+				this.$refs.scTable.toggleAllSelection()
+			},
+			toggleRowExpansion(row, expanded){
+				this.$refs.scTable.toggleRowExpansion(row, expanded)
+			},
+			setCurrentRow(row){
+				this.$refs.scTable.setCurrentRow(row)
+			},
+			clearSort(){
+				this.$refs.scTable.clearSort()
+			},
+			clearFilter(columnKey){
+				this.$refs.scTable.clearFilter(columnKey)
+			},
+			doLayout(){
+				this.$refs.scTable.doLayout()
+			},
+			sort(prop, order){
+				this.$refs.scTable.sort(prop, order)
 			},
 
 			// 切换数据方法

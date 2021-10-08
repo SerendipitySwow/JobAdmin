@@ -16,7 +16,7 @@
             </template>
             <el-row :gutter="15">
               <el-col :md="16" :xs="24">
-                <div class="el-table el-table--enable-row-hover el-table--medium">
+                <div class="table">
                   <table cellspacing="0" style="width: 100%;">
                     <tbody>
                       <tr>
@@ -59,7 +59,7 @@
             </template>
             <el-row :gutter="15">
               <el-col :md="16" :xs="24">
-                <div class="el-table el-table--enable-row-hover el-table--medium">
+                <div class="table">
                   <table cellspacing="0" style="width: 100%;">
                     <tbody>
                       <tr>
@@ -100,7 +100,7 @@
             <template #header>
               <span>PHP及环境信息</span>
             </template>
-            <div class="el-table el-table--enable-row-hover el-table--medium">
+            <div class="table">
               <table cellspacing="0" style="width: 100%;">
                 <tbody>
                   <tr>
@@ -154,7 +154,7 @@
             <template #header>
               <span>网络I/O数据</span>
             </template>
-            <div class="el-table el-table--enable-row-hover el-table--medium">
+            <div class="table">
               <table cellspacing="0" style="width: 100%;">
                 <tbody>
                   <tr>
@@ -244,5 +244,19 @@ export default {
 }
 :deep(.el-progress__text span) {
   font-size: 32px;
+}
+.table tbody tr {
+  font-size: 14px;
+  color: #606266;
+
+}
+.table tbody td {
+  box-sizing:border-box;
+  text-overflow:ellipsis;
+  text-align:left;
+  vertical-align:middle;
+  position:relative;
+  border-bottom: 1px solid #ebeef5;
+  padding: 10px 0;
 }
 </style>

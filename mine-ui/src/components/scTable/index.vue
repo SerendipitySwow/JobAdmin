@@ -1,7 +1,7 @@
 <template>
 	<div class="scTable" ref="scTableMain" v-loading="loading">
 		<div class="scTable-table">
-			<el-table :data="tableData" :row-key="rowKey" :key="toggleIndex" ref="scTable" :height="tableHeight" :stripe="stripe" :highlight-current-row="highlightCurrentRow"  @selection-change="selectionChange" @current-change="currentChange" @row-click="rowClick" @sort-change="sortChange" @filter-change="filterChange">
+			<el-table v-bind="$attrs" :data="tableData" :row-key="rowKey" :key="toggleIndex" ref="scTable" :height="tableHeight" @sort-change="sortChange" @filter-change="filterChange">
 				<slot></slot>
 				<template v-for="(item, index) in userColumn" :key="index">
 					<el-table-column v-if="!item.hide" :column-key="item.prop" :label="item.label" :prop="item.prop" :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :filters="item.filters" :filter-method="remoteFilter||!item.filters?null:filterHandler">
@@ -20,15 +20,15 @@
 		</div>
 		<div class="scTable-page">
 			<div class="scTable-pagination">
-				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="reload"></el-pagination>
+				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="paginationChange"></el-pagination>
 			</div>
 			<div class="scTable-do" v-if="!hideDo">
 				<el-button @click="refresh" icon="el-icon-refresh" circle style="margin-left:15px"></el-button>
-				<el-popover placement="top" title="列设置" :width="500" trigger="click">
+				<el-popover v-if="column" placement="top" title="列设置" :width="500" trigger="click" @show="customColumnShow=true" @after-leave="customColumnShow=false">
 					<template #reference>
 						<el-button icon="el-icon-setting" circle style="margin-left:15px"></el-button>
 					</template>
-					<columnSetting ref="columnSetting" @userChange="columnSettingChange" @save="columnSettingSave" :column="column"></columnSetting>
+					<columnSetting v-if="customColumnShow" ref="columnSetting" @userChange="columnSettingChange" @save="columnSettingSave" @back="columnSettingBack" :column="userColumn"></columnSetting>
 				</el-popover>
 			</div>
 		</div>
@@ -55,8 +55,6 @@
 			remoteFilter: { type: Boolean, default: false },
 			hidePagination: { type: Boolean, default: false },
 			hideDo: { type: Boolean, default: false },
-			stripe: { type: Boolean, default: false },
-			highlightCurrentRow: { type: Boolean, default: false },
 			paginationLayout: { type: String, default: "total, prev, pager, next, jumper" },
 		},
 		watch: {
@@ -83,7 +81,8 @@
 				loading: false,
 				tableHeight:'100%',
 				tableParams: this.params,
-				userColumn: this.column
+				userColumn: [],
+				customColumnShow: false
 			}
 		},
 		created() {
@@ -92,12 +91,26 @@
 			})
 		},
 		mounted() {
+			//判断是否开启自定义列
+			if(this.column){
+				this.getCustomColumn()
+			}else{
+				this.userColumn = this.column
+			}
+			//判断是否静态数据
 			if(this.apiObj){
 				this.getData();
 			}else if(this.data){
 				this.tableData = this.data;
 				this.total = this.tableData.length
 			}
+			this.$nextTick(() => {
+				this.upTableHeight()
+			})
+			window.addEventListener("resize", this.upTableHeight, true)
+		},
+		unmounted(){
+			window.removeEventListener("resize", this.upTableHeight, true)
 		},
 		activated(){
 			this.$nextTick(() => {
@@ -113,6 +126,11 @@
 			upTableHeight(){
 				this.tableHeight = (this.$refs.scTableMain.offsetHeight - 50 ) + "px"
 			},
+			//获取列
+			async getCustomColumn(){
+				const userColumn = await config.columnSettingGet(this.tableName, this.column)
+				this.userColumn = userColumn
+			},
 			//获取数据
 			async getData(){
 				this.loading = true;
@@ -122,7 +140,12 @@
 					[config.request.prop]: this.prop,
 					[config.request.order]: this.order
 				}
+				if(this.hidePagination){
+					delete reqData[config.request.page]
+					delete reqData[config.request.pageSize]
+				}
 				Object.assign(reqData, this.tableParams)
+
 				try {
 					var res = await this.apiObj.get(reqData);
 				}catch(error){
@@ -130,20 +153,30 @@
 					this.emptyText = error.statusText;
 					return false;
 				}
-				var response = config.parseData(res);
+				try {
+					var response = config.parseData(res);
+				}catch(error){
+					this.loading = false;
+					this.emptyText = "数据格式错误";
+					return false;
+				}
 				if(response.code != 200){
 					this.loading = false;
 					this.emptyText = response.msg;
 				}else{
 					this.emptyText = "暂无数据";
-					this.tableData = response.rows;
-					this.total = response.total;
+					if(this.hidePagination){
+						this.tableData = response.data || [];
+					}else{
+						this.tableData = response.rows || [];
+					}
+					this.total = response.total || 0;
 					this.loading = false;
 				}
 				this.$refs.scTable.$el.querySelector('.el-table__body-wrapper').scrollTop = 0
 			},
 			//分页点击
-			reload(){
+			paginationChange(){
 				this.getData();
 			},
 			//刷新数据
@@ -151,10 +184,20 @@
 				this.$refs.scTable.clearSelection();
 				this.getData();
 			},
-			//更新数据
-			upData(params){
-				this.currentPage = 1;
+			//更新数据 合并上一次params
+			upData(params, page=1){
+				this.currentPage = page;
+				this.$refs.scTable.clearSelection();
 				Object.assign(this.tableParams, params || {})
+				this.getData()
+			},
+			//重载数据 替换params
+			reload(params, page=1){
+				this.currentPage = page;
+				this.tableParams = params || {}
+				this.$refs.scTable.clearSelection();
+				this.$refs.scTable.clearSort()
+				this.$refs.scTable.clearFilter()
 				this.getData()
 			},
 			//自定义变化事件
@@ -163,8 +206,29 @@
 				this.toggleIndex += 1;
 			},
 			//自定义列保存
-			columnSettingSave(userColumn){
-				config.columnSettingSave(this.tableName, userColumn, this.$refs.columnSetting)
+			async columnSettingSave(userColumn){
+				this.$refs.columnSetting.isSave = true
+				try {
+					await config.columnSettingSave(this.tableName, userColumn)
+				}catch(error){
+					this.$message.error('保存失败')
+					this.$refs.columnSetting.isSave = false
+				}
+				this.$message.success('保存成功')
+				this.$refs.columnSetting.isSave = false
+			},
+			//自定义列重置
+			async columnSettingBack(){
+				this.$refs.columnSetting.isSave = true
+				try {
+					const column = await config.columnSettingReset(this.tableName, this.column)
+					this.userColumn = column
+					this.$refs.columnSetting.usercolumn = JSON.parse(JSON.stringify(this.userColumn||[]))
+				}catch(error){
+					this.$message.error('重置失败')
+					this.$refs.columnSetting.isSave = false
+				}
+				this.$refs.columnSetting.isSave = false
 			},
 			//排序事件
 			sortChange(obj){
@@ -195,15 +259,33 @@
 				})
 				this.upData(filters)
 			},
-			//转发原装方法&事件
-			selectionChange(selection){
-				this.$emit('selection-change', selection)
+			//原生方法转发
+			clearSelection(){
+				this.$refs.scTable.clearSelection()
 			},
-			currentChange(selection){
-				this.$emit('current-change', selection)
+			toggleRowSelection(row, selected){
+				this.$refs.scTable.toggleRowSelection(row, selected)
 			},
-			rowClick(row, column, event){
-				this.$emit('row-click', row, column, event)
+			toggleAllSelection(){
+				this.$refs.scTable.toggleAllSelection()
+			},
+			toggleRowExpansion(row, expanded){
+				this.$refs.scTable.toggleRowExpansion(row, expanded)
+			},
+			setCurrentRow(row){
+				this.$refs.scTable.setCurrentRow(row)
+			},
+			clearSort(){
+				this.$refs.scTable.clearSort()
+			},
+			clearFilter(columnKey){
+				this.$refs.scTable.clearFilter(columnKey)
+			},
+			doLayout(){
+				this.$refs.scTable.doLayout()
+			},
+			sort(prop, order){
+				this.$refs.scTable.sort(prop, order)
 			}
 		}
 	}
