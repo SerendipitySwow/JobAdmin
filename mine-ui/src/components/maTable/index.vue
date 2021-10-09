@@ -33,7 +33,7 @@
 		</div>
 		<div class="scTable-page">
 			<div class="scTable-pagination">
-				<el-pagination v-if="!hidePagination" background :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="reload"></el-pagination>
+				<el-pagination v-if="!hidePagination" background :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="paginationChange"></el-pagination>
 			</div>
 			<div class="scTable-do" v-if="!hideDo">
 
@@ -348,23 +348,4 @@
 		margin-top: 10px;
 	}
 
-	:deep(.el-table__header > thead tr){
-		background-color: #f8fafe!important; color: #5a657c;
-	}
-
-	:deep(.el-table tr), :deep(.el-table th) {
-		background: none;
-	}
-
-	:deep(.el-table__header > thead th:last-child) {
-		background-color: #f8fafe!important; color: #5a657c;
-	}
-
-	:deep(.el-table__fixed-body-wrapper) {
-		background:#fff;
-	}
-
-	:deep(.el-table th.is-sortable:hover) {
-		background-color: #eceff7;
-	}
 </style>
