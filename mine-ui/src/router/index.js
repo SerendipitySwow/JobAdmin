@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHistory, createWebHashHistory} from 'vue-router';
 import { ElMessage } from 'element-plus';
 import config from "@/config"
 import NProgress from 'nprogress'
@@ -22,7 +22,7 @@ const routes_404 = {
 }
 
 const router = createRouter({
-	history: createWebHistory(),
+	history: createWebHashHistory(),	// createWebHistory 暂时不可用，多层次路由地址有bug。
 	routes: routes
 })
 
