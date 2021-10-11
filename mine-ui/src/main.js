@@ -14,6 +14,7 @@ import hasRole from './utils/role'
 import errorHandler from './utils/errorHandler'
 import maTable from './components/maTable'          // 原scTable，进行了系统适配优化，与原版scTable并存
 import maImport from './components/maImport'
+import maResourceSelect from './components/maResourceSelect'
 import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
 import scUpload from './components/scUpload'
@@ -48,7 +49,10 @@ app.use(i18n)
 //注册全局组件
 app.component('maTable', maTable)
 app.component('maImport', maImport)
+app.component('maResourceSelect', maResourceSelect)
 app.component('scTable', scTable)
+app.component('scSelect', scSelect)
+app.component('scDialog', scDialog)
 app.component('scFilterBar', scFilterBar)
 app.component('scUpload', scUpload)
 app.component('scUploadMultiple', scUploadMultiple)
