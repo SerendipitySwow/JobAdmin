@@ -37,23 +37,22 @@ trait MapperTrait
         $paginate = $this->listQuerySetting($params)->paginate(
             $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
         );
-        return $this->setPaginate($paginate, ($params['pageSize'] ?? $this->model::PAGE_SIZE));
+        return $this->setPaginate($paginate);
     }
 
     /**
      * 设置数据库分页
      * @param LengthAwarePaginatorInterface $paginate
-     * @param int $pageSize
      * @return array
      */
-    public function setPaginate(LengthAwarePaginatorInterface $paginate, int $pageSize): array
+    public function setPaginate(LengthAwarePaginatorInterface $paginate): array
     {
         return [
             'items' => $paginate->items(),
             'pageInfo' => [
                 'total' => $paginate->total(),
                 'currentPage' => $paginate->currentPage(),
-                'totalPage' => ceil($paginate->total() / $pageSize)
+                'totalPage' => $paginate->lastPage()
             ]
         ];
     }
