@@ -291,7 +291,16 @@
 				})
 				this.upData(filters)
 			},
-			//原生方法转发
+			//转发原装方法&事件
+			selectionChange(selection){
+				this.$emit('selection-change', selection)
+			},
+			currentChange(selection){
+				this.$emit('current-change', selection)
+			},
+			rowClick(row, column, event){
+				this.$emit('row-click', row, column, event)
+			},
 			clearSelection(){
 				this.$refs.scTable.clearSelection()
 			},
