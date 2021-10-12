@@ -265,6 +265,7 @@
           recycleList: this.$API.dataDict.getRecyclePageList,
         },
         dataQueryParams: {},
+        currentTypeCode: '',
         selection: []
       }
     },
@@ -351,6 +352,7 @@
       //字典类型点击事件
       dicClick(data){
         this.$refs.table.upData({ code: data.code })
+        this.currentTypeCode = data.code
       },
 
       //删除字典类型
@@ -523,7 +525,7 @@
 
       //本地更新数据
       handleDataSuccess(){
-        this.$refs.table.upData(this.dataQueryParams)
+        this.dicClick({code: this.currentTypeCode})
       },
 
       // 清空缓存
