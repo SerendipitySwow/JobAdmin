@@ -1,200 +1,224 @@
 <template>
   <el-container>
-    <el-header>
-      <div class="left-panel">
+    <el-aside width="220px" v-loading="showDeptloading">
+      <el-container>
+        <el-header>
+          <el-input placeholder="输入关键字进行过滤" v-model="deptFilterText" clearable></el-input>
+        </el-header>
+        <el-main class="nopadding">
+          <el-tree
+            ref="dept"
+            class="menu"
+            node-key="id"
+            lazy
+            :data="dirs"
+            :current-node-key="''"
+            :highlight-current="true"
+            :expand-on-click-node="false"
+            :filter-node-method="dirFilterNode"
+            @node-click="dirClick"
+          ></el-tree>
+        </el-main>
+      </el-container>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <div class="left-panel">
 
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          v-auth="['system:post:delete']"
-          :disabled="selection.length==0"
-          @click="batchDel"
-        >删除附件</el-button>
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            v-auth="['system:post:delete']"
+            :disabled="selection.length==0"
+            @click="batchDel"
+          >删除附件</el-button>
 
-      </div>
-      <div class="right-panel">
-        <div class="right-panel-search">
-          <el-input v-model="queryParams.origin_name" clearable placeholder="请输入原文件名"></el-input>
+          <ma-resource-select />
 
-          <el-tooltip class="item" effect="dark" content="搜索" placement="top">
-            <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
-          </el-tooltip>
-
-          <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
-            <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
-          </el-tooltip>
-
-          <el-popover placement="bottom-end" :width="450" trigger="click" >
-            <template #reference>
-              <el-button type="text" @click="povpoerShow = ! povpoerShow">
-                更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-            </template>
-            <el-form label-width="80px">
-
-              <el-form-item label="存储模式" prop="status">
-                <el-select v-model="queryParams.storage_mode" clearable placeholder="请选择存储模式">
-                  <el-option :label="item.label" :value="item.value" v-for="(item, index) in storageMode" :key="index">{{item.label}}</el-option>
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="创建时间">
-                <el-date-picker
-                  clearable
-                  v-model="dateRange"
-                  type="daterange"
-                  range-separator="至"
-                  @change="handleDateChange"
-                  value-format="YYYY-MM-DD"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                ></el-date-picker>
-              </el-form-item>
-
-            </el-form>
-          </el-popover>
         </div>
-      </div>
-    </el-header>
-    <el-main class="nopadding">
-      <maTable
-        ref="table"
-        :api="api"
-        :column="column"
-        :showRecycle="true"
-        @selection-change="selectionChange"
-        @switch-data="switchData"
-        stripe
-        remoteSort
-        remoteFilter
+        <div class="right-panel">
+          <div class="right-panel-search">
+            <el-input v-model="queryParams.origin_name" clearable placeholder="请输入原文件名"></el-input>
+
+            <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+              <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+              <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
+            </el-tooltip>
+
+            <el-popover placement="bottom-end" :width="450" trigger="click" >
+              <template #reference>
+                <el-button type="text" @click="povpoerShow = ! povpoerShow">
+                  更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+              </template>
+              <el-form label-width="80px">
+
+                <el-form-item label="存储模式" prop="status">
+                  <el-select v-model="queryParams.storage_mode" clearable placeholder="请选择存储模式">
+                    <el-option :label="item.label" :value="item.value" v-for="(item, index) in storageMode" :key="index">{{item.label}}</el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="创建时间">
+                  <el-date-picker
+                    clearable
+                    v-model="dateRange"
+                    type="daterange"
+                    range-separator="至"
+                    @change="handleDateChange"
+                    value-format="YYYY-MM-DD"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                  ></el-date-picker>
+                </el-form-item>
+
+              </el-form>
+            </el-popover>
+          </div>
+        </div>
+      </el-header>
+      <el-main class="nopadding">
+        <maTable
+          ref="table"
+          :api="api"
+          :column="column"
+          :showRecycle="true"
+          @selection-change="selectionChange"
+          @switch-data="switchData"
+          stripe
+          remoteSort
+          remoteFilter
+        >
+          <el-table-column type="selection" width="50"></el-table-column>
+          
+          <el-table-column
+            label="原文件名"
+            prop="origin_name"
+            width="160"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column
+            label="新文件名"
+            prop="object_name"
+            width="160"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column prop="storage_mode" label="存储模式">
+            <template #default="scope">
+              {{ getLable(scope.row.storage_mode) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="资源类型"
+            prop="mime_type"
+            width="140"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column
+            label="存储目录"
+            prop="storage_path"
+            width="140"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column
+            label="扩展名"
+            prop="suffix"
+            width="80"
+          ></el-table-column>
+
+          <el-table-column
+            label="字节数"
+            prop="size_byte"
+            sortable='custom'
+            width="100"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column
+            label="文件大小"
+            prop="size_info"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+
+          <el-table-column
+            label="创建时间"
+            prop="created_at"
+            width="160"
+            sortable='custom'
+          ></el-table-column>
+
+          <!-- 正常数据操作按钮 -->
+          <el-table-column label="操作" fixed="right" align="right" v-if="!isRecycle">
+            <template #default="scope">
+
+              <el-button
+                type="text"
+                size="small"
+                @click="review(scope.row)"
+                v-auth="['system:post:update']"
+              >预览</el-button>
+
+              <el-button
+                type="text"
+                size="small"
+                @click="deletes(scope.row.id)"
+                v-auth="['system:post:delete']"
+              >删除</el-button>
+              
+            </template>
+          </el-table-column>
+
+          <!-- 回收站操作按钮 -->
+          <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
+            <template #default="scope">
+
+              <el-button
+                type="text"
+                size="small"
+                v-auth="['system:post:recovery']"
+                @click="recovery(scope.row.id)"
+              >恢复</el-button>
+
+              <el-button
+                type="text"
+                size="small"
+                v-auth="['system:post:realDelete']"
+                @click="deletes(scope.row.id)"
+              >删除</el-button>
+
+            </template>
+          </el-table-column>
+
+        </maTable>
+      </el-main>
+
+      <el-dialog
+        title="图片预览"
+        v-model="dialogVisible"
+        destroy-on-close
+        @closed="dialogVisible = false"
+        width="50%"
       >
-        <el-table-column type="selection" width="50"></el-table-column>
-        
-        <el-table-column
-          label="原文件名"
-          prop="origin_name"
-          width="160"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
 
-        <el-table-column
-          label="新文件名"
-          prop="object_name"
-          width="160"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-image :src="record.url" lazy></el-image>
 
-        <el-table-column prop="storage_mode" label="存储模式">
-          <template #default="scope">
-            {{ getLable(scope.row.storage_mode) }}
-          </template>
-        </el-table-column>
+        <template #footer class="dialog-footer">
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </template>
 
-        <el-table-column
-          label="资源类型"
-          prop="mime_type"
-          width="140"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+      </el-dialog>
 
-        <el-table-column
-          label="存储目录"
-          prop="storage_path"
-          width="140"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-
-        <el-table-column
-          label="扩展名"
-          prop="suffix"
-          width="80"
-        ></el-table-column>
-
-        <el-table-column
-          label="字节数"
-          prop="size_byte"
-          sortable='custom'
-          width="100"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-
-        <el-table-column
-          label="文件大小"
-          prop="size_info"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-
-        <el-table-column
-          label="创建时间"
-          prop="created_at"
-          width="160"
-          sortable='custom'
-        ></el-table-column>
-
-        <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" v-if="!isRecycle">
-          <template #default="scope">
-
-            <el-button
-              type="text"
-              size="small"
-              @click="review(scope.row)"
-              v-auth="['system:post:update']"
-            >预览</el-button>
-
-            <el-button
-              type="text"
-              size="small"
-              @click="deletes(scope.row.id)"
-              v-auth="['system:post:delete']"
-            >删除</el-button>
-            
-          </template>
-        </el-table-column>
-
-        <!-- 回收站操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
-          <template #default="scope">
-
-            <el-button
-              type="text"
-              size="small"
-              v-auth="['system:post:recovery']"
-              @click="recovery(scope.row.id)"
-            >恢复</el-button>
-
-            <el-button
-              type="text"
-              size="small"
-              v-auth="['system:post:realDelete']"
-              @click="deletes(scope.row.id)"
-            >删除</el-button>
-
-          </template>
-        </el-table-column>
-
-      </maTable>
-    </el-main>
-
-    <el-dialog
-      title="图片预览"
-      v-model="dialogVisible"
-      destroy-on-close
-      @closed="dialogVisible = false"
-      width="50%"
-    >
-
-      <el-image :src="record.url" lazy></el-image>
-
-      <template #footer class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </template>
-
-    </el-dialog>
-
+    </el-container>
   </el-container>
-
 </template>
 
 <script>
@@ -231,11 +255,39 @@
         },
         isRecycle: false,
 
+        dirs:[],
+
         // 当前记录
         record: { url: '' }
       }
     },
+    created () {
+      this.loadDirs()
+    },
     methods: {
+
+      async loadDirs (dir = '/') {
+        await this.$API.upload.getDirectory({path: dir}).then(res => {
+          console.log(res)
+        }).catch(err => {
+          this.$message.error('获取目录失败')
+        })
+      },
+
+      //树过滤
+      dirFilterNode(value, data){
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+      //树点击事件
+      dirClick(data){
+        if (this.queryParams.dept_id == data.id) {
+          return
+        }
+        this.queryParams.dept_id = data.id
+        this.$refs.table.upData(this.queryParams)
+      },
+
       //添加
       add(){
         this.dialog.save = true

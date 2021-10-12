@@ -15,7 +15,7 @@ export default {
   },
 
   /**
-   * 获取目录列表
+   * 获取所有文件
    * @returns
    */
   getAllFiles (params = {}) {

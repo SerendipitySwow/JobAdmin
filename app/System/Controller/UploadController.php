@@ -95,7 +95,7 @@ class UploadController extends MineController
     }
 
     /**
-     * 获取当前目录所有文件和目录
+     * 创建上传目录
      * @PostMapping("createUploadDir")
      * @Auth
      */

@@ -25,7 +25,7 @@ use Psr\Http\Message\ResponseInterface;
 class AttachmentController extends MineController
 {
     /**
-     * 字典类型服务
+     * 上传文件服务
      * @Inject
      * @var SystemUploadFileService
      */
