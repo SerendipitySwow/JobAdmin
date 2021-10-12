@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
 	LANG: 'zh-cn',
 
 	//主题颜色
-	COLOR: '',
+	COLOR: '#0960bd',
 
 	//控制台首页默认布局
 	DEFAULT_GRID: {
