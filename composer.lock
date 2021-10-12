@@ -369,16 +369,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "c81f18a3efb941d8c4d2e025f6183b5c6d697307"
+                "reference": "ee0db30118f661fb166bcffbf5d82032df484697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/c81f18a3efb941d8c4d2e025f6183b5c6d697307",
-                "reference": "c81f18a3efb941d8c4d2e025f6183b5c6d697307",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/ee0db30118f661fb166bcffbf5d82032df484697",
+                "reference": "ee0db30118f661fb166bcffbf5d82032df484697",
                 "shasum": ""
             },
             "require": {
@@ -425,7 +425,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/3.1.1"
+                "source": "https://github.com/egulias/EmailValidator/tree/3.1.2"
             },
             "funding": [
                 {
@@ -433,7 +433,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-01T18:37:14+00:00"
+            "time": "2021-10-11T09:18:27+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2505,16 +2505,16 @@
         },
         {
             "name": "hyperf/utils",
-            "version": "v2.2.8",
+            "version": "v2.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/utils.git",
-                "reference": "e0ce2db5e5ca10882d2132a3cc888bd29e2394db"
+                "reference": "70f3e0cea0795c71f2c9c3dac39d25235f395991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/utils/zipball/e0ce2db5e5ca10882d2132a3cc888bd29e2394db",
-                "reference": "e0ce2db5e5ca10882d2132a3cc888bd29e2394db",
+                "url": "https://api.github.com/repos/hyperf/utils/zipball/70f3e0cea0795c71f2c9c3dac39d25235f395991",
+                "reference": "70f3e0cea0795c71f2c9c3dac39d25235f395991",
                 "shasum": ""
             },
             "require": {
@@ -2566,7 +2566,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-09-08T06:55:45+00:00"
+            "time": "2021-10-11T01:51:09+00:00"
         },
         {
             "name": "hyperf/validation",
@@ -6853,16 +6853,16 @@
         },
         {
             "name": "hyperf/testing",
-            "version": "v2.2.0",
+            "version": "v2.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/testing.git",
-                "reference": "43679ae8f3d78b6f386c3f28673e55e774402a62"
+                "reference": "aac907887ba375d0bd8be4dc647e42624e5d8f08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/testing/zipball/43679ae8f3d78b6f386c3f28673e55e774402a62",
-                "reference": "43679ae8f3d78b6f386c3f28673e55e774402a62",
+                "url": "https://api.github.com/repos/hyperf/testing/zipball/aac907887ba375d0bd8be4dc647e42624e5d8f08",
+                "reference": "aac907887ba375d0bd8be4dc647e42624e5d8f08",
                 "shasum": ""
             },
             "require": {
@@ -6899,9 +6899,9 @@
                 "testing"
             ],
             "support": {
-                "source": "https://github.com/hyperf/testing/tree/v2.2.0"
+                "source": "https://github.com/hyperf/testing/tree/v2.2.11"
             },
-            "time": "2021-07-18T06:50:14+00:00"
+            "time": "2021-10-09T01:37:54+00:00"
         },
         {
             "name": "mockery/mockery",

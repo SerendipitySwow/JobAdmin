@@ -122,6 +122,7 @@
 import { union, xor, difference } from 'lodash'
 import dayjs from 'dayjs'
 export default {
+  emits: ['confirmData'],
   props: {
     type: {
       default: 'image',

@@ -1,9 +1,9 @@
 <template>
   <el-container>
-    <el-aside width="220px" v-loading="showDeptloading">
+    <el-aside width="220px" v-loading="showDirloading">
       <el-container>
         <el-header>
-          <el-input placeholder="输入关键字进行过滤" v-model="deptFilterText" clearable></el-input>
+          <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
         </el-header>
         <el-main class="nopadding">
           <el-tree
@@ -234,6 +234,8 @@
         dialogVisible: false,
         column: [],
         povpoerShow: false,
+        showDirloading: false,
+        filterText: '',
         dateRange:'',
         api: {
           list: this.$API.attachment.getPageList,
