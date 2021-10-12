@@ -320,6 +320,6 @@ const mysqlTypes = [
 </script>
 
 <style scoped>
-.page-form { padding: 15px; background: #fff; min-height: 100%}
+.page-form { padding: 15px; min-height: 100%}
 .ma-card, .ma-row {margin-top: 15px;}
 </style>

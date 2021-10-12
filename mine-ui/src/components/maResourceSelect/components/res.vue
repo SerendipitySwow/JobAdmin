@@ -300,7 +300,7 @@ export default {
   z-index: 9;
   overflow: hidden;
 }
-/deep/ .el-checkbox__label {
+:deep(.el-checkbox__label) {
   padding-right: 2px;
   line-height: 16px;
   font-size: 12px;
