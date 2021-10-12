@@ -83,7 +83,7 @@
                   <span v-if="item.type !== 'dir'">存储名称：{{ item.object_name }}<br /></span>
 
                   日期：
-                  <span v-if="item.type === 'dir'">{{ dayjs(item.timestamp * 1000).format('YYYY-M-D HH:mm:ss') }}</span>
+                  <span v-if="item.type === 'dir'">{{ dayjs(item.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss') }}</span>
                   <span v-else>{{ item.created_at }}</span>
                   <br />
 
@@ -264,7 +264,7 @@ export default {
   margin-right: 0;
 }
 .list .icon {
-  height: 70px;
+  height: 92px;
   margin-right: 1px;
   color: rgb(255, 214, 89);
   background: #f5f5f5;
@@ -297,9 +297,11 @@ export default {
   top: -1px;
   left: 2px;
   width: 100px;
-  height: 90px;
+  height: 20px;
   z-index: 9;
   overflow: hidden;
+  color: #fff;
+  text-shadow: 1px 1px 3px #333;
 }
 :deep(.el-checkbox__label) {
   padding-right: 2px;

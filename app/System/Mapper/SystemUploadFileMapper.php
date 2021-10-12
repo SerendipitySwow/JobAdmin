@@ -55,7 +55,7 @@ class SystemUploadFileMapper extends AbstractMapper
             $query->where('origin_name', 'like', '%'.$params['origin_name'].'%');
         }
         if (isset($params['storage_path'])) {
-            $query->where('storage_path', $params['storage_path']);
+            $query->where('storage_path', 'like', $params['storage_path'].'%');
         }
         if (isset($params['mime_type'])) {
             $query->where('mime_type', 'like', '%'.$params['mime_type'].'%');

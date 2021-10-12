@@ -7,10 +7,12 @@
         </el-header>
         <el-main class="nopadding">
           <el-tree
-            ref="dept"
+            ref="dirs"
             class="menu"
-            node-key="id"
+            node-key="name"
+            :props="props"
             lazy
+            :load="loadNode"
             :data="dirs"
             :current-node-key="''"
             :highlight-current="true"
@@ -98,14 +100,14 @@
           <el-table-column
             label="原文件名"
             prop="origin_name"
-            width="160"
+            width="100"
             :show-overflow-tooltip="true"
           ></el-table-column>
 
           <el-table-column
             label="新文件名"
             prop="object_name"
-            width="160"
+            width="100"
             :show-overflow-tooltip="true"
           ></el-table-column>
 
@@ -118,14 +120,14 @@
           <el-table-column
             label="资源类型"
             prop="mime_type"
-            width="140"
+            width="100"
             :show-overflow-tooltip="true"
           ></el-table-column>
 
           <el-table-column
             label="存储目录"
             prop="storage_path"
-            width="140"
+            width="100"
             :show-overflow-tooltip="true"
           ></el-table-column>
 
@@ -152,12 +154,12 @@
           <el-table-column
             label="创建时间"
             prop="created_at"
-            width="160"
+            width="140"
             sortable='custom'
           ></el-table-column>
 
           <!-- 正常数据操作按钮 -->
-          <el-table-column label="操作" fixed="right" align="right" v-if="!isRecycle">
+          <el-table-column label="操作" fixed="right" align="right" width="100" v-if="!isRecycle">
             <template #default="scope">
 
               <el-button
@@ -252,6 +254,7 @@
         queryParams: {
           storage_mode: undefined,
           origin_name: undefined,
+          storage_path: undefined,
           maxDate: undefined,
           minDate: undefined
         },
@@ -260,7 +263,13 @@
         dirs:[],
 
         // 当前记录
-        record: { url: '' }
+        record: { url: '' },
+
+        props: {
+          label: 'name',
+          children: 'children',
+          isLeaf: 'leaf',
+        },
       }
     },
     created () {
@@ -268,25 +277,58 @@
     },
     methods: {
 
+      async loadNode(node, resolve) {
+        if (node.data.name !== undefined) {
+          let data = await this.loadDirs(node.data.name)
+          if (data.length < 1) {
+            this.$message.info('没有子目录')
+            return resolve([])
+          } else {
+            return resolve(data)
+          }
+        }
+      },
+
       async loadDirs (dir = '/') {
-        await this.$API.upload.getDirectory({path: dir}).then(res => {
-          console.log(res)
-        }).catch(err => {
-          this.$message.error('获取目录失败')
-        })
+        let res = await this.$API.upload.getDirectory({path: dir})
+        if (res.data.length < 0) {
+          return []
+        }
+        if (res.success) {
+          if (dir === '/') {
+            this.dirs = res.data.map(item => {
+              return {name: item.basename, leaf: false, children: []}
+            })
+            this.dirs.unshift({name: '所有目录文件', leaf: true, children: []})
+            return []
+          } else {
+            let data = res.data.map(item => {
+              return {name: item.basename, leaf: false, children: []}
+            })
+            return data
+          }
+        } else {
+          this.$message.error('获取目录列表失败')
+          return []
+        }
       },
 
       //树过滤
       dirFilterNode(value, data){
         if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+        return data.name.indexOf(value) !== -1;
       },
       //树点击事件
       dirClick(data){
-        if (this.queryParams.dept_id == data.id) {
+        if (this.queryParams.storage_path == data.name) {
           return
         }
-        this.queryParams.dept_id = data.id
+        if (data.name == '所有目录文件') {
+          this.queryParams.storage_path = undefined
+          this.$refs.table.upData(this.queryParams)
+          return
+        }
+        this.queryParams.storage_path = data.name
         this.$refs.table.upData(this.queryParams)
       },
 
@@ -392,6 +434,7 @@
       resetSearch() {
         this.queryParams = {
           storage_mode: undefined,
+          storage_path: undefined,
           origin_name: undefined,
           maxDate: undefined,
           minDate: undefined
@@ -407,6 +450,11 @@
       //本地更新数据
       handleSuccess(){
         this.$refs.table.upData(this.queryParams)
+      }
+    },
+    watch: {
+      filterText(val) {
+        this.$refs.dirs.filter(val);
       }
     },
   }
