@@ -58,15 +58,16 @@ if (! function_exists('logger')) {
 
 }
 
-if (! function_exists('user')) {
 
+if (! function_exists('user')) {
     /**
-     * 获取日志实例
+     * 获取当前登录用户实例
      * @return LoginUser
      */
     function user(): LoginUser
     {
         return new LoginUser();
     }
-
 }
+
+

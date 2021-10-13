@@ -11,7 +11,7 @@ class MineStart extends ServerStartCallback
 {
     public function beforeStart()
     {
-        $console = ApplicationContext::getContainer()->get(StdoutLoggerInterface::class);
+        $console = console();
         $console->info('MineAdmin start success...');
         $console->info($this->welcome());
     }

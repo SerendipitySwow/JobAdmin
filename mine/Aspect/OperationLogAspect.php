@@ -32,9 +32,9 @@ class OperationLogAspect extends AbstractAspect
      */
     protected $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
+        $this->container = container();
     }
 
     /**

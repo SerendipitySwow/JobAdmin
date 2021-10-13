@@ -5,7 +5,6 @@ use App\System\Model\SystemDept;
 use App\System\Model\SystemRole;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\Builder;
-use Mine\Helper\LoginUser;
 
 trait ModelMacroTrait
 {
