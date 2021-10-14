@@ -70,4 +70,22 @@ if (! function_exists('user')) {
     }
 }
 
+if (! function_exists('format_size')) {
+    /**
+     * 格式化大小
+     * @param int $size
+     * @return string
+     */
+    function format_size(int $size): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        $index = 0;
+        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
+            $size /= 1024;
+            $index = $i;
+        }
+        return round($size, 2) . $units[$index];
+    }
+}
+
 
