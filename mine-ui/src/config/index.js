@@ -3,7 +3,7 @@ const DEFAULT_CONFIG = {
 	APP_NAME: "MineAdmin",
 
 	//版本号
-	APP_VER: "0.3.0",
+	APP_VER: "0.4.0",
 
 	//官网地址
 	APP_URL: "www.mineadmin.com",
