@@ -1,9 +1,10 @@
 <template>
   <el-container>
-    <el-aside width="220px" v-loading="showDirloading">
+    <el-aside width="240px" v-loading="showDirloading">
       <el-container>
         <el-header>
-          <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+          <el-input placeholder="过滤目录" v-model="filterText" clearable></el-input>
+          <el-button type="primary" class="el-icon-plus" style="margin-left: 10px;"> 新增</el-button>
         </el-header>
         <el-main class="nopadding">
           <el-tree
@@ -19,7 +20,32 @@
             :expand-on-click-node="false"
             :filter-node-method="dirFilterNode"
             @node-click="dirClick"
-          ></el-tree>
+          >
+            <template #default="{node, data}">
+              <span class="custom-tree-node">
+                <span class="label">{{ node.label }}</span>
+                <span class="do" v-if="node.label !== '所有目录文件'">
+
+                    <el-tooltip class="item" effect="dark" content="新增子目录" placement="top">
+                      <i
+                        class="el-icon-plus"
+                        v-auth="'system:menu:save'"
+                        @click.stop="add(node, data)"
+                      ></i>
+                    </el-tooltip>
+
+                    <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                      <i
+                        class="el-icon-delete"
+                        v-auth="'system:menu:delete'"
+                        @click.stop="handleDelete(data)"
+                      ></i>
+                    </el-tooltip>
+
+                  </span>
+              </span>
+            </template>
+          </el-tree>
         </el-main>
       </el-container>
     </el-aside>
@@ -138,14 +164,6 @@
           ></el-table-column>
 
           <el-table-column
-            label="字节数"
-            prop="size_byte"
-            sortable='custom'
-            width="100"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
-
-          <el-table-column
             label="文件大小"
             prop="size_info"
             :show-overflow-tooltip="true"
@@ -220,13 +238,20 @@
       </el-dialog>
 
     </el-container>
+
+    <dirs-dialog v-if="dialog.save" ref="dirDialog" @success="handleDirSuccess" @closed="dialog.save=false" />
+
   </el-container>
 </template>
 
 <script>
-
+  import dirsDialog from './dirs'
   export default {
     name: 'system:attachment',
+
+    components: {
+      dirsDialog,
+    },
 
     data() {
       return {
@@ -336,7 +361,7 @@
       add(){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open()
+          this.$refs.dirDialog.open()
         })
       },
       //编辑
@@ -461,4 +486,12 @@
 </script>
 
 <style>
+  .custom-tree-node {display: flex;flex: 1;align-items: center;justify-content: space-between;font-size: 14px;padding-right: 5px;height:100%;}
+  .custom-tree-node .label {display: flex;align-items: center;;height: 100%;}
+  .custom-tree-node .label .el-tag {margin-left: 5px;}
+  .custom-tree-node .do {display: none;}
+  .custom-tree-node .do i {margin-left:5px;color: #999;padding:5px;}
+  .custom-tree-node .do i:hover {color: #333;}
+
+  .custom-tree-node:hover .do {display: inline-block;}
 </style>

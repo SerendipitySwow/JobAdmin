@@ -104,18 +104,16 @@
       </el-empty>
 
       <template #footer class="dialog-footer">
-
         <el-pagination
           style="float:left;"
           @size-change="getList"
           @current-change="getList"
-          layout="total, prev, pager, next"
-          :page-sizes="[30, 60]"
-          :current-page="queryParams.page"
+          v-model:currentPage="queryParams.page"
           :page-size="queryParams.pageSize"
+          layout="prev, pager, next, jumper"
           :total="pageInfo.total"
-        ></el-pagination>
-
+        />
+        
         <el-button @click="handleResClose" size="small">
           关 闭
         </el-button>
