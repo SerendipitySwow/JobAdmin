@@ -32,7 +32,7 @@ class AppExceptionHandler extends ExceptionHandler
     public function __construct()
     {
         $this->console = console();
-        $this->logger = logger('mineAdmin');
+        $this->logger = container()->get(LoggerFactory::class)->get('mineAdmin');
     }
 
     public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface
