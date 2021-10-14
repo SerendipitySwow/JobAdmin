@@ -12,7 +12,7 @@
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'反选当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-close" @click="selectInvert">反选</el-button>
+              <el-button size="small" icon="el-icon-div" @click="selectInvert">反选</el-button>
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'取消选择当前页' + (type == 'image' ? '图片' : '文件')" placement="top">
@@ -105,7 +105,16 @@
 
       <template #footer class="dialog-footer">
 
-        <!-- <el-pagination class="ma-fl" @size-change="getList" @current-change="getList" layout="total, sizes, prev, pager, next" :page-sizes="[30, 60]" :current-page="queryParams.page" :page-size="queryParams.pageSize" :total="pageInfo.total"></el-pagination> -->
+        <el-pagination
+          style="float:left;"
+          @size-change="getList"
+          @current-change="getList"
+          layout="total, prev, pager, next"
+          :page-sizes="[30, 60]"
+          :current-page="queryParams.page"
+          :page-size="queryParams.pageSize"
+          :total="pageInfo.total"
+        ></el-pagination>
 
         <el-button @click="handleResClose" size="small">
           关 闭
@@ -150,7 +159,7 @@ export default {
       // 搜索参数
       queryParams: {
         origin_name: undefined,
-        storage_path: '',
+        storage_path: '/',
         mime_type: 'image',
         page: 1,
         pageSize: 30
@@ -266,7 +275,7 @@ export default {
 .list .icon {
   height: 92px;
   margin-right: 1px;
-  color: rgb(255, 214, 89);
+  color: #0960bd;
   background: #f5f5f5;
   font-size: 56px;
   text-align: center;
