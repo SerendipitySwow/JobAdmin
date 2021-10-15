@@ -39,6 +39,18 @@ export default {
   },
 
   /**
+   * 删除目录
+   * @returns
+   */
+  deleteUploadDir (params = {}) {
+    return request({
+      url: 'system/deleteUploadDir',
+      method: 'post',
+      params
+    })
+  },
+
+  /**
    * 上传图片接口
    * @returns
    */

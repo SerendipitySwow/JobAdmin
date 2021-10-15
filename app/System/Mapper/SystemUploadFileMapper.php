@@ -84,4 +84,14 @@ class SystemUploadFileMapper extends AbstractMapper
         unset($event);
         return true;
     }
+
+    /**
+     * 检查数据库中是否存在该目录数据
+     * @param string $path
+     * @return bool
+     */
+    public function checkDirDbExists(string $path): bool
+    {
+        return $this->model::withTrashed()->where('storage_path', 'like', $path . '%')->count() > 0;
+    }
 }

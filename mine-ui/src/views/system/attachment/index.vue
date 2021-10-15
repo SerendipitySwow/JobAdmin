@@ -4,7 +4,7 @@
       <el-container>
         <el-header>
           <el-input placeholder="过滤目录" v-model="filterText" clearable></el-input>
-          <el-button type="primary" class="el-icon-plus" style="margin-left: 10px;"> 新增</el-button>
+          <el-button type="primary" class="el-icon-plus" style="margin-left: 10px;" @click="add"> 新增</el-button>
         </el-header>
         <el-main class="nopadding">
           <el-tree
@@ -38,7 +38,7 @@
                       <i
                         class="el-icon-delete"
                         v-auth="'system:menu:delete'"
-                        @click.stop="handleDelete(data)"
+                        @click.stop="handleDeleteDir(data)"
                       ></i>
                     </el-tooltip>
 
@@ -358,18 +358,31 @@
       },
 
       //添加
-      add(){
+      add(node = null){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.dirDialog.open()
+          this.$refs.dirDialog.open(node)
         })
       },
-      //编辑
-      tableEdit(row){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open('edit').setData(row)
+
+      // 删除目录
+      handleDeleteDir(node) {
+        this.$confirm(`确定删除 ${node.name} 目录吗？`, '提示', {
+          type: 'warning'
+        }).then(async () => {
+          await this.$API.upload.deleteUploadDir({ name: node.name }).then(async res => {
+            if (res.success) {
+              await this.loadDirs()
+              this.$message.success(res.message)
+            }
+          }).catch(e => {
+            this.$message.error(e)
+          })
         })
+      },
+
+      handleDirSuccess() {
+        this.loadDirs()
       },
       
       // 预览图片

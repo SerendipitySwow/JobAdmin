@@ -105,6 +105,16 @@ class UploadController extends MineController
     }
 
     /**
+     * 删除上传目录
+     * @PostMapping("deleteUploadDir")
+     * @Auth
+     */
+    public function deleteUploadDir(CreateUploadDirRequest $request): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->service->deleteUploadDir($request->all()) ? $this->success() : $this->error();
+    }
+
+    /**
      * 下载文件
      * @GetMapping("download")
      */
