@@ -1,14 +1,17 @@
 <template>
   <el-row>
 
-    <el-row>
-      <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
-        {{ selectButtonText }}
-      </el-button>
-
-      <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
-        {{ uploadButtunText }}
-      </el-button>
+    <el-row class="padding-10">
+      <el-col :span="12">
+        <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
+          {{ selectButtonText }}
+        </el-button>
+      </el-col>
+      <el-col :span="12" class="padding-left">
+        <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
+          {{ uploadButtunText }}
+        </el-button>
+      </el-col>
     </el-row>
 
     <el-dialog :title="uploadButtunText" v-model="uploadDialog" width="420px" :before-close="handleUploadClose">
@@ -247,9 +250,17 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 :deep(.button) {
   position: relative !important;
   z-index: 1 !important;
 }
+
+.padding-10 {
+  padding: 0 10px !important;
+}
+.padding-left{
+  padding-left: 7px;
+}
+
 </style>

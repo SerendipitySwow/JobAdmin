@@ -67,7 +67,7 @@
 
               <div class="file" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">
                 <el-checkbox class="check" :label="item" > {{ index + 1 }}</el-checkbox>
-                <el-image class="image" :src="item.url" fit="contain"></el-image>
+                <el-image class="image" :src="item.url" fit="contain" @click="selectAdd(item)"></el-image>
               </div>
 
               <el-tooltip placement="bottom">
@@ -203,6 +203,10 @@ export default {
       }
       this.queryParams.storage_path = folder
       this.getList()
+    },
+
+    selectAdd (item) {
+      this.checkList = xor(this.checkList, [item])
     },
 
     // 全选当前页
