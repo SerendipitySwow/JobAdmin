@@ -2,6 +2,7 @@
 	<div class="scTable" ref="scTableMain" v-loading="loading">
 		<div class="scTable-table">
 			<el-table
+				v-bind="$attrs"
 				:data="tableData"
 				:row-key="rowKey"
 				:key="toggleIndex"
