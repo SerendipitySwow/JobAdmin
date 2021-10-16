@@ -1,13 +1,13 @@
-<template>
+ <template>
   <el-row>
 
     <el-row class="padding-10">
-      <el-col :span="12">
+      <el-col :span="12" v-if="showResource">
         <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
           {{ selectButtonText }}
         </el-button>
       </el-col>
-      <el-col :span="12" class="padding-left">
+      <el-col :span="12" :class="showResource ? ['padding-left'] : []">
         <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
           {{ uploadButtunText }}
         </el-button>
@@ -49,12 +49,12 @@
         :on-change="handleChange"
         :on-remove="handleRemove"
         :http-request="handleUpload"
-    >
+      >
 
         <i class="el-icon-upload"></i>
 
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip">只能上传{{allowUploadFile}}文件，单文件不超过2M</div>
+        <div class="el-upload__tip">只能上传{{allowUploadFile}}文件，单文件不超过10M</div>
 
       </el-upload>
 
@@ -83,6 +83,9 @@
 import Res from './components/res'
 export default {
   name: 'maResourceSelect',
+
+  emits: ['uploadData'],
+
   components: {
     Res
   },
@@ -108,6 +111,12 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    // 是否禁用
+    showResource: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data () {

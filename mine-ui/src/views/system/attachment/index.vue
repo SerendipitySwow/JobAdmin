@@ -62,7 +62,7 @@
             @click="batchDel"
           >删除附件</el-button>
 
-          <ma-resource-select />
+          <ma-resource-select @uploadData="getData()" />
 
         </div>
         <div class="right-panel">
@@ -302,6 +302,10 @@
     },
     methods: {
 
+      getData(data) {
+        console.log(data)
+      },
+
       async loadNode(node, resolve) {
         if (node.data.name !== undefined) {
           let data = await this.loadDirs(node.data.name)
@@ -345,6 +349,7 @@
       },
       //树点击事件
       dirClick(data){
+        console.log(this.$refs.table.$refs)
         if (this.queryParams.storage_path == data.name) {
           return
         }

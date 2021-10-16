@@ -78,6 +78,7 @@
         :showRecycle="true"
         row-key="id"
         :hidePagination="true"
+        :default-expand-all="true"
         @selection-change="selectionChange"
         @switch-data="switchData"
         stripe
@@ -348,5 +349,5 @@
   }
 </script>
 
-<style>
+<style scoped>
 </style>

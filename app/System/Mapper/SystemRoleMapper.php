@@ -72,7 +72,6 @@ class SystemRoleMapper extends AbstractMapper
         $role = $this->model::create($data);
         empty($menuIds) || $role->menus()->sync(array_unique($menuIds), false);
         empty($deptIds) || $role->depts()->sync($deptIds, false);
-        Db::commit();
         return $role->id;
     }
 
