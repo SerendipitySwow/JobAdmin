@@ -2,12 +2,12 @@
   <el-row>
 
     <el-row class="padding-10">
-      <el-col :span="12" v-if="showResource">
+      <el-col :span="12" v-if="resource">
         <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
           {{ selectButtonText }}
         </el-button>
       </el-col>
-      <el-col :span="12" :class="showResource ? ['padding-left'] : []">
+      <el-col :span="12" :class="resource ? ['padding-left'] : []">
         <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
           {{ uploadButtunText }}
         </el-button>
@@ -112,8 +112,14 @@ export default {
       required: false,
       default: false
     },
-    // 是否禁用
-    showResource: {
+    // 是否显示选择按钮
+    resource: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    // 是否显示图片缩略图
+    thumb: {
       type: Boolean,
       required: false,
       default: true
@@ -186,7 +192,7 @@ export default {
       this.uploadDialog = false
       if (data.length > 0) {
         this.$emit('uploadData', data)
-        this.success('选择成功')
+        this.$message.success('选择成功')
       }
     },
 
@@ -209,10 +215,10 @@ export default {
         this.uploadDialog = false
         if (this.fileList.length > 0) {
           this.$emit('uploadData', this.fileData)
-          this.success('上传成功')
+          this.$message.success('上传成功')
         }
       } else {
-        this.error('上传类型指定错误，组件type只能是image或者file')
+        this.$message.error('上传类型指定错误，组件type只能是image或者file')
         this.loading = false
         return false
       }

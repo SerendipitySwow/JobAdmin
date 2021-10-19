@@ -62,7 +62,7 @@
             @click="batchDel"
           >删除附件</el-button>
 
-          <ma-resource-select @uploadData="getData()" />
+          <ma-resource-select :resource="false" />
 
         </div>
         <div class="right-panel">
@@ -301,10 +301,6 @@
       this.loadDirs()
     },
     methods: {
-
-      getData(data) {
-        console.log(data)
-      },
 
       async loadNode(node, resolve) {
         if (node.data.name !== undefined) {
