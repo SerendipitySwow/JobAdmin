@@ -170,21 +170,17 @@ function typeColor (type = 'default') {
 	return color
 }
 
-tool.formatData = function (data) {
-	if (typeof data == 'undefined') {
+tool.formatSize = function (size) {
+	if (typeof size == 'undefined') {
 		return '0';
 	}
-	if (data < (1024 * 1024)) {
-		return parseInt(data / 1024 / 1024) + 'K'
-	} else if (data < (1024 * 1024 * 1024)) {
-		return parseInt(data / 1024 / 1024 / 1024) + 'M'
-	} else if (data < (1024 * 1024 * 1024 * 1024)) {
-		return parseInt(data / 1024 / 1024 / 1024 / 1024) + 'G'
-	} else if (data < (1024 * 1024 * 1024 * 1024 * 1024)) {
-		return parseInt(data / 1024 / 1024 / 1024 / 1024 / 1024) + 'T'
-	} else {
-		return '文件太大'
+	let units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+	let index = 0
+	for (let i = 0; size >= 1024 && i < 5; i++) {
+		size /= 1024
+		index = i
 	}
+	return Math.round(size, 2) + units[index]
 }
 
 tool.download = function(res) {

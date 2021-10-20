@@ -1,14 +1,17 @@
-<template>
+ <template>
   <el-row>
 
-    <el-row>
-      <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
-        {{ selectButtonText }}
-      </el-button>
-
-      <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
-        {{ uploadButtunText }}
-      </el-button>
+    <el-row class="padding-10">
+      <el-col :span="12" v-if="resource">
+        <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
+          {{ selectButtonText }}
+        </el-button>
+      </el-col>
+      <el-col :span="12" :class="resource ? ['padding-left'] : []">
+        <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
+          {{ uploadButtunText }}
+        </el-button>
+      </el-col>
     </el-row>
 
     <el-dialog :title="uploadButtunText" v-model="uploadDialog" width="420px" :before-close="handleUploadClose">
@@ -17,7 +20,7 @@
         <el-option
           v-for="item in dirs"
           :key="item.path"
-          :label="item.path == '' ? '根目录按日期存放' : item.path"
+          :label="item.path === '' ? '根目录按日期存放' : item.path"
           :value="item.path"></el-option>
       </el-select>
 
@@ -46,12 +49,12 @@
         :on-change="handleChange"
         :on-remove="handleRemove"
         :http-request="handleUpload"
-    >
+      >
 
         <i class="el-icon-upload"></i>
 
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip">只能上传{{allowUploadFile}}文件，单文件不超过2M</div>
+        <div class="el-upload__text" style="width: 100%">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" style="width: 100%">只能上传{{allowUploadFile}}文件，单文件不超过10M</div>
 
       </el-upload>
 
@@ -80,6 +83,9 @@
 import Res from './components/res'
 export default {
   name: 'maResourceSelect',
+
+  emits: ['uploadData'],
+
   components: {
     Res
   },
@@ -105,6 +111,18 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    // 是否显示选择按钮
+    resource: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    // 是否显示图片缩略图
+    thumb: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data () {
@@ -146,7 +164,7 @@ export default {
 
     // 获取目录内容
     getDirectorys () {
-      this.$API.upload.getDirectory({ path: '', isChildren: true }).then(res => {
+      this.$API.upload.getDirectory({ path: '/', isChildren: true }).then(res => {
         this.dirs = res.data
         this.dirs.unshift({ path: '' })
       })
@@ -174,7 +192,7 @@ export default {
       this.uploadDialog = false
       if (data.length > 0) {
         this.$emit('uploadData', data)
-        this.success('选择成功')
+        this.$message.success('选择成功')
       }
     },
 
@@ -197,10 +215,10 @@ export default {
         this.uploadDialog = false
         if (this.fileList.length > 0) {
           this.$emit('uploadData', this.fileData)
-          this.success('上传成功')
+          this.$message.success('上传成功')
         }
       } else {
-        this.error('上传类型指定错误，组件type只能是image或者file')
+        this.$message.error('上传类型指定错误，组件type只能是image或者file')
         this.loading = false
         return false
       }
@@ -237,7 +255,7 @@ export default {
         inputPattern: /^[A-Za-z0-9_]+$/,
         inputErrorMessage: '请输入合法的目录名称'
       }).then(({ value }) => {
-        createUploadDir({ name: value, path: this.uploadDir }).then(res => {
+        this.$API.upload.createUploadDir({ name: value, path: this.uploadDir }).then(res => {
           this.success(res.message)
           this.getDirectorys()
         })
@@ -247,9 +265,27 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 :deep(.button) {
   position: relative !important;
   z-index: 1 !important;
 }
+
+.padding-10 {
+  padding: 0 10px !important;
+}
+.padding-left{
+  padding-left: 7px;
+}
+.ma-mt-10 {
+	margin-top: 10px;
+}
+:deep(.el-upload) {
+	width: 100%;
+	& .el-upload-dragger {
+		width: 100% !important;
+		margin-top: 20px;
+	}
+}
+
 </style>
