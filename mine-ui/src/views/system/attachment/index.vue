@@ -58,11 +58,11 @@
             plain
             icon="el-icon-delete"
             v-auth="['system:post:delete']"
-            :disabled="selection.length==0"
+            :disabled="selection.length===0"
             @click="batchDel"
           >删除附件</el-button>
 
-          <ma-resource-select :resource="false" />
+          <ma-resource-select :resource="false" @upload-data="handleSuccess" />
 
         </div>
         <div class="right-panel">
@@ -122,7 +122,7 @@
           remoteFilter
         >
           <el-table-column type="selection" width="50"></el-table-column>
-          
+
           <el-table-column
             label="原文件名"
             prop="origin_name"
@@ -193,7 +193,7 @@
                 @click="deletes(scope.row.id)"
                 v-auth="['system:post:delete']"
               >删除</el-button>
-              
+
             </template>
           </el-table-column>
 
@@ -345,7 +345,6 @@
       },
       //树点击事件
       dirClick(data){
-        console.log(this.$refs.table.$refs)
         if (this.queryParams.storage_path == data.name) {
           return
         }
@@ -385,7 +384,7 @@
       handleDirSuccess() {
         this.loadDirs()
       },
-      
+
       // 预览图片
       review (row) {
         this.record = row
@@ -487,8 +486,8 @@
       },
 
       //本地更新数据
-      handleSuccess(){
-        this.$refs.table.upData(this.queryParams)
+      handleSuccess(data = null){
+        this.$refs.table.reload(this.queryParams)
       }
     },
     watch: {

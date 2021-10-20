@@ -20,7 +20,7 @@
         <el-option
           v-for="item in dirs"
           :key="item.path"
-          :label="item.path == '' ? '根目录按日期存放' : item.path"
+          :label="item.path === '' ? '根目录按日期存放' : item.path"
           :value="item.path"></el-option>
       </el-select>
 
@@ -53,8 +53,8 @@
 
         <i class="el-icon-upload"></i>
 
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip">只能上传{{allowUploadFile}}文件，单文件不超过10M</div>
+        <div class="el-upload__text" style="width: 100%">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" style="width: 100%">只能上传{{allowUploadFile}}文件，单文件不超过10M</div>
 
       </el-upload>
 
@@ -164,7 +164,7 @@ export default {
 
     // 获取目录内容
     getDirectorys () {
-      this.$API.upload.getDirectory({ path: '', isChildren: true }).then(res => {
+      this.$API.upload.getDirectory({ path: '/', isChildren: true }).then(res => {
         this.dirs = res.data
         this.dirs.unshift({ path: '' })
       })
@@ -255,7 +255,7 @@ export default {
         inputPattern: /^[A-Za-z0-9_]+$/,
         inputErrorMessage: '请输入合法的目录名称'
       }).then(({ value }) => {
-        createUploadDir({ name: value, path: this.uploadDir }).then(res => {
+        this.$API.upload.createUploadDir({ name: value, path: this.uploadDir }).then(res => {
           this.success(res.message)
           this.getDirectorys()
         })
@@ -276,6 +276,16 @@ export default {
 }
 .padding-left{
   padding-left: 7px;
+}
+.ma-mt-10 {
+	margin-top: 10px;
+}
+:deep(.el-upload) {
+	width: 100%;
+	& .el-upload-dragger {
+		width: 100% !important;
+		margin-top: 20px;
+	}
 }
 
 </style>
