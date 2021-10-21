@@ -30,7 +30,7 @@ const router = createRouter({
 document.title = config.APP_NAME
 
 router.beforeEach(async (to, from, next) => {
-	
+
 	NProgress.start()
 
 	//动态标题
@@ -82,14 +82,12 @@ router.afterEach((to, from) => {
 
 router.onError((error) => {
 	NProgress.done();
-	router.onError((error) => {
-		const pattern = /Loading chunk (\d)+ failed/g;
-		const isChunkLoadFailed = error.message.match(pattern);
-		const targetPath = router.history.pending.fullPath;
-		if (isChunkLoadFailed) {
-		  router.replace(targetPath);
-		}
-	});
+	const pattern = /Loading chunk (\d)+ failed/g;
+	const isChunkLoadFailed = error.message.match(pattern);
+	const targetPath = router.history.pending.fullPath;
+	if (isChunkLoadFailed) {
+		router.replace(targetPath);
+	}
 });
 
 
