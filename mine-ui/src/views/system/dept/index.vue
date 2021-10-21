@@ -19,6 +19,13 @@
           @click="batchDel"
         >删除</el-button>
 
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-sort"
+          @click="handleExpand"
+        > {{ isExpand ? '折叠' : '展开' }} </el-button>
+
       </div>
       <div class="right-panel">
         <div class="right-panel-search">
@@ -73,12 +80,13 @@
     <el-main class="nopadding">
       <maTable
         ref="table"
+        v-if="refreshTable"
         :api="api"
         :column="column"
         :showRecycle="true"
         row-key="id"
         :hidePagination="true"
-        :default-expand-all="true"
+        :default-expand-all="isExpand"
         @selection-change="selectionChange"
         @switch-data="switchData"
         stripe
@@ -222,6 +230,8 @@
           status: undefined
         },
         isRecycle: false,
+        isExpand: true,
+        refreshTable: true,
       }
     },
     methods: {
@@ -280,6 +290,14 @@
           loading.close();
           this.$message.success("操作成功")
         }).catch(()=>{})
+      },
+
+      handleExpand() {
+        this.refreshTable = false
+        this.isExpand = !this.isExpand
+        this.$nextTick(()=> {
+          this.refreshTable = true
+        })
       },
 
       // 恢复数据
