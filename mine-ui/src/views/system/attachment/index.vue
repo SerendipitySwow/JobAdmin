@@ -388,8 +388,8 @@
       // 预览图片
       review (row) {
         this.record = row
-        if (!/png|jpeg|jpg|png|bmp/.test(row.mime_type)) {
-          this.error('非图片，无法预览')
+        if (!/png|jpeg|jpg|png|bmp|gif/.test(row.mime_type)) {
+          this.$message.error('非图片，无法预览')
           return false
         } else {
           this.dialogVisible = true
