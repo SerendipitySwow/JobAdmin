@@ -12,7 +12,7 @@
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'反选当前页所有' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-div" @click="selectInvert">反选</el-button>
+              <el-button size="small" icon="el-icon-minus" @click="selectInvert">反选</el-button>
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'取消选择当前页' + (type == 'image' ? '图片' : '文件')" placement="top">

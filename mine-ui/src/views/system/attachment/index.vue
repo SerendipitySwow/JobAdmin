@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="240px" v-loading="showDirloading">
+    <el-aside width="260px" v-loading="showDirloading">
       <el-container>
         <el-header>
           <el-input placeholder="过滤目录" v-model="filterText" clearable></el-input>
@@ -53,16 +53,32 @@
       <el-header>
         <div class="left-panel">
 
-          <el-button
-            type="danger"
-            plain
-            icon="el-icon-delete"
-            v-auth="['system:post:delete']"
-            :disabled="selection.length===0"
-            @click="batchDel"
-          >删除附件</el-button>
+          <ma-resource-select :resource="false" @upload-data="handleSuccess" type="file" />
 
-          <ma-resource-select :resource="false" @upload-data="handleSuccess" />
+          <el-button-group>
+            <el-button
+              plain
+              icon="el-icon-delete"
+              v-auth="['system:post:delete']"
+              @click="batchDel"
+            >删除附件</el-button>
+
+            <el-tooltip class="item" effect="dark" content="选择当前页所有" placement="top">
+              <el-button size="small" icon="el-icon-check" @click="selectAll">全选</el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="反选当前页所有" placement="top">
+              <el-button size="small" icon="el-icon-minus" @click="selectInvert">反选</el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="取消选择当前页" placement="top">
+              <el-button size="small" icon="el-icon-close" @click="selectCancel">取消</el-button>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="清除所有选中的" placement="top">
+              <el-button size="small" icon="el-icon-error" @click="checkList = []">清除</el-button>
+            </el-tooltip>
+          </el-button-group>
 
         </div>
         <div class="right-panel">
@@ -109,133 +125,70 @@
           </div>
         </div>
       </el-header>
-      <el-main class="nopadding">
-        <maTable
-          ref="table"
-          :api="api"
-          :column="column"
-          :showRecycle="true"
-          @selection-change="selectionChange"
-          @switch-data="switchData"
-          stripe
-          remoteSort
-          remoteFilter
-        >
-          <el-table-column type="selection" width="50"></el-table-column>
+      <el-main class="nopadding file">
+        <el-row class="file-list">
+          <el-checkbox-group v-model="checkList">
+            <ul class="el-upload-list el-upload-list--picture-card">
+              <li
+                v-for="(item, index) in dataList"
+                :key="index"
+                class="el-upload-list__item"
+              >
+                <div class="thumbnail">
+                  <el-checkbox class="check" :label="item" > {{ index + 1 }}</el-checkbox>
+                  <div class="mask">
+                    <span class="del" @click.stop="remove(index)"><i class="el-icon-delete"></i></span>
+                  </div>
+                  <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
+                    <i class="el-icon-document" />
+                  </div>
+                  <el-image v-else :src="item.url" fit="cover" :preview-src-list="preview" hide-on-click-modal append-to-body />
+                  <el-tooltip placement="bottom">
+                    <div class="filename"> {{ item.origin_name }} </div>
+                    <template #content>
 
-          <el-table-column
-            label="原文件名"
-            prop="origin_name"
-            width="100"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
+                      原名称：
+                      <span>{{ item.origin_name }}</span>
+                      <br />
 
-          <el-table-column
-            label="新文件名"
-            prop="object_name"
-            width="100"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
+                      <span>存储名称：{{ item.object_name }}<br /></span>
 
-          <el-table-column prop="storage_mode" label="存储模式">
-            <template #default="scope">
-              {{ getLable(scope.row.storage_mode) }}
-            </template>
-          </el-table-column>
+                      <span>存储目录：{{ item.storage_path }}<br /></span>
 
-          <el-table-column
-            label="资源类型"
-            prop="mime_type"
-            width="100"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
+                      上传日期：
+                      <span>{{ item.created_at }}</span>
+                      <br />
 
-          <el-table-column
-            label="存储目录"
-            prop="storage_path"
-            width="100"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
+                      <span>大小：{{ item.size_info }}</span>
+                    </template>
+                    <div class="name">{{ item.origin_name }}</div>
 
-          <el-table-column
-            label="扩展名"
-            prop="suffix"
-            width="80"
-          ></el-table-column>
+                  </el-tooltip>
+                </div>
+              </li>
+            </ul>
+          </el-checkbox-group>
+        </el-row>
 
-          <el-table-column
-            label="文件大小"
-            prop="size_info"
-            :show-overflow-tooltip="true"
-          ></el-table-column>
+        <div class="scTable-page">
+          <div class="scTable-pagination">
+            <el-pagination background layout="total, prev, pager, next" :total="pageInfo.total" :page-size="queryParams.pageSize" :current-page="queryParams.page" @current-change="getList"></el-pagination>
+          </div>
+          <div class="scTable-do" v-if="!hideDo">
 
-          <el-table-column
-            label="创建时间"
-            prop="created_at"
-            width="140"
-            sortable='custom'
-          ></el-table-column>
-
-          <!-- 正常数据操作按钮 -->
-          <el-table-column label="操作" fixed="right" align="right" width="100" v-if="!isRecycle">
-            <template #default="scope">
-
+            <el-tooltip class="item" effect="dark" :content="getRecycleText" placement="top">
               <el-button
-                type="text"
-                size="small"
-                @click="review(scope.row)"
-                v-auth="['system:post:update']"
-              >预览</el-button>
-
-              <el-button
-                type="text"
-                size="small"
-                @click="deletes(scope.row.id)"
-                v-auth="['system:post:delete']"
-              >删除</el-button>
-
-            </template>
-          </el-table-column>
-
-          <!-- 回收站操作按钮 -->
-          <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
-            <template #default="scope">
-
-              <el-button
-                type="text"
-                size="small"
-                v-auth="['system:post:recovery']"
-                @click="recovery(scope.row.id)"
-              >恢复</el-button>
-
-              <el-button
-                type="text"
-                size="small"
-                v-auth="['system:post:realDelete']"
-                @click="deletes(scope.row.id)"
-              >删除</el-button>
-
-            </template>
-          </el-table-column>
-
-        </maTable>
+                @click="switchData"
+                v-if="showRecycle"
+                icon="el-icon-delete"
+                circle
+                style="margin-left:15px"
+              ></el-button>
+            </el-tooltip>
+          </div>
+        </div>
+        
       </el-main>
-
-      <el-dialog
-        title="图片预览"
-        v-model="dialogVisible"
-        destroy-on-close
-        @closed="dialogVisible = false"
-        width="50%"
-      >
-
-        <el-image :src="record.url" lazy></el-image>
-
-        <template #footer class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-        </template>
-
-      </el-dialog>
 
     </el-container>
 
@@ -246,11 +199,18 @@
 
 <script>
   import dirsDialog from './dirs'
+  import { union, xor, difference } from 'lodash'
   export default {
     name: 'system:attachment',
 
     components: {
       dirsDialog,
+    },
+
+    computed: {
+      preview(){
+        return this.dataList.filter( item => item.mime_type.indexOf('image') > -1).map(v => v.url)
+      },
     },
 
     data() {
@@ -259,7 +219,6 @@
           save: false
         },
         dialogVisible: false,
-        column: [],
         povpoerShow: false,
         showDirloading: false,
         filterText: '',
@@ -268,6 +227,9 @@
           list: this.$API.attachment.getPageList,
           recycleList: this.$API.attachment.getRecyclePageList,
         },
+        dataList: [],
+        checkList: [],
+        pageInfo: {},
         // 存储模式
         storageMode: [
           { label: '本地存储', value: 1 },
@@ -281,7 +243,9 @@
           origin_name: undefined,
           storage_path: undefined,
           maxDate: undefined,
-          minDate: undefined
+          minDate: undefined,
+          pageSize: 50,
+          page:1,
         },
         isRecycle: false,
 
@@ -299,8 +263,16 @@
     },
     created () {
       this.loadDirs()
+      this.getList()
     },
     methods: {
+
+      getList () {
+        this.$API.attachment.getPageList(this.queryParams).then(res => {
+          this.dataList = res.data.items
+          this.pageInfo = res.data.pageInfo
+        })
+      },
 
       async loadNode(node, resolve) {
         if (node.data.name !== undefined) {
@@ -350,11 +322,11 @@
         }
         if (data.name == '所有目录文件') {
           this.queryParams.storage_path = undefined
-          this.$refs.table.upData(this.queryParams)
+          this.getList()
           return
         }
         this.queryParams.storage_path = data.name
-        this.$refs.table.upData(this.queryParams)
+        this.getList()
       },
 
       //添加
@@ -446,11 +418,6 @@
         })
       },
 
-      //表格选择后回调事件
-      selectionChange(selection){
-        this.selection = selection;
-      },
-
       // 选择时间事件
       handleDateChange (values) {
         if (values !== null) {
@@ -461,7 +428,7 @@
 
       //搜索
       handlerSearch(){
-        this.$refs.table.upData(this.queryParams)
+        this.getList()
       },
 
       // 切换数据类型回调
@@ -477,7 +444,6 @@
           maxDate: undefined,
           minDate: undefined
         }
-        this.$refs.table.upData(this.queryParams)
       },
 
       // 字段映射标签
@@ -487,8 +453,27 @@
 
       //本地更新数据
       handleSuccess(data = null){
-        this.$refs.table.reload(this.queryParams)
-      }
+        this.getList()
+      },
+
+      selectAdd (item) {
+        this.checkList = xor(this.checkList, [item])
+      },
+
+      // 全选当前页
+      selectAll () {
+        this.checkList = union(this.checkList, this.dataList)
+      },
+
+      // 反选当前页
+      selectInvert () {
+        this.checkList = xor(this.checkList, this.dataList)
+      },
+
+      // 取消当前页选择
+      selectCancel () {
+        this.checkList = difference(this.checkList, this.dataList)
+      },
     },
     watch: {
       filterText(val) {
@@ -498,13 +483,76 @@
   }
 </script>
 
-<style>
-  .custom-tree-node {display: flex;flex: 1;align-items: center;justify-content: space-between;font-size: 14px;padding-right: 5px;height:100%;}
-  .custom-tree-node .label {display: flex;align-items: center;;height: 100%;}
-  .custom-tree-node .label .el-tag {margin-left: 5px;}
-  .custom-tree-node .do {display: none;}
-  .custom-tree-node .do i {margin-left:5px;color: #999;padding:5px;}
-  .custom-tree-node .do i:hover {color: #333;}
+<style scoped lang="scss">
+.el-main.nopadding {
+  background: none;
+}
+.el-main.file .scTable-page {height:50px;display: flex;align-items: center;justify-content: space-between;padding:0 15px; border-top: 1px solid #e6e6e6; background: #fff}
+[data-theme='dark'] .el-main.file .scTable-page {border-color: #434343; background: #2b2b2b !important;}
 
-  .custom-tree-node:hover .do {display: inline-block;}
+.custom-tree-node {display: flex;flex: 1;align-items: center;justify-content: space-between;font-size: 14px;padding-right: 5px;height:100%;}
+.custom-tree-node .label {display: flex;align-items: center;;height: 100%;}
+.custom-tree-node .label .el-tag {margin-left: 5px;}
+.custom-tree-node .do {display: none;}
+.custom-tree-node .do i {margin-left:5px;color: #999;padding:5px;}
+.custom-tree-node .do i:hover {color: #333;}
+
+.custom-tree-node:hover .do {display: inline-block;}
+
+.thumbnail {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  height: 150px;
+}
+.mask {display: none;position: absolute;top:0px;right:0px;line-height: 1;z-index: 1;}
+.mask span {display: inline-block;width: 25px;height:25px;line-height: 23px;text-align: center;cursor: pointer;color: #fff;}
+.mask span i {font-size: 12px;}
+.mask .del {background: var(--el-color-primary);}
+.thumbnail:hover .mask {display: inline-block;}
+.el-upload-list--picture-card .el-upload-list__item {
+  border-radius: 4px;
+  border: none;
+}
+.file-list {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 50px);
+  padding: 15px;
+}
+.filename {
+  position: absolute;
+  bottom: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background: rgba(255,255,255, 0.2);
+  padding: 0 5px;
+  width: 100%;
+  color: #555;
+  cursor: pointer;
+  height: 25px;
+  line-height: 25px;
+  font-size:12px;
+  text-align: center;
+}
+.check {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 120px;
+  height: 20px;
+  z-index: 9;
+  overflow: hidden;
+  color: #fff;
+  text-shadow: 1px 1px 3px #333;
+}
+.icon {
+  height: 148px;
+  margin-right: 1px;
+  color: #0960bd;
+  font-size: 60px;
+  text-align: center;
+  padding: 12px 0;
+}
 </style>

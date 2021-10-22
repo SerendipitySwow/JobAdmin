@@ -1,5 +1,5 @@
  <template>
-  <el-main>
+  <el-main style="padding-left: 0">
 
     <div
       v-if="imageList.length === 0 && thumb"
