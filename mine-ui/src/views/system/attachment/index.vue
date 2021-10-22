@@ -4,7 +4,7 @@
       <el-container>
         <el-header>
           <el-input placeholder="过滤目录" v-model="filterText" clearable></el-input>
-          <el-button type="primary" class="el-icon-plus" style="margin-left: 10px;" @click="add"> 新增</el-button>
+          <el-button type="primary" class="el-icon-plus" style="margin-left: 10px;" @click="add"> 新建</el-button>
         </el-header>
         <el-main class="nopadding">
           <el-tree
@@ -26,7 +26,7 @@
                 <span class="label">{{ node.label }}</span>
                 <span class="do" v-if="node.label !== '所有目录文件'">
 
-                    <el-tooltip class="item" effect="dark" content="新增子目录" placement="top">
+                    <el-tooltip class="item" effect="dark" content="新建子目录" placement="top">
                       <i
                         class="el-icon-plus"
                         v-auth="'system:menu:save'"
