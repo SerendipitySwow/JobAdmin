@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="260px" v-loading="showDirloading">
+    <el-aside width="300px" v-loading="showDirloading">
       <el-container>
         <el-header>
           <el-input placeholder="过滤目录" v-model="filterText" clearable></el-input>
@@ -53,7 +53,7 @@
       <el-header>
         <div class="left-panel">
 
-          <ma-resource-select :resource="false" @upload-data="handleSuccess" type="file" />
+          <ma-resource-select :resource="false" @upload-data="handleSuccess" />
 
           <el-button-group>
             <el-button
