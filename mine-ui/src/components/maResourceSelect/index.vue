@@ -268,13 +268,13 @@ export default {
     // 文件超出个数限制时的钩子
     handleExceed (files, fileList) {
       if (fileList.length >= this.limit) {
-        this.error(`最多只能上传 ${this.limit} 个文件`)
+        this.$message.error(`最多只能上传 ${this.limit} 个文件`)
         return
       }
 
       if (files.length + fileList.length > this.limit) {
         const count = this.limit - fileList.length
-        this.error(`上传数量超出限制，最多还能选择 ${count} 个文件`)
+        this.$message.error(`上传数量超出限制，最多还能选择 ${count} 个文件`)
       }
     },
 
