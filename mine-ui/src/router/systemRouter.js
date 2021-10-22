@@ -39,6 +39,14 @@ const routes = [{
 							icon: "el-icon-setting",
 						},
 						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/setting/index'),
+					},{
+						name: "demo",
+						path: "/demo",
+						meta: {
+							title: "组件演示",
+							icon: "sc-icon-vuejs-fill",
+						},
+						component: () => import(/* webpackChunkName: "usercenter" */ '@/views/demo/index'),
 					}
 				]
 			}

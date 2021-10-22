@@ -1,17 +1,25 @@
  <template>
-  <el-row>
+  <el-main>
 
-    <el-row class="padding-10">
-      <el-col :span="12" v-if="resource">
-        <el-button icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
+    <div
+      v-if="imageList.length === 0 && thumb"
+      class="el-upload el-upload--picture-card ma-upload"
+      @click="handleShowUploadDialog">
+      <i class="el-icon-plus"/>
+    </div>
+
+    <ma-photo :value="imageList" v-if="thumb" @remove="remove" />
+
+    <el-row :gutter="0">
+
+        <el-button v-if="resource" icon="el-icon-finished" size="small" class="button" :disabled="disabled" @click="$refs.Res.show()">
           {{ selectButtonText }}
         </el-button>
-      </el-col>
-      <el-col :span="12" :class="resource ? ['padding-left'] : []">
+
         <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
           {{ uploadButtunText }}
         </el-button>
-      </el-col>
+
     </el-row>
 
     <el-dialog :title="uploadButtunText" v-model="uploadDialog" width="420px" :before-close="handleUploadClose">
@@ -54,7 +62,7 @@
         <i class="el-icon-upload"></i>
 
         <div class="el-upload__text" style="width: 100%">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" style="width: 100%">只能上传{{allowUploadFile}}文件，单文件不超过10M</div>
+        <div class="el-upload__tip" style="width: 100%">只能上传{{allowUploadFile}}文件，单文件不超过 {{ config.maxSize }} M</div>
 
       </el-upload>
 
@@ -77,10 +85,11 @@
     </el-dialog>
 
     <res ref="Res" :type="type" @confirmData="getConfirmData"></res>
-  </el-row>
+  </el-main>
 </template>
 <script>
 import Res from './components/res'
+import Config from '@/config/upload'
 export default {
   name: 'maResourceSelect',
 
@@ -90,6 +99,10 @@ export default {
     Res
   },
   props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
     // 组件类型， image图片  file文件上传
     type: {
       default: 'image',
@@ -122,7 +135,7 @@ export default {
     thumb: {
       type: Boolean,
       required: false,
-      default: true
+      default: false
     }
   },
   data () {
@@ -144,19 +157,31 @@ export default {
       // 上传后文件数据
       fileData: [],
       // 上传方法
-      uploadMethod: null
+      uploadMethod: null,
+      // 配置信息
+      config: Config,
+    }
+  },
+  computed: {
+    imageList: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        this.$emit('input', value)
+      }
     }
   },
   created () {
     if (this.type === 'image') {
       this.selectButtonText = '选择图片'
       this.uploadButtunText = '上传图片'
-      this.allowUploadFile = '.jpg,.jpeg,.png,.bmp,.gif 或 svg'
+      this.allowUploadFile = this.config.images
       this.uploadMethod = this.$API.upload.uploadImage
     } else {
       this.selectButtonText = '选择文件'
       this.uploadButtunText = '上传文件'
-      this.allowUploadFile = '.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rar,.zip,.7z,.gz,.pdf,.wps,.md'
+      this.allowUploadFile = this.config.files
       this.uploadMethod = this.$API.upload.uploadFile
     }
   },
@@ -191,7 +216,8 @@ export default {
     getConfirmData (data) {
       this.uploadDialog = false
       if (data.length > 0) {
-        this.$emit('uploadData', data)
+        data.map(item => this.imageList.push(item))
+        this.$emit('uploadData', this.imageList)
         this.$message.success('选择成功')
       }
     },
@@ -214,6 +240,7 @@ export default {
         this.loading = false
         this.uploadDialog = false
         if (this.fileList.length > 0) {
+          this.fileData.map(item => this.imageList.push(item))
           this.$emit('uploadData', this.fileData)
           this.$message.success('上传成功')
         }
@@ -222,6 +249,10 @@ export default {
         this.loading = false
         return false
       }
+    },
+
+    remove(data) {
+      this.$emit('uploadData', data)
     },
 
     // 处理修改事件
@@ -286,6 +317,11 @@ export default {
 		width: 100% !important;
 		margin-top: 20px;
 	}
+}
+.ma-upload {
+  width: 120px; height: 120px; display: flex;
+  justify-content: center; align-items: center;
+  margin-bottom: 10px;
 }
 
 </style>

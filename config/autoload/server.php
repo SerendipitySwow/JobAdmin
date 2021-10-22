@@ -60,7 +60,7 @@ return [
         Constant::OPTION_SOCKET_BUFFER_SIZE     => 3 * 1024 * 1024,
         Constant::OPTION_BUFFER_OUTPUT_SIZE     => 3 * 1024 * 1024,
         // 上传最大为4M
-        Constant::OPTION_PACKAGE_MAX_LENGTH     => 10 * 1024 * 1024
+        Constant::OPTION_PACKAGE_MAX_LENGTH     => 4 * 1024 * 1024
     ],
     'callbacks' => [
         Event::ON_BEFORE_START => [Mine\MineStart::class, 'beforeStart'],

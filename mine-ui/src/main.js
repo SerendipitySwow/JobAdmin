@@ -13,6 +13,7 @@ import hasPermission from './utils/permission'
 import hasRole from './utils/role'
 import errorHandler from './utils/errorHandler'
 import maTable from './components/maTable'          // 原scTable，进行了系统适配优化，与原版scTable并存
+import maPhoto from './components/maPhoto'
 import maImport from './components/maImport'
 import maResourceSelect from './components/maResourceSelect'
 import scTable from './components/scTable'
@@ -49,6 +50,7 @@ app.use(i18n)
 //注册全局组件
 app.component('maTable', maTable)
 app.component('maImport', maImport)
+app.component('maPhoto', maPhoto)
 app.component('maResourceSelect', maResourceSelect)
 app.component('scTable', scTable)
 app.component('scSelect', scSelect)
