@@ -18,6 +18,12 @@
 				}
 				document.documentElement.style.setProperty(`--el-color-primary-darken-1`, colorTool.darken(app_color,0.1));
 			}
+			// 获取配置信息
+			this.$API.config.getSysConfig().then(res => {
+				res.data.map(item => {
+					this.$TOOL.data.set(item.key, item.value)
+				})
+			})
 		}
 	}
 </script>

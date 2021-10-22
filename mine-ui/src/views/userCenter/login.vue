@@ -5,7 +5,7 @@
 				<div class="login-form">
 					<div class="login-logo">
 						<img class="logo" :alt="appName" src="img/logo.png">
-						<h2>MineAdmin</h2>
+						<h2>{{ $TOOL.data.get('site_name') ? $TOOL.data.get('site_name') : 'MineAdmin' }}</h2>
 					</div>
 					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0" size="large">
 						<el-form-item prop="user">
@@ -52,7 +52,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="login-footer">Copyright © 2021-2022 mineadmin.com All Rights Reserved.</div>
+		<div class="login-footer">
+			Copyright © 2021-2022 mineadmin.com All Rights Reserved. 
+			<a href="https://beian.miit.gov.cn/" target="_blank" v-if="$TOOL.data.get('site_record_number')">{{ $TOOL.data.get('site_record_number') }}</a>
+		</div>
 
 		<!-- <ul class="circles">
 			<li v-for="n in 10" :key="n"></li>
@@ -168,6 +171,9 @@
 		text-align: center;color: #fff; position: fixed;
 		bottom: 20px; width: 100%;
 		font-family: Arial; letter-spacing: 1px;
+		& a {
+			color: #fff
+		}
 	}
 	.login-code {
       height: 40px - 2px;
