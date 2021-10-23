@@ -8,7 +8,7 @@ const routes = [{
 			{
 				name: "home",
 				path: "/home",
-				component: () => import(`@/views/other/empty`),
+				component: () => import(`@/layout/other/empty`),
 				meta: {
 					title: "首页",
 					icon: "el-icon-s-home"

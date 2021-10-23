@@ -18,7 +18,7 @@ const defaultRoutePath = '/dashboard'
 const routes_404 = {
 	path: "/:pathMatch(.*)*",
 	hidden: true,
-	component: () => import(/* webpackChunkName: "404" */ '@/views/other/404'),
+	component: () => import(/* webpackChunkName: "404" */ '@/layout/other/404'),
 }
 
 const router = createRouter({
@@ -126,7 +126,7 @@ function loadComponent(component){
 	if(component){
 		return () => import(/* webpackChunkName: "[request]" */ `@/views/${component}`)
 	}else{
-		return () => import(`@/views/other/empty`)
+		return () => import(`@/layout/other/empty`)
 	}
 
 }

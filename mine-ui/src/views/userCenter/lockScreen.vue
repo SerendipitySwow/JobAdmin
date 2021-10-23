@@ -42,7 +42,7 @@
           @keydown.enter="unlock"
         >
           <template #append>
-            <el-button type="primary" @click="unlock">进入</el-button>
+            <el-button @click="unlock">进入</el-button>
           </template>
         </el-input>
 

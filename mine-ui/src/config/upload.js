@@ -7,6 +7,7 @@ export default {
 		uploadImage:API.upload.uploadImage, 				//上传图片请求API对象
 		uploadFile: API.upload.uploadFile					//上传文件请求API对象
 	},
+	successCode: 200,
 	images: '.jpg,.jpeg,.png,.bmp,.gif,.svg',
 	files : '.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rar,.zip,.7z,.gz,.pdf,.wps,.md',
 	maxSize: 4,												//最大文件大小，单位M
