@@ -109,8 +109,8 @@ export default {
           this.$message.error('锁屏密码错误')
           return
         }
-        this.$TOOL.data.set('lockPassword', undefined)
-        this.$TOOL.data.set('lockScreen', undefined)
+        this.$TOOL.data.remove('lockPassword')
+        this.$TOOL.data.remove('lockScreen')
         this.$router.push('/dashboard')
       }
     },

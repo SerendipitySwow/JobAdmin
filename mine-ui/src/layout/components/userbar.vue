@@ -117,7 +117,6 @@
 						await this.$API.login.Logout().then(res => {
 							if (res.success) {
 								this.$store.commit('SET_ROUTERS', null)
-								this.$TOOL.data.set('token', null)
 								this.$TOOL.data.clear()
 								this.$router.replace({path: '/login'})
 							}

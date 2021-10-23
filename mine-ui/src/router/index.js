@@ -41,6 +41,8 @@ router.beforeEach(async (to, from, next) => {
 	if (token && token !== 'undefined') {
 		if (tool.data.get('lockScreen') && to.name !== 'lockScreen') {
 			next({ name: 'lockScreen' })
+		} else if (! tool.data.get('lockScreen') && to.name === 'lockScreen' ) {
+			next({ path: defaultRoutePath })
 		} else if (to.name === 'login'){
 			next({ path: defaultRoutePath })
 		} else if (! store.state.user.routers) {
@@ -60,9 +62,8 @@ router.beforeEach(async (to, from, next) => {
 				}
 			}).catch(() => {
 				next({ name: 'login', query: { redirect: to.fullPath } })
-				tool.data.set('user', null)
 				store.commit('SET_ROUTERS', undefined)
-				tool.data.set('token', null)
+				tool.data.clear()
 			})
 			next()
 		} else {
