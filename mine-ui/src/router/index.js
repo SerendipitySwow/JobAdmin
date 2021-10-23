@@ -39,7 +39,9 @@ router.beforeEach(async (to, from, next) => {
 	let token = tool.data.get('token');
 
 	if (token && token !== 'undefined') {
-		if(to.name === 'login'){
+		if (tool.data.get('lockScreen') && to.name !== 'lockScreen') {
+			next({ name: 'lockScreen' })
+		} else if (to.name === 'login'){
 			next({ path: defaultRoutePath })
 		} else if (! store.state.user.routers) {
 			await store.dispatch('getUserInfo').then( res => {
