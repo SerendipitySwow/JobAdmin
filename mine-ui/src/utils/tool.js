@@ -87,8 +87,12 @@ tool.objCopy = function (obj) {
 }
 
 /* 日期格式化 */
-tool.dateFormat = function (date, fmt='yyyy-MM-dd hh:mm:ss') {
+tool.dateFormat = function (date, fmt='yyyy-MM-dd hh:mm:ss', isDefault = '-') {
 	date = new Date(date)
+
+	if (date.valueOf() < 1) {
+		return isDefault
+	}
 	var o = {
 		"M+" : date.getMonth()+1,                 //月份
 		"d+" : date.getDate(),                    //日
