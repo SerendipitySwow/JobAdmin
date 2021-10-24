@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
 	LAYOUT_TAGS: true,
 
 	//语言
-	LANG: 'zh-cn',
+	LANG: 'zh_CN',
 
 	//主题颜色
 	COLOR: '#0960bd',

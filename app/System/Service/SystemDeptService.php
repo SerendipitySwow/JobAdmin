@@ -80,7 +80,7 @@ class SystemDeptService extends AbstractService
         }
 
         if ($data['id'] == $data['parent_id']) {
-            throw new NormalStatusException(__('system.parent_dept_error'), 500);
+            throw new NormalStatusException(t('system.parent_dept_error'), 500);
         }
 
         return $data;

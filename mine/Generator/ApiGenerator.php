@@ -44,7 +44,7 @@ class ApiGenerator extends MineGenerator implements CodeGenerator
         $this->model = $model;
         $this->filesystem = make(Filesystem::class);
         if (empty($model->module_name) || empty($model->menu_name)) {
-            throw new NormalStatusException(__('setting.gen_code_edit'));
+            throw new NormalStatusException(t('setting.gen_code_edit'));
         }
         return $this;
     }
