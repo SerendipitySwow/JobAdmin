@@ -11,5 +11,7 @@ return [
     'exists_children_ctu' => '删除成功。[:names]等包含子项，已跳过 ',
     'parent_dept_error' => '上级部门不能为本部门',
     'valid_password' => '密码验证失败',
-    'directory_no_delete' => '非空目录，不可删除'
+    'directory_no_delete' => '非空目录，不可删除',
+    'upload_image_verification_fail' => '图片上传验证不通过',
+    'upload_file_verification_fail' => '文件上传验证不通过',
 ];

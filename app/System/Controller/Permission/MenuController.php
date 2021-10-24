@@ -85,7 +85,7 @@ class MenuController extends MineController
     public function update(int $id, SystemMenuCreateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all())
-            ? $this->success() : $this->error('数据没有任何改变');
+            ? $this->success() : $this->error(t('mineadmin.data_no_change'));
     }
 
     /**
