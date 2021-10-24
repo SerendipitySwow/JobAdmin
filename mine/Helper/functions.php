@@ -92,15 +92,16 @@ if (! function_exists('t')) {
     /**
      * 多语言函数
      * @param string $key
+     * @param array $replace
      * @return string
      */
-    function t(string $key): string
+    function t(string $key, array $replace = []): string
     {
         $language = explode(
             ',',
             container()->get(\Mine\MineRequest::class)->getHeaderLine('accept-language')
         )[0] ?? 'zh_CN';
-        return __($key, [], $language);
+        return __($key, $replace, $language);
     }
 }
 
