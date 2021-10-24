@@ -84,7 +84,7 @@ class SystemUploadFileService extends AbstractService
         if (! $this->mapper->checkDirDbExists($params['name'])) {
             return $this->mineUpload->getFileSystem()->deleteDir($params['name']);
         }
-        throw new NormalStatusException('非空目录，不可删除', 500);
+        throw new NormalStatusException(__('system.directory_no_delete'), 500);
     }
 
     /**

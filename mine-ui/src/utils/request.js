@@ -92,6 +92,7 @@ function createRequest (service) {
 		const configDefault = {
 			headers: {
 				Authorization: sysConfig.TOKEN_PREFIX + token,
+				'Accept-Language': 'zh_CN',
 				'Content-Type': get(config, 'headers.Content-Type', 'application/json;charset=UTF-8')
 			},
 
