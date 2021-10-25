@@ -43,7 +43,7 @@ class UploadController extends MineController
             );
             return empty($data) ? $this->error() : $this->success($data);
         } else {
-            return $this->error('文件上传验证不通过');
+            return $this->error(t('system.upload_file_verification_fail'));
         }
     }
 
@@ -63,7 +63,7 @@ class UploadController extends MineController
             );
             return empty($data) ? $this->error() : $this->success($data);
         } else {
-            return $this->error('图片上传验证不通过');
+            return $this->error(t('system.upload_image_verification_fail'));
         }
     }
 

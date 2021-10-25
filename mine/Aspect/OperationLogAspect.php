@@ -81,7 +81,7 @@ class OperationLogAspect extends AbstractAspect
         try {
             $operationLog['username'] = $loginUser->getUsername();
         } catch (\Exception $e) {
-            $operationLog['username'] = __('system.no_login_user');
+            $operationLog['username'] = t('system.no_login_user');
         }
 
         return $operationLog;

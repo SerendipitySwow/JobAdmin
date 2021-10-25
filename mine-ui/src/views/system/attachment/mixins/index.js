@@ -33,7 +33,7 @@ export default {
         storage_path: undefined,
         maxDate: undefined,
         minDate: undefined,
-        pageSize: 50,
+        pageSize: 20,
         page:1,
       },
       isRecycle: false,

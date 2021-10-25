@@ -126,15 +126,11 @@
 				lang: [
 					{
 						name: '简体中文',
-						value: 'zh-cn',
+						value: 'zh_CN',
 					},
 					{
 						name: 'English',
 						value: 'en',
-					},
-					{
-						name: '日本語',
-						value: 'ja',
 					}
 				]
 			}

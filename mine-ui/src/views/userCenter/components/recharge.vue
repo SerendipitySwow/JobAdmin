@@ -19,7 +19,7 @@
 <style lang="scss" scoped>
   .container {
     position: absolute;
-    bottom: 15vh;
+    bottom: 20vh;
     left: 50vw;
     width: 300px;
     height: 500px;
