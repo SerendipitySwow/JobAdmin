@@ -36,7 +36,11 @@
 				<Topbar v-if="!ismobile"></Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view></router-view>
+					<router-view v-slot="{ Component }">
+					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
+					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
+					    </keep-alive>
+					</router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -71,14 +75,18 @@
 				<Topbar v-if="!ismobile"></Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view></router-view>
+					<router-view v-slot="{ Component }">
+					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
+					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
+					    </keep-alive>
+					</router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
 		</section>
 	</template>
 
-	<!-- 经典布局 -->
+	<!-- 功能坞布局 -->
 	<template v-else-if="layout=='dock'">
 		<header class="adminui-header">
 			<div class="adminui-header-left">
@@ -88,20 +96,24 @@
 				</div>
 			</div>
 			<div class="adminui-header-right">
+				<div v-if="!ismobile" class="adminui-header-menu">
+					<el-menu mode="horizontal" :default-active="active" router>
+						<NavMenu :navMenus="menu"></NavMenu>
+					</el-menu>
+				</div>
+				<Side-m v-if="ismobile"></Side-m>
 				<userbar></userbar>
 			</div>
 		</header>
 
 		<section class="aminui-wrapper">
-			<Side-m v-if="ismobile"></Side-m>
 			<div class="aminui-body el-container">
-				<div v-if="!ismobile" class="adminui-header-menu">
-					<el-menu :default-active="$route.meta.active || $route.fullPath" router mode="horizontal">
-						<NavMenu :navMenus="menu"></NavMenu>
-					</el-menu>
-				</div>
 				<div class="adminui-main" id="adminui-main">
-					<router-view></router-view>
+					<router-view v-slot="{ Component }">
+					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
+					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
+					    </keep-alive>
+					</router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -143,7 +155,11 @@
 				</Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view></router-view>
+					<router-view v-slot="{ Component }">
+					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
+					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
+					    </keep-alive>
+					</router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -182,7 +198,8 @@
 				settingDialog: false,
 				menu: [],
 				nextMenu: [],
-				pmenu: {}
+				pmenu: {},
+				active: ''
 			}
 		},
 		computed:{
