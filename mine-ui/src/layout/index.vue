@@ -36,11 +36,7 @@
 				<Topbar v-if="!ismobile"></Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view v-slot="{ Component }">
-					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
-					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
-					    </keep-alive>
-					</router-view>
+					<router-view></router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -75,18 +71,14 @@
 				<Topbar v-if="!ismobile"></Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view v-slot="{ Component }">
-					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
-					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
-					    </keep-alive>
-					</router-view>
+					<router-view></router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
 		</section>
 	</template>
 
-	<!-- 功能坞布局 -->
+	<!-- 经典布局 -->
 	<template v-else-if="layout=='dock'">
 		<header class="adminui-header">
 			<div class="adminui-header-left">
@@ -109,11 +101,7 @@
 		<section class="aminui-wrapper">
 			<div class="aminui-body el-container">
 				<div class="adminui-main" id="adminui-main">
-					<router-view v-slot="{ Component }">
-					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
-					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
-					    </keep-alive>
-					</router-view>
+					<router-view></router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -155,11 +143,7 @@
 				</Topbar>
 				<Tags v-if="!ismobile && layoutTags"></Tags>
 				<div class="adminui-main" id="adminui-main">
-					<router-view v-slot="{ Component }">
-					    <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
-					        <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow"/>
-					    </keep-alive>
-					</router-view>
+					<router-view></router-view>
 					<iframe-view></iframe-view>
 				</div>
 			</div>
@@ -198,8 +182,7 @@
 				settingDialog: false,
 				menu: [],
 				nextMenu: [],
-				pmenu: {},
-				active: ''
+				pmenu: {}
 			}
 		},
 		computed:{
