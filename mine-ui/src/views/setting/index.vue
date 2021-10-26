@@ -153,9 +153,6 @@
 				await this.getDict('upload_mode').then(res => {
 					this.uploadMode = res.data
 				})
-				this.getDicts(['table_engine', 'data_status']).then(Res=> {
-					console.log(Res)
-				})
 			},
 
 			// 保存系统类配置
