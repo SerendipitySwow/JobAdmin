@@ -169,7 +169,7 @@
 
       // 批量删除
       deleteBatch() {
-        this.$confirm('此操作只会删除按钮菜单，确定删除吗？', '提示', {
+        this.$confirm('此操作只会删除已选择的按钮菜单，确定删除吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
