@@ -35,4 +35,23 @@ class CacheMonitorService
         ];
     }
 
+    /**
+     * 删除一个缓存
+     * @param string $key
+     * @return bool
+     */
+    public function delete(string $key): bool
+    {
+        return container()->get(Redis::class)->del($key) > 0;
+    }
+
+    /**
+     * 清空所有缓存
+     * @return bool
+     */
+    public function clear(): bool
+    {
+        return container()->get(Redis::class)->flushDB();
+    }
+
 }
