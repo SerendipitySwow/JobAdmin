@@ -175,7 +175,6 @@
           type: 'warning'
         }).then(() => {
           let ids = []
-          
           this.$refs.menu.getCheckedNodes().filter(item => {
             if (item.type === 'B') {
               ids.push(item.id)
