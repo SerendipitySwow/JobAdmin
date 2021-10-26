@@ -28,6 +28,7 @@ class CacheMonitorController extends MineController
     /**
      * 获取Redis服务器信息
      * @GetMapping("monitor")
+     * @Permission("system:cache:monitor")
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function getCacheInfo(): \Psr\Http\Message\ResponseInterface

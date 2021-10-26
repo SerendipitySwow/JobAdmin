@@ -60,5 +60,16 @@ export default {
       method: 'post',
       data: params
     })
-  }
+  },
+
+  /**
+   * 获取缓存信息
+   * @returns
+   */
+    getCacheInfo () {
+    return request({
+      url: 'system/cache/monitor',
+      method: 'get'
+    })
+  },
 }
