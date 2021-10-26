@@ -139,7 +139,7 @@
     },
     computed: {
       getSwitchText() {
-        return this.showRecycle ? '显示正常数据' : '回收站'
+        return this.showRecycle ? '正常数据' : '回收站'
       }
     },
     watch: {
