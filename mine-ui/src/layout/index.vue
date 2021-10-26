@@ -210,7 +210,6 @@
 			}
 			menu.unshift(home);
 			this.menu = this.filterUrl(menu)
-			;
 			this.showThis()
 		},
 		watch: {
@@ -251,6 +250,12 @@
 			filterUrl(map){
 				var newMap = []
 				map && map.forEach(item => {
+					// 生产模式去掉开发者工具
+					if ( this.$CONFIG.APP_MODE === 'prod' ) {
+						if (item.meta.type === 'M' && ['/module', '/code', '/table'].includes(item.path)) {
+							return false
+						}
+					}
 					item.meta = item.meta?item.meta:{};
 					//处理隐藏
 					if(item.meta.hidden){

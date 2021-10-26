@@ -1,4 +1,7 @@
 const DEFAULT_CONFIG = {
+	// 模式 开发：dev | 生产：prod | 普通：normal，生产模式会隐藏掉模块管理、代码生成器、数据表设计器
+	APP_MODE: 'prod',
+
 	//标题
 	APP_NAME: "MineAdmin",
 
