@@ -23,7 +23,7 @@ class CacheMonitorService
             'keys'      => &$keys,
             'server'    => [
                 'version'           => &$info['redis_version'],
-                'use_money'         => &$info['used_memory_human'],
+                'use_memory'        => &$info['used_memory_human'],
                 'port'              => &$info['tcp_port'],
                 'forks_num'         => &$info['total_forks'],
                 'use_cpu'           => &$info['used_cpu_sys'],

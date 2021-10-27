@@ -43,7 +43,7 @@ class CacheMonitorController extends MineController
 
     /**
      * 删除一个缓存
-     * @DeleteMapping("delete/{key}")
+     * @DeleteMapping("delete")
      * @Permission("system:cache:delete")
      * @OperationLog
      */

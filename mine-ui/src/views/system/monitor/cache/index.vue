@@ -19,7 +19,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">使用内存</div></td>
-                  <td><div class="cell">{{ server.use_money }}</div></td>
+                  <td><div class="cell">{{ server.use_memory }}</div></td>
                   <td><div class="cell">使用CPU</div></td>
                   <td><div class="cell">{{ new Number(server.use_cpu).toFixed(2) }}%</div></td>
                 </tr>
@@ -45,7 +45,7 @@
         <el-card shadow="hover">
           <template #header>
             <span>其他信息</span>
-            <el-button style="float: right;" type="primary" icon="el-icon-refresh">清空缓存</el-button>
+            <el-button style="float: right;" type="primary" icon="el-icon-refresh" @click="clear">清空缓存</el-button>
           </template>
           <div class="table">
             <el-row :gutter="15">
@@ -63,7 +63,7 @@
                       <td><div class="cell">{{ index + 1 }}</div></td>
                       <td><div class="cell">{{ key }}</div></td>
                       <td><div class="cell" width="15%" style="text-align:center">
-                        <el-button><i class="el-icon-delete" /></el-button>
+                        <el-button @click="deleteKey(key)"><i class="el-icon-delete" /></el-button>
                       </div></td>
                     </tr>
                   </tbody>
@@ -72,15 +72,15 @@
 
               <el-col :span="12" class="cache-col">
                 <el-progress type="dashboard" :percentage="new Number(server.use_cpu).toFixed(2)" :stroke-width="8" :width="200">
-                  <template #default="{ percentage }">
-                    <span class="percentage-value">{{ percentage }}%</span>
+                  <template #default>
+                    <span class="percentage-value">{{ new Number(server.use_cpu).toFixed(2) }}%</span>
                     <span class="percentage-label">CPU</span>
                   </template>
                 </el-progress>
 
                 <el-progress type="dashboard" :percentage="100" :stroke-width="8" :width="200" style="margin-top: 5%" status="success">
                   <template #default>
-                    <span class="percentage-value">{{ server.use_money }}</span>
+                    <span class="percentage-value">{{ server.use_memory }}</span>
                     <span class="percentage-label">Memory</span>
                   </template>
                 </el-progress>
@@ -93,6 +93,7 @@
 	</div>
 </template>
 <script>
+import useTabs from '@/utils/useTabs'
 import scEcharts from '@/components/scEcharts';
 export default {
   name: 'system:cache',
@@ -116,10 +117,29 @@ export default {
     async getService () {
       await this.$API.monitor.getCacheInfo().then(res => {
         this.server = res.data.server
-        console.log(this.server)
         this.keys   = res.data.keys
       })
-    }
+    },
+
+    // 删除一个缓存
+    deleteKey(key) {
+      this.$API.monitor.deleteKey({ key }).then(res => {
+        if (res.success) {
+          this.$message.success(res.message)
+          useTabs.refresh()
+        }
+      })
+    },
+
+    // 清空缓存
+    clear() {
+      this.$API.monitor.clear().then(res => {
+        if (res.success) {
+          this.$message.success(res.message)
+          useTabs.refresh()
+        }
+      })
+    },
   }
 }
 </script>

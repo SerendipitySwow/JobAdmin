@@ -66,10 +66,33 @@ export default {
    * 获取缓存信息
    * @returns
    */
-    getCacheInfo () {
+  getCacheInfo () {
     return request({
       url: 'system/cache/monitor',
       method: 'get'
+    })
+  },
+
+  /**
+   * 删除一个缓存
+   * @returns
+   */
+  deleteKey (data) {
+    return request({
+      url: 'system/cache/delete',
+      method: 'delete',
+      data
+    })
+  },
+
+  /**
+   * 清空缓存
+   * @returns
+   */
+  clear () {
+    return request({
+      url: 'system/cache/clear',
+      method: 'post'
     })
   },
 }
