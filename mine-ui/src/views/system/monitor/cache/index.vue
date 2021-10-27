@@ -9,36 +9,47 @@
             <span>Redis信息</span>
           </template>
           <div class="table">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td><div class="cell">Redis版本</div></td>
-                  <td><div class="cell">{{ server.version }}</div></td>
-                  <td><div class="cell">客户端连接数</div></td>
-                  <td><div class="cell">{{ server.clients }}</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">使用内存</div></td>
-                  <td><div class="cell">{{ server.use_memory }}</div></td>
-                  <td><div class="cell">使用CPU</div></td>
-                  <td><div class="cell">{{ new Number(server.use_cpu).toFixed(2) }}%</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">端口</div></td>
-                  <td><div class="cell">{{ server.port }}</div></td>
-                  <td><div class="cell">进程数</div></td>
-                  <td><div class="cell">{{ server.forks_num }}</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">已过期key</div></td>
-                  <td><div class="cell">{{ server.expired_keys }}</div></td>
-                  <td><div class="cell">MineAdmin 使用key</div></td>
-                  <td><div class="cell">{{ server.sys_total_keys }}</div></td>
-                </tr>
-              </tbody>
-            </table>
+            <el-row :gutter="15">
+              <el-col :span="18">
+                <table cellspacing="0" style="width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td><div class="cell">Redis版本</div></td>
+                      <td><div class="cell">{{ server.version }}</div></td>
+                      <td><div class="cell">客户端连接数</div></td>
+                      <td><div class="cell">{{ server.clients }}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">运行模式</div></td>
+                      <td><div class="cell">{{ server.redis_mode }}</div></td>
+                      <td><div class="cell">运行天数</div></td>
+                      <td><div class="cell">{{ server.run_days }}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">端口</div></td>
+                      <td><div class="cell">{{ server.port }}</div></td>
+                      <td><div class="cell">AOF状态</div></td>
+                      <td><div class="cell">{{ server.aof_enabled }}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">已过期key</div></td>
+                      <td><div class="cell">{{ server.expired_keys }}</div></td>
+                      <td><div class="cell">系统使用key</div></td>
+                      <td><div class="cell">{{ server.sys_total_keys }}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </el-col>
 
-            
+              <el-col :span="6" class="cache-col">
+                <el-progress type="dashboard" :percentage="100" :stroke-width="8" :width="170" status="success">
+                  <template #default>
+                    <span class="percentage-value">{{ server.use_memory }}</span>
+                    <span class="percentage-label">Memory</span>
+                  </template>
+                </el-progress>
+              </el-col>
+            </el-row>
           </div>
         </el-card>
 
@@ -48,42 +59,31 @@
             <el-button style="float: right;" type="primary" icon="el-icon-refresh" @click="clear">清空缓存</el-button>
           </template>
           <div class="table">
-            <el-row :gutter="15">
-              <el-col :span="12">
+            <el-row :gutter="25">
+              <el-col :span="16">
                 <table cellspacing="0" style="width: 100%;">
                   <thead>
                     <tr>
-                      <td><div class="cell"></div></td>
-                      <td width="80%"><div class="cell">缓存名称</div></td>
-                      <td><div class="cell" width="15%" style="text-align:center">操作</div></td>
+                      <td><div class="cell" width="5%">&nbsp;</div></td>
+                      <td><div class="cell">缓存名称</div></td>
+                      <td><div class="cell" width="130" style="text-align:center">操作</div></td>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(key, index) in keys" :key="index">
-                      <td><div class="cell">{{ index + 1 }}</div></td>
+                      <td><div class="cell" width="5%">{{ index + 1 }}</div></td>
                       <td><div class="cell">{{ key }}</div></td>
-                      <td><div class="cell" width="15%" style="text-align:center">
+                      <td><div class="cell" width="130" style="text-align:center">
                         <el-button @click="deleteKey(key)"><i class="el-icon-delete" /></el-button>
+                        <el-button @click="view(key)"><i class="el-icon-view" /></el-button>
                       </div></td>
                     </tr>
                   </tbody>
                 </table>
               </el-col>
-
-              <el-col :span="12" class="cache-col">
-                <el-progress type="dashboard" :percentage="new Number(server.use_cpu).toFixed(2)" :stroke-width="8" :width="200">
-                  <template #default>
-                    <span class="percentage-value">{{ new Number(server.use_cpu).toFixed(2) }}%</span>
-                    <span class="percentage-label">CPU</span>
-                  </template>
-                </el-progress>
-
-                <el-progress type="dashboard" :percentage="100" :stroke-width="8" :width="200" style="margin-top: 5%" status="success">
-                  <template #default>
-                    <span class="percentage-value">{{ server.use_memory }}</span>
-                    <span class="percentage-label">Memory</span>
-                  </template>
-                </el-progress>
+              <el-col :span="8">
+                <div style="line-height: 38px; font-size: 14px;">Key详情</div>
+                <el-input type="textarea" :autosize="{minRows: 20}" v-model="keyContent"  />
               </el-col>
             </el-row>
           </div>
@@ -106,6 +106,7 @@ export default {
     return {
       server: {},
       keys: [],
+      keyContent: '',
     }
   },
 
@@ -118,6 +119,15 @@ export default {
       await this.$API.monitor.getCacheInfo().then(res => {
         this.server = res.data.server
         this.keys   = res.data.keys
+      })
+    },
+
+    // 查看key 
+    view (key) {
+      this.$API.monitor.view({ key }).then(res => {
+        if (res.success) {
+          this.keyContent = res.data.content
+        }
       })
     },
 

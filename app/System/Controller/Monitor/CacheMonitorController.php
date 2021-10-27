@@ -42,6 +42,15 @@ class CacheMonitorController extends MineController
     }
 
     /**
+     * 查看key内容
+     * @PostMapping("view")
+     */
+    public function view(): ResponseInterface
+    {
+        return $this->success(['content' => $this->service->view($this->request->input('key'))]);
+    }
+
+    /**
      * 删除一个缓存
      * @DeleteMapping("delete")
      * @Permission("system:cache:delete")

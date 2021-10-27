@@ -74,6 +74,19 @@ export default {
   },
 
   /**
+   * 查看key内容
+   * @returns
+   */
+  view (data) {
+    return request({
+      url: 'system/cache/view',
+      method: 'post',
+      data
+    })
+  },
+  
+
+  /**
    * 删除一个缓存
    * @returns
    */
