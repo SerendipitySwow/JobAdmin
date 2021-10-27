@@ -83,7 +83,7 @@
               </el-col>
               <el-col :span="8">
                 <div style="line-height: 38px; font-size: 14px;">Key详情</div>
-                <el-input type="textarea" :autosize="{minRows: 20}" v-model="keyContent"  />
+                <el-input type="textarea" :rows="20" v-model="keyContent"  />
               </el-col>
             </el-row>
           </div>
