@@ -5,7 +5,6 @@ namespace Mine\Traits;
 use Hyperf\Contract\LengthAwarePaginatorInterface;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\Model;
-use Hyperf\Utils\Collection;
 use Mine\Annotation\Transaction;
 use Mine\MineCollection;
 use Mine\MineModel;
