@@ -98,7 +98,7 @@
 
     <res ref="Res" :type="type" @confirmData="getConfirmData"></res>
 
-    <net-work ref="network" @useSuccess="useSuccess" />
+    <net-work ref="network" :path="uploadDir" @useSuccess="useSuccess" @saveSuccess="saveSuccess" />
   </el-main>
 </template>
 <script>
@@ -204,8 +204,15 @@ export default {
   methods: {
 
     // 使用网络图片
-    useSuccess(url) {
+    useSuccess (url) {
       this.imageList.push({ url })
+      this.$emit('uploadData', this.imageList)
+      this.uploadDialog = false
+    },
+
+    // 保存网络图片
+    saveSuccess (data) {
+      this.imageList.push(data)
       this.$emit('uploadData', this.imageList)
       this.uploadDialog = false
     },

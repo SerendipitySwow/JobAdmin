@@ -44,6 +44,13 @@ export default {
 
   emits: ['useSuccess', 'saveSuccess'],
 
+  props: {
+    path: {
+      default: '',
+      type: String
+    }
+  },
+
   data() {
     return {
       openDialog: false,
@@ -56,6 +63,7 @@ export default {
     open () {
       this.openDialog = true
       this.url = ''
+      console.log(this.path)
     },
 
     handleResClose() {
@@ -63,7 +71,11 @@ export default {
     },
 
     save() {
-
+      this.$API.upload.saveNetWorkImage({ url: this.url, path: this.path }).then(res => {
+        this.$emit('saveSuccess', res.data)
+        this.openDialog = false
+        this.$message.success('保存成功')
+      })
     },
 
     useImage() {

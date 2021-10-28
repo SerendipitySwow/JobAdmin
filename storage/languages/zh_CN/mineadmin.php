@@ -7,4 +7,5 @@ return [
     'data_no_change' => '数据没有任何改变',
     'not_found' => '您访问的资源不存在',
     'allow_method' => '只允许 [:method] 方式访问资源',
+    'network_image_save_fail' => '网络图片保存失败',
 ];

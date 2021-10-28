@@ -7,4 +7,5 @@ return [
     'data_no_change' => 'There has been no change in the data',
     'not_found' => 'The resource you are accessing does not exist',
     'allow_method' => 'Only allowed [:method] access to resources',
+    'network_image_save_fail' => 'Network picture saving failed',
 ];
