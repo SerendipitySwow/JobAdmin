@@ -426,10 +426,7 @@
           if (data.children && data.children.length > 0) {
             filterNode(data.children)
           }
-
           this.queryParams.dept_id = ids.join(',')
-
-          console.log(this.queryParams)
         }
         this.$refs.table.upData(this.queryParams)
       },
