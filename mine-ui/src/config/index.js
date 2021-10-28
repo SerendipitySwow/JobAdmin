@@ -30,6 +30,9 @@ const DEFAULT_CONFIG = {
 	//是否开启多标签
 	LAYOUT_TAGS: true,
 
+	// 请求超时时间	 默认 5 秒
+	TIMEOUT: 5000,
+
 	//语言
 	LANG: 'zh_CN',
 
