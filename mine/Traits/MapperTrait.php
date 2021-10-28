@@ -4,6 +4,7 @@ namespace Mine\Traits;
 
 use Hyperf\Contract\LengthAwarePaginatorInterface;
 use Hyperf\Database\Model\Builder;
+use Hyperf\Database\Model\Model;
 use Hyperf\Utils\Collection;
 use Mine\Annotation\Transaction;
 use Mine\MineCollection;
@@ -284,5 +285,74 @@ trait MapperTrait
     public function import(string $dto, ?\Closure $closure = null): bool
     {
         return (new MineCollection())->import($dto, $this->getModel(), $closure);
+    }
+
+    /**
+     * 闭包通用查询设置
+     * @param \Closure|null $closure 传入的闭包查询
+     * @return Builder
+     */
+    public function settingClosure(?\Closure $closure = null): Builder
+    {
+        return $this->model::where(function($query) use($closure) {
+            if ($closure instanceof \Closure) {
+                $closure($query);
+            }
+        });
+    }
+
+    /**
+     * 闭包通用方式查询一条数据
+     * @param \Closure|null $closure
+     * @param array|string[] $column
+     * @return Builder|Model|null
+     */
+    public function one(?\Closure $closure = null, array $column = ['*'])
+    {
+        return $this->settingClosure($closure)->select($column)->first();
+    }
+
+    /**
+     * 闭包通用方式查询数据集合
+     * @param \Closure|null $closure
+     * @param array|string[] $column
+     * @return array
+     */
+    public function get(?\Closure $closure = null, array $column = ['*']): array
+    {
+        return $this->settingClosure($closure)->get($column)->toArray();
+    }
+
+    /**
+     * 闭包通用方式统计
+     * @param \Closure|null $closure
+     * @param string $column
+     * @return int
+     */
+    public function count(?\Closure $closure = null, string $column = '*'): int
+    {
+        return $this->settingClosure($closure)->count($column);
+    }
+
+    /**
+     * 闭包通用方式查询最大值
+     * @param \Closure|null $closure
+     * @param string $column
+     * @return mixed|string|void
+     */
+    public function max(?\Closure $closure = null, string $column = '*')
+    {
+        return $this->settingClosure($closure)->max($column);
+    }
+
+    /**
+     * 闭包通用方式查询最小值
+     * @param \Closure|null $closure
+     * @param string $column
+     * @return mixed|string|void
+     */
+    public function min(?\Closure $closure = null, string $column = '*')
+    {
+        return $this->settingClosure($closure)->min($column);
     }
 }
