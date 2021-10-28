@@ -450,4 +450,22 @@ class SystemUserService extends AbstractService
     {
         return $this->mapper->initUserPassword((int) (make(LoginUser::class))->getId(), $params['newPassword']);
     }
+
+
+    public function test()
+    {
+        $data = [
+            'one' => $this->mapper->one(function($query){
+                        $query->where('id', env('SUPER_ADMIN'));
+                    }, ['username']),
+
+            'get' => $this->mapper->get(function($query) {
+                $query->where('id', env('SUPER_ADMIN'));
+            }, ['id', 'username', 'password']),
+
+            'count' => $this->mapper->count()
+        ];
+
+        return $data;
+    }
 }
