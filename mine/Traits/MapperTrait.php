@@ -177,9 +177,9 @@ trait MapperTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id): MineModel
+    public function read(int $id): ?MineModel
     {
-        return $this->model::find($id);
+        return ($model = $this->model::find($id)) ? $model : null;
     }
 
     /**
@@ -188,9 +188,9 @@ trait MapperTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id): MineModel
+    public function readByRecycle(int $id): ?MineModel
     {
-        return $this->model::withTrashed()->find($id);
+        return ($model = $this->model::withTrashed()->find($id)) ? $model : null;
     }
 
     /**
@@ -225,7 +225,9 @@ trait MapperTrait
     {
         foreach ($ids as $id) {
             $model = $this->model::withTrashed()->find($id);
-            $model->forceDelete();
+            if ($model) {
+                $model->forceDelete();
+            }
         }
         return true;
     }
