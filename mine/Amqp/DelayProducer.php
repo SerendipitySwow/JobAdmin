@@ -1,13 +1,18 @@
 <?php
 /**
- * Description:延迟队列
- * Created by phpStorm.
- * User: mike
- * Date: 2021/10/28
- * Time: 下午2:05
+ * MineAdmin is committed to providing solutions for quickly building web applications
+ * Please view the LICENSE file that was distributed with this source code,
+ * For the full copyright and license information.
+ * Thank you very much for using MineAdmin.
+ *
+ * @Description 延迟队列
+ * @Author mike
+ * @Link   https://gitee.com/xmo/MineAdmin
  */
+
+declare(strict_types=1);
 namespace Mine\Amqp;
-//use Hyperf\Amqp\Event\AfterProduce;
+// use Hyperf\Amqp\Event\AfterProduce;
 //use Hyperf\Amqp\Event\BeforeProduce;
 //use Hyperf\Amqp\Event\FailToProduce;
 //use Hyperf\Amqp\Event\ProduceEvent;
