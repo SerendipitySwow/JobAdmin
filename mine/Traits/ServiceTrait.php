@@ -9,8 +9,6 @@
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-declare(strict_types=1);
-
 namespace Mine\Traits;
 
 use Hyperf\Database\Model\Collection;
