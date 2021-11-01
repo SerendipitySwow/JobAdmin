@@ -84,7 +84,7 @@ class LoginUser
      */
     public function getId(): string
     {
-        return $this->jwt->getParserData()['id'];
+        return (string) $this->jwt->getParserData()['id'];
     }
 
     /**
