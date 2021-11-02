@@ -1,6 +1,4 @@
 import login from '@/api/apis/login';
-import sysRouter from '@/router/systemRouter';
-import tool from '@/utils/tool';
 
 export default {
     state: {
