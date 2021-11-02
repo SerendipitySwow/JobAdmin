@@ -1,15 +1,14 @@
-import {createRouter, createWebHistory, createWebHashHistory} from 'vue-router';
-import { ElMessage } from 'element-plus';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import config from "@/config"
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import tool from '@/utils/tool';
 import store from '@/store/index'
-import systemRouter from './systemRouter';
+import sysRouter from './systemRouter';
 import {beforeEach, afterEach} from './scrollBehavior';
 
 //系统路由
-const routes = systemRouter
+const routes = sysRouter.systemRouter
 
 const whiteList = ['login', 'test']
 const defaultRoutePath = '/dashboard'
@@ -53,19 +52,15 @@ router.beforeEach(async (to, from, next) => {
 			next({ path: defaultRoutePath })
 		} else if (! store.state.user.routers) {
 			await store.dispatch('getUserInfo').then( res => {
-				if (res.routers.length > 0) {
+				if (res.routers.length !== 0) {
 					let routers = res.routers
 					const apiRouter = filterAsyncRouter(routers)
-					systemRouter.map(item => {
-						apiRouter.push(item)
-					})
+					apiRouter.unshift(sysRouter.dashboard)
+					res.routers = apiRouter
+					tool.data.set('user', res)
 					flatAsyncRoutes(apiRouter).forEach(item => {
 						router.addRoute("layout", item)
 					})
-					console.log(apiRouter)
-					res.routers = apiRouter 
-					tool.data.set('user', res)
-
 					router.addRoute(routes_404)
 					if (to.matched.length == 0) {
 						router.push(to.fullPath)
@@ -121,10 +116,6 @@ function filterAsyncRouter(routerMap, activePath = null) {
 			item.meta.url = item.path
 			item.path = `/i/${item.name}`
 		}
-		
-		if (activePath) {
-			item.meta.active = activePath
-		}
 
 		//MAP转路由对象
 		const route = {
@@ -132,7 +123,7 @@ function filterAsyncRouter(routerMap, activePath = null) {
 			name: item.name,
 			meta: item.meta,
 			redirect: item.redirect,
-			children: item.children ? filterAsyncRouter(item.children, item.path) : null,
+			children: item.children ? filterAsyncRouter(item.children) : null,
 			component: loadComponent(item.component)
 		}
 		accessedRouters.push(route)

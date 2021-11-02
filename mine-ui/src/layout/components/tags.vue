@@ -67,9 +67,7 @@
 			}
 		},
 		created() {
-			var menu = this.$TOOL.data.get("user").routers
-			console.log(menu)
-			var dashboardRoute = this.treeFind(menu, node => node.path==this.$CONFIG.DASHBOARD_URL)
+			let dashboardRoute = this.$TOOL.data.get('user').routers[0].children[0]
 			dashboardRoute.fullPath = dashboardRoute.path
 			this.addViewTags(dashboardRoute);
 			this.addViewTags(this.$route);

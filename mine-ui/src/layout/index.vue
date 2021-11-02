@@ -218,15 +218,7 @@
 		created() {
 			this.onLayoutResize();
 			window.addEventListener('resize', this.onLayoutResize);
-			let menu = this.$TOOL.data.get('user').routers
-			// let home = this.$router.options.routes[0].children[0];
-			// 根据权限动态删除系统配置菜单
-			if ( !this.$TOOL.data.get("user").codes.includes('setting:config') && this.$TOOL.data.get("user").codes[0] != '*') {
-				home.children.pop()
-			}
-			// menu.unshift(home);
-			this.menu = this.filterUrl(menu)
-			console.log(this.menu)
+			this.menu = this.filterUrl(this.$TOOL.data.get('user').routers)
 			this.showThis()
 		},
 		watch: {
@@ -275,6 +267,14 @@
 						if (item.meta.type === 'M' && ['/module', '/code', '/table'].includes(item.path)) {
 							return false
 						}
+					}
+					// 去除没有系统配置权限
+					if (
+						! this.$TOOL.data.get("user").codes.includes('setting:config')
+						&& this.$TOOL.data.get("user").codes[0] != '*'
+						&& ['/system'].includes(item.path)
+						) {
+						return false
 					}
 					item.meta = item.meta?item.meta:{};
 					//处理隐藏
