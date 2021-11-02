@@ -145,7 +145,7 @@ class MineUpload
 
         $fileInfo = [
             'storage_mode' => $this->getMappingMode(),
-            'origin_name' => md5(time()).'.jpg',
+            'origin_name' => md5((string) time()).'.jpg',
             'object_name' => $filename,
             'mime_type' => 'image/jpg',
             'storage_path' => $path,
