@@ -1,4 +1,13 @@
 <?php
+/**
+ * MineAdmin is committed to providing solutions for quickly building web applications
+ * Please view the LICENSE file that was distributed with this source code,
+ * For the full copyright and license information.
+ * Thank you very much for using MineAdmin.
+ *
+ * @Author X.Mo<root@imoi.cn>
+ * @Link   https://gitee.com/xmo/MineAdmin
+ */
 
 namespace Mine\Traits;
 
@@ -177,9 +186,9 @@ trait MapperTrait
      * @param int $id
      * @return MineModel
      */
-    public function read(int $id): MineModel
+    public function read(int $id): ?MineModel
     {
-        return $this->model::find($id);
+        return ($model = $this->model::find($id)) ? $model : null;
     }
 
     /**
@@ -188,9 +197,9 @@ trait MapperTrait
      * @return MineModel
      * @noinspection PhpUnused
      */
-    public function readByRecycle(int $id): MineModel
+    public function readByRecycle(int $id): ?MineModel
     {
-        return $this->model::withTrashed()->find($id);
+        return ($model = $this->model::withTrashed()->find($id)) ? $model : null;
     }
 
     /**
@@ -213,7 +222,7 @@ trait MapperTrait
     public function update(int $id, array $data): bool
     {
         $this->filterExecuteAttributes($data, true);
-        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data);
+        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data) > 0;
     }
 
     /**
@@ -225,7 +234,9 @@ trait MapperTrait
     {
         foreach ($ids as $id) {
             $model = $this->model::withTrashed()->find($id);
-            $model->forceDelete();
+            if ($model) {
+                $model->forceDelete();
+            }
         }
         return true;
     }
