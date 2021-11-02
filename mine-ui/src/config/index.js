@@ -5,6 +5,9 @@ const DEFAULT_CONFIG = {
 	//标题
 	APP_NAME: "MineAdmin",
 
+	//首页地址
+	DASHBOARD_URL: "/dashboard",
+
 	//版本号
 	APP_VER: "0.3.9",
 

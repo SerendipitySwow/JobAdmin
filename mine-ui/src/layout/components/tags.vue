@@ -67,7 +67,9 @@
 			}
 		},
 		created() {
-			const dashboardRoute = this.$router.options.routes[0].children[0].children[0]
+			var menu = this.$TOOL.data.get("user").routers
+			console.log(menu)
+			var dashboardRoute = this.treeFind(menu, node => node.path==this.$CONFIG.DASHBOARD_URL)
 			dashboardRoute.fullPath = dashboardRoute.path
 			this.addViewTags(dashboardRoute);
 			this.addViewTags(this.$route);
@@ -77,6 +79,17 @@
 			this.scrollInit()
 		},
 		methods: {
+			//查找树
+			treeFind(tree, func){
+				for (const data of tree) {
+					if (func(data)) return data
+					if (data.children) {
+						const res = this.treeFind(data.children, func)
+						if (res) return res
+					}
+				}
+				return null
+			},
 			//标签拖拽排序
 			tagDrop(){
 				const target = this.$refs.tags
@@ -87,7 +100,7 @@
 			},
 			//增加tag
 			addViewTags(route) {
-				if(route.name){
+				if(route.name && !route.meta.fullpage){
 					this.$store.commit("pushViewTags",route)
 					this.$store.commit("pushKeepLive",route.name)
 				}
@@ -166,7 +179,7 @@
 				var nowTag = this.contextMenuItem;
 				var tags = [...this.tagList];
 				tags.forEach(tag => {
-					if(tag.meta && tag.meta.affix || nowTag.fullPath==tag.fullPath){
+					if(tag.meta&&tag.meta.affix || nowTag.fullPath==tag.fullPath){
 						return true
 					}else{
 						this.closeSelectedTag(tag)

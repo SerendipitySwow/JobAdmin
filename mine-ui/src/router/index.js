@@ -39,6 +39,12 @@ router.beforeEach(async (to, from, next) => {
 	let token = tool.data.get('token');
 
 	if (token && token !== 'undefined') {
+
+		//整页路由处理
+		if(to.meta.fullpage){
+			to.matched = [to.matched[to.matched.length-1]]
+		}
+
 		if (tool.data.get('lockScreen') && to.name !== 'lockScreen') {
 			next({ name: 'lockScreen' })
 		} else if (! tool.data.get('lockScreen') && to.name === 'lockScreen' ) {
@@ -47,14 +53,19 @@ router.beforeEach(async (to, from, next) => {
 			next({ path: defaultRoutePath })
 		} else if (! store.state.user.routers) {
 			await store.dispatch('getUserInfo').then( res => {
-				if (res.routers.length !== 0) {
+				if (res.routers.length > 0) {
 					let routers = res.routers
 					const apiRouter = filterAsyncRouter(routers)
-					res.routers = apiRouter
-					tool.data.set('user', res)
-					apiRouter.forEach(item => {
+					systemRouter.map(item => {
+						apiRouter.push(item)
+					})
+					flatAsyncRoutes(apiRouter).forEach(item => {
 						router.addRoute("layout", item)
 					})
+					console.log(apiRouter)
+					res.routers = apiRouter 
+					tool.data.set('user', res)
+
 					router.addRoute(routes_404)
 					if (to.matched.length == 0) {
 						router.push(to.fullPath)
@@ -65,12 +76,15 @@ router.beforeEach(async (to, from, next) => {
 				store.commit('SET_ROUTERS', undefined)
 				tool.data.clear()
 			})
+			beforeEach(to, from)
 			next()
 		} else {
+			beforeEach(to, from)
 			next()
 		}
 	} else {
 		if (whiteList.includes(to.name)) {
+			beforeEach(to, from)
 			next()
 		} else {
 			next({ name: 'login', query: { redirect: to.fullPath } })
@@ -95,17 +109,21 @@ router.onError((error) => {
 
 
 //转换
-function filterAsyncRouter(routerMap) {
+function filterAsyncRouter(routerMap, activePath = null) {
 	const accessedRouters = []
 	routerMap.forEach(item => {
 		if (item.meta.type == 'B') {
-			return;
+			return
 		}
 		item.meta = item.meta?item.meta:{};
 		//处理外部链接特殊路由
 		if(item.meta.type == 'I'){
-			item.meta.url = item.path;
-			item.path = `/i/${item.name}`;
+			item.meta.url = item.path
+			item.path = `/i/${item.name}`
+		}
+		
+		if (activePath) {
+			item.meta.active = activePath
 		}
 
 		//MAP转路由对象
@@ -114,7 +132,7 @@ function filterAsyncRouter(routerMap) {
 			name: item.name,
 			meta: item.meta,
 			redirect: item.redirect,
-			children: item.children ? filterAsyncRouter(item.children) : null,
+			children: item.children ? filterAsyncRouter(item.children, item.path) : null,
 			component: loadComponent(item.component)
 		}
 		accessedRouters.push(route)
@@ -131,5 +149,30 @@ function loadComponent(component){
 
 }
 
+//路由扁平化
+function flatAsyncRoutes(routes, breadcrumb=[]) {
+	let res = []
+	routes.forEach(route => {
+		const tmp = {...route}
+        if (tmp.children) {
+            let childrenBreadcrumb = [...breadcrumb]
+            childrenBreadcrumb.push(route)
+            let tmpRoute = { ...route }
+            tmpRoute.meta.breadcrumb = childrenBreadcrumb
+            delete tmpRoute.children
+            res.push(tmpRoute)
+            let childrenRoutes = flatAsyncRoutes(tmp.children, childrenBreadcrumb)
+            childrenRoutes.map(item => {
+                res.push(item)
+            })
+        } else {
+            let tmpBreadcrumb = [...breadcrumb]
+            tmpBreadcrumb.push(tmp)
+            tmp.meta.breadcrumb = tmpBreadcrumb
+            res.push(tmp)
+        }
+    })
+    return res
+}
 
 export default router

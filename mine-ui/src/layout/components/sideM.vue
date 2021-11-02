@@ -15,6 +15,7 @@
 			</el-main>
 		</el-container>
 	</el-drawer>
+
 </template>
 
 <script>
@@ -35,8 +36,8 @@
 		},
 		created() {
 			var menu = this.$TOOL.data.get("user").routers;
-			var home = this.$router.options.routes[0].children[0];
-			menu.unshift(home);
+			//var home = this.$router.options.routes[0].children[0];
+			//menu.unshift(home);
 			this.menu = this.filterUrl(menu)
 		},
 
