@@ -6,7 +6,6 @@ namespace App\Setting\Service;
 use App\Setting\Mapper\SettingGenerateTablesMapper;
 use App\Setting\Model\SettingGenerateTables;
 use App\System\Service\DataMaintainService;
-use Hyperf\DbConnection\Db;
 use Hyperf\Utils\Filesystem\Filesystem;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\Transaction;
@@ -169,26 +168,39 @@ class SettingGenerateTablesService extends AbstractService
 
     /**
      * 生成步骤
+     * @param int $id
+     * @param string $adminId
+     * @return SettingGenerateTables
      * @throws \Exception
      */
-    protected function generateCodeFile(int $id, string $adminId): void
+    protected function generateCodeFile(int $id, string $adminId): SettingGenerateTables
     {
         /** @var SettingGenerateTables $model */
         $model = $this->read($id);
 
         $requestType = ['Create', 'Update'];
 
-        $classList = [
+        // 后端
+        $backend = [
             ControllerGenerator::class,
             ModelGenerator::class,
             ServiceGenerator::class,
             MapperGenerator::class,
             RequestGenerator::class,
+        ];
+
+        $classList = [
             ApiGenerator::class,
             VueIndexGenerator::class,
             VueSaveGenerator::class,
             SqlGenerator::class
         ];
+
+        if ($model->generate_type == '0') {
+            foreach($backend as $item) {
+                array_push($classList, $item);
+            }
+        }
 
         foreach ($classList as $cls) {
             $class = make($cls);
@@ -202,6 +214,8 @@ class SettingGenerateTablesService extends AbstractService
                 $class->setGenInfo($model)->generator();
             }
         }
+
+        return $model;
     }
 
     /**
