@@ -109,6 +109,8 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
             } else {
                 $this->filesystem->move($sourcePath, $toPath);
             }
+        } else {
+            throw new NormalStatusException(t('setting.gen_model_error'), 500);
         }
     }
 
