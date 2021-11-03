@@ -338,7 +338,7 @@ class SystemUserService extends AbstractService
     {
         if (!empty($ids)) {
             $userIds = explode(',', $ids);
-            if ($key = array_search(env('SUPER_ADMIN'), $userIds) !== false) {
+            if (($key = array_search(env('SUPER_ADMIN'), $userIds)) !== false) {
                 unset($userIds[$key]);
             }
 
@@ -357,7 +357,7 @@ class SystemUserService extends AbstractService
     {
         if (!empty($ids)) {
             $userIds = explode(',', $ids);
-            if ($key = array_search(env('SUPER_ADMIN'), $userIds) !== false) {
+            if (($key = array_search(env('SUPER_ADMIN'), $userIds)) !== false) {
                 unset($userIds[$key]);
             }
 
