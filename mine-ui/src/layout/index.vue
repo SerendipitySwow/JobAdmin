@@ -254,7 +254,6 @@
 			},
 			//点击显示
 			showMenu(route) {
-				console.log(route)
 				this.pmenu = route;
 				this.nextMenu = this.filterUrl(route.children);
 			},
