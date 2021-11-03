@@ -190,18 +190,19 @@
       async handleGenCodes () {
         let ids = this.selection.map(item => item.id)
         this.$message.info('代码生成下载中，请稍后')
-        await this.$API.generate.generate(ids).then(res => {
-          this.$TOOL.download(res)
-          this.$message.success('代码生成成功')
-        })
+        this.generateCode(ids)
       },
 
       // 生成代码
       async generateCode (id) {
         this.$message.info('代码生成下载中，请稍后')
         await this.$API.generate.generate(id).then(res => {
-          this.$TOOL.download(res)
-          this.$message.success('代码生成成功')
+          if (res.message && !res.success) {
+            this.$message.error(res.message)
+          } else {
+            this.$TOOL.download(res)
+            this.$message.success('代码生成成功')
+          }
         })
       },
 
