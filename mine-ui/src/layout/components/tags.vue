@@ -67,7 +67,7 @@
 			}
 		},
 		created() {
-			let dashboardRoute = this.$TOOL.data.get('user').routers[0].children[0]
+			let dashboardRoute = this.$store.state.user.routers[0].children[0]
 			dashboardRoute.fullPath = dashboardRoute.path
 			this.addViewTags(dashboardRoute);
 			this.addViewTags(this.$route);

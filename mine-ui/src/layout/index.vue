@@ -218,7 +218,7 @@
 		created() {
 			this.onLayoutResize();
 			window.addEventListener('resize', this.onLayoutResize);
-			this.menu = this.filterUrl(this.$TOOL.data.get('user').routers)
+			this.menu = this.filterUrl(this.$store.state.user.routers)
 			this.showThis()
 		},
 		watch: {
