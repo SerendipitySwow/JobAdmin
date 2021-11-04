@@ -180,27 +180,17 @@ class SettingGenerateTablesService extends AbstractService
 
         $requestType = ['Create', 'Update'];
 
-        // 后端
-        $backend = [
+        $classList = [
             ControllerGenerator::class,
             ModelGenerator::class,
             ServiceGenerator::class,
             MapperGenerator::class,
             RequestGenerator::class,
-        ];
-
-        $classList = [
             ApiGenerator::class,
             VueIndexGenerator::class,
             VueSaveGenerator::class,
             SqlGenerator::class
         ];
-
-        if ($model->generate_type == '0') {
-            foreach($backend as $item) {
-                array_push($classList, $item);
-            }
-        }
 
         foreach ($classList as $cls) {
             $class = make($cls);
