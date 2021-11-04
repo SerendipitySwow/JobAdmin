@@ -133,6 +133,21 @@ class MineUpload
         try {
             $content = file_get_contents($data['url']);
 
+            $handle = fopen($data['url'], 'rb');
+            $meta = stream_get_meta_data($handle);
+            fclose($handle);
+
+            $dataInfo = $meta['wrapper_data']['headers'] ?? $meta['wrapper_data'];
+            $size = 0;
+
+            foreach ($dataInfo as $va) {
+                if ( preg_match('/length/iU', $va) ) {
+                    $ts = explode(':', $va);
+                    $size = intval(trim(array_pop($ts))) * 1024;
+                    break;
+                }
+            }
+
             if (!$this->filesystem->write($path . '/' . $filename, $content)) {
                 throw new \Exception(t('network_image_save_fail'));
             }
@@ -140,8 +155,6 @@ class MineUpload
         } catch (\Throwable $e) {
             throw new NormalStatusException($e->getMessage(), 500);
         }
-
-        $size = mb_strlen($content);
 
         $fileInfo = [
             'storage_mode' => $this->getMappingMode(),

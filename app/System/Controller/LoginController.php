@@ -82,14 +82,4 @@ class LoginController extends MineController
     {
         return $this->success(['token' => $user->refresh()]);
     }
-
-    /**
-     * @return ResponseInterface
-     * @GetMapping("test")
-     * @Resubmit
-     */
-    public function test():ResponseInterface
-    {
-        return $this->success();
-    }
 }
