@@ -143,7 +143,7 @@ class MineUpload
             foreach ($dataInfo as $va) {
                 if ( preg_match('/length/iU', $va) ) {
                     $ts = explode(':', $va);
-                    $size = intval(trim(array_pop($ts))) * 1024;
+                    $size = intval(trim(array_pop($ts)));
                     break;
                 }
             }
@@ -164,7 +164,7 @@ class MineUpload
             'storage_path' => $path,
             'suffix' => 'jpg',
             'size_byte' => $size,
-            'size_info' => format_size($size),
+            'size_info' => format_size($size * 1024),
             'url' => $this->assembleUrl($path, $filename),
         ];
 
