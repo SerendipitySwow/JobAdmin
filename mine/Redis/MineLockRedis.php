@@ -65,6 +65,16 @@ class MineLockRedis extends AbstractRedis implements MineRedisInterface
     }
 
     /**
+     * 检查锁
+     * @param string $key
+     * @return bool
+     */
+    public function check(string $key): bool
+    {
+        return redis()->exists($key);
+    }
+
+    /**
      * 添加锁
      * @param string $key
      * @param int $expired

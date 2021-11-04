@@ -10,6 +10,7 @@ use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\Resubmit;
 use Mine\Helper\LoginUser;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
@@ -80,5 +81,15 @@ class LoginController extends MineController
     public function refresh(LoginUser $user): ResponseInterface
     {
         return $this->success(['token' => $user->refresh()]);
+    }
+
+    /**
+     * @return ResponseInterface
+     * @GetMapping("test")
+     * @Resubmit
+     */
+    public function test():ResponseInterface
+    {
+        return $this->success();
     }
 }

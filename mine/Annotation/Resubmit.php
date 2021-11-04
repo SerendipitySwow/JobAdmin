@@ -17,7 +17,7 @@ use Hyperf\Di\Annotation\AbstractAnnotation;
 /**
  * 禁止重复提交
  * @Annotation
- * @Target({"METHOD"})
+ * @Target({"CLASS","METHOD"})
  */
 class Resubmit extends AbstractAnnotation
 {
@@ -25,11 +25,11 @@ class Resubmit extends AbstractAnnotation
      * second
      * @var int
      */
-    public $second;
+    public $second = 10;
 
-    public function __construct(int $value = 10)
+    public function __construct($value)
     {
         parent::__construct($value);
-        $this->bindMainProperty('second', [ $value ]);
+        $this->bindMainProperty('second', $value);
     }
 }

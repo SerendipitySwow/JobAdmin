@@ -34,7 +34,7 @@ abstract class AbstractRedis
 
     /**
      * 获取实例
-     * @return AbstractRedis|mixed
+     * @return mixed
      */
     public static function getInstance()
     {
