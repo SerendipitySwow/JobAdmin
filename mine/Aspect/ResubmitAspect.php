@@ -50,14 +50,16 @@ class ResubmitAspect extends AbstractAspect
 
         $key = md5(sprintf('%s-%s-%s', $request->ip(), $request->getPathInfo(), $request->getMethod()));
 
-        $lockRedis = container()->get(MineLockRedis::class);
+        $lockRedis = new MineLockRedis();
         $lockRedis->setTypeName('resubmit');
 
         if ($lockRedis->check($key)) {
-            throw new NormalStatusException(t('redis_lock_error'), 500);
+            $lockRedis = null;
+            throw new NormalStatusException(t('mineadmin.resubmit'), 500);
         }
 
         $lockRedis->lock($key, $resubmit->second);
+        $lockRedis = null;
 
         return $proceedingJoinPoint->process();
     }

@@ -55,8 +55,8 @@ class MineLockRedis extends AbstractRedis implements MineRedisInterface
         try {
             call_user_func($closure);
         } catch (\Throwable $e) {
-            logger('Redis Lock')->error(t('redis_lock_error'));
-            throw new NormalStatusException(t('redis_lock_error'), 500);
+            logger('Redis Lock')->error(t('mineadmin.redis_lock_error'));
+            throw new NormalStatusException(t('mineadmin.redis_lock_error'), 500);
         } finally {
             $this->freed($key);
         }
@@ -71,7 +71,7 @@ class MineLockRedis extends AbstractRedis implements MineRedisInterface
      */
     public function check(string $key): bool
     {
-        return redis()->exists($key);
+        return redis()->exists($this->getKey($key));
     }
 
     /**
