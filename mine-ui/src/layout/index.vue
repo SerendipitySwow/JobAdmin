@@ -165,9 +165,9 @@
 		</section>
 	</template>
 
-	<div class="layout-setting" @click="openSetting"><i class="el-icon-brush"></i></div>
+	<div class="layout-setting" @click="openSetting" v-if="$CONFIG.APP_MODE === 'dev'"><i class="el-icon-brush"></i></div>
 
-	<el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close>
+	<el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close v-if="$CONFIG.APP_MODE === 'dev'">
 		<setting></setting>
 	</el-drawer>
 </template>
@@ -198,7 +198,8 @@
 				menu: [],
 				nextMenu: [],
 				pmenu: {},
-				active: ''
+				active: '',
+				
 			}
 		},
 		computed:{
@@ -208,8 +209,8 @@
 			layout(){
 				return this.$store.state.global.layout
 			},
-			layoutTags(){
-				return this.$store.state.global.layoutTags
+			layoutTags() {
+				return this.$TOOL.data.get('APP_TAGS')
 			},
 			menuIsCollapse(){
 				return this.$store.state.global.menuIsCollapse

@@ -1,11 +1,15 @@
 <template>
 	<el-form ref="form" label-width="120px" label-position="left" style="padding:0 20px;">
-		<el-alert title="以下配置可实时预览，开发者可在 config/index.js 中配置默认值，非常不建议在生产环境下开放布局设置" type="error" :closable="false"></el-alert>
+		<el-alert
+			title="以下配置可实时预览，开发者可在 config/index.js 中配置默认值，只有开发环境下开放布局设置"
+			type="error"
+			:closable="false"
+		></el-alert>
 		<el-divider></el-divider>
-		<el-form-item :label="$t('user.nightmode')">
+		<el-form-item :label="$t('usercenter.nightmode')">
 			<el-switch v-model="theme" active-value="dark" inactive-value="default"></el-switch>
 		</el-form-item>
-		<el-form-item :label="$t('user.language')">
+		<el-form-item :label="$t('usercenter.language')">
 			<el-select v-model="lang">
 				<el-option label="简体中文" value="zh_CN"></el-option>
 				<el-option label="English" value="en"></el-option>
@@ -42,7 +46,7 @@
 			return {
 				layout: this.$store.state.global.layout,
 				menuIsCollapse: this.$store.state.global.menuIsCollapse,
-				layoutTags: this.$store.state.global.layoutTags,
+				layoutTags: this.$TOOL.data.get('APP_TAGS'),
 				lang: this.$TOOL.data.get('APP_LANG') || this.$CONFIG.LANG,
 				theme: this.$TOOL.data.get('APP_THEME') || 'default',
 				colorList: ['#409EFF', '#009688', '#536dfe', '#ff5c93', '#c62f2f', '#fd726d'],
@@ -52,12 +56,14 @@
 		watch: {
 			layout(val) {
 				this.$store.commit("SET_layout", val)
+				this.$TOOL.data.set('APP_LAYOUT', val)
 			},
 			menuIsCollapse(){
 				this.$store.commit("TOGGLE_menuIsCollapse")
 			},
-			layoutTags(){
-				this.$store.commit("TOGGLE_layoutTags")
+			layoutTags(val){
+				this.$TOOL.data.set('APP_TAGS', val)
+				this.$message.success('切换成功，请刷新页面')
 			},
 			theme(val){
 				document.body.setAttribute('data-theme', val)

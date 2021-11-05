@@ -99,24 +99,4 @@ class SystemUser extends MineModel
     {
         return password_verify($password, $hash);
     }
-
-    /**
-     * 序列化用户个性化后台设置
-     * @param $value
-     * @return void
-     */
-    public function setBackendSettingAttribute($value): void
-    {
-        $this->attributes['backend_setting'] = serialize($value);
-    }
-
-    /**
-     * 反序列化用户个性化后台设置
-     * @param $value
-     * @return string
-     */
-    public function getBackendSettingAttribute($value): string
-    {
-        return unserialize($value);
-    }
 }
