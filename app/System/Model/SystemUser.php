@@ -53,6 +53,7 @@ class SystemUser extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'dept_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
     /**
      * 通过中间表关联角色
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
@@ -61,6 +62,7 @@ class SystemUser extends MineModel
     {
         return $this->belongsToMany(SystemRole::class, 'system_user_role', 'user_id', 'role_id');
     }
+
     /**
      * 通过中间表关联岗位
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
