@@ -9,9 +9,19 @@
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-declare(strict_types=1);
+namespace Mine\Interfaces;
 
-return [
-    'gen_code_edit' => 'Please first edit the configuration build information',
-    'gen_model_error' => 'Model generation error, please check whether the module and table names match',
-];
+interface MineRedisInterface
+{
+    /**
+     * 设置 key 类型名
+     * @param string $typeName
+     */
+    public function setTypeName(string $typeName): void;
+
+    /**
+     * 获取key 类型名
+     * @return string
+     */
+    public function getTypeName(): string;
+}

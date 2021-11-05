@@ -116,7 +116,7 @@
 					}).then(async () => {
 						await this.$API.login.Logout().then(res => {
 							if (res.success) {
-								this.$store.commit('SET_ROUTERS', null)
+								this.$store.commit('SET_ROUTERS', undefined)
 								this.$TOOL.data.clear()
 								this.$router.replace({path: '/login'})
 							}
@@ -149,7 +149,6 @@
 				}).then(({ value }) => {
 					this.$TOOL.data.set('lockPassword', this.$TOOL.crypto.MD5(value))
         			this.$TOOL.data.set('lockScreen', true)
-					
 					this.$router.push('/lockScreen')
 				})
 			},
