@@ -103,7 +103,8 @@ class SystemUserService extends AbstractService
         $cache = $this->container->get(CacheInterface::class);
         $captcha = new MineCaptcha();
         $info = $captcha->getCaptchaInfo();
-        $cache->set(sprintf('captcha:%s', md5($info['code'])), $info['code'], 60);
+        $key = $this->request->ip() .'-'. \Mine\Helper\Str::lower($info['code']);
+        $cache->set(sprintf('captcha:%s', $key), $info['code'], 60);
         return $info['image'];
     }
 
@@ -117,13 +118,10 @@ class SystemUserService extends AbstractService
     {
         try {
             $cache = $this->container->get(CacheInterface::class);
-            $key = 'captcha:' . md5(\Mine\Helper\Str::lower($code));
-            if (\Mine\Helper\Str::lower($code) == $cache->get($key)) {
-                $cache->delete($key);
-                return true;
-            } else {
-                return false;
-            }
+            $key = 'captcha:' . $this->request->ip() .'-'. \Mine\Helper\Str::lower($code);
+            $result = (\Mine\Helper\Str::lower($code) == $cache->get($key));
+            $cache->delete($key);
+            return $result;
         } catch (InvalidArgumentException $e) {
             throw new \Exception;
         }
