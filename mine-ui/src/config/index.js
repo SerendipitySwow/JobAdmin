@@ -42,6 +42,9 @@ const DEFAULT_CONFIG = {
 	//主题颜色
 	COLOR: '#0960bd',
 
+	//菜单是否启用手风琴效果
+	MENU_UNIQUE_OPENED: true,
+
 	//控制台首页默认布局
 	DEFAULT_GRID: {
 		//默认分栏数量和宽度 例如 [24] [18,6] [8,8,8] [6,12,6]
