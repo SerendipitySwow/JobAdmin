@@ -38,6 +38,9 @@
                     <three-level-linkage v-model="cityDataName2" valueType="name" />
                     <p>{{cityDataName2}}</p>
 
+
+                    <imageChip v-model="isPassing" :images="images" />
+
                 </el-card>
 
             </el-col>
@@ -47,13 +50,15 @@
 <script>
 import cityLinkage from '@/components/maCityLinkage'
 import threeLevelLinkage from '@/components/maCityLinkage/threeLevelLinkage'
+import imageChip from '@/components/maDragVerify/imageChip'
 
 export default {
     name: 'demo:index',
 
     components: {
         cityLinkage,
-        threeLevelLinkage
+        threeLevelLinkage,
+        imageChip
     },
 
     data () {
@@ -63,6 +68,12 @@ export default {
             cityDataName: [],
             cityDataCode2: {},
             cityDataName2: {},
+            isPassing: false,
+            images: [
+                'https://img1.baidu.com/it/u=2813520958,2218166536&fm=26&fmt=auto&gp=0.jpg',
+                'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg',
+                'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic_360_360%2F13%2Fb0%2Fa9%2F13b0a9a111bdf4b70e7c9a9c1317a2b3.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638885184&t=0662b629206457db48ecdadc8da27bea',
+            ]
         }
     },
 
