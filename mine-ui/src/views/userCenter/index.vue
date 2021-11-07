@@ -125,6 +125,10 @@
                 <el-form-item :label="$t('usercenter.layoutTags')">
                   <el-switch v-model="config.layoutTags" :active-value="true" :inactive-value="false"></el-switch>
                 </el-form-item>
+
+                <el-form-item>
+                  <el-button type="primary" @click="saveSetting" :loading="settingLoading">{{ $t('sys.save') }}</el-button>
+                </el-form-item>
 							</el-form>
 						</el-tab-pane>
           </el-tabs>
@@ -187,13 +191,13 @@ export default {
 
       userInfo: null,
 
-      colorList: ['#409EFF', '#009688', '#536dfe', '#ff5c93', '#c62f2f', '#fd726d'],
+      colorList: ['#0960bd', '#409EFF', '#009688', '#536dfe', '#ff5c93', '#c62f2f', '#fd726d'],
       config: {
           lang: this.$TOOL.data.get('APP_LANG') || this.$CONFIG.LANG,
           theme: this.$TOOL.data.get('APP_THEME') || 'default',
           colorPrimary: this.$TOOL.data.get('APP_COLOR') || this.$CONFIG.COLOR || '#409EFF',
           layout: this.$TOOL.data.get('APP_LAYOUT') || this.$store.state.global.layout,
-          layoutTags: this.$TOOL.data.get('APP_TAGS')
+          layoutTags: this.$store.state.global.layoutTags
       }
     }
   },
@@ -212,9 +216,8 @@ export default {
 			this.$store.commit("SET_layout", val)
       this.$TOOL.data.set('APP_LAYOUT', val)
 		},
-    'config.layoutTags'(val) {
-      this.$TOOL.data.set('APP_TAGS', val)
-      this.$message.success('切换成功，请刷新页面')
+    'config.layoutTags'() {
+      this.$store.commit("TOGGLE_layoutTags")
 		},
     'config.theme'(val){
       document.body.setAttribute('data-theme', val)
@@ -304,7 +307,26 @@ export default {
 
         }
       })
+    },
+
+    // 保存个人设置
+    async saveSetting () {
+      this.formSetting = {
+        id: this.formUser.id,
+        backend_setting: JSON.stringify(this.config)
+      }
+      this.settingLoading = true
+      let res = await this.$API.user.updateInfo(this.formSetting)
+      this.settingLoading = false
+
+      if ( res.success ) {
+        this.$TOOL.data.set('user', this.userInfo)
+        this.$message.success(res.message)
+      }else{
+        this.$alert(res.message, "提示", { type: 'error' })
+      }
     }
+
   }
 }
 </script>

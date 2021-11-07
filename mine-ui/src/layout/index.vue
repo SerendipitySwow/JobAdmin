@@ -210,7 +210,7 @@
 				return this.$store.state.global.layout
 			},
 			layoutTags() {
-				return this.$TOOL.data.get('APP_TAGS')
+				return this.$store.state.global.layoutTags
 			},
 			menuIsCollapse(){
 				return this.$store.state.global.menuIsCollapse
