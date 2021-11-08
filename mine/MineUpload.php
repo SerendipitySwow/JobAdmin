@@ -110,7 +110,7 @@ class MineUpload
             'storage_path' => $path,
             'suffix' => $uploadedFile->getExtension(),
             'size_byte' => $uploadedFile->getSize(),
-            'size_info' => format_size($uploadedFile->getSize()),
+            'size_info' => format_size($uploadedFile->getSize() * 1024),
             'url' => $this->assembleUrl($path, $filename),
         ];
 

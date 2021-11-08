@@ -46,10 +46,10 @@
 			return {
 				layout: this.$store.state.global.layout,
 				menuIsCollapse: this.$store.state.global.menuIsCollapse,
-				layoutTags: this.$TOOL.data.get('APP_TAGS'),
+				layoutTags: this.$store.state.global.layoutTags,
 				lang: this.$TOOL.data.get('APP_LANG') || this.$CONFIG.LANG,
 				theme: this.$TOOL.data.get('APP_THEME') || 'default',
-				colorList: ['#409EFF', '#009688', '#536dfe', '#ff5c93', '#c62f2f', '#fd726d'],
+				colorList: ['#0960bd', '#409EFF', '#009688', '#536dfe', '#ff5c93', '#c62f2f', '#fd726d'],
 				colorPrimary: this.$TOOL.data.get('APP_COLOR') || this.$CONFIG.COLOR || '#409EFF'
 			}
 		},
@@ -61,9 +61,8 @@
 			menuIsCollapse(){
 				this.$store.commit("TOGGLE_menuIsCollapse")
 			},
-			layoutTags(val){
-				this.$TOOL.data.set('APP_TAGS', val)
-				this.$message.success('切换成功，请刷新页面')
+			layoutTags(){
+				this.$store.commit("TOGGLE_layoutTags")
 			},
 			theme(val){
 				document.body.setAttribute('data-theme', val)

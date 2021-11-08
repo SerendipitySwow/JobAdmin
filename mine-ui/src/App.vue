@@ -12,7 +12,6 @@
 		data () {
 			return {
 				layout: this.$store.state.global.layout,
-				layoutTags: this.$TOOL.data.get('APP_TAGS'),
 				lang: this.$TOOL.data.get('APP_LANG') || this.$CONFIG.LANG,
 				theme: this.$TOOL.data.get('APP_THEME') || 'default',
 				colorPrimary: this.$TOOL.data.get('APP_COLOR') || this.$CONFIG.COLOR || '#409EFF'
@@ -28,15 +27,6 @@
 				}
 				document.documentElement.style.setProperty(`--el-color-primary-darken-1`, colorTool.darken(app_color,0.1));
 			}
-			// 设置语言
-			const app_lang = this.$TOOL.data.get("APP_LANG") || this.$CONFIG.LANG
-			this.$i18n.locale = app_lang
-			// 设置布局
-			const app_layout = this.$TOOL.data.get("APP_LAYOUT") || this.$CONFIG.LAYOUT
-			this.$store.commit("SET_layout", app_layout)
-			// 是否黑夜模式
-			const app_mode = this.$TOOL.data.get("APP_THEME") || 'default'
-			document.body.setAttribute('data-theme', app_mode)
 			// 获取配置信息
 			this.$API.config.getSysConfig().then(res => {
 				res.data.map(item => {
