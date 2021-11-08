@@ -8,8 +8,9 @@
     :successText="successText"
     handlerIcon="el-icon-d-arrow-right"
     successIcon="el-icon-circle-check"
-    diffWidth="5"
-    @refresh="isPassing = false"
+    :diffWidth="5"
+    @refresh="reimg"
+    @passcallback="pass"
   >
   </drag-verify-img-chip>
 </template>
@@ -68,6 +69,13 @@ export default {
       } else {
         this.img = ''
       }
+    },
+    reimg() {
+
+    },
+
+    pass() {
+      
     }
   }
 
