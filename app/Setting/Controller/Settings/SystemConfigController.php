@@ -75,7 +75,7 @@ class SystemConfigController extends MineController
      */
     public function getConfigByKey(): \Psr\Http\Message\ResponseInterface
     {
-        return $this->success($this->service->getConfigByGroup($this->request->input('key', '')));
+        return $this->success($this->service->getConfigByKey($this->request->input('key', '')));
     }
 
     /**

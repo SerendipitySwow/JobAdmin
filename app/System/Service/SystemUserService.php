@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
+use App\Setting\Service\SettingConfigService;
 use App\System\Mapper\SystemUserMapper;
 use App\System\Model\SystemUser;
 use Hyperf\Cache\Annotation\Cacheable;
@@ -139,11 +140,14 @@ class SystemUserService extends AbstractService
             $this->evDispatcher->dispatch(new UserLoginBefore($data));
             $userinfo = $this->mapper->checkUserByUsername($data['username']);
             $userLoginAfter = new UserLoginAfter($userinfo);
-            if (!$this->checkCaptcha($data['code'])) {
-                $userLoginAfter->message = t('jwt.code_error');
-                $userLoginAfter->loginStatus = false;
-                $this->evDispatcher->dispatch($userLoginAfter);
-                throw new CaptchaException;
+            $webLoginVerify = container()->get(SettingConfigService::class)->getConfigByKey('web_login_verify');
+            if (isset($webLoginVerify['value']) && $webLoginVerify['value'] === '1') {
+                if (! $this->checkCaptcha($data['code'])) {
+                    $userLoginAfter->message = t('jwt.code_error');
+                    $userLoginAfter->loginStatus = false;
+                    $this->evDispatcher->dispatch($userLoginAfter);
+                    throw new CaptchaException;
+                }
             }
             if ($this->mapper->checkPass($data['password'], $userinfo['password'])) {
                 if (
