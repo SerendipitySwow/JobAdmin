@@ -213,7 +213,7 @@
 
 			submitForm() {
 				if (! this.ruleForm.code && this.verifyType === '0') this.ruleForm.code = 'code'
-				if (! this.ruleForm.isPassing){
+				if (! this.ruleForm.isPassing && this.verifyType === '0'){
 					this.$message.error('请滑动验证码进行验证')
 					return false;
 				}
