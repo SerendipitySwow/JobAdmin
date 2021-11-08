@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :title="titleMap[mode]" v-model="visible" :width="550" destroy-on-close @closed="$emit('closed')">
+	<el-dialog :title="titleMap[mode]" v-model="visible" :width="650" destroy-on-close @closed="$emit('closed')">
 		<el-form :model="form" :rules="rules" ref="dialogForm" label-width="105px">
 
 			<el-form-item label="任务名称" prop="name">
@@ -36,7 +36,8 @@
 						<i class="el-icon-question"></i>
 					</el-tooltip>
 				</template>
-				<el-input v-model="form.rule" placeholder="请输入Cron规则" clearable />
+				
+				<expression v-model="form.rule" />
 			</el-form-item>
 
 			<el-form-item label="调用目标" prop="target">
@@ -78,8 +79,14 @@
 </template>
 
 <script>
+	import expression from './expression'
 	export default {
 		emits: ['success', 'closed'],
+
+		components: {
+			expression
+		},
+
 		data() {
 			return {
 				mode: "add",
