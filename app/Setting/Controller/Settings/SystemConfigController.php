@@ -70,8 +70,7 @@ class SystemConfigController extends MineController
 
     /**
      * 按key获取配置
-     * @GetMapping("getConfigByKey")
-     * @Auth
+     * @PostMapping("getConfigByKey")
      */
     public function getConfigByKey(): \Psr\Http\Message\ResponseInterface
     {
