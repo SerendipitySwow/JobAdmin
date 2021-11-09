@@ -50,7 +50,7 @@ class TransactionAspect extends AbstractAspect
                 if (! is_null($result)) {
                     break;
                 }
-                $number++;
+                ++$number;
             } while ($number < $retry);
             Db::commit();
         } catch (\Throwable $e) {
