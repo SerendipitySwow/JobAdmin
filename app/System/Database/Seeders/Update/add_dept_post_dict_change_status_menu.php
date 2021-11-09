@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Hyperf\Database\Seeders\Seeder;
 use Hyperf\DbConnection\Db;
 
-class AddCacheMonitorMenu extends Seeder
+class AddDeptPostDictChangeStatusMenu extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,10 +17,9 @@ class AddCacheMonitorMenu extends Seeder
     {
         $table = env('DB_PREFIX') . \App\System\Model\SystemMenu::getModel()->getTable();
         $menus = [
-            "INSERT INTO `{$table}` VALUES (3700, 3000, '0,3000', '缓存监控', 'system:cache', 'el-icon-odometer', 'cache', 'system/monitor/cache/index', NULL, '1', 'M', '0', 98, NULL, NULL, '2021-10-26 20:50:31', '2021-10-26 20:50:31', NULL, NULL)",
-            "INSERT INTO `{$table}` VALUES (3701, 3700, '0,3000,3700', '获取Redis信息', 'system:cache:monitor', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-10-26 20:50:31', '2021-10-26 20:50:31', NULL, NULL)",
-            "INSERT INTO `{$table}` VALUES (3702, 3700, '0,3000,3700', '删除一个缓存', 'system:cache:delete', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-10-26 20:50:31', '2021-10-26 20:50:31', NULL, NULL)",
-            "INSERT INTO `{$table}` VALUES (3703, 3700, '0,3000,3700', '清空所有缓存', 'system:cache:clear', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-10-26 20:50:31', '2021-10-26 20:50:31', NULL, NULL)"
+            "INSERT INTO `{$table}` VALUES (1311, 1300, '0,1000,1300', '部门状态改变', 'system:dept:changeStatus', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-11-09 18:26:15', '2021-11-09 18:26:15', NULL, NULL)",
+            "INSERT INTO `{$table}` VALUES (1511, 1500, '0,1000,1500', '岗位状态改变', 'system:post:changeStatus', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-11-09 18:26:15', '2021-11-09 18:26:15', NULL, NULL)",
+            "INSERT INTO `{$table}` VALUES (2112, 2100, '0,2000,2100', '字典状态改变', 'system:dataDict:changeStatus', '', NULL, '', NULL, '1', 'B', '0', 0, NULL, NULL, '2021-11-09 18:26:15', '2021-11-09 18:26:15', NULL, NULL)"
         ];
 
         try {

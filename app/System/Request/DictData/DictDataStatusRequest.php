@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\System\Request\Post;
+namespace App\System\Request\DictData;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class SystemPostStatusRequest extends FormRequest
+class DictDataStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

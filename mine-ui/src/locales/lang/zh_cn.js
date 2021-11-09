@@ -2,6 +2,10 @@ export default {
 	sys: {
 		save: '保存',
 		pleaseInput: '请输入',
+		copy_success: '已成功复制到剪切板',
+		copy_fail: '复制失败',
+		sort_success: '排序成功',
+		sort_fail: '排序失败',
 	},
 	login: {
 		slogan: '高性能 / 精致 / 优雅',

@@ -1,7 +1,11 @@
 export default {
 	sys: {
 		save: 'Save',
-		pleaseInput: 'please input ',	
+		pleaseInput: 'please enter ',
+		copy_success: 'Successfully copied to the shear plate',
+		copy_fail: 'Replication failed',
+		sort_success: 'Sort successfully',
+		sort_fail: 'Sort failed',
 	},
 	login: {
 		slogan: 'High performance / delicate / grace',

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\System\Request\User;
+namespace App\System\Request\Dept;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class SystemUserStatusRequest extends FormRequest
+class SystemDeptStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

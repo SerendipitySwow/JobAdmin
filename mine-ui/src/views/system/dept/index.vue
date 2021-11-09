@@ -342,7 +342,7 @@
       handleStatus (val, row) {
         const status = row.status === '0' ? '0' : '1'
         const text = row.status === '0' ? '启用' : '停用'
-        this.$confirm(`确认要${text} ${row.name} 岗位吗？`, '提示', {
+        this.$confirm(`确认要${text} ${row.name} 部门吗？`, '提示', {
           type: 'warning',
           confirmButtonText: '确定',
           cancelButtonText: '取消'
