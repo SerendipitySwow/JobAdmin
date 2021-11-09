@@ -99,6 +99,23 @@ export default {
 				this.radioValue = 4
 				this.checkboxList = ins.split(',')
 			}
+		},
+		// 计算两个周期值
+		cycleTotal() {
+			this.cycle01 = this.checkNum(this.cycle01, 0, 59)
+			this.cycle02 = this.checkNum(this.cycle02, 0, 59)
+			return this.cycle01 + '-' + this.cycle02;
+		},
+		// 计算平均用到的值
+		averageTotal() {
+			this.average01 = this.checkNum(this.average01, 0, 59)
+			this.average02 = this.checkNum(this.average02, 1, 59)
+			return this.average01 + '/' + this.average02;
+		},
+		// 计算勾选的checkbox值合集
+		checkboxString() {
+			let str = this.checkboxList.join();
+			return str == '' ? '*' : str;
 		}
 	},
 	watch: {
@@ -109,25 +126,6 @@ export default {
 		radioParent() {
 			this.radioValue = this.radioParent
 		}
-	},
-	computed: {
-		// // 计算两个周期值
-		// cycleTotal() {
-		// 	this.cycle01 = this.checkNum(this.cycle01, 0, 59)
-		// 	this.cycle02 = this.checkNum(this.cycle02, 0, 59)
-		// 	return this.cycle01 + '-' + this.cycle02;
-		// },
-		// // 计算平均用到的值
-		// averageTotal() {
-		// 	this.average01 = this.checkNum(this.average01, 0, 59)
-		// 	this.average02 = this.checkNum(this.average02, 1, 59)
-		// 	return this.average01 + '/' + this.average02;
-		// },
-		// // 计算勾选的checkbox值合集
-		// checkboxString() {
-		// 	let str = this.checkboxList.join();
-		// 	return str == '' ? '*' : str;
-		// }
 	}
 }
 </script>
