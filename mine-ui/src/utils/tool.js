@@ -6,6 +6,7 @@
  */
 
 import CryptoJS from 'crypto-js';
+import Config from '@/config/index.js'
 
 const tool = {}
 
@@ -209,6 +210,16 @@ tool.download = function(res) {
 	aLink.click()
 	URL.revokeObjectURL(aLink.href);//清除引用
 	document.body.removeChild(aLink);
+}
+
+tool.viewImage = function(path, defaultStorage = 'LOCAL') {
+	let mode = tool.data.get('site_storage_mode').toUpperCase()
+
+	if (Config.STORAGE_URL[mode]) {
+		return Config.STORAGE_URL[mode] + path
+	} else {
+		return Config.STORAGE_URL[defaultStorage] + path
+	}
 }
 
 export default tool
