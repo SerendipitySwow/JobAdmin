@@ -117,7 +117,7 @@
 </template>
 
 <script>
-	import { request } from "@/utils/request"
+	import http from "@/utils/request"
 
 	import { defineAsyncComponent } from 'vue'
 	const tableselectRender = defineAsyncComponent(() => import('./items/tableselect'))
@@ -214,11 +214,7 @@
 				var remoteData = []
 				this.config.formItems.forEach((item) => {
 					if(item.options && item.options.remote){
-						var req = request({
-							url:item.options.remote.api,
-							options:item.options.remote.data,
-							method:'get'
-						}).then(res=>{
+						var req = http.get(item.options.remote.api, item.options.remote.data).then(res=>{
 							item.options.items = res.data
 						})
 						remoteData.push(req)
