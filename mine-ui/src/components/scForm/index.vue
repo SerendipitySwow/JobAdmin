@@ -116,8 +116,8 @@
 	</el-form>
 </template>
 
-<script>
-	import http from "@/utils/request"
+<script> 
+	import { request } from "@/utils/request"
 
 	import { defineAsyncComponent } from 'vue'
 	const tableselectRender = defineAsyncComponent(() => import('./items/tableselect'))
@@ -214,7 +214,7 @@
 				var remoteData = []
 				this.config.formItems.forEach((item) => {
 					if(item.options && item.options.remote){
-						var req = http.get(item.options.remote.api, item.options.remote.data).then(res=>{
+						var req = request({url: item.options.remote.api, params :item.options.remote.data}).then(res=>{
 							item.options.items = res.data
 						})
 						remoteData.push(req)

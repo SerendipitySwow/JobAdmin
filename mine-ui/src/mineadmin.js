@@ -43,6 +43,9 @@ export default {
 		// 全局挂载显示图片方法
 		app.config.globalProperties.viewImage = tool.viewImage
 
+		// 全局挂载城市代码翻译成名称方法
+		app.config.globalProperties.codeToCity = tool.codeToCity
+
 		//注册全局组件
 		app.component('maTable', maTable)
 		app.component('maImport', maImport)

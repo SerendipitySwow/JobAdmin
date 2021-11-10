@@ -7,6 +7,7 @@
 
 import CryptoJS from 'crypto-js';
 import Config from '@/config/index.js'
+import CityLinkageJson from '@/components/maCityLinkage/lib/cityLinkageSelect.json'
 
 const tool = {}
 
@@ -219,6 +220,26 @@ tool.viewImage = function(path, defaultStorage = 'LOCAL') {
 		return Config.STORAGE_URL[mode] + path
 	} else {
 		return Config.STORAGE_URL[defaultStorage] + path
+	}
+}
+
+// 城市代码翻译成名称
+tool.codeToCity = function(province, city = undefined, area = undefined, split = ' / ') {
+	try {
+		let provinceData = CityLinkageJson.filter(item => province == item.code)[0]
+		if (! city) {
+			return provinceData.name
+		}
+		let cityData = provinceData.children.filter(item => city == item.code)[0]
+
+		if (! area) {
+			return [provinceData.name, cityData.name].join(split)
+		}
+		let areaData = cityData.children.filter(item => area == item.code)[0]
+
+		return [provinceData.name, cityData.name, areaData.name].join(split)
+	} catch (e) {
+		return ''
 	}
 }
 

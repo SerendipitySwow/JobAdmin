@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import cityLinkageJson from './lib/cityLinkage.json';
+import cityLinkageJson from './lib/cityLinkageCascader.json';
 export default {
     name: 'cityLinkage',
 
@@ -30,6 +30,35 @@ export default {
         valueType: {
             type: String,
             default: 'code',
+        },
+        limitLevel: {
+            type: String,
+            default: '3'
+        }
+    },
+
+    created() {
+        // 处理层级数据
+        switch (this.limitLevel) {
+            case '1':
+                cityLinkageJson.map(item => {
+                    delete item.children
+                    this.cityLinkageList.push(item)
+                })
+                break;
+            case '2':
+                cityLinkageJson.map(item => {
+                    let children = item.children.map(city => {
+                        delete city.children
+                        return city
+                    })
+                    item.children = children
+                    this.cityLinkageList.push(item)
+                })
+                break;
+            default:
+                this.cityLinkageList = cityLinkageJson
+                break;
         }
     },
 
@@ -47,7 +76,7 @@ export default {
     
     data () {
         return {
-            cityLinkageList: cityLinkageJson,
+            cityLinkageList: [],
             defaultValue: '',
             defaultType: '',
         }

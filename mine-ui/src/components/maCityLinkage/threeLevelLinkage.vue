@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import cityLinkageJson from './lib/cityLinkage.json';
+import cityLinkageJson from './lib/cityLinkageSelect.json';
 export default {
     name: 'threeLevelLinkage',
 
@@ -41,7 +41,7 @@ export default {
         valueType: {
             type: String,
             default: 'code',
-        },
+        }
     },
 
     watch:{
