@@ -17,34 +17,11 @@ use Psr\Container\ContainerInterface;
 use Mine\Traits\ControllerTrait;
 
 /**
- * 后台控制器基类
- * Class MineController
+ * API接口控制器基类
+ * Class MineApi
  * @package Mine
  */
-abstract class MineController
+abstract class MineApi
 {
     use ControllerTrait;
-
-    /**
-     * @Inject
-     * @var Mine
-     */
-    protected $mine;
-
-    /**
-     * @param string $id
-     * @return mixed
-     */
-    public function app(string $id)
-    {
-        return $this->mine->app($id);
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer(): ContainerInterface
-    {
-        return $this->mine->getContainer();
-    }
 }

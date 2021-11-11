@@ -69,7 +69,8 @@
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "Mine\\": "mine/"
+      "Mine\\": "mine/",
+      "Api\\": "api/"
     },
     "files": [
       "mine/Helper/functions.php"
