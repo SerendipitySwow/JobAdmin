@@ -3,17 +3,18 @@
         <el-cascader
             v-model="defaultValue"
             :options="cityLinkageList"
-            :props="{ expandTrigger: 'hover', value: valueType, label: 'name' }"
+            :props="{ expandTrigger: expandType, value: valueType, label: 'name', checkStrictly: true }"
             filterable
             size="small"
             :placeholder="placeholder"
+
             clearable
         ></el-cascader>
     </el-main>
 </template>
 
 <script>
-import cityLinkageJson from './lib/cityLinkageCascader.json';
+import cityLinkageJson from './lib/cityLinkage.json';
 export default {
     name: 'cityLinkage',
 
@@ -31,34 +32,9 @@ export default {
             type: String,
             default: 'code',
         },
-        limitLevel: {
+        expandType: {
             type: String,
-            default: '3'
-        }
-    },
-
-    created() {
-        // 处理层级数据
-        switch (this.limitLevel) {
-            case '1':
-                cityLinkageJson.map(item => {
-                    delete item.children
-                    this.cityLinkageList.push(item)
-                })
-                break;
-            case '2':
-                cityLinkageJson.map(item => {
-                    let children = item.children.map(city => {
-                        delete city.children
-                        return city
-                    })
-                    item.children = children
-                    this.cityLinkageList.push(item)
-                })
-                break;
-            default:
-                this.cityLinkageList = cityLinkageJson
-                break;
+            default: 'click'
         }
     },
 
@@ -76,7 +52,7 @@ export default {
     
     data () {
         return {
-            cityLinkageList: [],
+            cityLinkageList: cityLinkageJson,
             defaultValue: '',
             defaultType: '',
         }

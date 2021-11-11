@@ -7,7 +7,7 @@
 
 import CryptoJS from 'crypto-js';
 import Config from '@/config/index.js'
-import CityLinkageJson from '@/components/maCityLinkage/lib/cityLinkageSelect.json'
+import CityLinkageJson from '@/components/maCityLinkage/lib/cityLinkage.json'
 
 const tool = {}
 

@@ -58,7 +58,7 @@ import cityLinkage from '@/components/maCityLinkage'
 import threeLevelLinkage from '@/components/maCityLinkage/threeLevelLinkage'
 
 export default {
-    name: 'demo:index',
+    name: 'demo',
 
     components: {
         cityLinkage,
