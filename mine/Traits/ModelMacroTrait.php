@@ -118,4 +118,41 @@ trait ModelMacroTrait
             return $dataScope->execute();
         });
     }
+
+    /**
+     * Description:注册常用自定义方法
+     * User:mike
+     */
+    private function registerBase()
+    {
+        // 数据权限方法
+        //添加andFilterWhere()方法
+        Builder::macro('andFilterWhere', function ($key, $operator, $value = NULL) {
+            if ($value === '' || $value === '%%' || $value === '%') {
+                return $this;
+            }
+            if ($operator === '' || $operator === '%%' || $operator === '%') {
+                return $this;
+            }
+            if($value === NULL){
+                return $this->where($key, $operator);
+            }else{
+                return $this->where($key, $operator,$value);
+            }
+        });
+        //添加orFilterWhere()方法
+        Builder::macro('orFilterWhere', function ($key, $operator, $value = NULL) {
+            if ($value === '' || $value === '%%' || $value === '%') {
+                return $this;
+            }
+            if ($operator === '' || $operator === '%%' || $operator === '%') {
+                return $this;
+            }
+            if($value === NULL){
+                return $this->orWhere($key, $operator);
+            }else{
+                return $this->orWhere($key, $operator,$value);
+            }
+        });
+    }
 }

@@ -57,7 +57,9 @@ class MineModel extends Model
     {
         parent::__construct($attributes);
 
-        // 注册用户数据权限方法
+        //注册常用方法
+        $this->registerBase();
+        //注册用户数据权限方法
         $this->registerUserDataScope();
     }
 
