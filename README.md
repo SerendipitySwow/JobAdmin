@@ -20,6 +20,8 @@ PHP有很多优秀的后台管理系统，但基于Swoole的后台管理系统�
 
 如果觉着还不错的话，就请点个star支持一下吧！
 
+- 腾讯云特惠专场：[点击进入](http://txy.mineadmin.com)
+- 阿里云特惠专场：[点击进入](http://aly.mineadmin.com)
 
 #### 内置功能
 
