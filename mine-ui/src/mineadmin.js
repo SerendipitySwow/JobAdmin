@@ -40,6 +40,9 @@ export default {
 		app.config.globalProperties.getDict = api.dataDict.getDict
 		app.config.globalProperties.getDicts = api.dataDict.getDicts
 
+		// 全局挂载字典翻译
+		app.config.globalProperties.ddLabel = tool.ddLabel
+
 		// 全局挂载显示图片方法
 		app.config.globalProperties.viewImage = tool.viewImage
 

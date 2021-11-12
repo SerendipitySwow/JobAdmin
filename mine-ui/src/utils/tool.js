@@ -243,4 +243,8 @@ tool.codeToCity = function(province, city = undefined, area = undefined, split =
 	}
 }
 
+tool.ddLabel = function(dictData, value) {
+	return dictData.filter(item => item.value == value)[0].label
+}
+
 export default tool

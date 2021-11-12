@@ -203,10 +203,14 @@ class ControllerGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getUse(): string
     {
+        $namespace = "\\";
+        if (!empty($this->model->package_name)) {
+            $namespace = "\\" . Str::title($this->model->package_name). "\\";
+        }
         return <<<UseNamespace
 use {$this->getNamespace()}\\Service\\{$this->getBusinessName()}Service;
-use {$this->getNamespace()}\\Request\\{$this->getBusinessName()}CreateRequest;
-use {$this->getNamespace()}\\Request\\{$this->getBusinessName()}UpdateRequest;
+use {$this->getNamespace()}\\Request$namespace{$this->getBusinessName()}CreateRequest;
+use {$this->getNamespace()}\\Request$namespace{$this->getBusinessName()}UpdateRequest;
 UseNamespace;
     }
 
