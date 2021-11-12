@@ -125,7 +125,6 @@ trait ModelMacroTrait
      */
     private function registerBase()
     {
-        // 数据权限方法
         //添加andFilterWhere()方法
         Builder::macro('andFilterWhere', function ($key, $operator, $value = NULL) {
             if ($value === '' || $value === '%%' || $value === '%') {
@@ -140,6 +139,7 @@ trait ModelMacroTrait
                 return $this->where($key, $operator,$value);
             }
         });
+
         //添加orFilterWhere()方法
         Builder::macro('orFilterWhere', function ($key, $operator, $value = NULL) {
             if ($value === '' || $value === '%%' || $value === '%') {
