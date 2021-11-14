@@ -35,7 +35,7 @@
 			<div class="login-form">
 				<div class="login-header">
 					<div class="logo">
-						<img :alt="$CONFIG.APP_NAME" src="img/logo.png">
+						<img :alt="$CONFIG.APP_NAME" src="img/logo.svg">
 						<label>{{$CONFIG.APP_NAME}}</label>
 					</div>
 					<h2>{{ $t('login.signInTitle') }}</h2>
