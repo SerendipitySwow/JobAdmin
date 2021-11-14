@@ -22,6 +22,9 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read \Hyperf\Database\Model\Collection|SystemApiColumn[] $apiColumn 
+ * @property-read SystemApiGroup $apiGroup 
+ * @property-read \Hyperf\Database\Model\Collection|SystemApp[] $apps 
  */
 class SystemApi extends MineModel
 {
@@ -45,7 +48,6 @@ class SystemApi extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'group_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 通过中间表关联APP
      * @return \Hyperf\Database\Model\Relations\BelongsToMany
@@ -54,21 +56,19 @@ class SystemApi extends MineModel
     {
         return $this->belongsToMany(SystemApp::class, 'system_app_api', 'api_id', 'app_id');
     }
-
     /**
      * 关联API分组
      * @return \Hyperf\Database\Model\Relations\HasOne
      */
-    public function apiGroup(): \Hyperf\Database\Model\Relations\HasOne
+    public function apiGroup() : \Hyperf\Database\Model\Relations\HasOne
     {
         return $this->hasOne(SystemApiGroup::class, 'id', 'group_id');
     }
-
     /**
      * 关联API字段
      * @return \Hyperf\Database\Model\Relations\hasMany
      */
-    public function apiColumn(): \Hyperf\Database\Model\Relations\hasMany
+    public function apiColumn() : \Hyperf\Database\Model\Relations\hasMany
     {
         return $this->hasMany(SystemApiColumn::class, 'api_id', 'id');
     }

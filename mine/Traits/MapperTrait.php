@@ -107,6 +107,8 @@ trait MapperTrait
 
         if ($params['orderBy'] ?? false) {
             $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
+        } else if (in_array('sort', (new $this->model)->getFillable())) {
+            $query->orderBy('sort', 'desc');
         }
 
         $query->userDataScope();

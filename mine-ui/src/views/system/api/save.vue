@@ -1,0 +1,175 @@
+<template>
+  <el-dialog :title="titleMap[mode]" v-model="visible" :width="800" destroy-on-close @closed="$emit('closed')">
+    <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
+      
+        <el-form-item label="接口组ID" prop="group_id">
+            <el-select v-model="form.group_id" style="width:100%" clearable placeholder="请选择接口组ID">
+            </el-select>
+        </el-form-item>
+
+        <el-form-item label="接口名称" prop="name">
+            <el-input v-model="form.name" clearable placeholder="请输入接口名称" />
+        </el-form-item>
+
+        <el-form-item label="类名称" prop="class_name">
+            <el-input v-model="form.class_name" clearable placeholder="请输入类名称" />
+        </el-form-item>
+
+        <el-form-item label="方法名" prop="method_name">
+            <el-input v-model="form.method_name" clearable placeholder="请输入方法名" />
+        </el-form-item>
+
+        <el-form-item label="认证模式" prop="auth_mode">
+            <el-radio-group v-model="form.auth_mode">
+                <el-radio label="0">简易模式</el-radio>
+                <el-radio label="1">复杂模式</el-radio>
+            </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="请求模式" prop="request_mode">
+            <el-select v-model="form.request_mode" style="width:100%" clearable placeholder="请选择请求模式">
+                <el-option
+                    v-for="(item, index) in request_mode_data"
+                    :key="index" :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
+        </el-form-item>
+
+        <el-form-item label="说明介绍" prop="description">
+            <editor v-model="form.description" placeholder="请输入说明介绍" :height="400"></editor>
+        </el-form-item>
+
+        <el-form-item label="返回示例" prop="response">
+            <editor v-model="form.response" placeholder="请输入返回示例" :height="400"></editor>
+        </el-form-item>
+
+        <el-form-item label="状态" prop="status">
+            <el-radio-group v-model="form.status">
+                <el-radio
+                    v-for="(item, index) in data_status_data"
+                    :key="index"
+                    :label="item.value"
+                >{{item.label}}</el-radio>
+            </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="备注" prop="remark">
+            <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
+        </el-form-item>
+
+    </el-form>
+    <template #footer>
+      <el-button @click="visible=false" >取 消</el-button>
+      <el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
+    </template>
+  </el-dialog>
+</template>
+
+<script>
+  import editor from '@/components/scEditor'
+
+  export default {
+    emits: ['success', 'closed'],
+    components: {
+      editor
+    },
+    data() {
+      return {
+        mode: "add",
+        titleMap: {
+          add: '新增接口',
+          edit: '编辑接口'
+        },
+        form: {
+          
+           id: '',
+           group_id: '',
+           name: '',
+           class_name: '',
+           method_name: '',
+           auth_mode: '0',
+           request_mode: 'A',
+           description: '',
+           response: '',
+           status: '0',
+           remark: '',
+        },
+        rules: {
+          
+           name: [{required: true, message: '接口名称必填', trigger: 'blur' }],
+           class_name: [{required: true, message: '类名称必填', trigger: 'blur' }],
+           method_name: [{required: true, message: '方法名必填', trigger: 'blur' }],
+           auth_mode: [{required: true, message: '认证模式必填', trigger: 'blur' }],
+           request_mode: [{required: true, message: '请求模式必填', trigger: 'blur' }],
+        },
+        visible: false,
+        isSaveing: false,
+        
+        request_mode_data: [],
+        data_status_data: [],
+      }
+    },
+    async created() {
+        await this.getDictData();
+    },
+    methods: {
+      //显示
+      open(mode='add'){
+        this.mode = mode;
+        this.visible = true;
+        return this;
+      },
+      //表单提交方法
+      submit(){
+        this.$refs.dialogForm.validate(async (valid) => {
+          if (valid) {
+            this.isSaveing = true;
+            let res = null
+            if (this.mode == 'add') {
+              res = await this.$API.api.save(this.form)
+            } else {
+              res = await this.$API.api.update(this.form.id, this.form)
+            }
+            this.isSaveing = false;
+            if(res.success){
+              this.$emit('success', this.form, this.mode)
+              this.visible = false;
+              this.$message.success(res.message)
+            }else{
+              this.$alert(res.message, "提示", {type: 'error'})
+            }
+          }
+        })
+      },
+
+      //表单注入数据
+      setData(data){
+        
+          this.form.id = data.id;
+          this.form.group_id = data.group_id;
+          this.form.name = data.name;
+          this.form.class_name = data.class_name;
+          this.form.method_name = data.method_name;
+          this.form.auth_mode = data.auth_mode;
+          this.form.request_mode = data.request_mode;
+          this.form.description = data.description;
+          this.form.response = data.response;
+          this.form.status = data.status;
+          this.form.remark = data.remark;
+      },
+
+      // 获取字典数据
+      getDictData() {
+        
+          this.getDict('request_mode').then(res => {
+              this.request_mode_data = res.data
+          })
+          this.getDict('data_status').then(res => {
+              this.data_status_data = res.data
+          })
+      }
+      
+    }
+  }
+</script>
