@@ -61,9 +61,9 @@ PHP有很多优秀的后台管理系统，但基于Swoole的后台管理系统�
 
 
 #### 安装项目
+- MineAdmin没有使用SQL文件导入安装，系统使用Migrates迁移文件形式安装和填充数据，请知悉。
 
-- 项目下载
-  - 请确保已经安装了 `Composer`
+- 项目下载，请确保已经安装了 `Composer`
 ```shell
 git clone https://gitee.com/xmo/MineAdmin && cd MineAdmin
 composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
@@ -77,16 +77,16 @@ composer install
 ```shell
 php bin/hyperf.php start
 ```
-切换到安装终端，执行安装命令
+切换到安装终端，执行安装命令，完成`.env`文件的配置
 ```shell
 php bin/hyperf.php mine:install
 ```
-待提示以下信息后，切换到启动终端，重启项目
+待提示以下信息后，切换到启动终端，重启项目，加载`.env`配置信息
 ```shell
 Reset the ".env" file. Please restart the service before running 
 the installation command to continue the installation.
 ```
-切换到安装终端，再次执行安装命令，完成安装。
+切换到安装终端，再次执行安装命令，执行Migrates数据迁移文件和SQL数据填充，完成安装。
 ```shell
 php bin/hyperf.php mine:install
 ```
@@ -96,10 +96,14 @@ php bin/hyperf.php mine:install
 请先确保安装了node.js，yarn 或者 npm 工具，建议使用yarn
 ```shell
 cd mine-ui && yarn
+or
+cd mine-ui && npm install
 ```
 启动
 ```shell
 yarn dev
+or
+npm run dev
 ```
 
 
@@ -114,7 +118,7 @@ yarn dev
 
 #### QQ群
 
-> 15169734
+> <img src="https://img.shields.io/badge/Q群-15169734-red.svg" />
 
 #### 演示图片
 <table>

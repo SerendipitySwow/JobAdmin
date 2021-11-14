@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Hyperf\Database\Seeders\Seeder;
 use Hyperf\DbConnection\Db;
 
-class AddDictDataNoticeData extends Seeder
+class AddDictDataRequestModeData extends Seeder
 {
     /**
      * Run the database seeds.
