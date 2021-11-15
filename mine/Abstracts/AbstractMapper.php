@@ -28,10 +28,29 @@ abstract class AbstractMapper
      */
     public $model;
 
+    protected static $attributes = [];
+    
     abstract public function assignModel();
 
     public function __construct()
     {
         $this->assignModel();
+    }
+    
+    public static function load($data){
+        self::$attributes = $data;
+    }
+
+    public function __get($name)
+    {
+        return self::$attributes[$name] ?? '';
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes():array
+    {
+        return self::$attributes;
     }
 }

@@ -20,4 +20,23 @@ class AbstractService
     use ServiceTrait;
 
     public $mapper;
+
+    protected static $attributes = [];
+
+    public static function load($data){
+        self::$attributes = $data;
+    }
+
+    public function __get($name)
+    {
+        return self::$attributes[$name] ?? '';
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes():array
+    {
+        return self::$attributes;
+    }
 }
