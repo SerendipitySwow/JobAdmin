@@ -23,7 +23,7 @@
       <div class="right-panel">
         <div class="right-panel-search">
 
-          <el-input v-model="queryParams.group_id" placeholder="应用分组" clearable></el-input>
+          <el-input v-model="queryParams.app_name" placeholder="应用名称" clearable></el-input>
 
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -33,32 +33,33 @@
             <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
           </el-tooltip>
 
-          <el-popover placement="bottom-end" :width="450" trigger="click" >
+          <el-popover placement="bottom-end" :width="400" trigger="click" >
             <template #reference>
               <el-button type="text" @click="povpoerShow = ! povpoerShow">
                 更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
             </template>
             <el-form label-width="80px">
-              
-            <el-form-item label="应用名称" prop="app_name">
-                <el-input v-model="queryParams.app_name" placeholder="应用名称" clearable></el-input>
+            
+            <el-form-item label="应用名称" prop="group_id">
+              <el-select v-model="queryParams.group_id" style="width:100%" clearable placeholder="应用分组">
+                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
+              </el-select>
             </el-form-item>
-        
+
             <el-form-item label="APP ID" prop="app_id">
                 <el-input v-model="queryParams.app_id" placeholder="APP ID" clearable></el-input>
             </el-form-item>
         
             <el-form-item label="状态" prop="status">
-                        
-            <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
-                <el-option
-                    v-for="(item, index) in data_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
+              <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
+                  <el-option
+                      v-for="(item, index) in data_status_data"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                  >{{item.label}}</el-option>
+              </el-select>
             </el-form-item>
         
             </el-form>
@@ -97,11 +98,12 @@
         <el-table-column
            label="状态"
            prop="status"
-        />
-        <el-table-column
-           label="应用介绍"
-           prop="description"
-        />
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+          </template>
+        </el-table-column>
 
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
@@ -163,7 +165,8 @@
     },
 
     async created() {
-        await this.getDictData();
+        await this.getDictData()
+        await this.getGroupData()
     },
 
     data() {
@@ -189,6 +192,8 @@
           status: undefined,
         },
         isRecycle: false,
+
+        groupData: [],
       }
     },
     methods: {
@@ -308,6 +313,15 @@
           this.getDict('data_status').then(res => {
               this.data_status_data = res.data
           })
+      },
+
+      // 获取组列表
+      getGroupData() {
+        this.$API.appGroup.getSelectList().then(res => {
+          if (res.success) {
+            this.groupData = res.data
+          }
+        })
       }
     }
   }

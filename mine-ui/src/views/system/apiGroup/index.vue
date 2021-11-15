@@ -81,7 +81,12 @@
         <el-table-column
            label="状态"
            prop="status"
-        />
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+          </template>
+        </el-table-column>
 
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">

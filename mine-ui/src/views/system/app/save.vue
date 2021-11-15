@@ -1,9 +1,10 @@
 <template>
-  <el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
-    <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
+  <el-dialog :title="titleMap[mode]" v-model="visible" :width="700" destroy-on-close @closed="$emit('closed')">
+    <el-form :model="form" :rules="rules" ref="dialogForm" label-width="110px">
       
         <el-form-item label="应用分组" prop="group_id">
             <el-select v-model="form.group_id" style="width:100%" clearable placeholder="请选择应用分组">
+                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
             </el-select>
         </el-form-item>
 
@@ -12,11 +13,19 @@
         </el-form-item>
 
         <el-form-item label="APP ID" prop="app_id">
-            <el-input v-model="form.app_id" clearable placeholder="请输入APP ID" />
+            <el-input v-model="form.app_id" clearable :disabled="true" placeholder="请输入APP ID">
+              <template #append v-if="mode === 'add'">
+                <el-button type="primary" icon="el-icon-refresh">刷新APP ID</el-button>
+              </template>
+            </el-input>
         </el-form-item>
 
         <el-form-item label="APP SECRET" prop="app_secret">
-            <el-input v-model="form.app_secret" clearable placeholder="请输入APP SECRET" />
+            <el-input v-model="form.app_secret" clearable :disabled="true" placeholder="请输入APP SECRET">
+              <template #append v-if="mode === 'add'">
+                <el-button type="primary" icon="el-icon-refresh">刷新APP SECRET</el-button>
+              </template>
+            </el-input>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
@@ -30,7 +39,7 @@
         </el-form-item>
 
         <el-form-item label="应用介绍" prop="description">
-            <editor v-model="form.description" placeholder="请输入应用介绍" :height="400"></editor>
+            <editor v-model="form.description" placeholder="请输入应用介绍" :height="260"></editor>
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
@@ -67,7 +76,7 @@
            app_name: '',
            app_id: '',
            app_secret: '',
-           status: '',
+           status: '0',
            description: '',
            remark: '',
         },
@@ -82,14 +91,14 @@
         isSaveing: false,
         
         data_status_data: [],
+        groudpData: [],
       }
-    },
-    async created() {
-        await this.getDictData();
     },
     methods: {
       //显示
-      open(mode='add'){
+      async open(mode='add'){
+        await this.getDictData()
+        await this.getGroupData()
         this.mode = mode;
         this.visible = true;
         return this;
@@ -119,7 +128,6 @@
 
       //表单注入数据
       setData(data){
-        
           this.form.id = data.id;
           this.form.group_id = data.group_id;
           this.form.app_name = data.app_name;
@@ -138,10 +146,14 @@
           })
       },
 
-      
-
-      
-
+      // 获取组列表
+      getGroupData() {
+        this.$API.appGroup.getSelectList().then(res => {
+          if (res.success) {
+            this.groupData = res.data
+          }
+        })
+      }
       
     }
   }

@@ -44,6 +44,16 @@ class SystemApiGroupController extends MineController
     }
 
     /**
+     * 列表，无分页
+     * @GetMapping("list")
+     * @return ResponseInterface
+     */
+    public function list(): ResponseInterface
+    {
+        return $this->success($this->service->getList());
+    }
+
+    /**
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface

@@ -22,4 +22,14 @@ class SystemAppGroupService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * 获取分组列表 无分页
+     * @param array|null $params
+     * @return array
+     */
+    public function getList(?array $params = null): array
+    {
+        return $this->mapper->getList(['select' => ['id', 'name'], 'status' => '0']);
+    }
 }

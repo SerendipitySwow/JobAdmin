@@ -19,6 +19,18 @@ export default {
   },
 
   /**
+   * 获取接口分组分页列表，无分页，下拉用
+   * @returns
+   */
+   getSelectList (params = {}) {
+    return request({
+      url: 'system/appGroup/list',
+      method: 'get',
+      params
+    })
+  },
+
+  /**
    * 从回收站获取应用分组数据列表
    * @returns
    */

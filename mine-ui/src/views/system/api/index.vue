@@ -23,7 +23,7 @@
       <div class="right-panel">
         <div class="right-panel-search">
 
-          <el-input v-model="queryParams.group_id" placeholder="接口组ID" clearable></el-input>
+          <el-input v-model="queryParams.name" placeholder="接口名称" clearable></el-input>
 
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -40,9 +40,11 @@
               </el-button>
             </template>
             <el-form label-width="80px">
-              
-            <el-form-item label="接口名称" prop="name">
-                <el-input v-model="queryParams.name" placeholder="接口名称" clearable></el-input>
+
+            <el-form-item label="应用名称" prop="group_id">
+              <el-select v-model="queryParams.group_id" style="width:100%" clearable placeholder="应用分组">
+                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
+              </el-select>
             </el-form-item>
         
             <el-form-item label="认证模式" prop="auth_mode">
@@ -125,7 +127,12 @@
         <el-table-column
            label="状态"
            prop="status"
-        />
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+          </template>
+        </el-table-column>
 
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
@@ -187,7 +194,8 @@
     },
 
     async created() {
-        await this.getDictData();
+        await this.getDictData()
+        await this.getGroupData()
     },
 
     data() {
@@ -215,6 +223,8 @@
           status: undefined,
         },
         isRecycle: false,
+
+        groupData: [],
       }
     },
     methods: {
@@ -338,6 +348,15 @@
           this.getDict('data_status').then(res => {
               this.data_status_data = res.data
           })
+      },
+
+      // 获取组列表
+      getGroupData() {
+        this.$API.apiGroup.getSelectList().then(res => {
+          if (res.success) {
+            this.groupData = res.data
+          }
+        })
       }
     }
   }
