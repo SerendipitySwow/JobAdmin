@@ -100,20 +100,45 @@ trait MapperTrait
             $query->select($this->filterQueryAttributes($params['select']));
         }
 
+        $query = $this->handleOrder($query, $params);
+
+        $query->userDataScope();
+
+        return $this->handleSearch($query, $params);
+    }
+
+    /**
+     * 搜索处理器
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function handleOrder(Builder $query, array &$params): Builder
+    {
         // 对树型数据强行加个排序
         if (isset($params['_mainAdmin_tree'])) {
             $query->orderBy($params['_mainAdmin_tree_pid']);
         }
 
         if ($params['orderBy'] ?? false) {
-            $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
-        } else if (in_array('sort', (new $this->model)->getFillable())) {
-            $query->orderBy('sort', 'desc');
+            if (is_array($params['orderBy'])) {
+                foreach ($params['orderBy'] as $key => $order) {
+                    $query->orderBy($order, $params['orderType'][$key] ?? 'asc');
+                }
+            } else {
+                $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
+            }
+        } else {
+            $model = new $this->model;
+            if (in_array('sort', $model->getFillable())) {
+                $query->orderBy('sort', 'desc');
+            }
+            if (in_array('id', $model->getFillable())) {
+                $model->incrementing ? $query->orderBy('id', 'desc') : $query->orderBy('id');
+            }
         }
 
-        $query->userDataScope();
-
-        return $this->handleSearch($query, $params);
+        return $query;
     }
 
     /**
