@@ -108,7 +108,7 @@ trait MapperTrait
     }
 
     /**
-     * 搜索处理器
+     * 排序处理器
      * @param Builder $query
      * @param array $params
      * @return Builder
