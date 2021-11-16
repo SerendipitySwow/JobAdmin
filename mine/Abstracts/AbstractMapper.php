@@ -12,6 +12,7 @@
 declare (strict_types = 1);
 namespace Mine\Abstracts;
 
+use Hyperf\Utils\Context;
 use Mine\MineModel;
 use Mine\Traits\MapperTrait;
 
@@ -27,8 +28,6 @@ abstract class AbstractMapper
      * @var MineModel
      */
     public $model;
-
-    protected static $attributes = [];
     
     abstract public function assignModel();
 
@@ -36,14 +35,14 @@ abstract class AbstractMapper
     {
         $this->assignModel();
     }
-    
+
     public static function load($data){
-        self::$attributes = $data;
+        Context::set('attributes', $data);
     }
 
     public function __get($name)
     {
-        return self::$attributes[$name] ?? '';
+        return $this->getAttributes()[$name] ?? '';
     }
 
     /**
@@ -51,6 +50,6 @@ abstract class AbstractMapper
      */
     public function getAttributes():array
     {
-        return self::$attributes;
+        return Context::get('attributes', []);
     }
 }

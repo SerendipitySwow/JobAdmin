@@ -14,22 +14,21 @@ namespace Mine\Abstracts;
 
 
 use Mine\Traits\ServiceTrait;
+use Hyperf\Utils\Context;
 
 class AbstractService
 {
     use ServiceTrait;
 
     public $mapper;
-
-    protected static $attributes = [];
-
+    
     public static function load($data){
-        self::$attributes = $data;
+        Context::set('attributes', $data);
     }
 
     public function __get($name)
     {
-        return self::$attributes[$name] ?? '';
+        return $this->getAttributes()[$name] ?? '';
     }
 
     /**
@@ -37,6 +36,6 @@ class AbstractService
      */
     public function getAttributes():array
     {
-        return self::$attributes;
+        return Context::get('attributes', []);
     }
 }
