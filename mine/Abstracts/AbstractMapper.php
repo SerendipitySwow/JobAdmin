@@ -36,19 +36,30 @@ abstract class AbstractMapper
         $this->assignModel();
     }
 
-    public static function load($data){
+    /**
+     * 把数据设置为类属性
+     * @param array $data
+     */
+    public static function setAttributes(array $data)
+    {
         Context::set('attributes', $data);
     }
 
-    public function __get($name)
+    /**
+     * 魔术方法，从类属性里获取数据
+     * @param string $name
+     * @return mixed|string
+     */
+    public function __get(string $name)
     {
         return $this->getAttributes()[$name] ?? '';
     }
 
     /**
+     * 获取数据
      * @return array
      */
-    public function getAttributes():array
+    public function getAttributes(): array
     {
         return Context::get('attributes', []);
     }
