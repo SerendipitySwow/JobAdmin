@@ -120,6 +120,20 @@ trait ServiceTrait
     }
 
     /**
+     * 批量新增
+     * @param array $collects
+     * @Transaction
+     * @return bool
+     */
+    public function batchSave(array $collects): bool
+    {
+        foreach ($collects as $collect) {
+            $this->mapper->save($collect);
+        }
+        return true;
+    }
+
+    /**
      * 读取一条数据
      * @param int $id
      * @return MineModel
