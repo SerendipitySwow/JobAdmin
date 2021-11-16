@@ -33,6 +33,8 @@ if (! function_exists('redis')) {
     /**
      * 获取Redis实例
      * @return \Hyperf\Redis\Redis
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     function redis(): \Hyperf\Redis\Redis
     {
@@ -46,6 +48,8 @@ if (! function_exists('console')) {
     /**
      * 获取控制台输出实例
      * @return StdoutLoggerInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     function console(): StdoutLoggerInterface
     {
@@ -60,6 +64,8 @@ if (! function_exists('logger')) {
      * 获取日志实例
      * @param string $name
      * @return LoggerInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     function logger(string $name = 'Log'): LoggerInterface
     {
@@ -104,6 +110,8 @@ if (! function_exists('t')) {
      * @param string $key
      * @param array $replace
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     function t(string $key, array $replace = []): string
     {
@@ -124,5 +132,30 @@ if (! function_exists('mine_collect')) {
     function mine_collect($value = null): \Mine\MineCollection
     {
         return new \Mine\MineCollection($value);
+    }
+}
+
+if (! function_exists('context_set')) {
+    /**
+     * 设置上下文数据
+     * @param string $key
+     * @param $data
+     * @return bool
+     */
+    function context_set(string $key, $data): bool
+    {
+        return (bool)\Hyperf\Utils\Context::set($key, $data);
+    }
+}
+
+if (! function_exists('context_get')) {
+    /**
+     * 获取上下文数据
+     * @param string $key
+     * @return mixed
+     */
+    function context_get(string $key)
+    {
+        return \Hyperf\Utils\Context::get($key);
     }
 }
