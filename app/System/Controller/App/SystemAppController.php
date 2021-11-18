@@ -33,6 +33,26 @@ class SystemAppController extends MineController
     protected $service;
 
     /**
+     * 获取APP ID
+     * @GetMapping("getAppId")
+     * @return ResponseInterface
+     */
+    public function getAppId(): ResponseInterface
+    {
+        return $this->success($this->service->getAppId());
+    }
+
+    /**
+     * 获取APP SECRET
+     * @GetMapping("getAppSecret")
+     * @return ResponseInterface
+     */
+    public function getAppSecret(): ResponseInterface
+    {
+        return $this->success($this->service->getAppSecret());
+    }
+
+    /**
      * 列表
      * @GetMapping("index")
      * @return ResponseInterface

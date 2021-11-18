@@ -97,6 +97,28 @@ export default {
       method: 'put',
       data: params
     })
+  },
+
+  /**
+   * 获取appid
+   * @returns
+   */
+  getAppId () {
+    return request({
+      url: 'system/app/getAppId',
+      method: 'get'
+    })
+  },
+
+  /**
+   * 获取app secret
+   * @returns
+   */
+   getAppSecret () {
+    return request({
+      url: 'system/app/getAppSecret',
+      method: 'get'
+    })
   }
 
 }
