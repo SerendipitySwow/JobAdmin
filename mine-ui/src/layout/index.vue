@@ -9,7 +9,7 @@
 				</div>
 				<ul v-if="!ismobile" class="nav">
 					<li v-for="item in menu" :key="item" :class="pmenu.path==item.path?'active':''" @click="showMenu(item)">
-						<i :class="item.meta.icon || 'el-icon-menu'"></i>
+						<el-icon><component :is="item.meta.icon || el-icon-menu" /></el-icon>
 						<span>{{ item.meta.title }}</span>
 					</li>
 				</ul>
@@ -19,7 +19,7 @@
 			</div>
 		</header>
 		<section class="aminui-wrapper">
-			<div v-if="!ismobile && nextMenu.length>0" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
+			<div v-if="!ismobile && nextMenu.length>0 || !pmenu.component" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
 				<div v-if="!menuIsCollapse" class="adminui-side-top">
 					<h2>{{ pmenu.meta.title }}</h2>
 				</div>
@@ -128,14 +128,14 @@
 						<ul>
 							<li v-for="item in menu" :key="item" :class="pmenu.path==item.path?'active':''"
 								@click="showMenu(item)">
-								<i :class="item.meta.icon || 'el-icon-menu'"></i>
+								<el-icon><component :is="item.meta.icon || el-icon-menu" /></el-icon>
 								<p>{{ item.meta.title }}</p>
 							</li>
 						</ul>
 					</el-scrollbar>
 				</div>
 			</div>
-			<div v-if="!ismobile" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
+			<div v-if="!ismobile && nextMenu.length>0 || !pmenu.component" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
 				<div v-if="!menuIsCollapse" class="adminui-side-top">
 					<h2>{{ pmenu.meta.title }}</h2>
 				</div>
@@ -165,9 +165,9 @@
 		</section>
 	</template>
 
-	<div class="layout-setting" @click="openSetting" v-if="$CONFIG.APP_MODE === 'dev'"><i class="el-icon-brush"></i></div>
+	<div class="layout-setting" @click="openSetting" v-if="$CONFIG.APP_MODE === 'dev'"><el-icon><el-icon-brush-filled /></el-icon></div>
 
-	<el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close v-if="$CONFIG.APP_MODE === 'dev'">
+	<el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close>
 		<setting></setting>
 	</el-drawer>
 </template>

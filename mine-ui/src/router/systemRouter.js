@@ -32,7 +32,7 @@ const routes = {
 		component: () => import(`@/layout/other/empty`),
 		meta: {
 			title: "首页",
-			icon: "el-icon-s-home"
+			icon: "el-icon-home-filled"
 		},
 		children: [
 			{
@@ -65,7 +65,7 @@ const routes = {
 				path: "/demo",
 				meta: {
 					title: "组件演示",
-					icon: "sc-icon-vuejs-fill",
+					icon: "sc-icon-vue",
 				},
 				component: () => import(/* webpackChunkName: "demo" */ '@/views/demo/index'),
 			}
