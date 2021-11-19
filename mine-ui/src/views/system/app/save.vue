@@ -3,7 +3,7 @@
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="110px">
       
         <el-form-item label="应用分组" prop="group_id">
-            <el-select v-model="form.group_id" style="width:100%" clearable placeholder="请选择应用分组">
+            <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择应用分组">
                 <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
             </el-select>
         </el-form-item>
@@ -15,7 +15,7 @@
         <el-form-item label="APP ID" prop="app_id">
             <el-input v-model="form.app_id" clearable :disabled="true" placeholder="请输入APP ID">
               <template #append v-if="mode === 'add'">
-                <el-button type="primary" icon="el-icon-refresh">刷新APP ID</el-button>
+                <el-button type="primary" icon="el-icon-refresh" @click="setAppid()">刷新APP ID</el-button>
               </template>
             </el-input>
         </el-form-item>
@@ -23,7 +23,7 @@
         <el-form-item label="APP SECRET" prop="app_secret">
             <el-input v-model="form.app_secret" clearable :disabled="true" placeholder="请输入APP SECRET">
               <template #append v-if="mode === 'add'">
-                <el-button type="primary" icon="el-icon-refresh">刷新APP SECRET</el-button>
+                <el-button type="primary" icon="el-icon-refresh" @click="setAppsecret()">刷新APP SECRET</el-button>
               </template>
             </el-input>
         </el-form-item>
@@ -91,7 +91,7 @@
         isSaveing: false,
         
         data_status_data: [],
-        groudpData: [],
+        groupData: [],
       }
     },
     methods: {
@@ -101,7 +101,20 @@
         await this.getGroupData()
         this.mode = mode;
         this.visible = true;
+        if (mode === 'add') {
+          this.setAppid()
+          this.setAppsecret()
+        }
         return this;
+      },
+      // 设置appid
+      async setAppid() {
+          let appid = await this.$API.app.getAppId()
+          this.form.app_id = appid.data.app_id
+      },
+      async setAppsecret() {
+          let appsecret = await this.$API.app.getAppSecret()
+          this.form.app_secret = appsecret.data.app_secret
       },
       //表单提交方法
       submit(){
@@ -140,7 +153,6 @@
 
       // 获取字典数据
       getDictData() {
-        
           this.getDict('data_status').then(res => {
               this.data_status_data = res.data
           })

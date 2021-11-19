@@ -86,22 +86,39 @@
         <el-table-column
            label="应用名称"
            prop="app_name"
+           width="150"
         />
         <el-table-column
            label="APP ID"
            prop="app_id"
-        />
+           width="120"
+        >
+          <template #default="scope">
+            <el-tooltip content="点击复制" placement="top">
+              <span style="cursor:pointer" @click="copy(scope.row.app_id)">{{ scope.row.app_id }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="APP SECRET"
            prop="app_secret"
-        />
+           show-overflow-tooltip
+        >
+          <template #default="scope">
+            <el-tooltip content="点击复制" placement="top">
+              <span style="cursor:pointer" @click="copy(scope.row.app_secret)">{{ scope.row.app_secret }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="状态"
            prop="status"
+           width="100"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
-            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <status-indicator :type="scope.row.status === '0' ? 'primary' : 'danger'" />
           </template>
         </el-table-column>
 
@@ -157,16 +174,18 @@
 
 <script>
   import saveDialog from './save'
+  import statusIndicator from  '@/components/scMini/scStatusIndicator'
 
   export default {
     name: 'system:app',
     components: {
-      saveDialog
+      saveDialog,
+      statusIndicator
     },
 
     async created() {
-        await this.getDictData()
-        await this.getGroupData()
+      await this.getGroupData()
+      await this.getDictData()
     },
 
     data() {
@@ -192,7 +211,6 @@
           status: undefined,
         },
         isRecycle: false,
-
         groupData: [],
       }
     },
@@ -210,7 +228,9 @@
       tableEdit(row){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open('edit').setData(row)
+          this.$refs.saveDialog.open('edit').then( _ => {
+            _.setData(row)
+          })
         })
       },
 
@@ -258,6 +278,15 @@
           loading.close();
           this.$message.success("操作成功")
         }).catch(()=>{})
+      },
+
+      async copy(str) {
+        try {
+          await this.clipboard(str)
+          this.$message.success(this.$t('sys.copy_success'))
+        } catch(e) {
+          this.$message.error(this.$t('sys.copy_fail'))
+        }
       },
 
       // 恢复数据

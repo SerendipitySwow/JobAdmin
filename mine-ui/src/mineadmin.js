@@ -31,6 +31,8 @@ import * as elIcons from '@element-plus/icons'
 import * as maIcons from './assets/maicons'
 import * as scIcons from './assets/icons'
 
+import useClipboard from 'vue-clipboard3'
+
 export default {
 	install(app) {
 		//挂载全局对象
@@ -52,6 +54,9 @@ export default {
 
 		// 全局挂载城市代码翻译成名称方法
 		app.config.globalProperties.codeToCity = tool.codeToCity
+
+		// 全局挂载复制方法
+		app.config.globalProperties.clipboard = useClipboard().toClipboard
 
 		//注册全局组件
 		app.component('maTable', maTable)

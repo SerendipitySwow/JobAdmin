@@ -27,19 +27,20 @@ class SystemAppService extends AbstractService
     /**
      * 生成新的app id
      * @return string
+     * @throws \Exception
      */
     public function getAppId(): string
     {
-        return Str::random(4, 0) . Str::random(4, 1).Str::random(2, 0);
+        return bin2hex(random_bytes(5));
     }
 
     /**
      * 生成新的app secret
      * @return string
+     * @throws \Exception
      */
     public function getAppSecret(): string
     {
-
-        return '';
+        return base64_encode(bin2hex(random_bytes(32)));
     }
 }

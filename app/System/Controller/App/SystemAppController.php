@@ -36,20 +36,22 @@ class SystemAppController extends MineController
      * 获取APP ID
      * @GetMapping("getAppId")
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function getAppId(): ResponseInterface
     {
-        return $this->success($this->service->getAppId());
+        return $this->success(['app_id' => $this->service->getAppId()]);
     }
 
     /**
      * 获取APP SECRET
      * @GetMapping("getAppSecret")
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function getAppSecret(): ResponseInterface
     {
-        return $this->success($this->service->getAppSecret());
+        return $this->success(['app_secret' => $this->service->getAppSecret()]);
     }
 
     /**
