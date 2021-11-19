@@ -44,7 +44,7 @@
 		</div>
 		<el-dropdown class="user panel-item" trigger="click" @command="handleUser">
 			<div class="user-avatar">
-				<el-avatar :size="30">{{ userNameF }}</el-avatar>
+				<el-avatar :size="30" :src="avatar">{{ userNameF }}</el-avatar>
 				<label>{{ userName }}</label>
 				<el-icon class="el-icon--right"><el-icon-arrow-down /></el-icon>
 			</div>
@@ -95,7 +95,7 @@
 			this.userNameF = this.userName.substring(0,1);
 			this.avatar = userInfo.avatar
 			if (this.avatar == '' || this.avatar == null) {
-				this.avatar = 'img/avatar.jpg'
+				this.avatar = '/img/avatar.jpg'
 			}
 		},
 		methods: {
