@@ -297,16 +297,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.1.3",
+            "version": "3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "96b0053775a544b4a6ab47654dac0621be8b4cf8"
+                "reference": "821b4f01a36ce63ed36c090ea74767b72db367e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/96b0053775a544b4a6ab47654dac0621be8b4cf8",
-                "reference": "96b0053775a544b4a6ab47654dac0621be8b4cf8",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/821b4f01a36ce63ed36c090ea74767b72db367e9",
+                "reference": "821b4f01a36ce63ed36c090ea74767b72db367e9",
                 "shasum": ""
             },
             "require": {
@@ -319,14 +319,14 @@
             "require-dev": {
                 "doctrine/coding-standard": "9.0.0",
                 "jetbrains/phpstorm-stubs": "2021.1",
-                "phpstan/phpstan": "0.12.99",
-                "phpstan/phpstan-strict-rules": "^0.12.11",
+                "phpstan/phpstan": "1.1.1",
+                "phpstan/phpstan-strict-rules": "^1",
                 "phpunit/phpunit": "9.5.10",
                 "psalm/plugin-phpunit": "0.16.1",
-                "squizlabs/php_codesniffer": "3.6.0",
+                "squizlabs/php_codesniffer": "3.6.1",
                 "symfony/cache": "^5.2|^6.0",
                 "symfony/console": "^2.0.5|^3.0|^4.0|^5.0|^6.0",
-                "vimeo/psalm": "4.10.0"
+                "vimeo/psalm": "4.12.0"
             },
             "suggest": {
                 "symfony/console": "For helpful console commands such as SQL execution and import of files."
@@ -386,7 +386,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.1.3"
+                "source": "https://github.com/doctrine/dbal/tree/3.1.4"
             },
             "funding": [
                 {
@@ -402,7 +402,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-02T16:15:05+00:00"
+            "time": "2021-11-15T16:44:33+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1890,16 +1890,16 @@
         },
         {
             "name": "hyperf/di",
-            "version": "v2.2.14",
+            "version": "v2.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/di.git",
-                "reference": "0c4e81051d5c5c0db159c1afb68139d2bbf20cb2"
+                "reference": "b6f05f8e31c1985c928708a04d8abc08d06888b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/di/zipball/0c4e81051d5c5c0db159c1afb68139d2bbf20cb2",
-                "reference": "0c4e81051d5c5c0db159c1afb68139d2bbf20cb2",
+                "url": "https://api.github.com/repos/hyperf/di/zipball/b6f05f8e31c1985c928708a04d8abc08d06888b1",
+                "reference": "b6f05f8e31c1985c928708a04d8abc08d06888b1",
                 "shasum": ""
             },
             "require": {
@@ -1949,7 +1949,7 @@
                 "pull-request": "https://github.com/hyperf/hyperf/pulls",
                 "source": "https://github.com/hyperf/hyperf"
             },
-            "time": "2021-10-29T10:44:12+00:00"
+            "time": "2021-11-13T04:35:05+00:00"
         },
         {
             "name": "hyperf/dispatcher",
@@ -2172,16 +2172,16 @@
         },
         {
             "name": "hyperf/filesystem",
-            "version": "v2.2.6",
+            "version": "v2.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hyperf/filesystem.git",
-                "reference": "c7ec9363305ae6ebc14eeb927cb84a3c5967be3d"
+                "reference": "b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hyperf/filesystem/zipball/c7ec9363305ae6ebc14eeb927cb84a3c5967be3d",
-                "reference": "c7ec9363305ae6ebc14eeb927cb84a3c5967be3d",
+                "url": "https://api.github.com/repos/hyperf/filesystem/zipball/b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e",
+                "reference": "b0a4926d5b818d5d5cc88ec3c5f99b4912cedb0e",
                 "shasum": ""
             },
             "require": {
@@ -2227,9 +2227,9 @@
             ],
             "support": {
                 "issues": "https://github.com/hyperf/filesystem/issues",
-                "source": "https://github.com/hyperf/filesystem/tree/v2.2.6"
+                "source": "https://github.com/hyperf/filesystem/tree/v2.2.16"
             },
-            "time": "2021-08-28T04:09:18+00:00"
+            "time": "2021-11-15T02:27:27+00:00"
         },
         {
             "name": "hyperf/framework",
@@ -7071,16 +7071,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.19.2",
+            "version": "v2.19.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "d5c737c2e18ba502b75b44832b31fe627f82e307"
+                "reference": "75ac86f33fab4714ea5a39a396784d83ae3b5ed8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d5c737c2e18ba502b75b44832b31fe627f82e307",
-                "reference": "d5c737c2e18ba502b75b44832b31fe627f82e307",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/75ac86f33fab4714ea5a39a396784d83ae3b5ed8",
+                "reference": "75ac86f33fab4714ea5a39a396784d83ae3b5ed8",
                 "shasum": ""
             },
             "require": {
@@ -7168,7 +7168,7 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
-                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v2.19.2"
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v2.19.3"
             },
             "funding": [
                 {
@@ -7176,7 +7176,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-18T19:55:46+00:00"
+            "time": "2021-11-15T17:17:55+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -9413,16 +9413,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "4.8.1",
+            "version": "4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "0dcd9558133a1742a4a1754e5e2971152bd2267d"
+                "reference": "63e19521c232adb1e86472bf2c4e94bff6189c8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/0dcd9558133a1742a4a1754e5e2971152bd2267d",
-                "reference": "0dcd9558133a1742a4a1754e5e2971152bd2267d",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/63e19521c232adb1e86472bf2c4e94bff6189c8f",
+                "reference": "63e19521c232adb1e86472bf2c4e94bff6189c8f",
                 "shasum": ""
             },
             "type": "library",
@@ -9439,7 +9439,7 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/4.8.1"
+                "source": "https://github.com/swoole/ide-helper/tree/4.8.2"
             },
             "funding": [
                 {
@@ -9451,7 +9451,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-29T16:44:09+00:00"
+            "time": "2021-11-17T05:43:38+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
