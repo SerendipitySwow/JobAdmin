@@ -79,7 +79,7 @@
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" content="清除所有选中的" placement="top">
-              <el-button size="small" icon="el-icon-error" @click="checkList = []">清除</el-button>
+              <el-button size="small" icon="el-icon-refresh" @click="checkList = []">清除</el-button>
             </el-tooltip>
           </el-button-group>
 
@@ -140,10 +140,12 @@
                 <div class="thumbnail">
                   <el-checkbox class="check" :label="item" > {{ index + 1 }}</el-checkbox>
                   <div class="mask" v-auth="['system:attachment:delete']">
-                    <span class="del" @click.stop="deletes(item.id)"><i class="el-icon-delete"></i></span>
+                    <span class="del" @click.stop="deletes(item.id)">
+                      <el-icon><el-icon-delete /></el-icon>
+                    </span>
                   </div>
                   <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
-                    <i class="el-icon-document" />
+                    <el-icon><el-icon-document /></el-icon>
                   </div>
                   <el-image v-else :src="viewImage(item.url)" fit="cover" :preview-src-list="preview" hide-on-click-modal append-to-body />
                   <el-tooltip placement="bottom">
