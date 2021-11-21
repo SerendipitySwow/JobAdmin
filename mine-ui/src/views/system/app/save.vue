@@ -1,51 +1,58 @@
 <template>
   <el-dialog :title="titleMap[mode]" v-model="visible" :width="700" destroy-on-close @closed="$emit('closed')">
-    <el-form :model="form" :rules="rules" ref="dialogForm" label-width="110px">
-      
-        <el-form-item label="应用分组" prop="group_id">
-            <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择应用分组">
-                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
-            </el-select>
-        </el-form-item>
+      <el-form :model="form" :rules="rules" ref="dialogForm" label-width="110px">
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="基础信息" name="base">
 
-        <el-form-item label="应用名称" prop="app_name">
-            <el-input v-model="form.app_name" clearable placeholder="请输入应用名称" />
-        </el-form-item>
+            <el-form-item label="应用分组" prop="group_id">
+                <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择应用分组">
+                    <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
+                </el-select>
+            </el-form-item>
 
-        <el-form-item label="APP ID" prop="app_id">
-            <el-input v-model="form.app_id" clearable :disabled="true" placeholder="请输入APP ID">
-              <template #append v-if="mode === 'add'">
-                <el-button type="primary" icon="el-icon-refresh" @click="setAppid()">刷新APP ID</el-button>
-              </template>
-            </el-input>
-        </el-form-item>
+            <el-form-item label="应用名称" prop="app_name">
+                <el-input v-model="form.app_name" clearable placeholder="请输入应用名称" />
+            </el-form-item>
 
-        <el-form-item label="APP SECRET" prop="app_secret">
-            <el-input v-model="form.app_secret" clearable :disabled="true" placeholder="请输入APP SECRET">
-              <template #append>
-                <el-button type="primary" icon="el-icon-refresh" @click="setAppsecret()">刷新APP SECRET</el-button>
-              </template>
-            </el-input>
-        </el-form-item>
+            <el-form-item label="APP ID" prop="app_id">
+                <el-input v-model="form.app_id" clearable :disabled="true" placeholder="请输入APP ID">
+                  <template #append v-if="mode === 'add'">
+                    <el-button type="primary" icon="el-icon-refresh" @click="setAppid()">刷新APP ID</el-button>
+                  </template>
+                </el-input>
+            </el-form-item>
 
-        <el-form-item label="状态" prop="status">
-            <el-radio-group v-model="form.status">
-                <el-radio
-                    v-for="(item, index) in data_status_data"
-                    :key="index"
-                    :label="item.value"
-                >{{item.label}}</el-radio>
-            </el-radio-group>
-        </el-form-item>
+            <el-form-item label="APP SECRET" prop="app_secret">
+                <el-input v-model="form.app_secret" clearable :disabled="true" placeholder="请输入APP SECRET">
+                  <template #append>
+                    <el-button type="primary" icon="el-icon-refresh" @click="setAppsecret()">刷新APP SECRET</el-button>
+                  </template>
+                </el-input>
+            </el-form-item>
 
-        <el-form-item label="应用介绍" prop="description">
-            <editor v-model="form.description" placeholder="请输入应用介绍" :height="260"></editor>
-        </el-form-item>
+            <el-form-item label="状态" prop="status">
+                <el-radio-group v-model="form.status">
+                    <el-radio
+                        v-for="(item, index) in data_status_data"
+                        :key="index"
+                        :label="item.value"
+                    >{{item.label}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
 
-        <el-form-item label="备注" prop="remark">
-            <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
-        </el-form-item>
+          </el-tab-pane>
 
+          <el-tab-pane label="其他信息" name="other">
+            <el-form-item label="应用介绍" prop="description">
+                <editor v-model="form.description" placeholder="请输入应用介绍" :height="260"></editor>
+            </el-form-item>
+
+            <el-form-item label="备注" prop="remark">
+                <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
+            </el-form-item>
+          </el-tab-pane>
+
+        </el-tabs>
     </el-form>
     <template #footer>
       <el-button @click="visible=false" >取 消</el-button>
@@ -65,6 +72,7 @@
     data() {
       return {
         mode: "add",
+        activeName: 'base',
         titleMap: {
           add: '新增应用',
           edit: '编辑应用'

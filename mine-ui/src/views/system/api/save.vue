@@ -1,67 +1,84 @@
 <template>
-  <el-dialog :title="titleMap[mode]" v-model="visible" :width="800" destroy-on-close @closed="$emit('closed')">
+  <el-dialog
+    :title="titleMap[mode]"
+    v-model="visible"
+    :width="800"
+    destroy-on-close
+    @closed="$emit('closed')"
+  >
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
-      
-        <el-form-item label="接口分组" prop="group_id">
-            <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择接口分组">
-                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
-            </el-select>
-        </el-form-item>
+      <el-tabs v-model="activeName">
 
-        <el-form-item label="接口名称" prop="name">
-            <el-input v-model="form.name" clearable placeholder="请输入接口名称" />
-        </el-form-item>
+        <el-tab-pane label="基础信息" name="base">
 
-        <el-form-item label="类名称" prop="class_name">
-            <el-autocomplete
-            v-model="form.class_name"
-            :fetch-suggestions="querySearch"
-            clearable style="width:100%"
-            placeholder="请输入类名称，包括命名空间" />
-        </el-form-item>
+          <el-form-item label="接口分组" prop="group_id">
+              <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择接口分组">
+                  <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
+              </el-select>
+          </el-form-item>
 
-        <el-form-item label="方法名" prop="method_name">
-            <el-input v-model="form.method_name" clearable placeholder="请输入方法名" />
-        </el-form-item>
+          <el-form-item label="接口名称" prop="name">
+              <el-input v-model="form.name" clearable placeholder="请输入接口名称" />
+          </el-form-item>
 
-        <el-form-item label="认证模式" prop="auth_mode">
-            <el-radio-group v-model="form.auth_mode">
-                <el-radio label="0">简易模式</el-radio>
-                <el-radio label="1">复杂模式</el-radio>
-            </el-radio-group>
-        </el-form-item>
+          <el-form-item label="类名称" prop="class_name">
+              <el-autocomplete
+              v-model="form.class_name"
+              :fetch-suggestions="querySearch"
+              clearable style="width:100%"
+              placeholder="请输入类名称，包括命名空间" />
+          </el-form-item>
 
-        <el-form-item label="请求模式" prop="request_mode">
-            <el-select v-model="form.request_mode" style="width:100%" clearable placeholder="请选择请求模式">
-                <el-option
-                    v-for="(item, index) in request_mode_data"
-                    :key="index" :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
-        </el-form-item>
+          <el-form-item label="方法名" prop="method_name">
+              <el-input v-model="form.method_name" clearable placeholder="请输入方法名" />
+          </el-form-item>
 
-        <el-form-item label="状态" prop="status">
-            <el-radio-group v-model="form.status">
-                <el-radio
-                    v-for="(item, index) in data_status_data"
-                    :key="index"
-                    :label="item.value"
-                >{{item.label}}</el-radio>
-            </el-radio-group>
-        </el-form-item>
+          <el-form-item label="认证模式" prop="auth_mode">
+              <el-radio-group v-model="form.auth_mode">
+                  <el-radio label="0">简易模式</el-radio>
+                  <el-radio label="1">复杂模式</el-radio>
+              </el-radio-group>
+          </el-form-item>
 
-        <el-form-item label="说明介绍" prop="description">
-            <editor v-model="form.description" placeholder="请输入说明介绍" :height="300"></editor>
-        </el-form-item>
+          <el-form-item label="请求模式" prop="request_mode">
+              <el-select v-model="form.request_mode" style="width:100%" clearable placeholder="请选择请求模式">
+                  <el-option
+                      v-for="(item, index) in request_mode_data"
+                      :key="index" :label="item.label"
+                      :value="item.value"
+                  >{{item.label}}</el-option>
+              </el-select>
+          </el-form-item>
 
-        <el-form-item label="返回示例" prop="response">
-            <ma-json-editor v-model="form.response" />
-        </el-form-item>
+          <el-form-item label="状态" prop="status">
+              <el-radio-group v-model="form.status">
+                  <el-radio
+                      v-for="(item, index) in data_status_data"
+                      :key="index"
+                      :label="item.value"
+                  >{{item.label}}</el-radio>
+              </el-radio-group>
+          </el-form-item>
 
-        <el-form-item label="备注" prop="remark">
-            <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
-        </el-form-item>
+        </el-tab-pane>
+
+        <el-tab-pane label="其他信息" name="other">
+
+          <el-form-item label="说明介绍" prop="description">
+              <editor v-model="form.description" placeholder="请输入说明介绍" :height="300"></editor>
+          </el-form-item>
+
+          <el-form-item label="返回示例" prop="response">
+              <ma-json-editor v-model="form.response" />
+          </el-form-item>
+
+          <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
+          </el-form-item>
+
+        </el-tab-pane>
+
+      </el-tabs>
 
     </el-form>
     <template #footer>
@@ -84,6 +101,7 @@
     data() {
       return {
         mode: "add",
+        activeName: 'base',
         titleMap: {
           add: '新增接口',
           edit: '编辑接口'

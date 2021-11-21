@@ -220,7 +220,7 @@
       add(){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open()
+           this.$refs.saveDialog.open()
         })
       },
 
