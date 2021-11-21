@@ -26,19 +26,21 @@
                 <span class="label">{{ node.label }}</span>
                 <span class="do" v-if="node.label !== '所有目录文件'">
 
-                    <el-tooltip class="item" effect="dark" content="新建子目录" placement="top">
-                      <i
-                        class="el-icon-plus"
-                        @click.stop="add(node, data)"
-                      ></i>
-                    </el-tooltip>
+                    <el-icon>
+                      <el-tooltip class="item" effect="dark" content="新建子目录" placement="top">
+                        <el-icon-plus
+                          @click.stop="add(node, data)"
+                        />
+                      </el-tooltip>
+                    </el-icon>
 
-                    <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                      <i
-                        class="el-icon-delete"
-                        @click.stop="handleDeleteDir(data)"
-                      ></i>
-                    </el-tooltip>
+                    <el-icon style="margin: 0 10px 0 10px;">
+                      <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                        <el-icon-delete
+                          @click.stop="handleDeleteDir(data)"
+                        />
+                      </el-tooltip>
+                    </el-icon>
 
                   </span>
               </span>
