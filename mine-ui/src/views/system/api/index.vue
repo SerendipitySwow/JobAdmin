@@ -144,7 +144,7 @@
         </el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="230" v-if="!isRecycle">
           <template #default="scope">
 
             <el-button
@@ -153,6 +153,20 @@
               @click="tableEdit(scope.row, scope.$index)"
               v-auth="['system:api:update']"
             >编辑</el-button>
+
+            <el-button
+              type="text"
+              size="small"
+              @click="goto('request', scope.row)"
+              v-auth="['system:apiColumn']"
+            >请求数据</el-button>
+
+            <el-button
+              type="text"
+              size="small"
+              @click="goto('response', scope.row)"
+              v-auth="['system:apiColumn']"
+            >响应数据</el-button>
 
             <el-button
               type="text"
@@ -321,6 +335,12 @@
           this.queryParams.minDate = values[0]
           this.queryParams.maxDate = values[1]
         }
+      },
+
+      // 跳转
+      goto(type, row) {
+        let params = { id: row.id, title: row.name, type }
+        this.$router.push({ path: '/apiColumn', query: params })
       },
 
       //搜索
