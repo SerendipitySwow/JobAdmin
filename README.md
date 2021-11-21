@@ -18,7 +18,7 @@ PHP有很多优秀的后台管理系统，但基于Swoole的后台管理系统�
 
 系统基于Hyperf框架开发，前端使用Vue3.0 + SCUI（基于Element UI），也支持PC和移动端。企业和个人可以免费使用。
 
-如果觉着还不错的话，就请点个star支持一下吧！
+如果觉着还不错的话，就请点个 ⭐star 支持一下吧，这将是对我最大的支持和鼓励！
 
 - 腾讯云特惠专场：[点击进入](http://txy.mineadmin.com)
 - 阿里云特惠专场：[点击进入](http://aly.mineadmin.com)
