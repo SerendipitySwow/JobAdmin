@@ -44,6 +44,16 @@ class SystemApiController extends MineController
     }
 
     /**
+     * 获取模块列表
+     * @GetMapping("getModuleList")
+     */
+    public function getModuleList(): ResponseInterface
+    {
+        $this->mine->scanModule();
+        return $this->success($this->mine->getModuleInfo());
+    }
+
+    /**
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface

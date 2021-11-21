@@ -13,7 +13,11 @@
         </el-form-item>
 
         <el-form-item label="类名称" prop="class_name">
-            <el-input v-model="form.class_name" clearable placeholder="请输入类名称" />
+            <el-autocomplete
+            v-model="form.class_name"
+            :fetch-suggestions="querySearch"
+            clearable style="width:100%"
+            placeholder="请输入类名称，包括命名空间" />
         </el-form-item>
 
         <el-form-item label="方法名" prop="method_name">
@@ -52,7 +56,7 @@
         </el-form-item>
 
         <el-form-item label="返回示例" prop="response">
-            <ma-json-editor v-model="form.response" />
+            <ma-json-editor v-model="form.response" theme="vs-dark" />
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
@@ -116,7 +120,9 @@
         request_mode_data: [],
         data_status_data: [],
 
-        groupData: []
+        groupData: [],
+
+        modules: [],
       }
     },
     methods: {
@@ -124,6 +130,7 @@
       async open(mode='add'){
         await this.getDictData()
         await this.getGroupData()
+        await this.getModuleList()
         this.mode = mode;
         this.visible = true;
         return this;
@@ -178,6 +185,14 @@
           })
       },
 
+      getModuleList() {
+        this.$API.api.getModuleList().then(res => {
+          if (res.success) {
+            this.modules = res.data
+          }
+        })
+      },
+
       // 获取组列表
       getGroupData() {
         this.$API.apiGroup.getSelectList().then(res => {
@@ -185,6 +200,18 @@
             this.groupData = res.data
           }
         })
+      },
+
+      // 模块命名空间过滤
+      querySearch(queryString, cb){
+        let modules = []
+        Object.keys(this.modules).forEach( item => {
+          if (item.indexOf(queryString) !== -1) {
+            modules.push({ 'value': `\\${item}\\` })
+            modules.push({ 'value': `\\${item}\\Controller\\` })
+          }
+        })
+        cb(modules)
       }
       
     }

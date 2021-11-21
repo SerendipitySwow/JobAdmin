@@ -65,6 +65,10 @@ module.exports = {
 						name: "tinymce",
 						test: /[\\/]node_modules[\\/]tinymce[\\/]/
 					},
+					monacoEditor: {
+						name: "monaco-editor",
+						test: /[\\/]node_modules[\\/]monaco-editor[\\/]/
+					},
 					echarts: {
 						name: "echarts",
 						test: /[\\/]node_modules[\\/]echarts[\\/]/

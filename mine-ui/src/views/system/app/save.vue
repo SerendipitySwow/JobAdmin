@@ -22,7 +22,7 @@
 
         <el-form-item label="APP SECRET" prop="app_secret">
             <el-input v-model="form.app_secret" clearable :disabled="true" placeholder="请输入APP SECRET">
-              <template #append v-if="mode === 'add'">
+              <template #append>
                 <el-button type="primary" icon="el-icon-refresh" @click="setAppsecret()">刷新APP SECRET</el-button>
               </template>
             </el-input>

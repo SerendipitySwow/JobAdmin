@@ -115,7 +115,7 @@
         <el-table-column
            label="状态"
            prop="status"
-           width="100"
+           width="50"
         >
           <template #default="scope">
             <status-indicator :type="scope.row.status === '0' ? 'primary' : 'danger'" />

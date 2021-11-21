@@ -88,6 +88,16 @@
           </template>
         </el-table-column>
 
+        <el-table-column
+           label="创建时间"
+           prop="created_at"
+        />
+
+        <el-table-column
+           label="更新时间"
+           prop="updated_at"
+        />
+
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
           <template #default="scope">
