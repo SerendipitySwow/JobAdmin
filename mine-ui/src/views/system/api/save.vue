@@ -2,8 +2,9 @@
   <el-dialog :title="titleMap[mode]" v-model="visible" :width="800" destroy-on-close @closed="$emit('closed')">
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
       
-        <el-form-item label="接口组ID" prop="group_id">
-            <el-select v-model="form.group_id" style="width:100%" clearable placeholder="请选择接口组ID">
+        <el-form-item label="接口分组" prop="group_id">
+            <el-select v-model="form.group_id" style="width:100%" filterable clearable placeholder="请选择接口分组">
+                <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
             </el-select>
         </el-form-item>
 
@@ -36,14 +37,6 @@
             </el-select>
         </el-form-item>
 
-        <el-form-item label="说明介绍" prop="description">
-            <editor v-model="form.description" placeholder="请输入说明介绍" :height="400"></editor>
-        </el-form-item>
-
-        <el-form-item label="返回示例" prop="response">
-            <editor v-model="form.response" placeholder="请输入返回示例" :height="400"></editor>
-        </el-form-item>
-
         <el-form-item label="状态" prop="status">
             <el-radio-group v-model="form.status">
                 <el-radio
@@ -52,6 +45,14 @@
                     :label="item.value"
                 >{{item.label}}</el-radio>
             </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="说明介绍" prop="description">
+            <editor v-model="form.description" placeholder="请输入说明介绍" :height="300"></editor>
+        </el-form-item>
+
+        <el-form-item label="返回示例" prop="response">
+            <ma-json-editor v-model="form.response" />
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
@@ -68,11 +69,13 @@
 
 <script>
   import editor from '@/components/scEditor'
+  import maJsonEditor from '@/components/maJsonEditor'
 
   export default {
     emits: ['success', 'closed'],
     components: {
-      editor
+      editor,
+      maJsonEditor
     },
     data() {
       return {
@@ -82,7 +85,6 @@
           edit: '编辑接口'
         },
         form: {
-          
            id: '',
            group_id: '',
            name: '',
@@ -91,31 +93,37 @@
            auth_mode: '0',
            request_mode: 'A',
            description: '',
-           response: '',
+           response: `{
+  code: 200,
+  success: true,
+  message: '请求成功',
+  data: []
+}`,
            status: '0',
            remark: '',
         },
         rules: {
-          
-           name: [{required: true, message: '接口名称必填', trigger: 'blur' }],
-           class_name: [{required: true, message: '类名称必填', trigger: 'blur' }],
-           method_name: [{required: true, message: '方法名必填', trigger: 'blur' }],
-           auth_mode: [{required: true, message: '认证模式必填', trigger: 'blur' }],
-           request_mode: [{required: true, message: '请求模式必填', trigger: 'blur' }],
+          group_id: [{required: true, message: '接口分组必选', trigger: 'change' }],
+          name: [{required: true, message: '接口名称必填', trigger: 'blur' }],
+          class_name: [{required: true, message: '类名称必填', trigger: 'blur' }],
+          method_name: [{required: true, message: '方法名必填', trigger: 'blur' }],
+          auth_mode: [{required: true, message: '认证模式必填', trigger: 'blur' }],
+          request_mode: [{required: true, message: '请求模式必填', trigger: 'blur' }],
         },
         visible: false,
         isSaveing: false,
         
         request_mode_data: [],
         data_status_data: [],
+
+        groupData: []
       }
-    },
-    async created() {
-        await this.getDictData();
     },
     methods: {
       //显示
-      open(mode='add'){
+      async open(mode='add'){
+        await this.getDictData()
+        await this.getGroupData()
         this.mode = mode;
         this.visible = true;
         return this;
@@ -168,6 +176,15 @@
           this.getDict('data_status').then(res => {
               this.data_status_data = res.data
           })
+      },
+
+      // 获取组列表
+      getGroupData() {
+        this.$API.apiGroup.getSelectList().then(res => {
+          if (res.success) {
+            this.groupData = res.data
+          }
+        })
       }
       
     }
