@@ -99,6 +99,7 @@
         <el-table-column
            label="接口名称"
            prop="name"
+           width="150"
         />
         <el-table-column
            label="类名称"
@@ -107,30 +108,38 @@
         <el-table-column
            label="方法名"
            prop="method_name"
+           width="180"
         />
         <el-table-column
            label="认证模式"
            prop="auth_mode"
-        />
+           width="120"
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.auth_mode === '0'" type="success">简易模式</el-tag>
+            <el-tag v-else type="danger">复杂模式</el-tag>
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="请求模式"
            prop="request_mode"
-        />
-        <el-table-column
-           label="说明介绍"
-           prop="description"
-        />
-        <el-table-column
-           label="返回内容"
-           prop="response"
-        />
+           width="120"
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.request_mode === 'A'">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
+            <el-tag v-if="scope.row.request_mode === 'P'" type="warning">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
+            <el-tag v-if="scope.row.request_mode === 'G'" type="danger">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="状态"
            prop="status"
+           width="50"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
-            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <status-indicator :type="scope.row.status === '0' ? 'primary' : 'danger'" />
           </template>
         </el-table-column>
 
@@ -186,11 +195,13 @@
 
 <script>
   import saveDialog from './save'
+  import statusIndicator from  '@/components/scMini/scStatusIndicator'
 
   export default {
     name: 'system:api',
     components: {
-      saveDialog
+      saveDialog,
+      statusIndicator
     },
 
     async created() {
@@ -241,7 +252,7 @@
       tableEdit(row){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open('edit').setData(row)
+          this.$refs.saveDialog.open('edit').then(_ => _.setData(row))
         })
       },
 
@@ -249,7 +260,7 @@
       tableShow(row){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open('show').setData(row)
+          this.$refs.saveDialog.open('show').then(_ => _.setData(row))
         })
       },
 

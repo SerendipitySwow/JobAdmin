@@ -30,20 +30,19 @@ const dom = ref()
 let instance
 
 onMounted(() => {
-  const jsonModel = monaco.editor.createModel(props.modelValue, 'javascript');
-
   instance = monaco.editor.create(dom.value, {
-    model: jsonModel,
+    model: monaco.editor.createModel(props.modelValue, 'javascript'),
     tabSize: 2,
     automaticLayout: true,
     scrollBeyondLastLine: false,
     language:"javascript",
-    theme: props.theme
+    theme: props.theme,
+    autoIndent: true,
+    minimap: { enabled: false }
   })
 
   instance.onDidChangeModelContent(() => {
-    const value = instance.getValue()
-    emit('update:modelValue', value)
+    emit('update:modelValue', instance.getValue())
   })
 })
 </script>

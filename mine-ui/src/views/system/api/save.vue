@@ -56,7 +56,7 @@
         </el-form-item>
 
         <el-form-item label="返回示例" prop="response">
-            <ma-json-editor v-model="form.response" theme="vs-dark" />
+            <ma-json-editor v-model="form.response" />
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
