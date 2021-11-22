@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\System\Mapper;
 
-use App\System\Model\SystemApiGroup;
+use App\System\Model\SystemApiColumn;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
@@ -13,13 +13,13 @@ use Mine\Abstracts\AbstractMapper;
 class SystemApiColumnMapper extends AbstractMapper
 {
     /**
-     * @var SystemApiGroup
+     * @var SystemApiColumn
      */
     public $model;
 
     public function assignModel()
     {
-        $this->model = SystemApiGroup::class;
+        $this->model = SystemApiColumn::class;
     }
 
     /**
@@ -30,6 +30,20 @@ class SystemApiColumnMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
+        // 字段名称
+        if (isset($params['name'])) {
+            $query->where('name', '=', $params['name']);
+        }
+
+        // 是否必填 0 非必填 1 必填
+        if (isset($params['is_required'])) {
+            $query->where('is_required', '=', $params['is_required']);
+        }
+
+        // 状态 (0正常 1停用)
+        if (isset($params['status'])) {
+            $query->where('status', '=', $params['status']);
+        }
         return $query;
     }
 }

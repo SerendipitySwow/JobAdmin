@@ -1,198 +1,332 @@
 <template>
 	<sc-page-header
-			:title="data.title"
+			:title="title"
 			icon="el-icon-connection"
 	>
-		<el-button @click="data.proxy.$router.push('api')">返回接口管理</el-button>
+		<el-button @click="$router.push('api')">返回接口管理</el-button>
 	</sc-page-header>
-	<el-container>
-		<el-header>
-			<div class="left-panel">
 
-				<el-button
-					icon="el-icon-plus"
-					v-auth="['system:SystemApiColumn:save']"
-					type="primary"
-					@click="add"
-				>新增</el-button>
+  <el-container>
+    <el-header>
+      <div class="left-panel">
 
-				<el-button
-					type="danger"
-					plain
-					icon="el-icon-delete"
-					v-auth="['system:SystemApiColumn:delete']"
-					:disabled="data.selection.length==0"
-					@click="batchDel"
-				>删除</el-button>
+        <el-button
+          icon="el-icon-plus"
+          v-auth="['system:apiColumn:save']"
+          type="primary"
+          @click="add"
+        >新增</el-button>
 
-			</div>
-			<div class="right-panel">
-				<div class="right-panel-search">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          v-auth="['system:apiColumn:delete']"
+          :disabled="selection.length==0"
+          @click="batchDel"
+        >删除</el-button>
 
-					<el-input v-model="data.queryParams.name" placeholder="字段名称" clearable></el-input>
+      </div>
+      <div class="right-panel">
+        <div class="right-panel-search">
 
-					<el-tooltip class="item" effect="dark" content="搜索" placement="top">
-						<el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
-					</el-tooltip>
+          <el-input v-model="queryParams.name" placeholder="字段名称" clearable></el-input>
 
-					<el-tooltip class="item" effect="dark" content="清空条件" placement="top">
-						<el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
-					</el-tooltip>
+          <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+            <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
+          </el-tooltip>
 
-					<el-popover placement="bottom-end" :width="450" trigger="click" >
-						<template #reference>
-							<el-button type="text" @click="povpoerShow = ! povpoerShow">
-								更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
-							</el-button>
-						</template>
-						<el-form label-width="80px">
+          <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+            <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
+          </el-tooltip>
 
-							<el-form-item label="是否必填" prop="is_required">
-								<el-input v-model="data.queryParams.is_required" placeholder="是否必填" clearable></el-input>
-							</el-form-item>
+          <el-popover placement="bottom-end" :width="450" trigger="click" >
+            <template #reference>
+              <el-button type="text" @click="povpoerShow = ! povpoerShow">
+                更多筛选<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+            </template>
+            <el-form label-width="80px">
+              
+            <el-form-item label="是否必填" prop="is_required">
+                <el-input v-model="queryParams.is_required" placeholder="是否必填" clearable></el-input>
+            </el-form-item>
+        
+            <el-form-item label="状态" prop="status">
+                        
+            <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
+                <el-option
+                    v-for="(item, index) in data_status_data"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
+            </el-form-item>
+        
+            </el-form>
+          </el-popover>
+        </div>
+      </div>
+    </el-header>
+    <el-main class="nopadding">
+      <maTable
+        ref="table"
+        :api="api"
+        :column="column"
+        :showRecycle="true"
+        row-key="id"
+        :hidePagination="false"
+        @selection-change="selectionChange"
+        @switch-data="switchData"
+        stripe
+        remoteSort
+      >
+        <el-table-column type="selection" width="50"></el-table-column>
 
-							<el-form-item label="状态" prop="status">
+        
+        <el-table-column
+           label="字段名称"
+           prop="name"
+        />
+        <el-table-column
+           label="字段类型"
+           prop="type"
+        />
+        <el-table-column
+           label="数据类型"
+           prop="data_type"
+        />
+        <el-table-column
+           label="是否必填"
+           prop="is_required"
+        />
+        <el-table-column
+           label="默认值"
+           prop="default_value"
+        />
+        <el-table-column
+           label="状态"
+           prop="status"
+        />
+        <el-table-column
+           label="字段说明"
+           prop="description"
+        />
 
-								<el-select v-model="data.queryParams.status" style="width:100%" clearable placeholder="状态">
-									<el-option
-										v-for="(item, index) in data_status_data"
-										:key="index"
-										:label="item.label"
-										:value="item.value"
-									>{{item.label}}</el-option>
-								</el-select>
-							</el-form-item>
+        <!-- 正常数据操作按钮 -->
+        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+          <template #default="scope">
 
-						</el-form>
-					</el-popover>
-				</div>
-			</div>
-		</el-header>
-		<el-main class="nopadding">
-			<maTable
-				ref="table"
-				:api="api"
-				:column="column"
-				:showRecycle="true"
-				row-key="id"
-				:hidePagination="false"
-				@selection-change="selectionChange"
-				@switch-data="switchData"
-				stripe
-				remoteSort
-			>
-				<el-table-column type="selection" width="50"></el-table-column>
+            <el-button
+              type="text"
+              size="small"
+              @click="tableEdit(scope.row, scope.$index)"
+              v-auth="['system:apiColumn:update']"
+            >编辑</el-button>
 
+            <el-button
+              type="text"
+              size="small"
+              @click="deletes(scope.row.id)"
+              v-auth="['system:apiColumn:delete']"
+            >删除</el-button>
 
-				<el-table-column
-					label="字段名称"
-					prop="name"
-				/>
-				<el-table-column
-					label="数据类型"
-					prop="data_type"
-				/>
-				<el-table-column
-					label="是否必填"
-					prop="is_required"
-				/>
-				<el-table-column
-					label="默认值"
-					prop="default_value"
-				/>
-				<el-table-column
-					label="状态"
-					prop="status"
-				/>
-				<el-table-column
-					label="字段说明"
-					prop="description"
-				/>
+          </template>
+        </el-table-column>
 
-				<!-- 正常数据操作按钮 -->
-				<el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
-					<template #default="scope">
+        <!-- 回收站操作按钮 -->
+        <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
+          <template #default="scope">
 
-						<el-button
-							type="text"
-							size="small"
-							@click="tableEdit(scope.row, scope.$index)"
-							v-auth="['system:SystemApiColumn:update']"
-						>编辑</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-auth="['system:apiColumn:recovery']"
+              @click="recovery(scope.row.id)"
+            >恢复</el-button>
 
-						<el-button
-							type="text"
-							size="small"
-							@click="deletes(scope.row.id)"
-							v-auth="['system:SystemApiColumn:delete']"
-						>删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              v-auth="['system:apiColumn:realDelete']"
+              @click="deletes(scope.row.id)"
+            >删除</el-button>
 
-					</template>
-				</el-table-column>
+          </template>
+        </el-table-column>
 
-				<!-- 回收站操作按钮 -->
-				<el-table-column label="操作" fixed="right" align="right" width="130" v-else>
-					<template #default="scope">
+      </maTable>
+    </el-main>
+  </el-container>
 
-						<el-button
-							type="text"
-							size="small"
-							v-auth="['system:SystemApiColumn:recovery']"
-							@click="recovery(scope.row.id)"
-						>恢复</el-button>
+  <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
 
-						<el-button
-							type="text"
-							size="small"
-							v-auth="['system:SystemApiColumn:realDelete']"
-							@click="deletes(scope.row.id)"
-						>删除</el-button>
-
-					</template>
-				</el-table-column>
-
-			</maTable>
-		</el-main>
-	</el-container>
-
-<!--	<save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>-->
 </template>
 
-<script setup>
-import { onMounted, reactive, getCurrentInstance } from 'vue'
-import useTabs from '@/utils/useTabs'
+<script>
+  import saveDialog from './save'
+  import useTabs from '@/utils/useTabs'
 
-const { proxy } = getCurrentInstance()
-const _this = getCurrentInstance().appContext.config.globalProperties
+  export default {
+    name: 'system:apiColumn',
+    components: {
+      saveDialog
+    },
 
-let data = reactive({
-	proxy,
-  title : '',
-	apiId : null,
-	selection: [],
-	queryParams: { name: undefined, status: undefined, is_required: undefined },
-	statusData: [],
-})
+    async created() {
+      await this.getDictData();
+      let query = this.$route.query
+      if (query.title && query.apiId) {
+        this.title = query.title + ' - ' + ((query.type === 'request') ? '接口请求数据' : '接口响应数据')
+        this.apiId = query.apiId
+        useTabs.setTitle(this.title)
+      } else {
+        this.$message.error('请从正确来路访问页面，标签页已关闭')
+        useTabs.close()
+      }
+    },
 
-onMounted(async () => {
-	let query = proxy.$route.query
-	if (query.title && query.apiId) {
-		data.title = query.title + ' - ' + ((query.type === 'request') ? '接口请求数据' : '接口响应数据')
-		data.apiId = query.apiId
-		useTabs.setTitle(data.title)
-	} else {
-		_this.$message.error('请从正确来路访问页面，标签页已关闭')
-		useTabs.close()
-	}
+    data() {
+      return {
+        dialog: {
+          save: false
+        },
+        title: '',
+        apiId: '',
+        data_status_data: [],
+        column: [],
+        povpoerShow: false,
+        dateRange:'',
+        api: {
+          list: this.$API.apiColumn.getList,
+          recycleList: this.$API.apiColumn.getRecycleList,
+        },
+        selection: [],
+        queryParams: {
+          name: undefined,
+          is_required: undefined,
+          status: undefined,
+        },
+        isRecycle: false,
+      }
+    },
+    methods: {
 
-	await getDictData()
-})
+      //添加
+      add(){
+        this.dialog.save = true
+        this.$nextTick(() => {
+          this.$refs.saveDialog.open()
+        })
+      },
 
-// 获取字典数据
-let getDictData = () => {
-	console.log('123123')
-	_this.getDict('data_status').then(res => {
-		data.statusData = res.data
-	})
-}
+      //编辑
+      tableEdit(row){
+        this.dialog.save = true
+        this.$nextTick(() => {
+          this.$refs.saveDialog.open('edit').setData(row)
+        })
+      },
+
+      //查看
+      tableShow(row){
+        this.dialog.save = true
+        this.$nextTick(() => {
+          this.$refs.saveDialog.open('show').setData(row)
+        })
+      },
+
+      //批量删除
+      async batchDel(){
+        await this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
+          type: 'warning'
+        }).then(() => {
+          const loading = this.$loading();
+          let ids = []
+          this.selection.map(item => ids.push(item.id))
+          if (this.isRecycle) {
+            this.$API.apiColumn.realDeletes(ids.join(','))
+            this.$refs.table.upData(this.queryParams)
+          } else {
+            this.$API.apiColumn.deletes(ids.join(','))
+            this.$refs.table.upData(this.queryParams)
+          }
+          loading.close();
+          this.$message.success("操作成功")
+        })
+      },
+
+      // 单个删除
+      async deletes(id) {
+        await this.$confirm(`确定删除该数据吗？`, '提示', {
+          type: 'warning'
+        }).then(async () => {
+          const loading = this.$loading();
+          if (this.isRecycle) {
+            await this.$API.apiColumn.realDeletes(id)
+            this.$refs.table.upData(this.queryParams)
+          } else {
+            await this.$API.apiColumn.deletes(id)
+            this.$refs.table.upData(this.queryParams)
+          }
+          loading.close();
+          this.$message.success("操作成功")
+        }).catch(()=>{})
+      },
+
+      // 恢复数据
+      async recovery (id) {
+        await this.$API.apiColumn.recoverys(id).then(res => {
+          this.$message.success(res.message)
+          this.$refs.table.upData(this.queryParams)
+        })
+      },
+
+      //表格选择后回调事件
+      selectionChange(selection){
+        this.selection = selection;
+      },
+
+      // 选择时间事件
+      handleDateChange (values) {
+        if (values !== null) {
+          this.queryParams.minDate = values[0]
+          this.queryParams.maxDate = values[1]
+        }
+      },
+
+      //搜索
+      handlerSearch(){
+        this.$refs.table.upData(this.queryParams)
+      },
+
+      // 切换数据类型回调
+      switchData(isRecycle) {
+        this.isRecycle = isRecycle
+      },
+
+      resetSearch() {
+        this.queryParams = {
+          
+          name: undefined,
+          is_required: undefined,
+          status: undefined,
+        }
+        this.$refs.table.upData(this.queryParams)
+      },
+
+      //本地更新数据
+      handleSuccess(){
+        this.$refs.table.upData(this.queryParams)
+      },
+
+      // 获取字典数据
+      getDictData() {
+          this.getDict('data_status').then(res => {
+              this.data_status_data = res.data
+          })
+      }
+    }
+  }
 </script>
