@@ -288,4 +288,14 @@ class Str
         return $value['years'] . '年' . $value['days'] .  '天 '. $value["hours"] . '小时'. $value['minutes'] . '分'.$value['seconds'].'秒';
 
     }
+    public static function  getUUID()
+    {
+        $chars = md5(uniqid((string)mt_rand(), true));
+        $uuid = substr ( $chars, 0, 8 ) . '-'
+            . substr ( $chars, 8, 4 ) . '-'
+            . substr ( $chars, 12, 4 ) . '-'
+            . substr ( $chars, 16, 4 ) . '-'
+            . substr ( $chars, 20, 12 );
+        return $uuid ;
+    }
 }

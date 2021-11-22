@@ -183,12 +183,50 @@ trait MapperTrait
 
     /**
      * 读取一条数据
-     * @param int $id
-     * @return MineModel
+     * @param $condition
+     * @param $columns
+     * @return 
      */
-    public function read(int $id): ?MineModel
+    public function read($condition,$columns = ['*'])
     {
-        return ($model = $this->model::find($id)) ? $model : null;
+        if(!is_array($condition)){
+            $condition = [
+                (new $this->model)->getKeyName()=>$condition
+            ];
+        }
+        return ($model = $this->model::where($condition)->select($columns)->first()) ? $model : null;
+    }
+
+    /**
+     * 获取单个值
+     * @param $condition
+     * @param $columns
+     * @return
+     */
+    public function value($condition,$columns = 'id')
+    {
+        if(!is_array($condition)){
+            $condition = [
+                (new $this->model)->getKeyName()=>$condition
+            ];
+        }
+        return ($model = $this->model::where($condition)->value($columns)) ? $model : null;
+    }
+
+    /**
+     * 获取单列值
+     * @param $condition
+     * @param $columns
+     * @return
+     */
+    public function pluck($condition,$columns = 'id')
+    { 
+        if(!is_array($condition)){
+            $condition = [
+                (new $this->model)->getKeyName()=>$condition
+            ];
+        }
+        return ($model = $this->model::where($condition)->pluck($columns)) ? $model : null;
     }
 
     /**
@@ -215,14 +253,19 @@ trait MapperTrait
 
     /**
      * 更新一条数据
-     * @param int $id
+     * @param $condition
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data): bool
+    public function update($condition, array $data): bool
     {
+        if(!is_array($condition)){
+            $condition = [
+                (new $this->model)->getKeyName()=>$condition
+            ];
+        }
         $this->filterExecuteAttributes($data, true);
-        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data) > 0;
+        return $this->model::query()->where($condition)->update($data);
     }
 
     /**

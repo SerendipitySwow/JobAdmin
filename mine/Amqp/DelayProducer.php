@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 namespace Mine\Amqp;
-// use Hyperf\Amqp\Event\AfterProduce;
-//use Hyperf\Amqp\Event\BeforeProduce;
-//use Hyperf\Amqp\Event\FailToProduce;
-//use Hyperf\Amqp\Event\ProduceEvent;
+use Mine\Amqp\Event\AfterProduce;
+use Mine\Amqp\Event\BeforeProduce;
+use Mine\Amqp\Event\FailToProduce;
+use Mine\Amqp\Event\ProduceEvent;
 use Hyperf\Amqp\Message\ProducerMessageInterface;
 use Hyperf\Amqp\Producer;
 use Hyperf\Di\Annotation\AnnotationCollector;
@@ -47,7 +47,7 @@ class DelayProducer extends Producer
         $this->injectMessageProperty($producerMessage);
 
         //触发队列发送之前事件
-//        $this->eventDispatcher->dispatch(new BeforeProduce($producerMessage,$delayTime));
+        $this->eventDispatcher->dispatch(new BeforeProduce($producerMessage,$delayTime));
 
         //如果过期时间为0,默认过期时间1毫秒,否则为设置的过期时间
         $expiration = $delayTime == 0 ? 500 : $delayTime * 1000;
@@ -56,7 +56,7 @@ class DelayProducer extends Producer
         ]));
         $connection = $this->factory->getConnection($producerMessage->getPoolName());
         //触发队列发送之中事件
-//        $this->eventDispatcher->dispatch(new ProduceEvent($producerMessage));
+        $this->eventDispatcher->dispatch(new ProduceEvent($producerMessage));
 
         try {
             if ($confirm) {
@@ -88,7 +88,7 @@ class DelayProducer extends Producer
             $channel->wait_for_pending_acks_returns($timeout);
         } catch (\Throwable $exception) {
             //触发队列发送失败事件
-//            $this->eventDispatcher->dispatch(new FailToProduce($producerMessage,$exception));
+            $this->eventDispatcher->dispatch(new FailToProduce($producerMessage,$exception));
 
             isset($channel) && $channel->close();
             throw $exception;
@@ -100,8 +100,8 @@ class DelayProducer extends Producer
             $result = true;
             $connection->releaseChannel($channel);
         }
-        //TODO 触发队列发送之后事件
-//        $this->eventDispatcher->dispatch(new AfterProduce($producerMessage));
+        //触发队列发送之后事件
+        $this->eventDispatcher->dispatch(new AfterProduce($producerMessage));
 
         return $result;
     }

@@ -14,6 +14,7 @@ namespace Mine\Traits;
 use Hyperf\Database\Model\Collection;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
+use Mine\Exception\NormalStatusException;
 use Mine\MineCollection;
 use Mine\MineModel;
 use Mine\MineResponse;
@@ -135,12 +136,40 @@ trait ServiceTrait
 
     /**
      * 读取一条数据
-     * @param int $id
-     * @return MineModel
+     * @param $condition
+     * @return 
      */
-    public function read(int $id): MineModel
+    public function read($condition,$columns = ['*'])
     {
-        return $this->mapper->read($id);
+        $info = $this->mapper->read($condition,$columns);
+        if(!$info){
+            throw new  NormalStatusException('数据不存在',500);
+        }
+        return $info;
+    }
+
+    /**
+     * Description:获取单个值
+     * User:mike
+     * @param $condition
+     * @param array $columns
+     * @return \Hyperf\Utils\HigherOrderTapProxy|mixed|void|null
+     */
+    public function value($condition,$columns = 'id')
+    {
+        return $this->mapper->value($condition,$columns);
+    }
+
+    /**
+     * Description:获取单列值
+     * User:mike
+     * @param $condition
+     * @param array $columns
+     * @return \Hyperf\Utils\HigherOrderTapProxy|mixed|void|null
+     */
+    public function pluck($condition,$columns = 'id')
+    {
+        return $this->mapper->pluck($condition,$columns);
     }
 
     /**
@@ -166,13 +195,14 @@ trait ServiceTrait
 
     /**
      * 更新一条数据
-     * @param int $id
+     * @param $condition
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data): bool
+    public function update($condition, array $data): bool
     {
-        return $this->mapper->update($id, $data);
+        $this->read($condition);
+        return $this->mapper->update($condition, $data);
     }
 
     /**
