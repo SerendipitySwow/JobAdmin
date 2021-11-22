@@ -104,6 +104,7 @@
         <el-table-column
            label="类名称"
            prop="class_name"
+					 show-overflow-tooltip
         />
         <el-table-column
            label="方法名"
