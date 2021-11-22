@@ -46,13 +46,13 @@
                 <el-option v-for="(item, index) in groupData" :key="index" :value="item.id" :label="item.name" />
               </el-select>
             </el-form-item>
-        
+
             <el-form-item label="认证模式" prop="auth_mode">
                 <el-input v-model="queryParams.auth_mode" placeholder="认证模式" clearable></el-input>
             </el-form-item>
-        
+
             <el-form-item label="请求模式" prop="request_mode">
-                        
+
             <el-select v-model="queryParams.request_mode" style="width:100%" clearable placeholder="请求模式">
                 <el-option
                     v-for="(item, index) in request_mode_data"
@@ -62,9 +62,9 @@
                 >{{item.label}}</el-option>
             </el-select>
             </el-form-item>
-        
+
             <el-form-item label="状态" prop="status">
-                        
+
             <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
                 <el-option
                     v-for="(item, index) in data_status_data"
@@ -74,7 +74,7 @@
                 >{{item.label}}</el-option>
             </el-select>
             </el-form-item>
-        
+
             </el-form>
           </el-popover>
         </div>
@@ -95,7 +95,7 @@
       >
         <el-table-column type="selection" width="50"></el-table-column>
 
-        
+
         <el-table-column
            label="接口名称"
            prop="name"
@@ -228,7 +228,7 @@
         dialog: {
           save: false
         },
-        
+
         request_mode_data: [],
         data_status_data: [],
         column: [],
@@ -240,7 +240,7 @@
         },
         selection: [],
         queryParams: {
-            
+
           group_id: undefined,
           name: undefined,
           auth_mode: undefined,
@@ -339,7 +339,7 @@
 
       // 跳转
       goto(type, row) {
-        let params = { id: row.id, title: row.name, type }
+        let params = { apiId: row.id, title: row.name, type }
         this.$router.push({ path: '/apiColumn', query: params })
       },
 
@@ -355,7 +355,7 @@
 
       resetSearch() {
         this.queryParams = {
-          
+
           group_id: undefined,
           name: undefined,
           auth_mode: undefined,
@@ -372,7 +372,7 @@
 
       // 获取字典数据
       getDictData() {
-        
+
           this.getDict('request_mode').then(res => {
               this.request_mode_data = res.data
           })
