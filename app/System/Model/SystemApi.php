@@ -9,6 +9,7 @@ use Mine\MineModel;
  * @property int $id 主键
  * @property int $group_id 接口组ID
  * @property string $name 接口名称
+ * @property string $access_name 接口访问名称
  * @property string $class_name 类命名空间
  * @property string $method_name 方法名
  * @property string $auth_mode 认证模式 (0简易 1复杂)
@@ -41,7 +42,7 @@ class SystemApi extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'group_id', 'name', 'class_name', 'method_name', 'auth_mode', 'request_mode', 'description', 'response', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'group_id', 'name', 'access_name', 'class_name', 'method_name', 'auth_mode', 'request_mode', 'description', 'response', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

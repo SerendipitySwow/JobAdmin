@@ -26,6 +26,7 @@ class CreateSystemApiTable extends Migration
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
             $table->addColumn('bigInteger', 'group_id', ['unsigned' => true, 'comment' => '接口组ID']);
             $table->addColumn('string', 'name', ['length' => 32, 'comment' => '接口名称']);
+            $table->addColumn('string', 'access_name', ['length' => 64, 'comment' => '接口访问名称']);
             $table->addColumn('string', 'class_name', ['length' => 128, 'comment' => '类命名空间']);
             $table->addColumn('string', 'method_name', ['length' => 128, 'comment' => '方法名']);
             $table->addColumn('char', 'auth_mode', ['length' => 1, 'default' => '0', 'comment' => '认证模式 (0简易 1复杂)']);
