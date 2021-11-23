@@ -30,6 +30,16 @@ class SystemApiColumnMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
+        // 接口ID
+        if (isset($params['api_id'])) {
+            $query->where('api_id', '=', $params['api_id']);
+        }
+
+        // 字段类型
+        if (isset($params['type'])) {
+            $query->where('type', '=', $params['type']);
+        }
+
         // 字段名称
         if (isset($params['name'])) {
             $query->where('name', '=', $params['name']);

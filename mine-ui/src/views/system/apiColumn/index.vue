@@ -47,13 +47,13 @@
               </el-button>
             </template>
             <el-form label-width="80px">
-              
+
             <el-form-item label="是否必填" prop="is_required">
                 <el-input v-model="queryParams.is_required" placeholder="是否必填" clearable></el-input>
             </el-form-item>
-        
+
             <el-form-item label="状态" prop="status">
-                        
+
             <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
                 <el-option
                     v-for="(item, index) in data_status_data"
@@ -63,7 +63,7 @@
                 >{{item.label}}</el-option>
             </el-select>
             </el-form-item>
-        
+
             </el-form>
           </el-popover>
         </div>
@@ -79,12 +79,13 @@
         :hidePagination="false"
         @selection-change="selectionChange"
         @switch-data="switchData"
+				:autoLoad="false"
         stripe
         remoteSort
       >
         <el-table-column type="selection" width="50"></el-table-column>
 
-        
+
         <el-table-column
            label="字段名称"
            prop="name"
@@ -180,7 +181,11 @@
       if (query.title && query.apiId) {
         this.title = query.title + ' - ' + ((query.type === 'request') ? '接口请求数据' : '接口响应数据')
         this.apiId = query.apiId
+				this.type  = query.type
         useTabs.setTitle(this.title)
+				this.queryParams.api_id = this.apiId
+				this.queryParams.type = (query.type === 'request') ? '0' : '1'
+				this.handleSuccess()
       } else {
         this.$message.error('请从正确来路访问页面，标签页已关闭')
         useTabs.close()
@@ -194,6 +199,7 @@
         },
         title: '',
         apiId: '',
+				type: '',
         data_status_data: [],
         column: [],
         povpoerShow: false,
@@ -206,18 +212,17 @@
         queryParams: {
           name: undefined,
           is_required: undefined,
-          status: undefined,
+          status: undefined
         },
         isRecycle: false,
       }
     },
     methods: {
-
       //添加
       add(){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open()
+          this.$refs.saveDialog.open('add', this.type, this.apiId)
         })
       },
 
@@ -225,7 +230,7 @@
       tableEdit(row){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open('edit').setData(row)
+          this.$refs.saveDialog.open('edit', this.type, this.apiId).setData(row)
         })
       },
 
@@ -233,7 +238,7 @@
       tableShow(row){
         this.dialog.save = true
         this.$nextTick(() => {
-          this.$refs.saveDialog.open('show').setData(row)
+          this.$refs.saveDialog.open('show', this.type, this.apiId).setData(row)
         })
       },
 
@@ -308,7 +313,7 @@
 
       resetSearch() {
         this.queryParams = {
-          
+
           name: undefined,
           is_required: undefined,
           status: undefined,
