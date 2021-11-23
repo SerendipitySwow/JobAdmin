@@ -3,11 +3,11 @@
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
 
         <el-form-item label="字段名称" prop="name">
-            <el-input v-model="form.name" clearable placeholder="请输入字段名称" />
+            <el-input v-model="form.name" clearable :disabled="mode === 'show'" placeholder="请输入字段名称" />
         </el-form-item>
 
         <el-form-item label="数据类型" prop="data_type">
-					<el-select v-model="form.data_type" style="width:100%" clearable placeholder="请选择数据类型">
+					<el-select v-model="form.data_type" style="width:100%" :disabled="mode === 'show'" clearable placeholder="请选择数据类型">
 						<el-option
 							v-for="(item, index) in api_data_type"
 							:key="index" :label="item.label"
@@ -17,22 +17,22 @@
         </el-form-item>
 
         <el-form-item label="是否必填" prop="is_required">
-            <el-radio-group v-model="form.is_required">
+            <el-radio-group v-model="form.is_required" :disabled="mode === 'show'">
                 <el-radio label="0">是</el-radio>
                 <el-radio label="1">否</el-radio>
             </el-radio-group>
         </el-form-item>
 
         <el-form-item label="默认值" prop="default_value" v-if="form.is_required === '1'">
-            <el-input v-model="form.default_value" clearable placeholder="请输入默认值" />
+            <el-input v-model="form.default_value" :disabled="mode === 'show'" clearable placeholder="请输入默认值" />
         </el-form-item>
 
         <el-form-item label="字段说明" prop="description">
-            <editor v-model="form.description" clearable placeholder="请输入字段说明"/>
+            <editor v-model="form.description" :disabled="mode === 'show'" clearable placeholder="请输入字段说明"/>
         </el-form-item>
 
 				<el-form-item label="状态" prop="status">
-					<el-radio-group v-model="form.status">
+					<el-radio-group v-model="form.status" :disabled="mode === 'show'">
 						<el-radio
 							v-for="(item, index) in data_status_data"
 							:key="index" :label="item.value"
@@ -41,11 +41,11 @@
 				</el-form-item>
 
         <el-form-item label="备注" prop="remark">
-            <el-input v-model="form.remark" type="textarea" :rows="3" clearable placeholder="请输入备注" />
+            <el-input v-model="form.remark" type="textarea" :disabled="mode === 'show'" :rows="3" clearable placeholder="请输入备注" />
         </el-form-item>
 
     </el-form>
-    <template #footer>
+    <template #footer v-if="mode !== 'show'">
       <el-button @click="visible=false" >取 消</el-button>
       <el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
     </template>
@@ -66,7 +66,8 @@
 				titleSuffix: '',
         titleMap: {
           add: '新增接口',
-          edit: '编辑接口'
+          edit: '编辑接口',
+          show: '查看接口',
         },
         form: {
            id: '',
@@ -112,9 +113,9 @@
             this.isSaveing = true;
             let res = null
             if (this.mode === 'add') {
-              res = await this.$API.systemApiColumn.save(this.form)
+              res = await this.$API.apiColumn.save(this.form)
             } else {
-              res = await this.$API.systemApiColumn.update(this.form.id, this.form)
+              res = await this.$API.apiColumn.update(this.form.id, this.form)
             }
             this.isSaveing = false;
             if(res.success){
@@ -130,7 +131,6 @@
 
       //表单注入数据
       setData(data){
-
           this.form.id = data.id;
           this.form.api_id = data.api_id;
           this.form.name = data.name;

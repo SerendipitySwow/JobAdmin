@@ -83,8 +83,8 @@
            prop="status"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.status === '0'">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
-            <el-tag v-else type="danger">{{ ddLabel(data_status_data, scope.row.status) }}</el-tag>
+            <ma-dict-tag v-if="scope.row.status === '0'" :options="data_status_data" :value="scope.row.status" />
+            <ma-dict-tag v-if="scope.row.status === '1'" type="danger" :options="data_status_data" :value="scope.row.status" />
           </template>
         </el-table-column>
 

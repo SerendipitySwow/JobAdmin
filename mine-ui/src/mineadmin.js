@@ -9,6 +9,7 @@ import maTable from './components/maTable'          // 原scTable，进行了系
 import maPhoto from './components/maPhoto'
 import maImport from './components/maImport'
 import maResourceSelect from './components/maResourceSelect'
+import maDictTag from './components/maDictTag'
 
 import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
@@ -45,10 +46,7 @@ export default {
 		// 全局挂载获取字典数据方法
 		app.config.globalProperties.getDict = api.dataDict.getDict
 		app.config.globalProperties.getDicts = api.dataDict.getDicts
-
-		// 全局挂载字典翻译
-		app.config.globalProperties.ddLabel = tool.ddLabel
-
+		
 		// 全局挂载显示图片方法
 		app.config.globalProperties.viewImage = tool.viewImage
 
@@ -60,6 +58,7 @@ export default {
 
 		//注册全局组件
 		app.component('maTable', maTable)
+		app.component('maDictTag', maDictTag)
 		app.component('maImport', maImport)
 		app.component('maPhoto', maPhoto)
 		app.component('maResourceSelect', maResourceSelect)

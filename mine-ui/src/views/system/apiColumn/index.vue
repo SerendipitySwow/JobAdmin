@@ -53,15 +53,14 @@
             </el-form-item>
 
             <el-form-item label="状态" prop="status">
-
-            <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
-                <el-option
-                    v-for="(item, index) in data_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
+              <el-select v-model="queryParams.status" style="width:100%" clearable placeholder="状态">
+                  <el-option
+                      v-for="(item, index) in data_status_data"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                  >{{item.label}}</el-option>
+              </el-select>
             </el-form-item>
 
             </el-form>
@@ -90,18 +89,26 @@
            label="字段名称"
            prop="name"
         />
-        <el-table-column
-           label="字段类型"
-           prop="type"
-        />
+
         <el-table-column
            label="数据类型"
            prop="data_type"
-        />
+        >
+          <template #default="scope">
+            <ma-dict-tag :options="api_data_type" :value="scope.row.data_type" />
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="是否必填"
            prop="is_required"
-        />
+        >
+          <template #default="scope">
+            <el-tag v-if="scope.row.is_required === '0'" type="success">非必填</el-tag>
+            <el-tag v-else type="danger">必填</el-tag>
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="默认值"
            prop="default_value"
@@ -109,10 +116,15 @@
         <el-table-column
            label="状态"
            prop="status"
-        />
+        >
+          <template #default="scope">
+            <status-indicator :type="scope.row.status === '0' ? 'primary' : 'danger'" />
+          </template>
+        </el-table-column>
+
         <el-table-column
-           label="字段说明"
-           prop="description"
+           label="创建时间"
+           prop="created_at"
         />
 
         <!-- 正常数据操作按钮 -->
@@ -122,7 +134,14 @@
             <el-button
               type="text"
               size="small"
-              @click="tableEdit(scope.row, scope.$index)"
+              @click="tableShow(scope.row)"
+              v-auth="['system:apiColumn:read']"
+            >查看</el-button>
+
+            <el-button
+              type="text"
+              size="small"
+              @click="tableEdit(scope.row)"
               v-auth="['system:apiColumn:update']"
             >编辑</el-button>
 
@@ -168,11 +187,13 @@
 <script>
   import saveDialog from './save'
   import useTabs from '@/utils/useTabs'
+  import statusIndicator from  '@/components/scMini/scStatusIndicator'
 
   export default {
     name: 'system:apiColumn',
     components: {
-      saveDialog
+      saveDialog,
+      statusIndicator
     },
 
     async created() {
@@ -201,6 +222,7 @@
         apiId: '',
 				type: '',
         data_status_data: [],
+        api_data_type: [],
         column: [],
         povpoerShow: false,
         dateRange:'',
@@ -331,6 +353,10 @@
           this.getDict('data_status').then(res => {
               this.data_status_data = res.data
           })
+
+          this.getDict('api_data_type').then(res => {
+					  this.api_data_type = res.data
+			  	})
       }
     }
   }

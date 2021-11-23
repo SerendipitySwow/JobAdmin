@@ -128,9 +128,9 @@
            width="120"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.request_mode === 'A'">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
-            <el-tag v-if="scope.row.request_mode === 'P'" type="warning">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
-            <el-tag v-if="scope.row.request_mode === 'G'" type="danger">{{ ddLabel(request_mode_data, scope.row.request_mode) }}</el-tag>
+            <ma-dict-tag v-if="scope.row.request_mode === 'A'" :options="request_mode_data" :value="scope.row.request_mode" />
+            <ma-dict-tag v-if="scope.row.request_mode === 'P'"  :tagType="'warning'" :options="request_mode_data" :value="scope.row.request_mode" />
+            <ma-dict-tag v-if="scope.row.request_mode === 'G'" :tagType="'danger'" :options="request_mode_data" :value="scope.row.request_mode" />
           </template>
         </el-table-column>
 
