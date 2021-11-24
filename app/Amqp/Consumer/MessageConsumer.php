@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Amqp\Consumer;
+
+use App\System\Model\SystemMessage;
+use App\System\Service\SystemMessageService;
+use Hyperf\Amqp\Result;
+use Hyperf\Amqp\Annotation\Consumer;
+use Hyperf\Amqp\Message\ConsumerMessage;
+use Hyperf\Di\Annotation\Inject;
+use PhpAmqpLib\Message\AMQPMessage;
+
+/**
+ * @Consumer(exchange="hyperf", routingKey="message.routing", queue="message.queue", name="message.queue", nums=1)
+ */
+#[Consumer(exchange: 'hyperf', routingKey: 'message.routing', queue: 'message.queue', name: "message.queue", nums: 1)]
+class MessageConsumer extends ConsumerMessage
+{
+    /**
+     * @Inject
+     * @var SystemMessageService
+     */
+    protected $service;
+    
+    public function consumeMessage($data, AMQPMessage $message): string
+    {
+        parent::consumeMessage($data,$message);
+        $data = $data['data'];
+        $messageIdArr = $data['messageId'] ?? [];
+        if(!$messageIdArr){
+            return Result::DROP;
+        }
+        array_map(function($messageId){
+            //发送中
+            $this->service->update($messageId,['send_status'=>SystemMessage::STATUS_SENDING]);
+            //发送成功
+            $this->service->update($messageId,['send_status'=>SystemMessage::STATUS_SEND_SUCCESS]);
+        },$messageIdArr);
+        return Result::ACK;
+    }
+}

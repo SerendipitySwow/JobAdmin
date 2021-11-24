@@ -201,7 +201,6 @@ trait ServiceTrait
      */
     public function update($condition, array $data): bool
     {
-        $this->read($condition);
         return $this->mapper->update($condition, $data);
     }
 

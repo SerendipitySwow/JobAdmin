@@ -8,10 +8,10 @@ use Hyperf\Amqp\Annotation\Producer;
 use Hyperf\Amqp\Message\ProducerMessage;
 
 /**
- * @Producer(exchange="hyperf", routingKey="notice.routing")
+ * @Producer(exchange="hyperf", routingKey="message.routing")
  */
-#[Producer(exchange: 'hyperf', routingKey: 'notice.routing')]
-class NoticeProducer extends ProducerMessage
+#[Producer(exchange: 'hyperf', routingKey: 'message.routing')]
+class MessageProducer extends ProducerMessage
 {
     public function __construct($data)
     {

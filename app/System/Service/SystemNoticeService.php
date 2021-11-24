@@ -3,7 +3,7 @@
 declare(strict_types = 1);
 namespace App\System\Service;
 
-use App\Amqp\Producer\NoticeProducer;
+use App\Amqp\Producer\MessageProducer;
 use App\System\Mapper\SystemNoticeMapper;
 use Mine\Abstracts\AbstractService;
 use Hyperf\Di\Annotation\Inject;

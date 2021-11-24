@@ -226,7 +226,7 @@ trait MapperTrait
                 (new $this->model)->getKeyName()=>$condition
             ];
         }
-        return ($model = $this->model::where($condition)->pluck($columns)) ? $model : null;
+        return ($model = $this->model::where($condition)->pluck($columns)->toArray()) ? $model : null;
     }
 
     /**
@@ -259,6 +259,9 @@ trait MapperTrait
      */
     public function update($condition, array $data): bool
     {
+//        if(!in_array((new $this->model)->getKeyName(),array_keys($condition))){
+//            $this->read($condition);
+//        }
         if(!is_array($condition)){
             $condition = [
                 (new $this->model)->getKeyName()=>$condition
