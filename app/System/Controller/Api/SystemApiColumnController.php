@@ -15,6 +15,7 @@ use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
+use Mine\MineCollection;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -130,5 +131,40 @@ class SystemApiColumnController extends MineController
     public function recovery(String $ids): ResponseInterface
     {
         return $this->service->recovery($ids) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 字段导出
+     * @PostMapping("export")
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @Permission("system:apiColumn:export")
+     * @return ResponseInterface
+     */
+    public function export(): ResponseInterface
+    {
+        return $this->service->export($this->request->all(), \App\System\Dto\ApiColumnDto::class, '字段列表');
+    }
+
+    /**
+     * 字段导入
+     * @PostMapping("import")
+     * @Permission("system:apiColumn:import")
+     * @return ResponseInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    public function import(): ResponseInterface
+    {
+        return $this->service->import(\App\System\Dto\ApiColumnDto::class) ? $this->success() : $this->error();
+    }
+
+    /**
+     * 下载导入模板
+     * @PostMapping("downloadTemplate")
+     * @return ResponseInterface
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function downloadTemplate(): ResponseInterface
+    {
+        return (new MineCollection)->export(\App\System\Dto\ApiColumnDto::class, '模板下载', []);
     }
 }

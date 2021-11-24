@@ -26,4 +26,5 @@ class MineCode
 
     public const METHOD_NOT_ALLOW = 2000;   // 地址使用了不允许的访问方法
     public const NOT_FOUND = 2100;          // 资源不存在
+    public const RESOURCE_STOP = 2200;      // 资源被停用
 }

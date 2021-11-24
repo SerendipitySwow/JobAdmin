@@ -42,6 +42,7 @@ class CreateSystemApiTable extends Migration
             $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
             $table->primary('id');
             $table->index('group_id');
+            $table->index('access_name');
         });
     }
 

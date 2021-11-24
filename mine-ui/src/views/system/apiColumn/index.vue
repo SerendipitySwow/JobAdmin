@@ -26,6 +26,19 @@
           @click="batchDel"
         >删除</el-button>
 
+				<el-button
+					icon="el-icon-download"
+					v-auth="['system:apiColumn:export']"
+					@click="exportExcel"
+				>导出</el-button>
+
+				<ma-import
+					:auth="['system:apiColumn:import']"
+					:upload-api="$API.apiColumn.importExcel"
+					:download-tpl-api="$API.apiColumn.downloadTemplate"
+					@success="handleSuccess()"
+				/>
+
       </div>
       <div class="right-panel">
         <div class="right-panel-search">
@@ -357,7 +370,14 @@
           this.getDict('api_data_type').then(res => {
 					  this.api_data_type = res.data
 			  	})
-      }
+      },
+
+			// 导出字段
+			exportExcel () {
+				this.$API.apiColumn.exportExcel(this.queryParams).then(res => {
+					this.$TOOL.download(res)
+				})
+			},
     }
   }
 </script>

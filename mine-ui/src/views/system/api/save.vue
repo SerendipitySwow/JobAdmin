@@ -21,6 +21,10 @@
               <el-input v-model="form.name" clearable placeholder="请输入接口名称" />
           </el-form-item>
 
+					<el-form-item label="访问名称" prop="access_name">
+						<el-input v-model="form.access_name" clearable placeholder="请输入接口访问名称" />
+					</el-form-item>
+
           <el-form-item label="类名称" prop="class_name">
               <el-autocomplete
               v-model="form.class_name"
@@ -110,6 +114,7 @@
            id: '',
            group_id: '',
            name: '',
+					 access_name: '',
            class_name: '',
            method_name: '',
            auth_mode: '0',
@@ -127,6 +132,7 @@
         rules: {
           group_id: [{required: true, message: '接口分组必选', trigger: 'change' }],
           name: [{required: true, message: '接口名称必填', trigger: 'blur' }],
+					access_name: [{required: true, message: '访问名称必填', trigger: 'blur' }],
           class_name: [{required: true, message: '类名称必填', trigger: 'blur' }],
           method_name: [{required: true, message: '方法名必填', trigger: 'blur' }],
           auth_mode: [{required: true, message: '认证模式必填', trigger: 'blur' }],
@@ -134,7 +140,7 @@
         },
         visible: false,
         isSaveing: false,
-        
+
         request_mode_data: [],
         data_status_data: [],
 
@@ -178,10 +184,11 @@
 
       //表单注入数据
       setData(data){
-        
+
           this.form.id = data.id;
           this.form.group_id = data.group_id;
           this.form.name = data.name;
+          this.form.access_name = data.access_name;
           this.form.class_name = data.class_name;
           this.form.method_name = data.method_name;
           this.form.auth_mode = data.auth_mode;
@@ -194,7 +201,7 @@
 
       // 获取字典数据
       getDictData() {
-        
+
           this.getDict('request_mode').then(res => {
               this.request_mode_data = res.data
           })
@@ -225,13 +232,13 @@
         let modules = []
         Object.keys(this.modules).forEach( item => {
           if (item.indexOf(queryString) !== -1) {
-            modules.push({ 'value': `\\${item}\\` })
-            modules.push({ 'value': `\\${item}\\Controller\\` })
+            modules.push({ 'value': `\\App\\${item}\\` })
+            modules.push({ 'value': `\\App\\${item}\\Controller\\` })
           }
         })
         cb(modules)
       }
-      
+
     }
   }
 </script>

@@ -95,12 +95,17 @@
       >
         <el-table-column type="selection" width="50"></el-table-column>
 
-
         <el-table-column
            label="接口名称"
            prop="name"
            width="150"
         />
+
+				<el-table-column
+					label="访问名称"
+					prop="access_name"
+				/>
+
         <el-table-column
            label="类名称"
            prop="class_name"

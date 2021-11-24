@@ -12,10 +12,15 @@
 declare(strict_types=1);
 namespace Api\v1;
 
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\RequestMapping;
+use Mine\Exception\NormalStatusException;
+use Mine\Helper\MineCode;
 use Mine\MineApi;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\Middlewares;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
+use Api\v1\Middleware\VerifyInterfaceMiddleware;
 
 /**
  * Class ApiController
@@ -27,14 +32,29 @@ class ApiController extends MineApi
 
     /**
      * @RequestMapping("index/{method}")
+     * @Middlewares({
+     *     @Middleware(VerifyInterfaceMiddleware::class)
+     * })
      * @return ResponseInterface
      */
     public function index(): ResponseInterface
     {
-        return $this->success([
-            'txt' => 'api interface',
-            'method' => $this->request->route('method'),
-            'params' => $this->request->getQueryParams()
-        ]);
+        $apiData = $this->__init();
+
+        try {
+            $class = make($apiData['class_name']);
+            return $this->success($class->{$apiData['method_name']}());
+        } catch (\Throwable $e) {
+            throw new NormalStatusException('接口异常，请联系管理员', 500);
+        }
+    }
+
+    protected function __init()
+    {
+        if (empty($this->request->input('apiData'))) {
+            throw new NormalStatusException('非法操作', MineCode::NORMAL_STATUS);
+        }
+
+        return $this->request->input('apiData');
     }
 }

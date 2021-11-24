@@ -16,8 +16,10 @@ return [
     'response_error' => '请求失败',
     'data_no_change' => '数据没有任何改变',
     'not_found' => '您访问的资源不存在',
+    'not_allow_method' => '不允许 [:method] 方式访问资源',
     'allow_method' => '只允许 [:method] 方式访问资源',
     'network_image_save_fail' => '网络图片保存失败',
     'redis_lock_error' => 'Redis锁错误，请重试',
     'resubmit' => '访问太频繁，请稍后访问',
+    'api_stop' => '接口已停用',
 ];

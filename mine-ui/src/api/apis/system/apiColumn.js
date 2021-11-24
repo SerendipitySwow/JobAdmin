@@ -97,6 +97,43 @@ export default {
       method: 'put',
       data: params
     })
-  }
+  },
+
+	/**
+	 * 导出
+	 * @returns
+	 */
+	exportExcel (params = {}) {
+		return request({
+			url: 'system/apiColumn/export',
+			method: 'post',
+			responseType: 'blob',
+			params
+		})
+	},
+
+	/**
+	 * 导入
+	 * @returns
+	 */
+	importExcel (data = {}) {
+		return request({
+			url: 'system/apiColumn/import',
+			method: 'post',
+			data
+		})
+	},
+
+	/**
+	 * 下载模板
+	 * @returns
+	 */
+	downloadTemplate () {
+		return request({
+			url: 'system/apiColumn/downloadTemplate',
+			method: 'post',
+			responseType: 'blob'
+		})
+	},
 
 }
