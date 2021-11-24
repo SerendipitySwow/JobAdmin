@@ -22,4 +22,6 @@ return [
     'redis_lock_error' => 'Redis锁错误，请重试',
     'resubmit' => '访问太频繁，请稍后访问',
     'api_stop' => '接口已停用',
+    'access_denied' => '拒绝非法访问',
+    'interface_exception' => '接口异常',
 ];

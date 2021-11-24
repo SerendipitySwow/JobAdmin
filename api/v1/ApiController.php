@@ -36,6 +36,8 @@ class ApiController extends MineApi
      *     @Middleware(VerifyInterfaceMiddleware::class)
      * })
      * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function index(): ResponseInterface
     {
@@ -45,14 +47,19 @@ class ApiController extends MineApi
             $class = make($apiData['class_name']);
             return $this->success($class->{$apiData['method_name']}());
         } catch (\Throwable $e) {
-            throw new NormalStatusException('接口异常，请联系管理员', 500);
+            throw new NormalStatusException(t('mineadmin.interface_exception'), MineCode::INTERFACE_EXCEPTION);
         }
     }
 
+    /**
+     * 初始化
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     protected function __init()
     {
         if (empty($this->request->input('apiData'))) {
-            throw new NormalStatusException('非法操作', MineCode::NORMAL_STATUS);
+            throw new NormalStatusException(t('mineadmin.access_denied'), MineCode::NORMAL_STATUS);
         }
 
         return $this->request->input('apiData');

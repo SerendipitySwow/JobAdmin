@@ -22,4 +22,6 @@ return [
     'redis_lock_error' => 'Redis lock error, please try again',
     'resubmit' => 'Access is too frequent, please visit later',
     'api_stop' => 'The interface has been deactivated',
+    'access_denied' => 'Illegal access is denied',
+    'interface_exception' => 'Interface exception',
 ];
