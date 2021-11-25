@@ -1,11 +1,12 @@
 <?php
 
 declare(strict_types=1);
-namespace App\System\Controller\Notice;
+namespace App\System\Controller\Monitor;
 
-use App\System\Service\SystemNoticeService;
-use App\System\Request\Notice\SystemNoticeCreateRequest;
-use App\System\Request\Notice\SystemNoticeUpdateRequest;
+use App\System\Model\SystemMessage;
+use App\System\Service\SystemMessageService;
+use App\System\Request\Message\SystemMessageCreateRequest;
+use App\System\Request\Message\SystemMessageUpdateRequest;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -19,16 +20,16 @@ use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 通知管理控制器
- * Class NoticeController
- * @Controller(prefix="system/notice")
+ * 信息管理控制器
+ * Class MessageController
+ * @Controller(prefix="system/message")
  * @Auth
  */
-class NoticeController extends MineController
+class MessageController extends MineController
 {
     /**
      * @Inject
-     * @var SystemNoticeService
+     * @var SystemMessageService
      */
     protected $service;
 
@@ -36,18 +37,21 @@ class NoticeController extends MineController
      * 列表
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission("system:notice:index")
+     * @Permission("system:message:index")
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList($this->request->all()));
+        $params = $this->request->all();
+        $params['receive_by'] = user()->getId();
+        $params['send_status'] = SystemMessage::STATUS_SEND_SUCCESS;
+        return $this->success($this->service->getPageList($params));
     }
 
     /**
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission("system:notice:recycle")
+     * @Permission("system:message:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -55,16 +59,29 @@ class NoticeController extends MineController
     }
 
     /**
-     * 新增
-     * @PostMapping("save")
-     * @param SystemNoticeCreateRequest $request
+     * 发送信息
+     * @PostMapping("send")
+     * @param SystemMessageCreateRequest $request
+     * ['content_id','content_type','content','receive_by','remark']
      * @return ResponseInterface
-     * @Permission("system:notice:save")
+     * @Permission("system:message:save")
      * @OperationLog
      */
-    public function save(SystemNoticeCreateRequest $request): ResponseInterface
+    public function send(SystemMessageCreateRequest $request): ResponseInterface
     {
-        return $this->success(['id' => $this->service->save($request->all())]);
+        return $this->success($this->service->send($request->all()));
+    }
+
+    /**
+     * Description:查看操作
+     * @PutMapping("look")
+     * User:mike
+     * @param SystemMessageUpdateRequest $request
+     * @return ResponseInterface
+     */
+    public function look(SystemMessageUpdateRequest $request)
+    {
+        return $this->success($this->service->look($request->post('message_id')));
     }
 
     /**
@@ -72,7 +89,7 @@ class NoticeController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission("system:notice:read")
+     * @Permission("system:message:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -83,12 +100,12 @@ class NoticeController extends MineController
      * 更新
      * @PutMapping("update/{id}")
      * @param int $id
-     * @param SystemNoticeUpdateRequest $request
+     * @param SystemMessageUpdateRequest $request
      * @return ResponseInterface
-     * @Permission("system:notice:update")
+     * @Permission("system:message:update")
      * @OperationLog
      */
-    public function update(int $id, SystemNoticeUpdateRequest $request): ResponseInterface
+    public function update(int $id, SystemMessageUpdateRequest $request): ResponseInterface
     {
         return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
     }
@@ -98,7 +115,7 @@ class NoticeController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:notice:delete")
+     * @Permission("system:message:delete")
      * @OperationLog
      */
     public function delete(String $ids): ResponseInterface
@@ -111,7 +128,7 @@ class NoticeController extends MineController
      * @DeleteMapping("realDelete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:notice:realDelete")
+     * @Permission("system:message:realDelete")
      * @OperationLog
      */
     public function realDelete(String $ids): ResponseInterface
@@ -124,7 +141,7 @@ class NoticeController extends MineController
      * @PutMapping("recovery/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:notice:recovery")
+     * @Permission("system:message:recovery")
      * @OperationLog
      */
     public function recovery(String $ids): ResponseInterface

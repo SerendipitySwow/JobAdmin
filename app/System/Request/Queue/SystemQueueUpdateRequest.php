@@ -1,13 +1,13 @@
 <?php
 
-namespace App\System\Request\Amqp;
+namespace App\System\Request\Queue;
 
 use Hyperf\Validation\Request\FormRequest;
 
 /**
  * 队列管理验证数据类 (Update)
  */
-class SystemRabbitmqUpdateRequest extends FormRequest
+class SystemQueueUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

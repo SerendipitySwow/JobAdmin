@@ -3,10 +3,10 @@
 declare(strict_types = 1);
 namespace App\System\Service;
 
-use App\Amqp\Producer\MessageProducer;
 use App\System\Mapper\SystemMessageMapper;
 use App\System\Model\SystemMessage;
 use App\System\Model\SystemUser;
+use App\System\Queue\Producer\MessageProducer;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
 use Mine\Amqp\DelayProducer;
@@ -74,7 +74,7 @@ class SystemMessageService extends AbstractService
                 'receive_by'=>user()->getId()
             ];
         }
-        return $this->mapper->update($condition,[
+        return $this->mapper->updateByCondition($condition, [
             'read_status'=>SystemMessage::READ_STATUS_YES
         ]) ? 1 : 0;
     }

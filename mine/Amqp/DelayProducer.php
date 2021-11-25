@@ -32,7 +32,12 @@ class DelayProducer extends Producer
      */
     protected $eventDispatcher;
 
-    public function produce(ProducerMessageInterface $producerMessage, bool $confirm = false, int $timeout = 5,$delayTime = 0): bool
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Throwable
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function produce(ProducerMessageInterface $producerMessage, bool $confirm = false, int $timeout = 5, $delayTime = 0): bool
     {
         $this->eventDispatcher = ApplicationContext::getContainer()->get(EventDispatcherInterface::class);
         return retry(1, function () use ($producerMessage, $confirm, $timeout,$delayTime) {
@@ -40,8 +45,20 @@ class DelayProducer extends Producer
         });
     }
 
-    private function produceMessage(ProducerMessageInterface $producerMessage, bool $confirm = false, int $timeout = 5,int $delayTime = 0)
+    /**
+     * 生产消息
+     * @param ProducerMessageInterface $producerMessage
+     * @param bool $confirm
+     * @param int $timeout
+     * @param int $delayTime
+     * @return bool
+     * @throws \Throwable
+     */
+    private function produceMessage(ProducerMessageInterface $producerMessage, bool $confirm = false, int $timeout = 5,int $delayTime = 0): bool
     {
+        // 连接ampq
+        $connection = $this->factory->getConnection($producerMessage->getPoolName());
+
         $result = false;
 
         $this->injectMessageProperty($producerMessage);
@@ -54,7 +71,7 @@ class DelayProducer extends Producer
         $message = new AMQPMessage($producerMessage->payload(), array_merge($producerMessage->getProperties(), [
             'expiration' => $expiration,
         ]));
-        $connection = $this->factory->getConnection($producerMessage->getPoolName());
+
         //触发队列发送之中事件
         $this->eventDispatcher->dispatch(new ProduceEvent($producerMessage));
 

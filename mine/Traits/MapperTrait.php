@@ -183,50 +183,34 @@ trait MapperTrait
 
     /**
      * 读取一条数据
-     * @param $condition
-     * @param $columns
-     * @return 
+     * @param int $id
+     * @return MineModel
      */
-    public function read($condition,$columns = ['*'])
+    public function read(int $id): ?MineModel
     {
-        if(!is_array($condition)){
-            $condition = [
-                (new $this->model)->getKeyName()=>$condition
-            ];
-        }
-        return ($model = $this->model::where($condition)->select($columns)->first()) ? $model : null;
+        return ($model = $this->model::find($id)) ? $model : null;
     }
 
     /**
      * 获取单个值
-     * @param $condition
-     * @param $columns
-     * @return
+     * @param array $condition
+     * @param string $columns
+     * @return MineModel
      */
-    public function value($condition,$columns = 'id')
+    public function value(array $condition, string $columns = 'id'): ?MineModel
     {
-        if(!is_array($condition)){
-            $condition = [
-                (new $this->model)->getKeyName()=>$condition
-            ];
-        }
         return ($model = $this->model::where($condition)->value($columns)) ? $model : null;
     }
 
     /**
      * 获取单列值
-     * @param $condition
-     * @param $columns
-     * @return
+     * @param array $condition
+     * @param string $columns
+     * @return array|null
      */
-    public function pluck($condition,$columns = 'id')
-    { 
-        if(!is_array($condition)){
-            $condition = [
-                (new $this->model)->getKeyName()=>$condition
-            ];
-        }
-        return ($model = $this->model::where($condition)->pluck($columns)->toArray()) ? $model : null;
+    public function pluck(array $condition, string $columns = 'id'): array
+    {
+        return $this->model::where($condition)->pluck($columns)->toArray();
     }
 
     /**
@@ -253,22 +237,26 @@ trait MapperTrait
 
     /**
      * 更新一条数据
-     * @param $condition
+     * @param int $id
      * @param array $data
      * @return bool
      */
-    public function update($condition, array $data): bool
+    public function update(int $id, array $data): bool
     {
-//        if(!in_array((new $this->model)->getKeyName(),array_keys($condition))){
-//            $this->read($condition);
-//        }
-        if(!is_array($condition)){
-            $condition = [
-                (new $this->model)->getKeyName()=>$condition
-            ];
-        }
         $this->filterExecuteAttributes($data, true);
-        return $this->model::query()->where($condition)->update($data);
+        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data) > 0;
+    }
+
+    /**
+     * 按条件更新数据
+     * @param array $condition
+     * @param array $data
+     * @return bool
+     */
+    public function updateByCondition(array $condition, array $data): bool
+    {
+        $this->filterExecuteAttributes($data, true);
+        return $this->model::query()->where($condition)->update($data) > 0;
     }
 
     /**

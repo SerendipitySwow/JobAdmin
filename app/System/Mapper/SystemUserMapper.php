@@ -8,6 +8,7 @@ use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\ModelNotFoundException;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
+use Mine\MineModel;
 
 /**
  * Class SystemUserMapper
@@ -49,7 +50,7 @@ class SystemUserMapper extends AbstractMapper
     /**
      * 检查用户密码
      * @param String $password
-     * @param $hash
+     * @param string $hash
      * @return bool
      */
     public function checkPass(String $password, string $hash): bool
@@ -120,17 +121,16 @@ class SystemUserMapper extends AbstractMapper
     /**
      * 获取用户信息
      * @param int $id
-     * @return SystemUser|null
+     * @return MineModel
      */
-    public function read(int $id): ?SystemUser
+    public function read(int $id): ?MineModel
     {
         $user = $this->model::find($id);
         if ($user) {
             $user->setAttribute('roleList', $user->roles()->get() ?: []);
             $user->setAttribute('postList', $user->posts()->get() ?: []);
-            return $user;
         }
-        return null;
+        return $user;
     }
 
     /**

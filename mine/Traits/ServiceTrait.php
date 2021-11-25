@@ -136,40 +136,36 @@ trait ServiceTrait
 
     /**
      * 读取一条数据
-     * @param $condition
-     * @return 
+     * @param int $id
+     * @return MineModel
      */
-    public function read($condition,$columns = ['*'])
+    public function read(int $id): MineModel
     {
-        $info = $this->mapper->read($condition,$columns);
-        if(!$info){
-            throw new  NormalStatusException('数据不存在',500);
-        }
-        return $info;
+        return $this->mapper->read($id);
     }
 
     /**
      * Description:获取单个值
      * User:mike
-     * @param $condition
-     * @param array $columns
-     * @return \Hyperf\Utils\HigherOrderTapProxy|mixed|void|null
+     * @param array $condition
+     * @param string $columns
+     * @return ?MineModel
      */
-    public function value($condition,$columns = 'id')
+    public function value(array $condition, string $columns = 'id'): ?MineModel
     {
-        return $this->mapper->value($condition,$columns);
+        return $this->mapper->value($condition, $columns);
     }
 
     /**
      * Description:获取单列值
      * User:mike
-     * @param $condition
-     * @param array $columns
-     * @return \Hyperf\Utils\HigherOrderTapProxy|mixed|void|null
+     * @param array $condition
+     * @param string $columns
+     * @return array|null
      */
-    public function pluck($condition,$columns = 'id')
+    public function pluck(array $condition, string $columns = 'id'): array
     {
-        return $this->mapper->pluck($condition,$columns);
+        return $this->mapper->pluck($condition, $columns);
     }
 
     /**
@@ -195,13 +191,13 @@ trait ServiceTrait
 
     /**
      * 更新一条数据
-     * @param $condition
+     * @param int $id
      * @param array $data
      * @return bool
      */
-    public function update($condition, array $data): bool
+    public function update(int $id, array $data): bool
     {
-        return $this->mapper->update($condition, $data);
+        return $this->mapper->update($id, $data);
     }
 
     /**

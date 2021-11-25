@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Amqp\Consumer;
+namespace App\System\Queue\Consumer;
 
 use App\System\Model\SystemMessage;
 use App\System\Service\SystemMessageService;
@@ -13,9 +13,9 @@ use Hyperf\Di\Annotation\Inject;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
- * @Consumer(exchange="hyperf", routingKey="message.routing", queue="message.queue", name="message.queue", nums=1)
+ * 后台内部消息队列消费处理
+ * @Consumer(exchange="mineadmin", routingKey="message.routing", queue="message.queue", name="message.queue", nums=1)
  */
-#[Consumer(exchange: 'hyperf', routingKey: 'message.routing', queue: 'message.queue', name: "message.queue", nums: 1)]
 class MessageConsumer extends ConsumerMessage
 {
     /**
@@ -39,5 +39,14 @@ class MessageConsumer extends ConsumerMessage
             $this->service->update($messageId,['send_status'=>SystemMessage::STATUS_SEND_SUCCESS]);
         },$messageIdArr);
         return Result::ACK;
+    }
+
+    /**
+     * 设置是否启动amqp
+     * @return bool
+     */
+    public function isEnable(): bool
+    {
+        return env('AMQP_ENABLE');
     }
 }
