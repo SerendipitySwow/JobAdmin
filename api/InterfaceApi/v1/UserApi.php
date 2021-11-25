@@ -13,6 +13,9 @@ namespace Api\InterfaceApi\v1;
 
 use App\System\Mapper\SystemUserMapper;
 
+/**
+ * 演示，测试专用
+ */
 class UserApi
 {
     protected $user;
@@ -24,6 +27,7 @@ class UserApi
 
     public function getList(): array
     {
+        // 第二个参数，不进行数据权限检查，否则会拉起检测是否登录。
         return $this->user->getList([], false);
     }
 }
