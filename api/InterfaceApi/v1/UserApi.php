@@ -9,7 +9,7 @@
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
-namespace Api\v1\Controller;
+namespace Api\InterfaceApi\v1;
 
 use App\System\Mapper\SystemUserMapper;
 

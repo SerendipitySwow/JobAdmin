@@ -10,7 +10,7 @@
  */
 
 declare(strict_types=1);
-namespace Api\v1\Middleware;
+namespace Api\Middleware;
 
 use App\System\Model\SystemApi;
 use App\System\Service\SystemApiService;

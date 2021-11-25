@@ -10,7 +10,7 @@
  */
 
 declare(strict_types=1);
-namespace Api\v1;
+namespace Api;
 
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
@@ -20,18 +20,19 @@ use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\Middlewares;
 use Hyperf\HttpServer\Annotation\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
-use Api\v1\Middleware\VerifyInterfaceMiddleware;
+use Api\Middleware\VerifyInterfaceMiddleware;
 
 /**
  * Class ApiController
  * @package Api\v1
- * @Controller(prefix="api/v1")
+ * @Controller(prefix="api")
  */
 class ApiController extends MineApi
 {
 
     /**
-     * @RequestMapping("index/{method}")
+     * v1 版本
+     * @RequestMapping("v1/{method}")
      * @Middlewares({
      *     @Middleware(VerifyInterfaceMiddleware::class)
      * })
@@ -39,7 +40,7 @@ class ApiController extends MineApi
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function index(): ResponseInterface
+    public function v1(): ResponseInterface
     {
         $apiData = $this->__init();
 
