@@ -18,7 +18,6 @@ use Mine\Event\UserLoginBefore;
 use Mine\Exception\CaptchaException;
 use Mine\Exception\NormalStatusException;
 use Mine\Exception\UserBanException;
-use Mine\Helper\LoginUser;
 use Mine\Helper\MineCaptcha;
 use Mine\MineRequest;
 use Mine\Helper\MineCode;
@@ -153,7 +152,7 @@ class SystemUserService extends AbstractService
                     ($userinfo['status'] == SystemUser::USER_BAN && $userinfo['id'] == env('SUPER_ADMIN'))
                 ) {
                     $userLoginAfter->message = t('jwt.login_success');
-                    $token = $this->loginUser->getToken($userLoginAfter->userinfo);
+                    $token = user()->getToken($userLoginAfter->userinfo);
                     $userLoginAfter->token = $token;
                     $this->evDispatcher->dispatch($userLoginAfter);
                     return $token;
@@ -192,8 +191,9 @@ class SystemUserService extends AbstractService
      */
     public function logout()
     {
-        $this->evDispatcher->dispatch(new UploadAfter($this->loginUser->getUserInfo()));
-        $this->loginUser->getJwt()->logout();
+        $user = user();
+        $this->evDispatcher->dispatch(new UploadAfter($user->getUserInfo()));
+        $user->getJwt()->logout();
     }
 
     /**
@@ -381,7 +381,7 @@ class SystemUserService extends AbstractService
     {
         $redis = $this->container->get(Redis::class);
         $prefix = config('cache.default.prefix');
-        $this->container->get(LoginUser::class)->getJwt()->logout($redis->get("{$prefix}Token:{$id}"));
+        user()->getJwt()->logout($redis->get("{$prefix}Token:{$id}"));
         return $redis->del("{$prefix}Token:{$id}") > 0;
     }
 
@@ -457,6 +457,6 @@ class SystemUserService extends AbstractService
      */
     public function modifyPassword(array $params): bool
     {
-        return $this->mapper->initUserPassword((int) (make(LoginUser::class))->getId(), $params['newPassword']);
+        return $this->mapper->initUserPassword((int) user()->getId(), $params['newPassword']);
     }
 }
