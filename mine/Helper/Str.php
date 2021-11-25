@@ -298,4 +298,23 @@ class Str
             . substr ( $chars, 20, 12 );
         return $uuid ;
     }
+
+    /**
+     * Replace the first occurrence of a given value in the string.
+     */
+    public static function replaceFirst(string $search, string $replace, string $subject, int &$offset = 0): string
+    {
+        if ($search == '') {
+            return $subject;
+        }
+
+        $position = strpos($subject, $search, $offset);
+
+        if ($position !== false) {
+            $offset = $position + strlen($replace);
+            return substr_replace($subject, $replace, $position, strlen($search));
+        }
+
+        return $subject;
+    }
 }
