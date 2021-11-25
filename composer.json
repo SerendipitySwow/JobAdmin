@@ -1,15 +1,13 @@
 {
-  "name": "hyperf/hyperf-skeleton",
+  "name": "xmo/mineadmin",
   "type": "project",
   "keywords": [
-    "php",
+    "mineadmin",
     "swoole",
-    "framework",
-    "hyperf",
-    "microservice",
-    "middleware"
+    "hyperf"
   ],
-  "description": "A coroutine framework that focuses on hyperspeed and flexible, specifically use for build microservices and middlewares.",
+  "homepage": "https://www.mineadmin.com/",
+  "description": "Quickly build a background management system for web applications",
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.4",

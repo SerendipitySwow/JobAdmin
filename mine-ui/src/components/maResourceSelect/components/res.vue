@@ -20,7 +20,7 @@
             </el-tooltip>
 
             <el-tooltip class="item" effect="dark" :content="'清除所有选中的' + (type == 'image' ? '图片' : '文件')" placement="top">
-              <el-button size="small" icon="el-icon-error" @click="checkList = []">清除</el-button>
+              <el-button size="small" icon="el-icon-refresh" @click="checkList = []">清除</el-button>
             </el-tooltip>
 
           </el-button-group>
@@ -58,11 +58,11 @@
             <div class="list" v-for="(item, index) in dataList" :key="index">
 
               <div class="icon" @click="openFolder(item.basename, 'in')" v-if="item.type === 'dir'">
-                <i class="el-icon-folder" />
+                <el-icon><el-icon-folder /></el-icon>
               </div>
 
               <div class="icon" v-if="item.mime_type && item.mime_type.indexOf('image') === -1">
-                <i class="el-icon-document" />
+                <el-icon><el-icon-document /></el-icon>
               </div>
 
               <div class="file" v-if="item.mime_type && item.mime_type.indexOf('image') > -1">

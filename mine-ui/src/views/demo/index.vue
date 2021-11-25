@@ -25,7 +25,7 @@
                     <p>{{cityDataCode}}</p>
 
                     <el-alert title="返回城市名称，并限制层级，只显示省份" type="warning" class="mt" />
-                    <city-linkage v-model="cityDataName" valueType="name" limitLevel="1" />
+                    <city-linkage v-model="cityDataName" valueType="name" />
 
                     <p class="value">{{cityDataName}}</p>
                 </el-card>

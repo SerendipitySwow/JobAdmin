@@ -16,7 +16,7 @@
           {{ selectButtonText }}
         </el-button>
 
-        <el-button icon="el-icon-upload2" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
+        <el-button icon="el-icon-upload" type="primary" class="button" size="small" @click="handleShowUploadDialog" :disabled="disabled">
           {{ uploadButtunText }}
         </el-button>
 
@@ -59,7 +59,7 @@
         :http-request="handleUpload"
       >
 
-        <i class="el-icon-upload"></i>
+        <el-icon-upload style="width:120px" />
 
         <div class="el-upload__text" style="width: 100%">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" style="width: 100%">只能上传{{allowUploadFile}}文件，单文件不超过 {{ config.maxSize }} M</div>

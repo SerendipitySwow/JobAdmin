@@ -123,6 +123,18 @@ if (! function_exists('t')) {
     }
 }
 
+if (! function_exists('mine_collect')) {
+    /**
+     * 创建一个Mine的集合类
+     * @param null|mixed $value
+     * @return \Mine\MineCollection
+     */
+    function mine_collect($value = null): \Mine\MineCollection
+    {
+        return new \Mine\MineCollection($value);
+    }
+}
+
 if (! function_exists('context_set')) {
     /**
      * 设置上下文数据
@@ -147,4 +159,3 @@ if (! function_exists('context_get')) {
         return \Hyperf\Utils\Context::get($key);
     }
 }
-

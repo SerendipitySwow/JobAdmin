@@ -9,7 +9,7 @@ const DEFAULT_CONFIG = {
 	DASHBOARD_URL: "/dashboard",
 
 	//版本号
-	APP_VER: "0.3.11",
+	APP_VER: "0.4.0",
 
 	//官网地址
 	APP_URL: "www.mineadmin.com",
