@@ -47,6 +47,6 @@ class MessageConsumer extends ConsumerMessage
      */
     public function isEnable(): bool
     {
-        return env('AMQP_ENABLE');
+        return env('AMQP_ENABLE', false);
     }
 }
