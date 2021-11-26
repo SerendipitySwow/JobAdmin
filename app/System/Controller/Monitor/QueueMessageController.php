@@ -3,8 +3,8 @@
 declare(strict_types=1);
 namespace App\System\Controller\Monitor;
 
-use App\System\Model\SystemMessage;
-use App\System\Service\SystemMessageService;
+use App\System\Model\SystemQueueMessage;
+use App\System\Service\SystemQueueMessageService;
 use App\System\Request\Message\SystemMessageCreateRequest;
 use App\System\Request\Message\SystemMessageUpdateRequest;
 use Hyperf\Di\Annotation\Inject;
@@ -22,14 +22,14 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * 信息管理控制器
  * Class MessageController
- * @Controller(prefix="system/message")
+ * @Controller(prefix="system/queueMessage")
  * @Auth
  */
-class MessageController extends MineController
+class QueueMessageController extends MineController
 {
     /**
      * @Inject
-     * @var SystemMessageService
+     * @var SystemQueueMessageService
      */
     protected $service;
 
@@ -37,13 +37,13 @@ class MessageController extends MineController
      * 列表
      * @GetMapping("index")
      * @return ResponseInterface
-     * @Permission("system:message:index")
+     * @Permission("system:queueMessage:index")
      */
     public function index(): ResponseInterface
     {
         $params = $this->request->all();
         $params['receive_by'] = user()->getId();
-        $params['send_status'] = SystemMessage::STATUS_SEND_SUCCESS;
+        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
         return $this->success($this->service->getPageList($params));
     }
 
@@ -51,7 +51,7 @@ class MessageController extends MineController
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface
-     * @Permission("system:message:recycle")
+     * @Permission("system:queueMessage:recycle")
      */
     public function recycle(): ResponseInterface
     {
@@ -64,7 +64,7 @@ class MessageController extends MineController
      * @param SystemMessageCreateRequest $request
      * ['content_id','content_type','content','receive_by','remark']
      * @return ResponseInterface
-     * @Permission("system:message:save")
+     * @Permission("system:queueMessage:save")
      * @OperationLog
      */
     public function send(SystemMessageCreateRequest $request): ResponseInterface
@@ -74,12 +74,12 @@ class MessageController extends MineController
 
     /**
      * Description:查看操作
-     * @PutMapping("look")
      * User:mike
+     * @PutMapping("look")
      * @param SystemMessageUpdateRequest $request
      * @return ResponseInterface
      */
-    public function look(SystemMessageUpdateRequest $request)
+    public function look(SystemMessageUpdateRequest $request): ResponseInterface
     {
         return $this->success($this->service->look($request->post('message_id')));
     }

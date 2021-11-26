@@ -5,10 +5,10 @@
 				<h2>MineAdmin</h2>
 				<h4>{{ $t('login.slogan') }}</h4>
 				<p>{{ $t('login.describe') }}</p>
-				<!--
+				
 				<div>
 					<span>
-						<el-icon><sc-icon-vue /></el-icon>
+						<el-icon><ma-icon-mineadmin style="font-size: 48px;" /></el-icon>
 					</span>
 					<span>
 						<el-icon class="add"><el-icon-plus /></el-icon>
@@ -16,7 +16,7 @@
 					<span>
 						<el-icon><el-icon-eleme-filled /></el-icon>
 					</span>
-				</div>-->
+				</div>
 			</div>
 			<div class="login_adv__bottom">
 				<p>{{$CONFIG.APP_NAME}} {{$CONFIG.APP_VER}}</p>

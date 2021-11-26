@@ -17,9 +17,9 @@ declare(strict_types=1);
  */
 namespace Mine\Amqp\Listener;
 
-use App\System\Mapper\SystemRabbitmqMapper;
-use App\System\Model\SystemRabbitmq;
-use App\System\Service\SystemRabbitmqService;
+use App\System\Mapper\SystemQueueMapper;
+use App\System\Model\SystemQueue;
+use App\System\Service\SystemQueueService;
 use Mine\Helper\Str;
 use Mine\Amqp\Event\AfterProduce;
 use Mine\Amqp\Event\BeforeProduce;
@@ -54,7 +54,7 @@ class QueueProduceListener implements ListenerInterface
     
     public function process(object $event)
     {
-        $this->service = new SystemRabbitmqService(new SystemRabbitmqMapper());
+        $this->service = new SystemQueueService(new SystemQueueMapper());
         $producer = $event->producer;
         $this->throwable = $event->throwable ?? '';
         $delayTime = $event->delayTime ?? 0;
@@ -87,7 +87,7 @@ class QueueProduceListener implements ListenerInterface
             'queue_name'=>$this->queueName,
             'queue_content'=>$producer->payload(),
             'delay_time'=>$delayTime,
-            'produce_status'=>SystemRabbitmq::PRODUCE_STATUS_SUCCESS
+            'produce_status'=>SystemQueue::PRODUCE_STATUS_SUCCESS
         ];
         $this->service->save($data);
     }
@@ -120,7 +120,7 @@ class QueueProduceListener implements ListenerInterface
      */
     public function failToProduce($producer,$delayTime){
         $condition = ['uuid'=>$this->uuid];
-        $data = ['produce_status'=>SystemRabbitmq::PRODUCE_STATUS_FAIL];
+        $data = ['produce_status'=>SystemQueue::PRODUCE_STATUS_FAIL];
         if($this->throwable){
             $data['log_content'] = $this->throwable->getMessage();
         }

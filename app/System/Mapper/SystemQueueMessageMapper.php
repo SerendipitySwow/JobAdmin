@@ -3,23 +3,23 @@
 declare(strict_types = 1);
 namespace App\System\Mapper;
 
-use App\System\Model\SystemMessage;
+use App\System\Model\SystemQueueMessage;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 /**
  * 信息管理Mapper类
  */
-class SystemMessageMapper extends AbstractMapper
+class SystemQueueMessageMapper extends AbstractMapper
 {
     /**
-     * @var SystemMessage
+     * @var SystemQueueMessage
      */
     public $model;
 
     public function assignModel()
     {
-        $this->model = SystemMessage::class;
+        $this->model = SystemQueueMessage::class;
     }
 
     /**

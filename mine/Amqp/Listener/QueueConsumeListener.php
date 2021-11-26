@@ -17,9 +17,9 @@ declare(strict_types=1);
  */
 namespace Mine\Amqp\Listener;
 
-use App\System\Mapper\SystemRabbitmqMapper;
-use App\System\Model\SystemRabbitmq;
-use App\System\Service\SystemRabbitmqService;
+use App\System\Mapper\SystemQueueMapper;
+use App\System\Model\SystemQueue;
+use App\System\Service\SystemQueueService;
 use Mine\Amqp\Event\AfterConsume;
 use Mine\Amqp\Event\BeforeConsume;
 use Mine\Amqp\Event\ConsumeEvent;
@@ -49,7 +49,7 @@ class QueueConsumeListener implements ListenerInterface
 
     public function process(object $event)
     {
-        $this->service = new SystemRabbitmqService(new SystemRabbitmqMapper());
+        $this->service = new SystemQueueService(new SystemQueueMapper());
         $message = $event->message;
         $this->throwable = $event->throwable ?? '';
         if($message){
@@ -69,7 +69,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function beforeConsume($message){
         $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemRabbitmq::CONSUME_STATUS_DOING];
+        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_DOING];
         $this->service->update($condition,$data);
     }
 
@@ -91,7 +91,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function afterConsume($message){
         $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemRabbitmq::CONSUME_STATUS_SUCCESS];
+        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_SUCCESS];
         $this->service->update($condition,$data);
     }
     /**
@@ -101,7 +101,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function failToConsume($message){
         $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemRabbitmq::CONSUME_STATUS_4];
+        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_4];
         if($this->throwable){
             $data['log_content'] = $this->throwable->getMessage();
         }

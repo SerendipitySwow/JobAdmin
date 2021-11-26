@@ -13,21 +13,21 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSystemRabbitmqTable extends Migration
+class CreateSystemNoticeTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('system_rabbitmq', function (Blueprint $table) {
+        Schema::create('system_notice', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('系统后台队列表');
-            /**
-             * uuid, exchange_name, routing_key_name, queue_name, queue_content
-             * log_content, produce_status, consume_status, delay_time
-             */
+            $table->comment('系统公告表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
+            $table->addColumn('string', 'title', ['length' => 255, 'comment' => '标题']);
+            $table->addColumn('char', 'type', ['length' => 1, 'comment' => '公告类型（1通知 2公告）']);
+            $table->addColumn('text', 'content', ['length' => 1, 'comment' => '公告内容'])->nullable();
+            $table->addColumn('integer', 'click_num', ['comment' => '浏览次数', 'default' => 0])->nullable();
             $table->addColumn('bigInteger', 'created_by', ['comment' => '创建者'])->nullable();
             $table->addColumn('bigInteger', 'updated_by', ['comment' => '更新者'])->nullable();
             $table->addColumn('timestamp', 'created_at', ['precision' => 0, 'comment' => '创建时间'])->nullable();
@@ -43,6 +43,6 @@ class CreateSystemRabbitmqTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_rabbitmq');
+        Schema::dropIfExists('system_notice');
     }
 }

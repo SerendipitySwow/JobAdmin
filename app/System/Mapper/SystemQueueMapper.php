@@ -3,23 +3,23 @@
 declare(strict_types = 1);
 namespace App\System\Mapper;
 
-use App\System\Model\SystemRabbitmq;
+use App\System\Model\SystemQueue;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 /**
  * 队列管理Mapper类
  */
-class SystemRabbitmqMapper extends AbstractMapper
+class SystemQueueMapper extends AbstractMapper
 {
     /**
-     * @var SystemRabbitmq
+     * @var SystemQueue
      */
     public $model;
 
     public function assignModel()
     {
-        $this->model = SystemRabbitmq::class;
+        $this->model = SystemQueue::class;
     }
 
     /**

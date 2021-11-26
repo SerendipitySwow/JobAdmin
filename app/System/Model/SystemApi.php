@@ -31,11 +31,9 @@ class SystemApi extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
-
     public const METHOD_ALL = 'A';
     public const METHOD_POST = 'P';
     public const METHOD_GET = 'G';
-
     /**
      * The table associated with the model.
      *

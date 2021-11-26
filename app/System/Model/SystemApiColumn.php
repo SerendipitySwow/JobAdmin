@@ -21,6 +21,7 @@ use Mine\MineModel;
  * @property \Carbon\Carbon $updated_at 更新时间
  * @property string $deleted_at 删除时间
  * @property string $remark 备注
+ * @property-read SystemApi $api 
  */
 class SystemApiColumn extends MineModel
 {
@@ -44,12 +45,11 @@ class SystemApiColumn extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'api_id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
-
     /**
      * 关联API
      * @return \Hyperf\Database\Model\Relations\BelongsTo
      */
-    public function api(): \Hyperf\Database\Model\Relations\BelongsTo
+    public function api() : \Hyperf\Database\Model\Relations\BelongsTo
     {
         return $this->belongsTo(SystemApi::class, 'api_id', 'id');
     }

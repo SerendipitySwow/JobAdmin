@@ -3,8 +3,8 @@
 declare(strict_types = 1);
 namespace App\System\Service;
 
-use App\System\Mapper\SystemMessageMapper;
-use App\System\Model\SystemMessage;
+use App\System\Mapper\SystemQueueMessageMapper;
+use App\System\Model\SystemQueueMessage;
 use App\System\Model\SystemUser;
 use App\System\Queue\Producer\MessageProducer;
 use Hyperf\Di\Annotation\Inject;
@@ -14,10 +14,10 @@ use Mine\Amqp\DelayProducer;
 /**
  * 信息管理服务类
  */
-class SystemMessageService extends AbstractService
+class SystemQueueMessageService extends AbstractService
 {
     /**
-     * @var SystemMessageMapper
+     * @var SystemQueueMessageMapper
      */
     public $mapper;
     /**
@@ -32,7 +32,7 @@ class SystemMessageService extends AbstractService
      */
     protected $producer;
 
-    public function __construct(SystemMessageMapper $mapper)
+    public function __construct(SystemQueueMessageMapper $mapper)
     {
         $this->mapper = $mapper;
     }
@@ -75,7 +75,7 @@ class SystemMessageService extends AbstractService
             ];
         }
         return $this->mapper->updateByCondition($condition, [
-            'read_status'=>SystemMessage::READ_STATUS_YES
+            'read_status'=>SystemQueueMessage::READ_STATUS_YES
         ]) ? 1 : 0;
     }
 

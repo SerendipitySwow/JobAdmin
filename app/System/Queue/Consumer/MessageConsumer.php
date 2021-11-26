@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\System\Queue\Consumer;
 
-use App\System\Model\SystemMessage;
-use App\System\Service\SystemMessageService;
+use App\System\Model\SystemQueueMessage;
+use App\System\Service\SystemQueueMessageService;
 use Hyperf\Amqp\Result;
 use Hyperf\Amqp\Annotation\Consumer;
 use Hyperf\Amqp\Message\ConsumerMessage;
@@ -20,7 +20,7 @@ class MessageConsumer extends ConsumerMessage
 {
     /**
      * @Inject
-     * @var SystemMessageService
+     * @var SystemQueueMessageService
      */
     protected $service;
     
@@ -34,9 +34,9 @@ class MessageConsumer extends ConsumerMessage
         }
         array_map(function($messageId){
             //发送中
-            $this->service->update($messageId,['send_status'=>SystemMessage::STATUS_SENDING]);
+            $this->service->update($messageId,['send_status'=>SystemQueueMessage::STATUS_SENDING]);
             //发送成功
-            $this->service->update($messageId,['send_status'=>SystemMessage::STATUS_SEND_SUCCESS]);
+            $this->service->update($messageId,['send_status'=>SystemQueueMessage::STATUS_SEND_SUCCESS]);
         },$messageIdArr);
         return Result::ACK;
     }

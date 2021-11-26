@@ -3,20 +3,20 @@
 declare(strict_types = 1);
 namespace App\System\Service;
 
-use App\System\Mapper\SystemRabbitmqMapper;
+use App\System\Mapper\SystemQueueMapper;
 use Mine\Abstracts\AbstractService;
 
 /**
  * 队列管理服务类
  */
-class SystemRabbitmqService extends AbstractService
+class SystemQueueService extends AbstractService
 {
     /**
-     * @var SystemRabbitmqMapper
+     * @var SystemQueueMapper
      */
     public $mapper;
 
-    public function __construct(SystemRabbitmqMapper $mapper)
+    public function __construct(SystemQueueMapper $mapper)
     {
         $this->mapper = $mapper;
     }

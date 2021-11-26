@@ -35,8 +35,57 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
-        $service = container()->get(SystemApiService::class);
+        $this->crossSetting($request);
 
+        $this->auth();
+
+        $this->apiLog();
+
+        return $handler->handle($this->apiModelCheck($request));
+    }
+
+    /**
+     * 跨域设置
+     * @param $request
+     */
+    protected function crossSetting($request): void
+    {
+        $crossData = [
+            'Access-Control-Allow-Origin'      => '*',
+            'Access-Control-Allow-Methods'     => 'POST,GET,OPTIONS',
+            'Access-Control-Allow-Headers'     => 'Version, Access-Token, User-Token, Api-Auth, User-Agent, Keep-Alive, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With',
+            'Access-Control-Allow-Credentials' => 'true'
+        ];
+
+        foreach ($crossData as $name => $value) {
+            $request->withHeader($name, $value);
+        }
+    }
+
+    /**
+     * api 鉴权
+     */
+    protected function auth()
+    {
+
+    }
+
+    /**
+     * api 日志
+     */
+    protected function apiLog()
+    {
+
+    }
+
+    /**
+     * api 检查
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     */
+    protected function apiModelCheck($request)
+    {
+        $service = container()->get(SystemApiService::class);
         $apiModel = $service->mapper->one(function($query) {
             $request = container()->get(MineRequest::class);
             $query->where('access_name', $request->route('method'));
@@ -63,10 +112,8 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
         }
 
         // 合并入参
-        $request = $request->withParsedBody(array_merge(
+        return $request->withParsedBody(array_merge(
             $request->getParsedBody(), ['apiData' => $apiModel->toArray()]
         ));
-
-        return $handler->handle($request);
     }
 }
