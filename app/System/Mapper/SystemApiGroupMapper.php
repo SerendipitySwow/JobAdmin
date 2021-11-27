@@ -43,10 +43,9 @@ class SystemApiGroupMapper extends AbstractMapper
 
         // 关联查询api列表
         if (isset($params['getApiList']) && $params['getApiList'] == true) {
-//            $query->with(['apis' => function($query) {
-//                $query->select(['id', 'name', 'access_name'])->where('status', SystemApi::ENABLE);
-//            }]);
-            $query->with('apis:id,name,access_name');
+            $query->with(['apis' => function($query) {
+                $query->where('status', SystemApi::ENABLE)->select(['id', 'group_id', 'name', 'access_name']);
+            }]);
         }
         return $query;
     }

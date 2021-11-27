@@ -31,15 +31,8 @@ class SystemApiGroupService extends AbstractService
      */
     public function getList(?array $params = null): array
     {
-//        $params['select'] = 'id, name';
-//        $params['status'] = '0';
-        $ok = SystemApiGroup::query()->where('status', '0')->with(['apis' => function($query){
-            $query->select(['id', 'name']);
-        }])->get();
-
-        foreach ($ok as $v) {
-            print_r($v);
-        }
+        $params['select'] = 'id, name';
+        $params['status'] = SystemApiGroup::ENABLE;
         return parent::getList($params);
     }
 }
