@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\System\Mapper;
 
+use App\System\Model\SystemApi;
 use App\System\Model\SystemApiGroup;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
@@ -38,6 +39,14 @@ class SystemApiGroupMapper extends AbstractMapper
         // 状态
         if (isset($params['status'])) {
             $query->where('status', '=', $params['status']);
+        }
+
+        // 关联查询api列表
+        if (isset($params['getApiList']) && $params['getApiList'] == true) {
+//            $query->with(['apis' => function($query) {
+//                $query->select(['id', 'name', 'access_name'])->where('status', SystemApi::ENABLE);
+//            }]);
+            $query->with('apis:id,name,access_name');
         }
         return $query;
     }

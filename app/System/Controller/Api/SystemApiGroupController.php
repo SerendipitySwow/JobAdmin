@@ -50,7 +50,7 @@ class SystemApiGroupController extends MineController
      */
     public function list(): ResponseInterface
     {
-        return $this->success($this->service->getList());
+        return $this->success($this->service->getList($this->request->all()));
     }
 
     /**

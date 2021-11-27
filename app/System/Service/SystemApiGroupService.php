@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemApiGroupMapper;
+use App\System\Model\SystemApiGroup;
 use Mine\Abstracts\AbstractService;
 
 /**
@@ -30,6 +31,15 @@ class SystemApiGroupService extends AbstractService
      */
     public function getList(?array $params = null): array
     {
-        return $this->mapper->getList(['select' => ['id', 'name'], 'status' => '0']);
+//        $params['select'] = 'id, name';
+//        $params['status'] = '0';
+        $ok = SystemApiGroup::query()->where('status', '0')->with(['apis' => function($query){
+            $query->select(['id', 'name']);
+        }])->get();
+
+        foreach ($ok as $v) {
+            print_r($v);
+        }
+        return parent::getList($params);
     }
 }

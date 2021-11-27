@@ -38,4 +38,15 @@ class SystemApiGroup extends MineModel
      * @var array
      */
     protected $casts = ['id' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 关联API
+     * @return \Hyperf\Database\Model\Relations\hasMany
+     */
+    public function apis() : \Hyperf\Database\Model\Relations\hasMany
+    {
+        return $this->hasMany(SystemApi::class, 'group_id', 'id');
+    }
+
+
 }

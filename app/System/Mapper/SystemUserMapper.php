@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace App\System\Mapper;
 
+use App\System\Model\SystemDept;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\Builder;
 use Hyperf\Database\Model\ModelNotFoundException;
@@ -165,6 +166,7 @@ class SystemUserMapper extends AbstractMapper
 
             $query->with(['dept' => function($query) use($isAll){
                 /* @var Builder $query*/
+                $query->where('status', SystemDept::ENABLE);
                 return $isAll ? $query->select(['*']) : $query->select(['id', 'name']);
             }]);
         }
