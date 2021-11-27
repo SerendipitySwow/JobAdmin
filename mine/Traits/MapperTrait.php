@@ -224,6 +224,17 @@ trait MapperTrait
     }
 
     /**
+     * 按条件读取一行数据
+     * @param array $condition
+     * @param array $column
+     * @return mixed
+     */
+    public function first(array $condition, array $column = ['*']): ?MineModel
+    {
+        return ($model = $this->model::where($condition)->first($column)) ? $model : null;
+    }
+
+    /**
      * 获取单个值
      * @param array $condition
      * @param string $columns
@@ -300,9 +311,7 @@ trait MapperTrait
     {
         foreach ($ids as $id) {
             $model = $this->model::withTrashed()->find($id);
-            if ($model) {
-                $model->forceDelete();
-            }
+            $model && $model->forceDelete();
         }
         return true;
     }

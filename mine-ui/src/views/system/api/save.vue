@@ -232,8 +232,7 @@
         let modules = []
         Object.keys(this.modules).forEach( item => {
           if (item.indexOf(queryString) !== -1) {
-            modules.push({ 'value': `\\App\\${item}\\` })
-            modules.push({ 'value': `\\App\\${item}\\Controller\\` })
+            modules.push({ 'value': `Api\\InterfaceApi\\v1\\${item}` })
           }
         })
         cb(modules)

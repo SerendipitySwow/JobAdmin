@@ -51,7 +51,7 @@
            remark: '',
         },
         rules: {
-          
+          name: [{required: true, message: '分组名称必填', trigger: 'blur' }],
         },
         visible: false,
         isSaveing: false,

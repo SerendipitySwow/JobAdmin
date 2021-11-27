@@ -20,11 +20,11 @@ use Mine\Amqp\Event\FailToConsume;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class RabbitmqAspect
+ * Class ConsumeAspect
  * @package Mine\Aspect
  * @Aspect
  */
-class RabbitmqAspect extends AbstractAspect
+class ConsumeAspect extends AbstractAspect
 {
     public $classes = [
         'Hyperf\Amqp\Message\ConsumerMessage::consumeMessage'
@@ -55,7 +55,7 @@ class RabbitmqAspect extends AbstractAspect
             return $result;
         }catch(\Throwable $e){
             //发生错误处理
-            $eventDispatcher->dispatch(new FailToConsume($message,$data,$e));
+            $eventDispatcher->dispatch(new FailToConsume($message, $data, $e));
         }
         
     }

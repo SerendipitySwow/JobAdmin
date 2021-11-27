@@ -59,9 +59,7 @@ class DbQueryExecutedListener implements ListenerInterface
             $offset = 0;
             if (! Arr::isAssoc($event->bindings)) {
                 foreach ($event->bindings as $value) {
-                    if (is_array($value)) {
-                        $value = json_encode($value);
-                    }
+                    $value = is_array($value) ? json_encode($value) : "'{$value}'";
                     $sql = Str::replaceFirst('?', "{$value}", $sql, $offset);
                 }
             }

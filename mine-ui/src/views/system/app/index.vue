@@ -123,8 +123,15 @@
         </el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="150" v-if="!isRecycle">
           <template #default="scope">
+
+            <el-button
+              type="text"
+              size="small"
+              @click="bind(scope.row)"
+              v-auth="['system:app:bind']"
+            >绑定接口</el-button>
 
             <el-button
               type="text"
@@ -169,16 +176,18 @@
   </el-container>
 
   <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
-
+  <bind-form v-if="dialog.bind" ref="bindForm" @success="handleSuccess" @closed="dialog.bind=false" />
 </template>
 
 <script>
+  import bindForm from './bind'
   import saveDialog from './save'
   import statusIndicator from  '@/components/scMini/scStatusIndicator'
 
   export default {
     name: 'system:app',
     components: {
+      bindForm,
       saveDialog,
       statusIndicator
     },
@@ -191,7 +200,8 @@
     data() {
       return {
         dialog: {
-          save: false
+          save: false,
+          bind: false,
         },
         
         data_status_data: [],
@@ -221,6 +231,14 @@
         this.dialog.save = true
         this.$nextTick(() => {
            this.$refs.saveDialog.open()
+        })
+      },
+
+      // 绑定接口
+      bind() {
+        this.dialog.bind = true
+        this.$nextTick(() => {
+          this.$refs.bindForm.open()
         })
       },
 
