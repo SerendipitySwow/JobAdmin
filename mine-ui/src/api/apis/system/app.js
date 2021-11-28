@@ -119,6 +119,18 @@ export default {
       url: 'system/app/getAppSecret',
       method: 'get'
     })
-  }
+  },
+
+  /**
+   * 绑定接口
+   * @returns
+   */
+  bind (id, params = {}) {
+    return request({
+      url: 'system/app/bind/' + id,
+      method: 'put',
+      data: params
+    })
+  },
 
 }

@@ -51,4 +51,13 @@ class SystemApp extends MineModel
     {
         return $this->belongsToMany(SystemApi::class, 'system_app_api', 'app_id', 'api_id');
     }
+
+    /**
+     * 关联APP分组
+     * @return \Hyperf\Database\Model\Relations\HasOne
+     */
+    public function appGroup() : \Hyperf\Database\Model\Relations\HasOne
+    {
+        return $this->hasOne(SystemAppGroup::class, 'id', 'group_id');
+    }
 }

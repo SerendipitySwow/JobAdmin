@@ -5,6 +5,7 @@ namespace App\System\Service;
 
 use App\System\Mapper\SystemAppMapper;
 use Mine\Abstracts\AbstractService;
+use Mine\Annotation\Transaction;
 use Mine\Helper\Str;
 
 /**
@@ -42,5 +43,17 @@ class SystemAppService extends AbstractService
     public function getAppSecret(): string
     {
         return base64_encode(bin2hex(random_bytes(32)));
+    }
+
+    /**
+     * 绑定接口
+     * @param int $id
+     * @param array $ids
+     * @return bool
+     * @Transaction
+     */
+    public function bind(int $id, array $ids): bool
+    {
+        return $this->mapper->bind($id, $ids);
     }
 }

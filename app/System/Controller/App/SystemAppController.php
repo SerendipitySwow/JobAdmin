@@ -116,6 +116,19 @@ class SystemAppController extends MineController
     }
 
     /**
+     * 绑定接口
+     * @PutMapping("bind/{id}")
+     * @param int $id
+     * @return ResponseInterface
+     * @Permission("system:app:bind")
+     * @OperationLog
+     */
+    public function bind(int $id): ResponseInterface
+    {
+        return $this->service->bind($id, $this->request->input('apiIds', [])) ? $this->success() : $this->error();
+    }
+
+    /**
      * 单个或批量删除数据到回收站
      * @DeleteMapping("delete/{ids}")
      * @param String $ids

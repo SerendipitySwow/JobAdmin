@@ -123,7 +123,7 @@
         </el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="150" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="160" v-if="!isRecycle">
           <template #default="scope">
 
             <el-button
@@ -176,7 +176,7 @@
   </el-container>
 
   <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
-  <bind-form v-if="dialog.bind" ref="bindForm" @success="handleSuccess" @closed="dialog.bind=false" />
+  <bind-form v-if="dialog.bind" ref="bindForm" @success="handleSuccess" />
 </template>
 
 <script>
@@ -235,10 +235,10 @@
       },
 
       // 绑定接口
-      bind() {
+      bind(row) {
         this.dialog.bind = true
         this.$nextTick(() => {
-          this.$refs.bindForm.open()
+          this.$refs.bindForm.open(row.id)
         })
       },
 

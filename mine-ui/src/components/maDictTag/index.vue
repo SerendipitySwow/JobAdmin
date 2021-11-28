@@ -15,7 +15,7 @@ export default {
     value: [Number, String, Array],
     tagType: {
       type: String,
-      default: 'primary'
+      default: ''
     }
   },
   computed: {
