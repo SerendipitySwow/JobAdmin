@@ -159,8 +159,6 @@ export default {
 
     // 保存
     save() {
-      console.log(this.appId)
-      console.log(this.checkList)
       this.$API.app.bind(this.appId, { apiIds: this.checkList }).then(res => {
         if (res.success) {
           this.$message.success(res.message)
