@@ -56,4 +56,15 @@ class SystemAppService extends AbstractService
     {
         return $this->mapper->bind($id, $ids);
     }
+
+    /**
+     * @param int|null $id
+     * @return array
+     */
+    public function getApiList(?int $id): array
+    {
+        if (! $id) return [];
+
+        return $this->mapper->getApiList($id);
+    }
 }

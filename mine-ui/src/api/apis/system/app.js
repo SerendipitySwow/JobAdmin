@@ -133,4 +133,18 @@ export default {
     })
   },
 
+  /**
+   * 获取已绑定接口
+   * @returns
+   */
+   getBindApiList (params = {}) {
+    return request({
+      url: 'system/app/getApiList',
+      method: 'get',
+      params
+    })
+  },
+
+
+  
 }

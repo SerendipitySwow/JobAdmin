@@ -86,12 +86,12 @@
         <el-table-column
            label="应用名称"
            prop="app_name"
-           width="150"
+           width="130"
         />
         <el-table-column
            label="APP ID"
            prop="app_id"
-           width="120"
+           width="100"
         >
           <template #default="scope">
             <el-tooltip content="点击复制" placement="top">
@@ -123,7 +123,7 @@
         </el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="160" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="180" v-if="!isRecycle">
           <template #default="scope">
 
             <el-button
@@ -151,7 +151,7 @@
         </el-table-column>
 
         <!-- 回收站操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
+        <el-table-column label="操作" fixed="right" align="right" width="180" v-else>
           <template #default="scope">
 
             <el-button

@@ -60,4 +60,24 @@ class SystemAppMapper extends AbstractMapper
         $model && $model->apis()->sync($ids);
         return true;
     }
+
+    /**
+     * 获取api列表
+     * @param int $id
+     * @return array
+     */
+    public function getApiList(int $id): array
+    {
+        $data = $this->read($id)->with(['apis' => function($query) {
+            $query->where('status', '0')->select('id as apiId');
+        }])->get()->toArray();
+
+        $ids = [];
+        foreach ($data as $item) {
+            foreach ($item['apis'] as $api) {
+                $ids[] = $api['apiId'];
+            }
+        }
+        return $ids;
+    }
 }

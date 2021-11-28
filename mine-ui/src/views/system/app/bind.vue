@@ -11,7 +11,7 @@
       style="height:100%;"
     >
       <el-tabs v-model="activeName">
-        <el-tab-pane label="选择分组绑定" name="group">
+        <el-tab-pane label="选择接口绑定" name="group">
           <el-button-group>
             <el-button size="small" icon="el-icon-check" @click="selectAll">全选</el-button>
 
@@ -85,7 +85,21 @@ export default {
     },
 
     setData() {
-      
+      this.$API.app.getBindApiList({ id: this.appId }).then(res => {
+        // 设置数据
+        if (res.success && res.data.length > 0) {
+          res.data.map(id => {
+            this.apiGroupData.map((rows, key) => {
+              rows.apis.map(async item => {
+                if (item.id == id) {
+                  this.apiGroupCheckList[key].push(item.id)
+                  await this.handleCheckedChange(key, item, rows.apis.length)
+                }
+              })
+            })
+          })
+        }
+      })
     },
 
     // 请求数据
@@ -103,10 +117,12 @@ export default {
     // 分组全选
     handleCheckAllChange(index, rows) {
       if (! this.checkAll[index]) {
+        let list = Object.assign({}, this.checkList)
         this.apiGroupCheckList[index] = []
         rows.map(row => {
           this.checkList = xor(this.checkList, [row.id])
         })
+        this.checkList = union(this.checkList, list)
       } else {
         rows.map(row => {
           this.apiGroupCheckList[index].push(row.id)

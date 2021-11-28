@@ -66,6 +66,16 @@ class SystemAppController extends MineController
     }
 
     /**
+     * 获取绑定接口列表
+     * @GetMapping("getApiList")
+     * @return ResponseInterface
+     */
+    public function getApiList(): ResponseInterface
+    {
+        return $this->success($this->service->getApiList((int) $this->request->input('id', null)));
+    }
+
+    /**
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface
