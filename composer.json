@@ -72,7 +72,8 @@
       "Api\\": "api/"
     },
     "files": [
-      "mine/Helper/functions.php"
+      "mine/Helper/functions.php",
+      "common/common.php"
     ]
   },
   "autoload-dev": {
