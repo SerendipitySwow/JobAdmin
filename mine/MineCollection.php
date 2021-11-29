@@ -207,7 +207,7 @@ class MineCollection extends Collection
             try {
                 unlink($tempFilePath);
             } catch (\Throwable $e) {
-                logger('Unlink File')->error('上传文件删除失败：' . $e->getMessage());
+                logger('Unlink File')->error('导入临时文件删除失败：' . $e->getMessage());
             }
         } else {
             return false;
