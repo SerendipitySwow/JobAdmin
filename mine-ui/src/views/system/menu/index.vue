@@ -188,10 +188,17 @@
           })
 
           if (ids.length > 0) {
-            this.$API.menu.deletes(ids.join(',')).then(res => {
-              this.$message.success(res.message)
-              this.getMenu()
-            })
+            if (! this.showRecycle) {
+              this.$API.menu.deletes(ids.join(',')).then(res => {
+                this.$message.success(res.message)
+                this.getMenu()
+              })
+            } else {
+              this.$API.menu.realDeletes(ids.join(',')).then(res => {
+                this.$message.success(res.message)
+                this.getMenu()
+              })
+            }
           } else {
             this.$message.error('选择项里没有按钮菜单，跳过删除')
           }
