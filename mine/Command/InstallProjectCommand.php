@@ -231,6 +231,7 @@ class InstallProjectCommand extends MineCommand
             $env['ADMIN_ROLE'] = (string) ($id->getId());
             $env['CONSOLE_SQL'] = 'true';
             $env['JWT_SECRET'] = base64_encode(random_bytes(64));
+            $env['JWT_API_SECRET'] = base64_encode(random_bytes(64));
 
             $id = null;
 

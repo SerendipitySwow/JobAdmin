@@ -13,6 +13,7 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\ApplicationContext;
 use Mine\Helper\LoginUser;
+use Mine\Helper\AppVerify;
 use Psr\Log\LoggerInterface;
 
 if (! function_exists('container')) {
@@ -73,7 +74,6 @@ if (! function_exists('logger')) {
     }
 
 }
-
 
 if (! function_exists('user')) {
     /**
@@ -158,5 +158,17 @@ if (! function_exists('context_get')) {
     function context_get(string $key)
     {
         return \Hyperf\Utils\Context::get($key);
+    }
+}
+
+if (! function_exists('app_verify')) {
+    /**
+     * 获取APP应用请求实例
+     * @param string $scene
+     * @return AppVerify
+     */
+    function app_verify(string $scene = 'api'): AppVerify
+    {
+        return new AppVerify($scene);
     }
 }

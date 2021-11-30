@@ -22,6 +22,8 @@ use Hyperf\Utils\Context;
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
 use Mine\MineRequest;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,16 +44,12 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler):ResponseInterface
     {
         $this->crossSetting($request);
-
-        if (! $this->auth($request)) {
-            throw new NormalStatusException(t('mineadmin.api_auth_fail'));
-        }
 
         return $this->run($request, $handler);
     }
@@ -77,22 +75,32 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
     /**
      * 访问接口鉴权处理
      * @param ServerRequestInterface $request
-     * @return bool
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @return int
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    protected function auth(ServerRequestInterface $request): bool
+    protected function auth(ServerRequestInterface $request): int
     {
         try {
             /* @var $service SystemAppService */
             $service = container()->get(SystemAppService::class);
+            $queryParams = $request->getQueryParams();
             switch ($this->_getApiData()['auth_mode']) {
                 case SystemApi::AUTH_MODE_EASY:
-                    return $service->verifyEasyMode($request->getQueryParams()['app_id'], $request->getQueryParams()['app_secret']);
+                    if (empty($queryParams['app_id'])) {
+                        return MineCode::API_APP_ID_MISSING;
+                    }
+                    if (empty($queryParams['app_secret'])) {
+                        return MineCode::API_APP_SECRET_MISSING;
+                    }
+                    return $service->verifyEasyMode($queryParams['app_id'], $queryParams['app_secret']);
                 case SystemApi::AUTH_MODE_NORMAL:
-                    return $service->verifyNormalMode($request->getQueryParams()['access_token']);
+                    if (empty($queryParams['access_token'])) {
+                        return MineCode::API_ACCESS_TOKEN_MISSING;
+                    }
+                    return $service->verifyNormalMode($queryParams['access_token']);
                 default:
-                    return false;
+                    throw new \RuntimeException();
             }
         } catch (\Throwable $e) {
             throw new NormalStatusException(t('mineadmin.api_auth_exception'), MineCode::API_AUTH_EXCEPTION);
@@ -101,10 +109,10 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
 
     /**
      * API常规检查
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
-    protected function apiModelCheck($request)
+    protected function apiModelCheck($request): ServerRequestInterface
     {
         $service = container()->get(SystemApiService::class);
         $apiModel = $service->mapper->one(function($query) {
@@ -145,13 +153,21 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function run(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->evDispatcher->dispatch(new ApiBefore());
-        $result = $handler->handle($this->apiModelCheck($request));
+
+        $request = $this->apiModelCheck($request);
+
+        if (($code = $this->auth($request)) !== MineCode::API_VERIFY_PASS) {
+            throw new NormalStatusException(t('mineadmin.api_auth_fail'), $code);
+        }
+
+        $result = $handler->handle($request);
+
         $event = new ApiAfter($this->_getApiData(), $result);
         $this->evDispatcher->dispatch($event);
 

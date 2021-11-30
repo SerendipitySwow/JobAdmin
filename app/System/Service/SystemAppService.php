@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemAppMapper;
+use App\System\Model\SystemApp;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\Transaction;
-use Mine\Helper\Str;
+use Mine\Helper\MineCode;
 
 /**
  * app应用业务
@@ -68,13 +69,37 @@ class SystemAppService extends AbstractService
         return $this->mapper->getApiList($id);
     }
 
-    public function verifyEasyMode(string $appId, string $appSecret): bool
+    /**
+     * 简易验证方式
+     * @param string $appId
+     * @param string $appSecret
+     * @return int
+     */
+    public function verifyEasyMode(string $appId, string $appSecret): int
     {
-        return true;
+        $model = $this->mapper->one(function($query) use($appId, $appSecret){
+            $query->where('app_id', $appId)->where('app_secret', $appSecret);
+        }, ['id', 'status']);
+
+        if (! $model) {
+            return MineCode::API_PARAMS_ERROR;
+        }
+
+        if ($model['status'] != SystemApp::ENABLE) {
+            return MineCode::APP_BAN;
+        }
+
+        return MineCode::API_VERIFY_PASS;
     }
 
-    public function verifyNormalMode(string $accessToken): bool
+    /**
+     * 正常（复杂）验证方式
+     * @param string $accessToken
+     * @return int
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function verifyNormalMode(string $accessToken): int
     {
-        return true;
+        return app_verify()->check($accessToken) ? MineCode::API_VERIFY_PASS : MineCode::API_PARAMS_ERROR;
     }
 }
