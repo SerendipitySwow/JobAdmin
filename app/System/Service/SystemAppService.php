@@ -67,4 +67,14 @@ class SystemAppService extends AbstractService
 
         return $this->mapper->getApiList($id);
     }
+
+    public function verifyEasyMode(string $appId, string $appSecret): bool
+    {
+        return true;
+    }
+
+    public function verifyNormalMode(string $accessToken): bool
+    {
+        return true;
+    }
 }

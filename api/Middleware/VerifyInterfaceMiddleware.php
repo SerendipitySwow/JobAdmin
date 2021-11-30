@@ -12,6 +12,7 @@
 declare(strict_types=1);
 namespace Api\Middleware;
 
+use App\System\Service\SystemAppService;
 use Mine\Event\ApiAfter;
 use Mine\Event\ApiBefore;
 use App\System\Model\SystemApi;
@@ -48,7 +49,9 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
     {
         $this->crossSetting($request);
 
-        $this->auth();
+        if (! $this->auth($request)) {
+            throw new NormalStatusException(t('mineadmin.api_auth_fail'));
+        }
 
         return $this->run($request, $handler);
     }
@@ -73,10 +76,27 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
 
     /**
      * 访问接口鉴权处理
+     * @param ServerRequestInterface $request
+     * @return bool
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    protected function auth()
+    protected function auth(ServerRequestInterface $request): bool
     {
-
+        try {
+            /* @var $service SystemAppService */
+            $service = container()->get(SystemAppService::class);
+            switch ($this->_getApiData()['auth_mode']) {
+                case SystemApi::AUTH_MODE_EASY:
+                    return $service->verifyEasyMode($request->getQueryParams()['app_id'], $request->getQueryParams()['app_secret']);
+                case SystemApi::AUTH_MODE_NORMAL:
+                    return $service->verifyNormalMode($request->getQueryParams()['access_token']);
+                default:
+                    return false;
+            }
+        } catch (\Throwable $e) {
+            throw new NormalStatusException(t('mineadmin.api_auth_exception'), MineCode::API_AUTH_EXCEPTION);
+        }
     }
 
     /**

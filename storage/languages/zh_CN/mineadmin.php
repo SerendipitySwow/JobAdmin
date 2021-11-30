@@ -24,4 +24,6 @@ return [
     'api_stop' => '接口已停用',
     'access_denied' => '拒绝非法访问',
     'interface_exception' => '接口异常',
+    'api_auth_exception' => '接口鉴权异常',
+    'api_auth_fail' => '接口鉴权失败',
 ];

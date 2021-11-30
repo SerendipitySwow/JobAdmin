@@ -28,4 +28,7 @@ class MineCode
     public const NOT_FOUND = 2100;          // 资源不存在
     public const INTERFACE_EXCEPTION = 2150;// 接口异常
     public const RESOURCE_STOP = 2200;      // 资源被停用
+
+    public const API_AUTH_EXCEPTION = 10000;    // 接口鉴权异常
+    public const API_AUTH_FAIL = 10010;         // 接口鉴权失败
 }

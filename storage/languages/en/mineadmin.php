@@ -24,4 +24,6 @@ return [
     'api_stop' => 'The interface has been deactivated',
     'access_denied' => 'Illegal access is denied',
     'interface_exception' => 'Interface exception',
+    'api_auth_exception' => 'Interface authentication exception',
+    'api_auth_fail' => 'Interface authentication failed',
 ];
