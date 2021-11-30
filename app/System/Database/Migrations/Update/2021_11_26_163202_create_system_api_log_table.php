@@ -22,10 +22,8 @@ class CreateSystemApiLogTable extends Migration
     {
         Schema::create('system_api_log', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('表注释');
+            $table->comment('接口日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
-            $table->addColumn('bigInteger', 'app_id', ['unsigned' => true, 'comment' => 'app ID']);
-            $table->addColumn('string', 'app_name', ['length' => 32, 'comment' => '应用名称']);
             $table->addColumn('bigInteger', 'api_id', ['unsigned' => true, 'comment' => 'api ID']);
             $table->addColumn('string', 'api_name', ['length' => 32, 'comment' => '接口名称']);
             $table->addColumn('string', 'access_name', ['length' => 64, 'comment' => '接口访问名称']);

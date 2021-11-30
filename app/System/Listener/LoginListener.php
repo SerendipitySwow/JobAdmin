@@ -41,6 +41,8 @@ class LoginListener implements ListenerInterface
 
     /**
      * @param UserLoginAfter $event
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function process(object $event)
     {
@@ -75,6 +77,8 @@ class LoginListener implements ListenerInterface
     /**
      * @param $agent
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function os($agent): string
     {
@@ -105,6 +109,8 @@ class LoginListener implements ListenerInterface
     /**
      * @param $agent
      * @return string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function browser($agent): string
     {

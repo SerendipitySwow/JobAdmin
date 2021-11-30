@@ -24,6 +24,14 @@ const routes = {
 			meta: {
 				title: "锁屏"
 			}
+		},
+		{
+			path: '/doc',
+			name: 'Doc',
+			component: () => import(/* webpackChunkName: "Doc" */ '@/views/doc/index'),
+			meta: {
+				title: "接口文档"
+			}
 		}
 	],
 	dashboard: {

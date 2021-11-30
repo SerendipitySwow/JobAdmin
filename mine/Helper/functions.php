@@ -78,11 +78,12 @@ if (! function_exists('logger')) {
 if (! function_exists('user')) {
     /**
      * 获取当前登录用户实例
+     * @param string $scene
      * @return LoginUser
      */
-    function user(): LoginUser
+    function user(string $scene = 'default'): LoginUser
     {
-        return new LoginUser();
+        return new LoginUser($scene);
     }
 }
 

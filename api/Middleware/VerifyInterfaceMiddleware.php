@@ -12,11 +12,16 @@
 declare(strict_types=1);
 namespace Api\Middleware;
 
+use Mine\Event\ApiAfter;
+use Mine\Event\ApiBefore;
 use App\System\Model\SystemApi;
 use App\System\Service\SystemApiService;
+use Hyperf\Di\Annotation\Inject;
+use Hyperf\Utils\Context;
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
 use Mine\MineRequest;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -24,6 +29,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class VerifyInterfaceMiddleware implements MiddlewareInterface
 {
+    /**
+     * 事件调度器
+     * @Inject
+     * @var EventDispatcherInterface
+     */
+    protected $evDispatcher;
 
     /**
      * 验证检查接口
@@ -39,9 +50,7 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
 
         $this->auth();
 
-        $this->apiLog();
-
-        return $handler->handle($this->apiModelCheck($request));
+        return $this->run($request, $handler);
     }
 
     /**
@@ -63,7 +72,7 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
     }
 
     /**
-     * api 鉴权
+     * 访问接口鉴权处理
      */
     protected function auth()
     {
@@ -71,15 +80,7 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
     }
 
     /**
-     * api 日志
-     */
-    protected function apiLog()
-    {
-
-    }
-
-    /**
-     * api 检查
+     * API常规检查
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      */
@@ -111,9 +112,47 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
             }
         }
 
+        $this->_setApiData($apiModel->toArray());
+
         // 合并入参
         return $request->withParsedBody(array_merge(
             $request->getParsedBody(), ['apiData' => $apiModel->toArray()]
         ));
+    }
+
+    /**
+     * 运行
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    protected function run(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $this->evDispatcher->dispatch(new ApiBefore());
+        $result = $handler->handle($this->apiModelCheck($request));
+        $event = new ApiAfter($this->_getApiData(), $result);
+        $this->evDispatcher->dispatch($event);
+
+        return $event->getResult();
+    }
+
+    /**
+     * 设置协程上下文
+     * @param array $data
+     */
+    private function _setApiData(array $data)
+    {
+        Context::set('apiData', $data);
+    }
+
+    /**
+     * 获取协程上下文
+     * @return array
+     */
+    private function _getApiData(): array
+    {
+        return Context::get('apiData', []);
     }
 }
