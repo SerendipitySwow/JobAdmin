@@ -25,7 +25,7 @@ use Symfony\Component\Console\Input\InputOption;
 class GenJwtCommand extends MineCommand
 {
     /**
-     * 更新项目命令
+     * 生成JWT密钥命令
      * @var string
      */
     protected $name = 'mine:gen-jwt';
@@ -53,7 +53,7 @@ class GenJwtCommand extends MineCommand
         $jwtSecret = Str::upper($this->input->getOption('jwtSecret'));
 
         if (empty($jwtSecret)) {
-            $this->line('Missing parameter <--jwtSecret < module_name>>', 'error');
+            $this->line('Missing parameter <--jwtSecret < jwt secret name>>', 'error');
         }
 
         $envPath = BASE_PATH . '/.env';
