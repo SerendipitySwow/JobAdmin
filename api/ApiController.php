@@ -12,6 +12,8 @@
 declare(strict_types=1);
 namespace Api;
 
+use App\System\Service\SystemAppService;
+use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
 use Mine\MineApi;
@@ -29,6 +31,21 @@ use Api\Middleware\VerifyInterfaceMiddleware;
  */
 class ApiController extends MineApi
 {
+    public const SIGN_VERSION = '1.0';
+
+    /**
+     * 获取accessToken
+     * @PostMapping("v1/getAccessToken")
+     * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function getAccessToken(): ResponseInterface
+    {
+        $service = container()->get(SystemAppService::class);
+        return $this->success($service->getAccessToken($this->request->all()));
+    }
 
     /**
      * v1 版本

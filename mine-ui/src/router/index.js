@@ -11,7 +11,7 @@ import {beforeEach, afterEach} from './scrollBehavior'
 //系统路由
 const routes = sysRouter.systemRouter
 
-const whiteList = ['login', 'test']
+const whiteList = ['login', 'doc', 'test']
 const defaultRoutePath = '/dashboard'
 
 //系统特殊路由
@@ -76,6 +76,7 @@ router.beforeEach(async (to, from, next) => {
 			next()
 		}
 	} else {
+		debugger
 		if (whiteList.includes(to.name)) {
 			beforeEach(to, from)
 			next()

@@ -3,10 +3,12 @@
 declare(strict_types=1);
 namespace App\System\Service;
 
+use Api\ApiController;
 use App\System\Mapper\SystemAppMapper;
 use App\System\Model\SystemApp;
 use Mine\Abstracts\AbstractService;
 use Mine\Annotation\Transaction;
+use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
 
 /**
@@ -67,6 +69,60 @@ class SystemAppService extends AbstractService
         if (! $id) return [];
 
         return $this->mapper->getApiList($id);
+    }
+
+    /**
+     * 获取AccessToken
+     * @param array $params
+     * @return array
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function getAccessToken(array $params): array
+    {
+        if (empty($params['app_id'])) {
+            throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_APP_ID_MISSING);
+        }
+
+        if (empty($params['signature'])) {
+            throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_SIGN_MISSING);
+        }
+
+        $model = $this->mapper->one(function($query) use(&$params){
+            $query->where('status', SystemApp::ENABLE)->where('app_id', $params['app_id']);
+        });
+
+        if (! $model) {
+            throw new NormalStatusException(t('mineadmin.access_denied'), MineCode::API_AUTH_EXCEPTION);
+        }
+
+        if ($params['signature'] !== $this->getSignature($model['app_secret'], $params)) {
+            throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_SIGN_ERROR);
+        }
+
+        return ['access_token' => app_verify()->getToken($params)];
+    }
+
+    /**
+     * 获取签名
+     * @param $appSecret
+     * @param $params
+     * @return string
+     */
+    public function getSignature($appSecret, $params): string
+    {
+        unset($params['signature']);
+
+        $data = [
+            'sign_ver'   => ApiController::SIGN_VERSION,
+            'app_secret' => $appSecret
+        ];
+
+        $data = array_merge($data, $params);
+        ksort($data);
+
+        return md5(http_build_query($data));
     }
 
     /**

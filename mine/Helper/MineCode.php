@@ -37,5 +37,7 @@ class MineCode
     public const API_APP_SECRET_MISSING = 10102;    // 缺少APP SECRET
     public const API_ACCESS_TOKEN_MISSING = 10103;  // 缺少 ACCESS TOKEN
     public const API_PARAMS_ERROR = 10104;          // API参数错误
+    public const API_SIGN_MISSING = 10105;          // 缺少签名
+    public const API_SIGN_ERROR   = 10106;          // 签名错误
     public const API_VERIFY_PASS = 10160;           // API验证通过
 }

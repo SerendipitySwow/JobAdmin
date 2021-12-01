@@ -27,8 +27,8 @@ const routes = {
 		},
 		{
 			path: '/doc',
-			name: 'Doc',
-			component: () => import(/* webpackChunkName: "Doc" */ '@/views/doc/index'),
+			name: 'doc',
+			component: () => import(/* webpackChunkName: "doc" */ '@/views/doc/index'),
 			meta: {
 				title: "接口文档"
 			}
