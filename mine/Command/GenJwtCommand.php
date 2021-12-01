@@ -74,6 +74,8 @@ class GenJwtCommand extends MineCommand
             ));
         }
 
+        $this->info('jwt secret generator successfully:' . $key);
+
     }
 
     protected function getOptions(): array
