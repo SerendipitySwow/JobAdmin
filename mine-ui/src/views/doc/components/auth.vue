@@ -14,7 +14,7 @@
             <el-input v-model="form.app_secret"></el-input>
           </el-form-item>
 
-          <el-button type="primary" size="large" style="width: 100%; margin-top: 5px;" @click="login" :loading="loading">{{ $t('apiDoc.loginBtn') }}</el-button>
+          <el-button type="primary" size="large" class="login-btn" @click="login" :loading="loading">{{ $t('apiDoc.loginBtn') }}</el-button>
         </el-form>
       </el-col>
     </el-row>
@@ -52,11 +52,16 @@ export default {
     },
 
     login() {
-      this.$refs.form.validate( _ => {
+      this.$refs.form.validate(async _ => {
         if (_) {
-          this.$TOOL.data.set('appId', this.form.app_id)
-          this.$TOOL.data.set('apiAuth', true)
-          this.checkAuth()
+          let res = await this.$API.apiDoc.login(this.form)
+          if (res.success && res.code === 200) {
+            this.$TOOL.data.set('appId', this.form.app_id)
+            this.$TOOL.data.set('apiAuth', true)
+            this.checkAuth()
+          } else {
+            this.$message.error(res.message)
+          }
         } else {
           return;
         }
@@ -84,6 +89,20 @@ export default {
 
   .form {
     padding: 30px 20px;
+  }
+  .login-btn {
+    width: 100%;
+    background: linear-gradient(160deg, #fff, #effbff, #dcf6ff);
+    border: 1px solid #a6c4c0;
+    color: #002c36
+  }
+  .login-btn:hover {
+    background: linear-gradient(0deg, #fff, #effbff, #dcf6ff);
+    border: 1px solid #e4e4e4;
+  }
+  .login-btn:active {
+    background: linear-gradient(160deg, #fff, #effbff, #dcf6ff);
+    border: 1px solid #e4e4e4;
   }
 }
 </style>
