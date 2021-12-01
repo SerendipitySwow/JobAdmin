@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Api;
 
 use App\System\Service\SystemAppService;
+use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Exception\NormalStatusException;
 use Mine\Helper\MineCode;
@@ -45,6 +46,30 @@ class ApiController extends MineApi
     {
         $service = container()->get(SystemAppService::class);
         return $this->success($service->getAccessToken($this->request->all()));
+    }
+
+    /**
+     * 登录文档
+     * @GetMapping("v1/docLogin")
+     * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function docLogin(): ResponseInterface
+    {
+        $app_id = $this->request->input('app_id', '');
+        $app_secret = $this->request->input('app_secret', '');
+
+        if (empty($app_id) && empty($app_secret)) {
+            return $this->error(t('mineadmin.api_auth_fail'), MineCode::API_PARAMS_ERROR);
+        }
+
+        $service = container()->get(SystemAppService::class);
+        if (($code = $service->verifyEasyMode($app_id, $app_secret)) !== MineCode::API_VERIFY_PASS) {
+            return $this->error(t('mineadmin.api_auth_fail'), $code);
+        }
+
+        return $this->success();
     }
 
     /**

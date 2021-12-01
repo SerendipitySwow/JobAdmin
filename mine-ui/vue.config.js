@@ -65,6 +65,10 @@ module.exports = {
 						name: "tinymce",
 						test: /[\\/]node_modules[\\/]tinymce[\\/]/
 					},
+					tinymce: {
+						name: "tailwindcss",
+						test: /[\\/]node_modules[\\/]tailwindcss[\\/]/
+					},
 					monacoEditor: {
 						name: "monaco-editor",
 						test: /[\\/]node_modules[\\/]monaco-editor[\\/]/

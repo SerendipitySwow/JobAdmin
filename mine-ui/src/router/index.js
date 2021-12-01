@@ -76,7 +76,6 @@ router.beforeEach(async (to, from, next) => {
 			next()
 		}
 	} else {
-		debugger
 		if (whiteList.includes(to.name)) {
 			beforeEach(to, from)
 			next()
