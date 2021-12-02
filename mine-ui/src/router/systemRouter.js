@@ -31,7 +31,33 @@ const routes = {
 			component: () => import(/* webpackChunkName: "doc" */ '@/views/doc/index'),
 			meta: {
 				title: "接口文档"
-			}
+			},
+			children: [
+				{
+					path: "/interfaceList",
+					name: "interfaceList",
+					meta: {
+						title: "接口列表",
+					},
+					component: () => import(/* webpackChunkName: "interfaceList" */ '@/views/doc/page/interfaceList'),
+				},
+				{
+					path: "/interfaceCode",
+					name: "interfaceCode",
+					meta: {
+						title: "代码释义",
+					},
+					component: () => import(/* webpackChunkName: "interfaceCode" */ '@/views/doc/page/interfaceCode'),
+				},
+				{
+					path: "/signature",
+					name: "signature",
+					meta: {
+						title: "签名算法",
+					},
+					component: () => import(/* webpackChunkName: "signature" */ '@/views/doc/page/signature'),
+				}
+			]
 		}
 	],
 	dashboard: {

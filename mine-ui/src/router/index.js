@@ -11,7 +11,7 @@ import {beforeEach, afterEach} from './scrollBehavior'
 //系统路由
 const routes = sysRouter.systemRouter
 
-const whiteList = ['login', 'doc', 'test']
+const whiteList = ['login', 'doc', 'interfaceList', 'interfaceCode', 'signature', 'test']
 const defaultRoutePath = '/dashboard'
 
 //系统特殊路由

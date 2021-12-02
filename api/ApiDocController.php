@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Api;
 
 use App\System\Service\SystemAppService;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Helper\MineCode;
 use Mine\MineApi;
@@ -26,6 +27,12 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ApiDocController extends MineApi
 {
+    /**
+     * @Inject
+     * @var SystemAppService
+     */
+    protected $systemAppService;
+
     /**
      * 登录文档
      * @PostMapping("login")
@@ -42,8 +49,7 @@ class ApiDocController extends MineApi
             return $this->error(t('mineadmin.api_auth_fail'), MineCode::API_PARAMS_ERROR);
         }
 
-        $service = container()->get(SystemAppService::class);
-        if (($code = $service->verifyEasyMode($app_id, $app_secret)) !== MineCode::API_VERIFY_PASS) {
+        if (($code = $this->systemAppService->verifyEasyMode($app_id, $app_secret)) !== MineCode::API_VERIFY_PASS) {
             return $this->error(t('mineadmin.api_auth_fail'), $code);
         }
 

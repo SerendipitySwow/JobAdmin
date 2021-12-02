@@ -47,7 +47,7 @@ export default {
   methods: {
     checkAuth() {
       if (this.$TOOL.data.get('apiAuth')) {
-        window.location.reload()
+        this.$router.push({ name: 'interfaceList' })
       }
     },
 

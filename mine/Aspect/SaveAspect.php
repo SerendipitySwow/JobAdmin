@@ -46,6 +46,7 @@ class SaveAspect extends AbstractAspect
      * @throws Exception
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Exception
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {

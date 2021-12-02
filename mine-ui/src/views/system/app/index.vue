@@ -123,8 +123,14 @@
         </el-table-column>
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="180" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="210" v-if="!isRecycle">
           <template #default="scope">
+
+            <el-button
+              type="text"
+              size="small"
+              @click="apidoc(scope.row)"
+            >查看文档</el-button>
 
             <el-button
               type="text"
@@ -151,7 +157,7 @@
         </el-table-column>
 
         <!-- 回收站操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="180" v-else>
+        <el-table-column label="操作" fixed="right" align="right" width="210" v-else>
           <template #default="scope">
 
             <el-button
@@ -232,6 +238,13 @@
         this.$nextTick(() => {
            this.$refs.saveDialog.open()
         })
+      },
+
+      // 查看文档
+      apidoc(row) {
+        this.$TOOL.data.set('apiAuth', true)
+        this.$TOOL.data.set('appId', row.id)
+        this.$router.push('/doc')
       },
 
       // 绑定接口

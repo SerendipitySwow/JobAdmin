@@ -5,14 +5,15 @@
         <img src="img/logo.svg" width="54" /> <span class="title">API Document</span>
         <span class="sys_name">MineAdmin</span>
       </div>
-      <el-menu default-active="1" mode="horizontal">
-        <el-menu-item index="1">接口列表</el-menu-item>
-        <el-menu-item index="2">签名算法</el-menu-item>
-        <el-submenu index="3">
-          <el-menu-item index="3-1">
+      <el-menu :default-active="active" mode="horizontal" style="top: -1px">
+        <el-menu-item index="interfaseList" @click="$router.push({ name: 'interfaceList' })">接口列表</el-menu-item>
+        <el-menu-item index="interfaceCode" @click="$router.push({ name: 'interfaceCode' })">代码释义</el-menu-item>
+        <el-menu-item index="signature" @click="$router.push({ name: 'signature' })">签名算法</el-menu-item>
+        <el-submenu index="parent">
+          <el-menu-item index="switchApp" @click="switchApp()">
             <el-icon><el-icon-refresh /></el-icon>切换应用
           </el-menu-item>
-          <el-menu-item index="3-2" @click="$router.push('/')">
+          <el-menu-item index="dashboard" @click="$router.push('/')">
             <el-icon><ma-icon-mineadmin /></el-icon>返回后台
           </el-menu-item>
         </el-submenu>
@@ -28,6 +29,26 @@
     </el-footer>
   </el-container>
 </template>
+
+<script>
+export default {
+  created () {
+    this.active = this.$route.name
+  },
+  data () {
+    return {
+      active: '',
+    }
+  },
+  methods: {
+    switchApp () {
+      this.$TOOL.data.set('apiAuth', false)
+      this.$TOOL.data.set('appId', null)
+      this.$router.push({ name: 'doc' })
+    }
+  }
+}
+</script>
 
 <style scoped lang="scss">
 .logo {
