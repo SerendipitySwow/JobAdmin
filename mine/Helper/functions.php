@@ -14,6 +14,7 @@ use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\ApplicationContext;
 use Mine\Helper\LoginUser;
 use Mine\Helper\AppVerify;
+use Mine\Helper\Id;
 use Psr\Log\LoggerInterface;
 
 if (! function_exists('container')) {
@@ -170,5 +171,16 @@ if (! function_exists('app_verify')) {
     function app_verify(string $scene = 'api'): AppVerify
     {
         return new AppVerify($scene);
+    }
+}
+
+if (! function_exists('snowflake')) {
+    /**
+     * 生成雪花ID
+     * @return String
+     */
+    function snowflake_id(): String
+    {
+        return (new Id())->getId();
     }
 }
