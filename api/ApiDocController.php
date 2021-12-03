@@ -14,6 +14,7 @@ namespace Api;
 
 use App\System\Service\SystemAppService;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Helper\MineCode;
 use Mine\MineApi;
@@ -54,6 +55,17 @@ class ApiDocController extends MineApi
         }
 
         return $this->success();
+    }
+
+    /**
+     * 通过app id获取数据
+     * @GetMapping("readApp/{id}")
+     * @param string $id
+     * @return ResponseInterface
+     */
+    public function readApp(string $id): ResponseInterface
+    {
+        return $this->success($this->systemAppService->readByAppId($id));
     }
 
 }

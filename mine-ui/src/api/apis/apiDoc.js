@@ -17,4 +17,15 @@ export default {
     })
   },
 
+  /**
+   * 获取一个app信息
+   * @returns
+   */
+   readApp (appId = null) {
+    return request({
+      url: 'apiDoc/readApp/' + appId,
+      method: 'get'
+    })
+  },
+
 }

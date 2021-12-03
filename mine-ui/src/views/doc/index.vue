@@ -10,6 +10,12 @@ export default {
   components: {
     AuthPage,
     MainPage
+  },
+
+  created () {
+    if (this.$TOOL.data.get('apiAuth')) {
+      this.$router.push({name: 'interfaceList'})
+    }
   }
 }
 </script>

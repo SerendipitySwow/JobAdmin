@@ -158,4 +158,15 @@ class SystemAppService extends AbstractService
     {
         return app_verify()->check($accessToken) ? MineCode::API_VERIFY_PASS : MineCode::API_PARAMS_ERROR;
     }
+
+    /**
+     * 通过app_id获取app信息
+     * @param string $appId
+     */
+    public function readByAppId(string $appId)
+    {
+        return $this->mapper->one(function($query) use($appId) {
+            $query->where('app_id', $appId);
+        });
+    }
 }

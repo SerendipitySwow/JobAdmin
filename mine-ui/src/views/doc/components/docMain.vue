@@ -6,7 +6,7 @@
         <span class="sys_name">MineAdmin</span>
       </div>
       <el-menu :default-active="active" mode="horizontal" style="top: -1px">
-        <el-menu-item index="interfaseList" @click="$router.push({ name: 'interfaceList' })">接口列表</el-menu-item>
+        <el-menu-item index="interfaceList" @click="$router.push({ name: 'interfaceList' })">接口列表</el-menu-item>
         <el-menu-item index="interfaceCode" @click="$router.push({ name: 'interfaceCode' })">代码释义</el-menu-item>
         <el-menu-item index="signature" @click="$router.push({ name: 'signature' })">签名算法</el-menu-item>
         <el-submenu index="parent">
@@ -34,6 +34,7 @@
 export default {
   created () {
     this.active = this.$route.name
+    this.$router.push({ name: 'interfaceList' })
   },
   data () {
     return {
@@ -44,7 +45,7 @@ export default {
     switchApp () {
       this.$TOOL.data.set('apiAuth', false)
       this.$TOOL.data.set('appId', null)
-      this.$router.push({ name: 'doc' })
+      this.$router.push({ name: 'interfaceList' })
     }
   }
 }
