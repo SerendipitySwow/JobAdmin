@@ -35,7 +35,7 @@ class CreateSystemApiLogTable extends Migration
             $table->addColumn('timestamp', 'access_time', ['precision' => 0, 'comment' => '访问时间'])->nullable();
             $table->addColumn('string', 'remark', ['length' => 255, 'comment' => '备注'])->nullable();
             $table->primary('id');
-            $table->index(['app_id', 'api_id']);
+            $table->index(['api_id']);
         });
     }
 
