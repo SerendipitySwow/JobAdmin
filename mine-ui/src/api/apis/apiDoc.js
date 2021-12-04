@@ -18,12 +18,12 @@ export default {
   },
 
   /**
-   * 获取一个app信息
+   * 获取app信息和接口列表
    * @returns
    */
-   readApp (appId = null) {
+   getAppAndInterfaceList (appId = null) {
     return request({
-      url: 'apiDoc/readApp/' + appId,
+      url: 'apiDoc/getAppAndInterfaceList/' + appId,
       method: 'get'
     })
   },

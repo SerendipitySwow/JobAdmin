@@ -160,13 +160,12 @@ class SystemAppService extends AbstractService
     }
 
     /**
-     * 通过app_id获取app信息
+     * 通过app_id获取app信息和接口数据
      * @param string $appId
+     * @return array
      */
-    public function readByAppId(string $appId)
+    public function getAppAndInterfaceList(string $appId): array
     {
-        return $this->mapper->one(function($query) use($appId) {
-            $query->where('app_id', $appId);
-        });
+        return $this->mapper->getAppAndInterfaceList($appId);
     }
 }

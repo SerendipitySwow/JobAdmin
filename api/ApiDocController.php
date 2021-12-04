@@ -58,14 +58,14 @@ class ApiDocController extends MineApi
     }
 
     /**
-     * 通过app id获取数据
-     * @GetMapping("readApp/{id}")
+     * 通过app id获取接口数据
+     * @GetMapping("getAppAndInterfaceList/{id}")
      * @param string $id
      * @return ResponseInterface
      */
-    public function readApp(string $id): ResponseInterface
+    public function getAppAndInterfaceList(string $id): ResponseInterface
     {
-        return $this->success($this->systemAppService->readByAppId($id));
+        return $this->success($this->systemAppService->getAppAndInterfaceList($id));
     }
 
 }

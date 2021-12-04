@@ -2,41 +2,76 @@
   <el-card shadow="never" class="decs">
     <h2>{{ appInfo.app_name }}</h2>
     <div class="decs-list">
-      <p>最后更新时间：{{ appInfo.updated_at }}</p>
+      <el-divider content-position="left">最后更新时间</el-divider>
+      <p>{{ appInfo.updated_at }}</p>
+      <el-divider content-position="left">应用介绍</el-divider>
       <div class="description" v-html="appInfo.description"></div>
     </div>
   </el-card>
   <el-card shadow="never" class="card" style="margin-top: 10px;">
     <el-collapse v-model="activeName" accordion>
-      <el-collapse-item title="Consistency" name="1">
-        <div>
-          Consistent with real life: in line with the process and logic of real
-          life, and comply with languages and habits that the users are used to;
+      <el-collapse-item
+        :title="item.name"
+        :name="index.toString()" v-for="(item, index) in appInfo.apis"
+        :key="index"
+      >
+        <div class="miaoshu">
+          <el-tooltip content="点击复制">
+            <el-tag
+              size="large"
+              class="interface-url"
+              @click="async () => {
+                try{
+                  await this.clipboard(`/api/v1/${item.access_name}`)
+                  $message.success(this.$t('sys.copy_success'))
+                } catch(e) {
+                  $message.error(this.$t('sys.copy_fail'))
+                }
+              }">
+              /api/v1/{{ item.access_name }}
+            </el-tag>
+          </el-tooltip>
+          <el-tag type="success" size="large" v-if="item.request_mode === 'A' ">ALL</el-tag>
+          <el-tag type="warning" size="large" v-if="item.request_mode === 'P' ">POST</el-tag>
+          <el-tag type="danger" size="large" v-if="item.request_mode === 'G' ">GET</el-tag>
+          <el-button type="primary" class="details" @click="details(item)">查看详情</el-button>
         </div>
         <div>
-          Consistent within interface: all elements should be consistent, such
-          as: design style, icons and texts, position of elements, etc.
+          <el-divider content-position="left">更新时间</el-divider>
+          <p>{{ item.updated_at }}</p>
         </div>
       </el-collapse-item>
     </el-collapse>
   </el-card>
+
+  <details-page ref="details" />
 </template>
 
 <script>
+import DetailsPage from './components/details'
 export default {
+  components: {
+    DetailsPage
+  },
   async created() {
     await this.getAppInfo()
   },
   data () {
     return {
-      activeName: '1',
+      activeName: '0',
       appInfo: {},
     }
   },
   methods: {
     async getAppInfo() {
-      let res = await this.$API.apiDoc.readApp(this.$TOOL.data.get('appId'))
+      let res = await this.$API.apiDoc.getAppAndInterfaceList(this.$TOOL.data.get('appId'))
       this.appInfo = res.data
+    },
+
+    details(row) {
+      this.$nextTick(() => {
+        this.$refs.details.open(row)
+      })
     }
   }
 
@@ -45,16 +80,22 @@ export default {
 
 <style scoped>
 .decs {
-  background: linear-gradient(160deg, #fff, #effbff, #dcf6ff);
+  /* background: linear-gradient(160deg, #fff, #effbff, #dcf6ff); */
   font-size: 14px;
-}
-.decs h2 {
-  margin-bottom: 15px;
 }
 .decs-list p {
   line-height: 25px;
 }
 .decs-list .description {
   line-height: 25px;
+}
+.interface-url {
+  cursor: pointer;
+}
+.miaoshu {
+  position: relative;
+}
+.details {
+  position: relative; top: -1px; margin-left: 30px;
 }
 </style>
