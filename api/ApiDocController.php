@@ -12,6 +12,7 @@
 declare(strict_types=1);
 namespace Api;
 
+use App\System\Service\SystemApiService;
 use App\System\Service\SystemAppService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\GetMapping;
@@ -33,6 +34,12 @@ class ApiDocController extends MineApi
      * @var SystemAppService
      */
     protected $systemAppService;
+
+    /**
+     * @Inject
+     * @var SystemApiService
+     */
+    protected $systemApiService;
 
     /**
      * 登录文档
@@ -66,6 +73,16 @@ class ApiDocController extends MineApi
     public function getAppAndInterfaceList(string $id): ResponseInterface
     {
         return $this->success($this->systemAppService->getAppAndInterfaceList($id));
+    }
+
+    /**
+     * @GetMapping("getColumnList/{id}")
+     * @param string $id
+     * @return ResponseInterface
+     */
+    public function getColumnList(string $id): ResponseInterface
+    {
+        return $this->success($this->systemApiService->getColumnListByApiId($id));
     }
 
 }

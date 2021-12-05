@@ -120,7 +120,7 @@ class SystemAppService extends AbstractService
         ];
 
         $data = array_merge($data, $params);
-        ksort($data);
+        krsort($data);
 
         return md5(http_build_query($data));
     }

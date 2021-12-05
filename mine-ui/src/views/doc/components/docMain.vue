@@ -45,7 +45,7 @@ export default {
     switchApp () {
       this.$TOOL.data.set('apiAuth', false)
       this.$TOOL.data.set('appId', null)
-      this.$router.push({ name: 'interfaceList' })
+      this.$router.push({ name: 'doc' })
     }
   }
 }

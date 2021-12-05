@@ -16,19 +16,23 @@
 					</el-select>
         </el-form-item>
 
-        <el-form-item label="是否必填" prop="is_required">
+        <el-form-item label="是否必填" prop="is_required" v-if="form.type === '0'">
             <el-radio-group v-model="form.is_required" :disabled="mode === 'show'">
                 <el-radio label="0">是</el-radio>
                 <el-radio label="1">否</el-radio>
             </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="默认值" prop="default_value" v-if="form.is_required === '1'">
+        <el-form-item label="默认值" prop="default_value" v-if="form.is_required === '1' && form.type === '0'">
             <el-input v-model="form.default_value" :disabled="mode === 'show'" clearable placeholder="请输入默认值" />
         </el-form-item>
 
-        <el-form-item label="字段说明" prop="description">
+        <el-form-item label="字段说明" prop="description" v-if="form.type === '0'">
             <editor v-model="form.description" :disabled="mode === 'show'" clearable placeholder="请输入字段说明"/>
+        </el-form-item>
+
+        <el-form-item label="返回示例" prop="description" v-if="form.type === '1'">
+          <ma-json-editor v-model="form.description" />
         </el-form-item>
 
 				<el-form-item label="状态" prop="status">
@@ -54,11 +58,13 @@
 
 <script>
   import editor from '@/components/scEditor'
+  import maJsonEditor from '@/components/maJsonEditor'
 
   export default {
     emits: ['success', 'closed'],
     components: {
-      editor
+      editor,
+      maJsonEditor
     },
     data() {
       return {

@@ -9,7 +9,10 @@
     </div>
   </el-card>
   <el-card shadow="never" class="card" style="margin-top: 10px;">
-    <el-collapse v-model="activeName" accordion>
+    <el-button type="primary" @click="openGlobalParams">设置全局参数</el-button>
+    <el-button type="danger" @click="clearGlobalParams">清除全局参数</el-button>
+    <el-button type="warning" @click="genSign">生成请求AccessToken参数</el-button>
+    <el-collapse v-model="activeName" accordion style="margin-top: 15px;">
       <el-collapse-item
         :title="item.name"
         :name="index.toString()" v-for="(item, index) in appInfo.apis"
@@ -72,7 +75,56 @@ export default {
       this.$nextTick(() => {
         this.$refs.details.open(row)
       })
-    }
+    },
+
+    async genSign() {
+      let timestamp = Date.now()
+      let obj = {
+        app_id: this.appInfo.app_id,
+        timestamp,
+        app_secret: this.appInfo.app_secret,
+        sign_ver: "1.0",
+      }
+
+      let keysSorted = Object.keys(obj).sort((x, y) => {
+        if(x < y) return 1
+        else if(x > y) return -1
+        else return 0
+      })
+
+      let newObj = {}
+
+      for (let i=0; i < keysSorted.length; i++) {
+        newObj[keysSorted[i]] = obj[keysSorted[i]];
+      }
+
+      let signature = this.$TOOL.crypto.MD5(JSON.stringify(newObj))
+
+      obj = {
+        app_id: this.appInfo.app_id,
+        signature,
+        timestamp,
+      }
+      try{
+        await this.clipboard(JSON.stringify(obj))
+        this.$message.success('生成成功，已复制到剪切板')
+      } catch(e) {
+        $message.error(this.$t('sys.copy_fail'))
+      }
+    },
+
+    openGlobalParams() {
+
+    },
+
+    setGlobalParams() {
+      // this.$TOOL.session.remove('globalParams')
+    },
+
+    clearGlobalParams() {
+      this.$TOOL.session.remove('globalParams')
+      this.$message.success('清除成功')
+    },
   }
 
 }

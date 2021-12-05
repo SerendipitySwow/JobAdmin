@@ -28,4 +28,15 @@ export default {
     })
   },
 
+  /**
+   * 获取字段列表
+   * @returns
+   */
+   getColumnList (apiId = null) {
+    return request({
+      url: 'apiDoc/getColumnList/' + apiId,
+      method: 'get'
+    })
+  },
+
 }

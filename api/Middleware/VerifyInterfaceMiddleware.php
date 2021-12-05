@@ -78,6 +78,7 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
      * @return int
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function auth(ServerRequestInterface $request): int
     {

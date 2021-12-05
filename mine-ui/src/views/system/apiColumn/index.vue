@@ -62,7 +62,7 @@
             <el-form label-width="80px">
 
             <el-form-item label="是否必填" prop="is_required">
-                <el-input v-model="queryParams.is_required" placeholder="是否必填" clearable></el-input>
+              <el-input v-model="queryParams.is_required" placeholder="是否必填" clearable></el-input>
             </el-form-item>
 
             <el-form-item label="状态" prop="status">
@@ -115,16 +115,18 @@
         <el-table-column
            label="是否必填"
            prop="is_required"
+           v-if="type === 'request'"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.is_required === '0'" type="success">非必填</el-tag>
-            <el-tag v-else type="danger">必填</el-tag>
+            <el-tag v-if="scope.row.is_required === '0'" type="danger">必填</el-tag>
+            <el-tag v-else type="success">非必填</el-tag>
           </template>
         </el-table-column>
 
         <el-table-column
            label="默认值"
            prop="default_value"
+           v-if="type === 'request'"
         />
         <el-table-column
            label="状态"
