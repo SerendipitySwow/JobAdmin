@@ -48,12 +48,16 @@
   </el-card>
 
   <details-page ref="details" />
+
+  <global-params ref="GlobalParams" />
 </template>
 
 <script>
 import DetailsPage from './components/details'
+import GlobalParams from './components/globalParams'
 export default {
   components: {
+    GlobalParams,
     DetailsPage
   },
   async created() {
@@ -63,6 +67,7 @@ export default {
     return {
       activeName: '0',
       appInfo: {},
+      dialogVisible: false,
     }
   },
   methods: {
@@ -114,11 +119,9 @@ export default {
     },
 
     openGlobalParams() {
-
-    },
-
-    setGlobalParams() {
-      // this.$TOOL.session.remove('globalParams')
+      this.$nextTick(() => {
+        this.$refs.GlobalParams.open()
+      })
     },
 
     clearGlobalParams() {
@@ -130,7 +133,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+:deep(.el-dialog__body) {
+  padding-top: 0 !important;
+}
 .decs {
   /* background: linear-gradient(160deg, #fff, #effbff, #dcf6ff); */
   font-size: 14px;
