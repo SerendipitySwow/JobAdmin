@@ -32,11 +32,22 @@ export default {
    * 获取字段列表
    * @returns
    */
-   getColumnList (apiId = null) {
+  getColumnList (apiId = null) {
     return request({
       url: 'apiDoc/getColumnList/' + apiId,
       method: 'get'
     })
   },
 
+  /**
+   * 模拟请求
+   * @returns
+   */
+  simRequest (data) {
+    return request({
+      url: 'apiDoc/simRequest',
+      method: 'post',
+      data
+    })
+  },
 }

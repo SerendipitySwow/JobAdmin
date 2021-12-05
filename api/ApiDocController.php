@@ -15,6 +15,7 @@ namespace Api;
 use App\System\Service\SystemApiService;
 use App\System\Service\SystemAppService;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Guzzle\ClientFactory;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Helper\MineCode;
@@ -83,6 +84,32 @@ class ApiDocController extends MineApi
     public function getColumnList(string $id): ResponseInterface
     {
         return $this->success($this->systemApiService->getColumnListByApiId($id));
+    }
+
+    /**
+     * 模拟请求
+     * @PostMapping("simRequest")
+     * @return ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function simRequest(): ResponseInterface
+    {
+//        try {
+            $client = container()->get(ClientFactory::class)->create();
+            $params = $this->request->all();
+            $response = $client->request($params['method'], $params['url'], [
+                'header' => $params['header'],
+                'query' => $params['query'],
+                'form_params' => $params['body'],
+            ]);
+
+            print_r($response);
+            return $this->success();
+//        } catch (\Throwable $e) {
+//            return $this->error();
+//        }
     }
 
 }

@@ -78,17 +78,21 @@
           <el-divider content-position="left">返回示例</el-divider>
           <ma-highlight :code="apiData.response" lang="js" />
         </el-tab-pane>
-        <el-tab-pane label="模拟请求" name="request">模拟请求</el-tab-pane>
+        <el-tab-pane label="模拟请求" name="request">
+          <sim-request :url="apiData.access_name" />
+        </el-tab-pane>
       </el-tabs>
     </el-main>
   </el-drawer>
 </template>
 
 <script>
+import simRequest from './simRequest'
 import maHighlight from '@/components/maHighlight'
 export default {
   components: {
-    maHighlight
+    maHighlight,
+    simRequest
   },
   data () {
     return {
