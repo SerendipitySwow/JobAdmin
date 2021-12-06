@@ -3,6 +3,9 @@
 		<div class="screen panel-item hidden-sm-and-down" @click="lockScreen">
 			<el-icon><el-icon-lock /></el-icon>
 		</div>
+		<div class="screen panel-item hidden-sm-and-down" @click="goDoc">
+			<el-icon><sc-icon-file-word /></el-icon>
+		</div>
 		<div class="screen panel-item hidden-sm-and-down" @click="screen">
 			<el-icon><el-icon-full-screen /></el-icon>
 		</div>
@@ -153,6 +156,11 @@
 					this.$router.push('/lockScreen')
 				})
 			},
+			// 跳转文档
+			goDoc() {
+				this.$TOOL.data.set('apiAuth', false)
+				this.$router.push({ name: 'doc' })
+			}
 		}
 	}
 </script>
