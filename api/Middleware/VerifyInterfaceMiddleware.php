@@ -156,6 +156,7 @@ class VerifyInterfaceMiddleware implements MiddlewareInterface
      * @return ResponseInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function run(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

@@ -101,6 +101,8 @@ class SystemAppService extends AbstractService
             throw new NormalStatusException(t('mineadmin.api_auth_fail'), MineCode::API_SIGN_ERROR);
         }
 
+        $params['id'] = $model['id'];
+
         return ['access_token' => app_verify()->getToken($params)];
     }
 

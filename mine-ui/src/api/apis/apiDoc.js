@@ -37,17 +37,5 @@ export default {
       url: 'apiDoc/getColumnList/' + apiId,
       method: 'get'
     })
-  },
-
-  /**
-   * 模拟请求
-   * @returns
-   */
-  simRequest (data) {
-    return request({
-      url: 'apiDoc/simRequest',
-      method: 'post',
-      data
-    })
-  },
+  }
 }
