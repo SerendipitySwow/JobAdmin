@@ -20,10 +20,10 @@
             </div>
             <div class="user-info-main">
               <ul>
-                <li><label><i class="el-icon-user"></i></label><span>{{ userInfo.user.email }}</span></li>
-                <li><label><i class="el-icon-present"></i></label><span> {{ userInfo.user.user_type == '100' ? '系统用户' : '其他类型' }}</span></li>
-                <li><label><i class="el-icon-mobile"></i></label><span>{{ userInfo.user.phone }}</span></li>
-                <li><label><i class="el-icon-coin"></i></label><span>{{ userInfo.roles[0] }}</span></li>
+                <li><label><el-icon><el-icon-user /></el-icon></label><span>{{ userInfo.user.email }}</span></li>
+                <li><label><el-icon><el-icon-present /></el-icon></label><span> {{ userInfo.user.user_type == '100' ? '系统用户' : '其他类型' }}</span></li>
+                <li><label><el-icon><el-icon-phone /></el-icon></label><span>{{ userInfo.user.phone }}</span></li>
+                <li><label><el-icon><el-icon-coin /></el-icon></label><span>{{ userInfo.roles[0] }}</span></li>
               </ul>
             </div>
             <div class="user-info-bottom">
