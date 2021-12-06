@@ -32,4 +32,16 @@ class SystemApiMapper extends AbstractMapper
     {
         return $query;
     }
+
+    /**
+     * 通过api获取字段列表
+     * @param string $id
+     * @return array
+     */
+    public function getColumnListByApiId(string $id): array
+    {
+        return $this->model::query()->where('id', $id)->with(['apiColumn' => function($query) {
+            $query->where('status', $this->model::ENABLE);
+        }])->first()->toArray();
+    }
 }

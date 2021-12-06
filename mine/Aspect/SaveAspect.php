@@ -65,7 +65,7 @@ class SaveAspect extends AbstractAspect
             $instance->getPrimaryKeyType() === 'int' &&
             empty($instance->{$instance->getKeyName()})
         ) {
-            $instance->setPrimaryKeyValue($instance->genId());
+            $instance->setPrimaryKeyValue(snowflake_id());
         }
         return $proceedingJoinPoint->process();
     }

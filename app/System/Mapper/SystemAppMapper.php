@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\System\Mapper;
 
+use App\System\Model\SystemApi;
 use App\System\Model\SystemApp;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
@@ -79,5 +80,18 @@ class SystemAppMapper extends AbstractMapper
             }
         }
         return $ids;
+    }
+
+    /**
+     * 通过app_id获取app信息和接口数据
+     * @param string $appId
+     * @return array
+     */
+    public function getAppAndInterfaceList(string $appId): array
+    {
+        return $this->model::query()->where('app_id', $appId)
+            ->with(['apis' => function($query) {
+                $query->where('status', '0');
+            }])->first(['id', 'app_id', 'app_secret', 'app_name', 'updated_at', 'description'])->toArray();
     }
 }

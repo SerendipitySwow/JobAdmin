@@ -22,4 +22,14 @@ class SystemApiService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * 获取字段列
+     * @param string $id
+     * @return array
+     */
+    public function getColumnListByApiId(string $id): array
+    {
+        return $this->mapper->getColumnListByApiId($id);
+    }
 }

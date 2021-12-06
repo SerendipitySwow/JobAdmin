@@ -120,7 +120,7 @@ class SystemAppService extends AbstractService
         ];
 
         $data = array_merge($data, $params);
-        ksort($data);
+        krsort($data);
 
         return md5(http_build_query($data));
     }
@@ -157,5 +157,15 @@ class SystemAppService extends AbstractService
     public function verifyNormalMode(string $accessToken): int
     {
         return app_verify()->check($accessToken) ? MineCode::API_VERIFY_PASS : MineCode::API_PARAMS_ERROR;
+    }
+
+    /**
+     * 通过app_id获取app信息和接口数据
+     * @param string $appId
+     * @return array
+     */
+    public function getAppAndInterfaceList(string $appId): array
+    {
+        return $this->mapper->getAppAndInterfaceList($appId);
     }
 }

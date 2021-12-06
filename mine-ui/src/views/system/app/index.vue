@@ -243,8 +243,8 @@
       // 查看文档
       apidoc(row) {
         this.$TOOL.data.set('apiAuth', true)
-        this.$TOOL.data.set('appId', row.id)
-        this.$router.push('/doc')
+        this.$TOOL.data.set('appId', row.app_id)
+        this.$router.push({ name: 'interfaceList' })
       },
 
       // 绑定接口
