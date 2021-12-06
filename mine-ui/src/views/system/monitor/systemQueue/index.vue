@@ -2,6 +2,7 @@
   <el-container>
     <el-header>
       <div class="left-panel">
+
         <el-button
           type="danger"
           plain
@@ -49,16 +50,32 @@
                 <el-input v-model="queryParams.queue_content" placeholder="队列内容" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="队列内容" prop="log_content">
-                <el-input v-model="queryParams.log_content" placeholder="队列内容" clearable></el-input>
+            <el-form-item label="日志内容" prop="log_content">
+                <el-input v-model="queryParams.log_content" placeholder="日志内容" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复" prop="produce_status">
-                <el-input v-model="queryParams.produce_status" placeholder="生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复" clearable></el-input>
+            <el-form-item label="生产状态" prop="produce_status">
+
+            <el-select v-model="queryParams.produce_status" style="width:100%" clearable placeholder="生产状态">
+                <el-option
+                    v-for="(item, index) in queue_produce_status_data"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
             </el-form-item>
 
-            <el-form-item label="消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复" prop="consume_status">
-                <el-input v-model="queryParams.consume_status" placeholder="消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复" clearable></el-input>
+            <el-form-item label="消费状态" prop="consume_status">
+
+            <el-select v-model="queryParams.consume_status" style="width:100%" clearable placeholder="消费状态">
+                <el-option
+                    v-for="(item, index) in queue_consume_status_data"
+                    :key="index"
+                    :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
             </el-form-item>
 
             <el-form-item label="延迟时间（秒）" prop="delay_time">
@@ -107,17 +124,31 @@
            prop="queue_content"
         />
         <el-table-column
-           label="队列内容"
+           label="日志内容"
            prop="log_content"
         />
+
+				<el-table-column
+					label="生产状态"
+					prop="produce_status"
+				>
+					<template #default="scope">
+						<ma-dict-tag  :options="queue_produce_status_data" :value="scope.row.produce_status" />
+					</template>
+
+				</el-table-column>
+
         <el-table-column
-           label="生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复"
-           prop="produce_status"
-        />
-        <el-table-column
-           label="消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复"
+           label="消费状态"
            prop="consume_status"
-        />
+        >
+
+					<template #default="scope">
+						<ma-dict-tag  :options="queue_consume_status_data" :value="scope.row.consume_status" />
+					</template>
+
+				</el-table-column>
+
         <el-table-column
            label="延迟时间（秒）"
            prop="delay_time"
@@ -126,13 +157,6 @@
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
           <template #default="scope">
-
-            <el-button
-              type="text"
-              size="small"
-              @click="tableEdit(scope.row, scope.$index)"
-              v-auth="['system:SystemQueue:update']"
-            >编辑</el-button>
 
             <el-button
               type="text"
@@ -192,6 +216,8 @@
           save: false
         },
 
+        queue_produce_status_data: [],
+        queue_consume_status_data: [],
         column: [],
         povpoerShow: false,
         dateRange:'',
@@ -334,6 +360,12 @@
       // 获取字典数据
       getDictData() {
 
+          this.getDict('queue_produce_status').then(res => {
+              this.queue_produce_status_data = res.data
+          })
+          this.getDict('queue_consume_status').then(res => {
+              this.queue_consume_status_data = res.data
+          })
       }
     }
   }

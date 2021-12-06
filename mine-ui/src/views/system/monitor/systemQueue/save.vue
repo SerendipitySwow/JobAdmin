@@ -22,16 +22,28 @@
             <el-input v-model="form.queue_content" clearable placeholder="请输入队列内容" />
         </el-form-item>
 
-        <el-form-item label="队列内容" prop="log_content">
-            <el-input v-model="form.log_content" clearable placeholder="请输入队列内容" />
+        <el-form-item label="日志内容" prop="log_content">
+            <el-input v-model="form.log_content" clearable placeholder="请输入日志内容" />
         </el-form-item>
 
         <el-form-item label="生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复" prop="produce_status">
-            <el-input v-model="form.produce_status" clearable placeholder="请输入生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复" />
+            <el-select v-model="form.produce_status" style="width:100%" clearable placeholder="请选择生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复">
+                <el-option
+                    v-for="(item, index) in queue_produce_status_data"
+                    :key="index" :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
         </el-form-item>
 
         <el-form-item label="消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复" prop="consume_status">
-            <el-input v-model="form.consume_status" clearable placeholder="请输入消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复" />
+            <el-select v-model="form.consume_status" style="width:100%" clearable placeholder="请选择消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复">
+                <el-option
+                    v-for="(item, index) in queue_consume_status_data"
+                    :key="index" :label="item.label"
+                    :value="item.value"
+                >{{item.label}}</el-option>
+            </el-select>
         </el-form-item>
 
         <el-form-item label="延迟时间（秒）" prop="delay_time">
@@ -80,6 +92,8 @@
         visible: false,
         isSaveing: false,
         
+        queue_produce_status_data: [],
+        queue_consume_status_data: [],
       }
     },
     async created() {
@@ -133,6 +147,12 @@
       // 获取字典数据
       getDictData() {
         
+          this.getDict('queue_produce_status').then(res => {
+              this.queue_produce_status_data = res.data
+          })
+          this.getDict('queue_consume_status').then(res => {
+              this.queue_consume_status_data = res.data
+          })
       },
 
       

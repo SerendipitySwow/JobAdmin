@@ -70,7 +70,7 @@ class QueueConsumeListener implements ListenerInterface
     public function beforeConsume($message){
         $condition = ['uuid'=>$this->uuid];
         $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_DOING];
-        $this->service->update($condition,$data);
+        $this->service->updateByCondition($condition,$data);
     }
 
     /**
@@ -92,7 +92,7 @@ class QueueConsumeListener implements ListenerInterface
     public function afterConsume($message){
         $condition = ['uuid'=>$this->uuid];
         $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_SUCCESS];
-        $this->service->update($condition,$data);
+        $this->service->updateByCondition($condition,$data);
     }
     /**
      * Description:消费失败
@@ -105,6 +105,6 @@ class QueueConsumeListener implements ListenerInterface
         if($this->throwable){
             $data['log_content'] = $this->throwable->getMessage();
         }
-        $this->service->update($condition,$data);
+        $this->service->updateByCondition($condition,$data);
     }
 }

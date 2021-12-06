@@ -52,6 +52,7 @@ class SystemQueueMessageService extends AbstractService
             //获取所有用户Id
             $userIdArr = $this->userService->pluck(['status'=>SystemUser::USER_NORMAL],'id');
         }
+        $data['send_by'] = $this->send_by ?: user()->getId();
         $messageId = array_map(function($userId) use ($data){
             $data['receive_by'] = $userId;
             return $this->mapper->save($data);

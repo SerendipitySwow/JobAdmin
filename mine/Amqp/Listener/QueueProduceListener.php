@@ -124,7 +124,7 @@ class QueueProduceListener implements ListenerInterface
         if($this->throwable){
             $data['log_content'] = $this->throwable->getMessage();
         }
-        $this->service->update($condition,$data);
+        $this->service->updateByCondition($condition,$data);
 
     }
 }
