@@ -133,14 +133,6 @@ trait MapperTrait
             } else {
                 $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
             }
-        } else {
-            $model = new $this->model;
-            if (in_array('sort', $model->getFillable())) {
-                $query->orderBy('sort', 'desc');
-            }
-            if (in_array('id', $model->getFillable())) {
-                $model->incrementing ? $query->orderBy('id', 'desc') : $query->orderBy('id');
-            }
         }
 
         return $query;
