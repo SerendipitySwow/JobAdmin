@@ -174,10 +174,11 @@ if (! function_exists('app_verify')) {
     }
 }
 
-if (! function_exists('snowflake')) {
+if (! function_exists('snowflake_id')) {
     /**
      * 生成雪花ID
      * @return String
+     * @throws Exception
      */
     function snowflake_id(): String
     {
