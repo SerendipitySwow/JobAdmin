@@ -436,18 +436,18 @@ class SystemUserService extends AbstractService
      */
     public function updateInfo(array $params): bool
     {
-        unset($params['password']);
-
         if (!isset($params['id'])) {
             return false;
         }
 
-        $res = ($this->mapper->getModel())::query()
-            ->where('id', $params['id'])
-            ->update($params) > 0;
+        $model = $this->mapper->getModel()::find($params['id']);
+        unset($params['id'], $params['password']);
+        foreach ($params as $key => $param) {
+            $model[$key] = $param;
+        }
 
-        $this->clearCache((string) $params['id']);
-        return $res;
+        $this->clearCache((string) $model['id']);
+        return $model->save();
     }
 
     /**

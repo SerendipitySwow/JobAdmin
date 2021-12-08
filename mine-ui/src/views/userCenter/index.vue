@@ -259,6 +259,7 @@ export default {
       this.$refs.formUser.validate( async (valid) => {
         if (valid) {
           this.formUser.avatar = undefined
+          this.formUser.backend_setting = undefined
           this.infoLoading = true
           let res = await this.$API.user.updateInfo(this.formUser)
           this.infoLoading = false
@@ -313,7 +314,7 @@ export default {
     async saveSetting () {
       this.formSetting = {
         id: this.formUser.id,
-        backend_setting: JSON.stringify(this.config)
+        backend_setting: this.config
       }
       this.settingLoading = true
       let res = await this.$API.user.updateInfo(this.formSetting)

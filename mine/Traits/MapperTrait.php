@@ -279,7 +279,11 @@ trait MapperTrait
     public function update(int $id, array $data): bool
     {
         $this->filterExecuteAttributes($data, true);
-        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data) > 0;
+        $model = $this->model::find($id);
+        foreach ($data as $name => $val) {
+            $model[$name] = $val;
+        }
+        return $model->save();
     }
 
     /**

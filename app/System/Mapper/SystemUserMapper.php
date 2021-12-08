@@ -90,9 +90,9 @@ class SystemUserMapper extends AbstractMapper
         $post_ids = $data['post_ids'] ?? [];
         $this->filterExecuteAttributes($data, true);
 
-        $this->model::query()->where('id', $id)->update($data);
+        $result = parent::update($id, $data);
         $user = $this->model::find($id);
-        if ($user) {
+        if ($user && $result) {
             !empty($role_ids) && $user->roles()->sync($role_ids);
             $user->posts()->sync($post_ids);
             return true;
