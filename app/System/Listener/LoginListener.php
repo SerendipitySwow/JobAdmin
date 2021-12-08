@@ -101,7 +101,7 @@ class LoginListener implements ListenerInterface
             return 'Linux';
         }
         if (false !== stripos($agent, 'mac')) {
-            return 'mac';
+            return 'Mac';
         }
         return t('jwt.unknown');
     }
