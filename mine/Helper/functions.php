@@ -117,10 +117,8 @@ if (! function_exists('t')) {
      */
     function t(string $key, array $replace = []): string
     {
-        $language = explode(
-            ',',
-            container()->get(\Mine\MineRequest::class)->getHeaderLine('accept-language')
-        )[0] ?? 'zh_CN';
+        $acceptLanguage = container()->get(\Mine\MineRequest::class)->getHeaderLine('accept-language');
+        $language = !empty($acceptLanguage) ? explode(',',$acceptLanguage)[0] : 'zh_CN';
         return __($key, $replace, $language);
     }
 }
