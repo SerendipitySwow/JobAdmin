@@ -32,6 +32,7 @@ class SystemConfigController extends MineController
     /**
      * 获取系统组配置 （不验证身份和权限）
      * @GetMapping("getSysConfig")
+     * @OperationLog("获取系统组配置")
      */
     public function getSysConfig(): \Psr\Http\Message\ResponseInterface
     {

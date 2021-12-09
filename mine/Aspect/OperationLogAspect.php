@@ -55,9 +55,8 @@ class OperationLogAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        if (isset($proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class])) {
-            $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class];
-        } else {
+        $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class];
+        if (empty($annotation->menuName)) {
             $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class];
         }
         $result = $proceedingJoinPoint->process();
