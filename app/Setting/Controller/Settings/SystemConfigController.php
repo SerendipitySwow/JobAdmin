@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Annotation\DeleteMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Mine\Annotation\Auth;
+use Mine\Annotation\DeleteCache;
 use Mine\Annotation\OperationLog;
 use Mine\Annotation\Permission;
 use Mine\MineController;
@@ -32,6 +33,7 @@ class SystemConfigController extends MineController
     /**
      * 获取系统组配置 （不验证身份和权限）
      * @GetMapping("getSysConfig")
+     * @DeleteCache("crontab,Token:*")
      */
     public function getSysConfig(): \Psr\Http\Message\ResponseInterface
     {
