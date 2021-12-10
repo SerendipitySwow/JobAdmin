@@ -23,6 +23,7 @@ use Psr\Http\Message\ResponseInterface;
  * 信息管理控制器
  * Class MessageController
  * @Controller(prefix="system/queueMessage")
+ * @Auth
  */
 class QueueMessageController extends MineController
 {
