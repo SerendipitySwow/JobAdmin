@@ -59,11 +59,8 @@ class DeleteCacheAspect extends AbstractAspect
                 if (! Str::contains($key, '*')) {
                     $redis->del("{$this->prefix}{$key}");
                 } else {
-                    // 删不掉，准备换笨办法。
-                    $lua = <<<lua
-"local keys = redis.call('keys', ARGV[1]) for i=1,#keys,5000 do redis.call('del', unpack(keys, i, math.min(i+4999, #keys))) end return #keys" 0 '{$this->prefix}{$key}'
-lua;
-                    $redis->eval($lua);
+                    $keyList = $redis->keys("{$this->prefix}{$key}");
+                    $redis->del(...$keyList);
                 }
             }
         }
