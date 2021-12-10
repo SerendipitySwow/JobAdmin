@@ -56,6 +56,10 @@ class SystemQueueMessageMapper extends AbstractMapper
             $query->where('send_status', '=', $params['send_status']);
         }
 
+        //关联查询用户
+        
+        $query->with(['receiveUser','sendUser']);
+        
         return $query;
     }
 }

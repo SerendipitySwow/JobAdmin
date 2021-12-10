@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace App\System\Controller\Monitor;
+namespace App\System\Controller\DataCenter;
 
 use App\System\Model\SystemQueueMessage;
 use App\System\Service\SystemQueueMessageService;
@@ -23,7 +23,6 @@ use Psr\Http\Message\ResponseInterface;
  * 信息管理控制器
  * Class MessageController
  * @Controller(prefix="system/queueMessage")
- * @Auth
  */
 class QueueMessageController extends MineController
 {
@@ -42,8 +41,8 @@ class QueueMessageController extends MineController
     public function index(): ResponseInterface
     {
         $params = $this->request->all();
-        $params['receive_by'] = user()->getId();
-        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
+//        $params['receive_by'] = user()->getId();
+//        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
         return $this->success($this->service->getPageList($params));
     }
 

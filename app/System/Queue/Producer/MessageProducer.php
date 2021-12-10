@@ -9,7 +9,7 @@ use Hyperf\Amqp\Message\ProducerMessage;
 
 /**
  * 后台内部消息队列生产处理
- * _Producer(exchange="mineadmin", routingKey="message.routing")
+ * @Producer(exchange="mineadmin", routingKey="message.routing")
  */
 class MessageProducer extends ProducerMessage
 {
