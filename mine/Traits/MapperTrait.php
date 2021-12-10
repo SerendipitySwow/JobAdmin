@@ -39,11 +39,11 @@ trait MapperTrait
     /**
      * 获取列表数据（带分页）
      * @param array|null $params
-     * @param string $pageName
      * @param bool $isScope
+     * @param string $pageName
      * @return array
      */
-    public function getPageList(?array $params, string $pageName = 'page', bool $isScope = true): array
+    public function getPageList(?array $params, bool $isScope = true, string $pageName = 'page'): array
     {
         $paginate = $this->listQuerySetting($params, $isScope)->paginate(
             $params['pageSize'] ?? $this->model::PAGE_SIZE, ['*'], $pageName, $params[$pageName] ?? 1
@@ -71,18 +71,18 @@ trait MapperTrait
     /**
      * 获取树列表
      * @param array|null $params
+     * @param bool $isScope
      * @param string $id
      * @param string $parentField
      * @param string $children
-     * @param bool $isScope
      * @return array
      */
     public function getTreeList(
         ?array $params = null,
+        bool $isScope = true,
         string $id = 'id',
         string $parentField = 'parent_id',
-        string $children='children',
-        bool $isScope = true
+        string $children='children'
     ): array
     {
         $params['_mainAdmin_tree'] = true;
@@ -132,14 +132,6 @@ trait MapperTrait
                 }
             } else {
                 $query->orderBy($params['orderBy'], $params['orderType'] ?? 'asc');
-            }
-        } else {
-            $model = new $this->model;
-            if (in_array('sort', $model->getFillable())) {
-                $query->orderBy('sort', 'desc');
-            }
-            if (in_array('id', $model->getFillable())) {
-                $model->incrementing ? $query->orderBy('id', 'desc') : $query->orderBy('id');
             }
         }
 
@@ -287,7 +279,11 @@ trait MapperTrait
     public function update(int $id, array $data): bool
     {
         $this->filterExecuteAttributes($data, true);
-        return $this->model::query()->where((new $this->model)->getKeyName(), $id)->update($data) > 0;
+        $model = $this->model::find($id);
+        foreach ($data as $name => $val) {
+            $model[$name] = $val;
+        }
+        return $model->save();
     }
 
     /**

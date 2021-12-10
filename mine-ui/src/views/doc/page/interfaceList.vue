@@ -11,7 +11,7 @@
   <el-card shadow="never" class="card" style="margin-top: 10px;">
     <el-button type="primary" @click="openGlobalParams">设置全局参数</el-button>
     <el-button type="danger" @click="clearGlobalParams">清除全局参数</el-button>
-    <el-button type="warning" @click="genSign">生成请求AccessToken参数</el-button>
+    <el-button type="warning" @click="getAccessToken">生成AccessToken</el-button>
     <el-collapse v-model="activeName" accordion style="margin-top: 15px;">
       <el-collapse-item
         :title="item.name"
@@ -55,6 +55,7 @@
 <script>
 import DetailsPage from './components/details'
 import GlobalParams from './components/globalParams'
+import { request } from '@/utils/request.js'
 export default {
   components: {
     GlobalParams,
@@ -82,7 +83,7 @@ export default {
       })
     },
 
-    async genSign() {
+    genSign() {
       let timestamp = Date.now()
       let obj = {
         app_id: this.appInfo.app_id,
@@ -103,19 +104,32 @@ export default {
         newObj[keysSorted[i]] = obj[keysSorted[i]];
       }
 
-      let signature = this.$TOOL.crypto.MD5(JSON.stringify(newObj))
+      let signature = this.$TOOL.crypto.MD5(this.$TOOL.httpBuild(newObj))
 
-      obj = {
+      return {
         app_id: this.appInfo.app_id,
         signature,
         timestamp,
       }
-      try{
-        await this.clipboard(JSON.stringify(obj))
-        this.$message.success('生成成功，已复制到剪切板')
-      } catch(e) {
-        $message.error(this.$t('sys.copy_fail'))
-      }
+
+
+    },
+
+    getAccessToken() {
+      let url = '/api/v1/getAccessToken?' + this.$TOOL.httpBuild(this.genSign())
+      
+      request({ url, method: 'post' }).then(async res => {
+        if (res.success) {
+          try{
+            await this.clipboard(res.data.access_token)
+            this.$message.success('获取成功，已复制到剪切板')
+          } catch(e) {
+            $message.error(this.$t('sys.copy_fail'))
+          }
+        }
+      }).catch(e => {
+        $message.error(res.message)
+      })
     },
 
     openGlobalParams() {

@@ -104,6 +104,7 @@
 
 <script>
 import maHighlight from '@/components/maHighlight'
+import { request } from '@/utils/request.js'
 export default {
   components: {
     maHighlight
@@ -113,11 +114,16 @@ export default {
       type:String
     }
   },
+  watch: {
+    url(value) {
+      this.form.url = '/api/v1/' + value
+    }
+  },
   created () {
     if (this.$TOOL.session.get('globalParams')) {
       this.globalParams = this.$TOOL.session.get('globalParams')
     }
-    this.form.url = 'http://localhost:2800/api/api/v1/' + this.url
+    this.form.url = '/api/v1/' + this.url
   },
 
   data () {
@@ -146,19 +152,36 @@ export default {
         this.$message.error('请输入请求地址')
         return;
       }
+
+      let header = {}
+      let query  = {}
+      let body   = {}
+
+      this.requestParams.header.map(item => {
+        header[item.name] = item.value
+      })
+      this.requestParams.query.map(item => {
+        query[item.name] = item.value
+      })
+      this.requestParams.body.map(item => {
+        body[item.name] = item.value
+      })
+
       const config = {
-        header: Object.assign(this.requestParams.header, this.globalParams.header),
-        query: Object.assign(this.requestParams.query, this.globalParams.query),
-        body: Object.assign(this.requestParams.body, this.globalParams.body),
+        header: Object.assign(header, this.globalParams.header),
+        params: Object.assign(query, this.globalParams.query),
+        data  : Object.assign(body, this.globalParams.body),
         method: this.form.method,
         url: this.form.url
       }
+
       this.loading = true
 
-      this.$API.apiDoc.simRequest(config).then(res => {
+      request(config).then(res => {
+        this.loading = false
         if (res.success) {
           this.response = res.data
-          this.loading = false
+          
           this.$message.success(res.message)
         }
       }).catch(e => {

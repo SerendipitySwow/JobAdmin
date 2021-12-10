@@ -104,7 +104,17 @@ export default {
     open () {
       this.dialogVisible = true
       if (this.$TOOL.session.get('globalParams')) {
-        this.globalParams = this.$TOOL.session.get('globalParams')
+        this.globalParams = { header: [], query: [], body: [] }
+        let params = this.$TOOL.session.get('globalParams')
+        for (let name in params.header) {
+          this.globalParams.header.push({ 'name': name, value: params.header[name] })
+        }
+        for (let name in params.query) {
+          this.globalParams.query.push({ 'name': name, value: params.query[name] })
+        }
+        for (let name in params.body) {
+          this.globalParams.body.push({ 'name': name, value: params.body[name] })
+        }
       }
     },
 
@@ -117,7 +127,22 @@ export default {
     },
 
     setGlobalParams() {
-      this.$TOOL.session.set('globalParams', this.globalParams)
+      let header = {}
+      let query  = {}
+      let body   = {}
+
+      this.globalParams.header.map(item => {
+        header[item.name] = item.value
+      })
+      this.globalParams.query.map(item => {
+        query[item.name] = item.value
+      })
+      this.globalParams.body.map(item => {
+        body[item.name] = item.value
+      })
+      const params = { header, query, body }
+      
+      this.$TOOL.session.set('globalParams', params)
       this.dialogVisible = false
       this.$message.success('设置成功')
     },

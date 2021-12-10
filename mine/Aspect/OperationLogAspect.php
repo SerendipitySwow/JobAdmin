@@ -55,12 +55,15 @@ class OperationLogAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        /** @var Permission $permission */
-        $permission = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class];
+        $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class];
+        if (empty($annotation->menuName)) {
+            $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class];
+        }
         $result = $proceedingJoinPoint->process();
         $evDispatcher = $this->container->get(EventDispatcherInterface::class);
         $evDispatcher->dispatch(new Operation($this->getRequestInfo([
-            'code' => $permission->menuCode,
+            'code' => $annotation->menuCode ?? '',
+            'name' => $annotation->menuName ?? '',
             'response_code' => $result->getStatusCode(),
             'response_data' => $result->getBody()->getContents()
         ])));
@@ -85,7 +88,7 @@ class OperationLogAspect extends AbstractAspect
             'protocol' => $request->getServerParams()['server_protocol'],
             'ip' => $request->ip(),
             'ip_location' => Str::ipToRegion($request->ip()),
-            'service_name' => $this->getOperationMenuName($data['code']),
+            'service_name' => $data['name'] ?: $this->getOperationMenuName($data['code']),
             'request_data' => $request->all(),
             'response_code' => $data['response_code'],
             'response_data' => $data['response_data'],
