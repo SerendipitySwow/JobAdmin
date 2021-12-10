@@ -33,7 +33,6 @@ class SystemConfigController extends MineController
     /**
      * 获取系统组配置 （不验证身份和权限）
      * @GetMapping("getSysConfig")
-     * @DeleteCache("crontab,Token:*")
      */
     public function getSysConfig(): \Psr\Http\Message\ResponseInterface
     {
