@@ -23,7 +23,7 @@
       <div class="right-panel">
         <div class="right-panel-search">
 
-          <el-input v-model="queryParams.content_type" placeholder="内容类型" clearable></el-input>
+          <el-input v-model="queryParams.send_by" placeholder="发送人ID" clearable></el-input>
 
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -41,40 +41,8 @@
             </template>
             <el-form label-width="80px">
 
-            <el-form-item label="消息内容" prop="content">
-                <el-input v-model="queryParams.content" placeholder="消息内容" clearable></el-input>
-            </el-form-item>
-
-            <el-form-item label="接收人" prop="receive_by">
-                <el-input v-model="queryParams.receive_by" placeholder="接收人" clearable></el-input>
-            </el-form-item>
-
-            <el-form-item label="发送人" prop="send_by">
-                <el-input v-model="queryParams.send_by" placeholder="发送人" clearable></el-input>
-            </el-form-item>
-
-            <el-form-item label="发送状态" prop="send_status">
-
-            <el-select v-model="queryParams.send_status" style="width:100%" clearable placeholder="发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败">
-                <el-option
-                    v-for="(item, index) in message_send_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
-            </el-form-item>
-
-            <el-form-item label="查看状态" prop="read_status">
-
-            <el-select v-model="queryParams.read_status" style="width:100%" clearable placeholder="查看状态 0:未读 1: 已读">
-                <el-option
-                    v-for="(item, index) in message_read_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
+            <el-form-item label="发送人ID" prop="send_by">
+                <el-input v-model="queryParams.send_by" placeholder="发送人ID" clearable></el-input>
             </el-form-item>
 
             </el-form>
@@ -97,31 +65,30 @@
       >
         <el-table-column type="selection" width="50"></el-table-column>
 
-
-        <el-table-column
-           label="内容类型"
-           prop="content_type"
-        />
-        <el-table-column
-           label="消息内容"
-           prop="content"
-        />
-        <el-table-column
-           label="接收人"
-           prop="receive_name"
-        />
         <el-table-column
            label="发送人"
            prop="send_name"
         />
-        <el-table-column
-           label="发送状态"
-           prop="send_status"
-        />
-        <el-table-column
-           label="查看状态"
-           prop="read_status"
-        />
+
+				<el-table-column
+					label="发送状态"
+					prop="send_status"
+				>
+					<template #default="scope">
+						<ma-dict-tag  :options="message_send_status_data" :value="scope.row.send_status" />
+					</template>
+
+				</el-table-column>
+
+				<el-table-column
+					label="查看状态"
+					prop="read_status"
+				>
+					<template #default="scope">
+						<ma-dict-tag  :options="message_read_status_data" :value="scope.row.read_status" />
+					</template>
+
+				</el-table-column>
 
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
@@ -130,9 +97,8 @@
             <el-button
               type="text"
               size="small"
-              @click="tableEdit(scope.row, scope.$index)"
-              v-auth="['system:SystemQueueMessage:update']"
-            >编辑</el-button>
+							@click="logs(scope.row)"
+            >详情</el-button>
 
             <el-button
               type="text"
@@ -171,15 +137,20 @@
 
   <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
 
+	<el-drawer title="消息日志" v-model="dialog.logsVisible" :size="1000" direction="rtl" destroy-on-close>
+		<logs ref="messageList" />
+	</el-drawer>
 </template>
 
 <script>
   import saveDialog from './save'
+	import logs from './logs'
 
   export default {
     name: 'system:SystemQueueMessage',
     components: {
-      saveDialog
+      saveDialog,
+			logs
     },
 
     async created() {
@@ -285,6 +256,14 @@
           this.$refs.table.upData(this.queryParams)
         })
       },
+
+			// 消息日志
+			logs(row){
+				this.dialog.logsVisible = true
+				this.$nextTick(() => {
+					this.$refs.messageList.setData(row)
+				})
+			},
 
       //表格选择后回调事件
       selectionChange(selection){

@@ -48,6 +48,18 @@ class QueueMessageController extends MineController
     }
 
     /**
+     * 日志列表
+     * @GetMapping("log")
+     * @return ResponseInterface
+     * @Permission("system:queueMessage:log")
+     */
+    public function log(): ResponseInterface
+    {
+        $params = $this->request->all();
+        return $this->success($this->service->getLogPageList($params));
+    }
+
+    /**
      * 回收站列表
      * @GetMapping("recycle")
      * @return ResponseInterface

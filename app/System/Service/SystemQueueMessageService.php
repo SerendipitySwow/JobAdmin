@@ -55,6 +55,23 @@ class SystemQueueMessageService extends AbstractService
     }
 
     /**
+     * 获取列表数据（带分页）
+     * @param array|null $params
+     * @return array
+     */
+    public function getLogPageList(?array $params = null):array
+    {
+        $params['type'] = 'log';
+        $res = parent::getPageList($params);
+        foreach($res['items'] as $key => $info){
+            $info['receive_name'] = $info->receiveUser->nickname;
+            $info['send_name']    = $info->sendUser->nickname;
+            $res['items'][$key] = $info;
+        }
+        return $res;
+    }
+
+    /**
      * Description:发送消息
      * User:mike
      * @param array $data

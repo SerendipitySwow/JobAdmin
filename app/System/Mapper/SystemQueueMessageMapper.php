@@ -43,7 +43,7 @@ class SystemQueueMessageMapper extends AbstractMapper
 
         // 发送内容
         if (isset($params['content'])) {
-            $query->where('content', '=', $params['content']);
+            $query->where('content', 'like', $params['content']);
         }
 
         // 接收人ID
@@ -51,15 +51,27 @@ class SystemQueueMessageMapper extends AbstractMapper
             $query->where('receive_by', '=', $params['receive_by']);
         }
 
+        if (isset($params['send_by'])) {
+            $query->where('send_by', '=', $params['send_by']);
+        }
+
         // 发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败
         if (isset($params['send_status'])) {
             $query->where('send_status', '=', $params['send_status']);
         }
-
+        
+        
         //关联查询用户
-        
-        $query->with(['receiveUser','sendUser']);
-        
+//        $query->with(['receiveUser','sendUser']);
+        $query->with(['receiveUser'=>function($query){
+            $query->select(['id','nickname']);
+        }]);
+        $query->with(['sendUser'=>function($query){
+            $query->select(['id','nickname']);
+        }]);
+        if(!isset($params['type'])){
+            $query->groupBy('send_by');
+        }
         return $query;
     }
 }

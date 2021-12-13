@@ -18,6 +18,18 @@ export default {
     })
   },
 
+	/**
+	 * 获取消息管理日志列表
+	 * @returns
+	 */
+	getLogList (params = {}) {
+		return request({
+			url: 'system/queueMessage/log',
+			method: 'get',
+			params
+		})
+	},
+
   /**
    * 从回收站获取消息管理数据列表
    * @returns

@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="titleMap[mode]" v-model="visible" :width="500" destroy-on-close @closed="$emit('closed')">
     <el-form :model="form" :rules="rules" ref="dialogForm" label-width="80px">
-      
+
         <el-form-item label="内容类型" prop="content_type">
             <el-input v-model="form.content_type" clearable placeholder="请输入内容类型" />
         </el-form-item>
@@ -16,26 +16,6 @@
 
         <el-form-item label="发送人" prop="send_by">
             <el-input v-model="form.send_by" clearable placeholder="请输入发送人" />
-        </el-form-item>
-
-        <el-form-item label="发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败" prop="send_status">
-            <el-select v-model="form.send_status" style="width:100%" clearable placeholder="请选择发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败">
-                <el-option
-                    v-for="(item, index) in message_send_status_data"
-                    :key="index" :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
-        </el-form-item>
-
-        <el-form-item label="查看状态 0:未读 1: 已读" prop="read_status">
-            <el-select v-model="form.read_status" style="width:100%" clearable placeholder="请选择查看状态 0:未读 1: 已读">
-                <el-option
-                    v-for="(item, index) in message_read_status_data"
-                    :key="index" :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
         </el-form-item>
 
     </el-form>
@@ -62,7 +42,7 @@
           edit: '编辑消息'
         },
         form: {
-          
+
            id: '',
            content_id: '',
            content_type: '',
@@ -73,11 +53,11 @@
            read_status: '',
         },
         rules: {
-          
+
         },
         visible: false,
         isSaveing: false,
-        
+
         message_send_status_data: [],
         message_read_status_data: [],
       }
@@ -117,7 +97,7 @@
 
       //表单注入数据
       setData(data){
-        
+
           this.form.id = data.id;
           this.form.content_id = data.content_id;
           this.form.content_type = data.content_type;
@@ -130,7 +110,7 @@
 
       // 获取字典数据
       getDictData() {
-        
+
           this.getDict('message_send_status').then(res => {
               this.message_send_status_data = res.data
           })
@@ -139,11 +119,11 @@
           })
       },
 
-      
 
-      
 
-      
+
+
+
     }
   }
 </script>
