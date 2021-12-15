@@ -52,6 +52,8 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
      * 设置生成信息
      * @param SettingGenerateTables $model
      * @return VueIndexGenerator
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function setGenInfo(SettingGenerateTables $model): VueIndexGenerator
     {
@@ -175,9 +177,7 @@ class VueIndexGenerator extends MineGenerator implements CodeGenerator
      */
     protected function getCode(): string
     {
-        return Str::lower($this->model->module_name)
-                . ':' .
-                Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
+        return Str::lower($this->model->module_name) . ':' . $this->getShortBusinessName();
     }
 
     /**
@@ -367,6 +367,19 @@ js;
             }
         }
         return '';
+    }
+
+    /**
+     * 获取短业务名称
+     * @return string
+     */
+    public function getShortBusinessName(): string
+    {
+        return Str::camel(str_replace(
+            Str::lower($this->model->module_name),
+            '',
+            str_replace(env('DB_PREFIX'), '', $this->model->table_name)
+        ));
     }
 
     /**

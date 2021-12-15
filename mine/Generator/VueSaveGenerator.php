@@ -391,6 +391,19 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     }
 
     /**
+     * 获取短业务名称
+     * @return string
+     */
+    public function getShortBusinessName(): string
+    {
+        return Str::camel(str_replace(
+            Str::lower($this->model->module_name),
+            '',
+            str_replace(env('DB_PREFIX'), '', $this->model->table_name)
+        ));
+    }
+
+    /**
      * 设置代码内容
      * @param string $content
      */
