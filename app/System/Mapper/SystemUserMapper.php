@@ -154,6 +154,10 @@ class SystemUserMapper extends AbstractMapper
             $query->where('status', $this->model::ENABLE);
         }
 
+        if (isset($params['filterSuperAdmin'])) {
+            $query->whereNotIn('id', [env('SUPER_ADMIN')]);
+        }
+
         if (isset($params['minDate']) && isset($params['maxDate'])) {
             $query->whereBetween(
                 'created_at',
