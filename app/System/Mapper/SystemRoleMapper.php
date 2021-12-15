@@ -155,9 +155,13 @@ class SystemRoleMapper extends AbstractMapper
         if (isset($params['code'])) {
             $query->where('code', $params['code']);
         }
+
         if (isset($params['status'])) {
             $query->where('status', $params['status']);
+        } else {
+            $query->where('status', $this->model::ENABLE);
         }
+
         if (isset($params['minDate']) && isset($params['maxDate'])) {
             $query->whereBetween(
                 'created_at',
