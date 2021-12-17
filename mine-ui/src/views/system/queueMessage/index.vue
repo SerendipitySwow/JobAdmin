@@ -9,16 +9,6 @@
           type="primary"
           @click="add"
         >新增</el-button>
-
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          v-auth="['system:SystemQueueMessage:delete']"
-          :disabled="selection.length==0"
-          @click="batchDel"
-        >删除</el-button>
-
       </div>
       <div class="right-panel">
         <div class="right-panel-search">
@@ -99,13 +89,6 @@
               size="small"
 							@click="logs(scope.row)"
             >详情</el-button>
-
-            <el-button
-              type="text"
-              size="small"
-              @click="deletes(scope.row.id)"
-              v-auth="['system:SystemQueueMessage:delete']"
-            >删除</el-button>
 
           </template>
         </el-table-column>

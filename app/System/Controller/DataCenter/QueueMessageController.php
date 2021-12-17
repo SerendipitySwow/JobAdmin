@@ -48,6 +48,20 @@ class QueueMessageController extends MineController
     }
 
     /**
+     * 用户信息列表
+     * @GetMapping("userMessage")
+     * @return ResponseInterface
+     * @Permission("system:queueMessage:index")
+     */
+    public function userMessage(): ResponseInterface
+    {
+        $params = $this->request->all();
+        $params['receive_by'] = user()->getId();
+        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
+        return $this->success($this->service->getList($params));
+    }
+
+    /**
      * 日志列表
      * @GetMapping("log")
      * @return ResponseInterface
@@ -74,7 +88,7 @@ class QueueMessageController extends MineController
      * 发送信息
      * @PostMapping("send")
      * @param SystemMessageCreateRequest $request
-     * ['content_id','content_type','content','receive_by','remark']
+     * ['content_id','content_type','title','content','receive_by','remark']
      * @return ResponseInterface
      * @Permission("system:queueMessage:save")
      * @OperationLog

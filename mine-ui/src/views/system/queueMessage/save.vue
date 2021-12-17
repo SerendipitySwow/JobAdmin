@@ -6,22 +6,67 @@
             <el-input v-model="form.content_type" clearable placeholder="请输入内容类型" />
         </el-form-item>
 
+				<el-form-item label="消息标题" prop="title">
+					<el-input v-model="form.title" clearable placeholder="请输入消息标题" />
+				</el-form-item>
+
         <el-form-item label="消息内容" prop="content">
             <el-input v-model="form.content" clearable placeholder="请输入消息内容" />
         </el-form-item>
 
-        <el-form-item label="接收人" prop="receive_by">
-            <el-input v-model="form.receive_by" clearable placeholder="请输入接收人" />
-        </el-form-item>
 
-        <el-form-item label="发送人" prop="send_by">
-            <el-input v-model="form.send_by" clearable placeholder="请输入发送人" />
-        </el-form-item>
+				<el-form-item label="发送人" prop="send_by">
+
+				<sc-table-select v-model="send_by" :api="api" :table-width="700" :props="props">
+					<template #header="{form, submit}">
+						<el-form :inline="true" :model="form">
+							<el-form-item label="用户ID" prop="id">
+								<el-input v-model="form.id" clearable placeholder="请输入用户ID" />
+							</el-form-item>
+							<el-form-item label="用户名" prop="username">
+								<el-input v-model="form.username" clearable placeholder="请输入用户名" />
+							</el-form-item>
+							<el-form-item>
+								<el-button type="primary" @click="submit">查询</el-button>
+							</el-form-item>
+						</el-form>
+					</template>
+					<el-table-column prop="id" label="ID" width="150"></el-table-column>
+					<el-table-column prop="username" label="用户名" width="100"></el-table-column>
+					<el-table-column prop="nickname" label="姓名" width="150"></el-table-column>
+					<el-table-column prop="created_at" label="注册时间"></el-table-column>
+				</sc-table-select>
+
+				</el-form-item>
+
+				<el-form-item label="接收人" prop="receive_by">
+
+				<sc-table-select v-model="receive_by" :api="api" :table-width="700" multiple :props="props">
+					<template #header="{form, submit}">
+						<el-form :inline="true" :model="form">
+							<el-form-item label="用户ID" prop="id">
+								<el-input v-model="form.id" clearable placeholder="请输入用户ID" />
+							</el-form-item>
+							<el-form-item label="用户名" prop="username">
+								<el-input v-model="form.username" clearable placeholder="请输入用户名" />
+							</el-form-item>
+							<el-form-item>
+								<el-button type="primary" @click="submit">查询</el-button>
+							</el-form-item>
+						</el-form>
+					</template>
+					<el-table-column prop="id" label="ID" width="150"></el-table-column>
+					<el-table-column prop="username" label="用户名" width="100"></el-table-column>
+					<el-table-column prop="nickname" label="姓名" width="150"></el-table-column>
+					<el-table-column prop="created_at" label="注册时间"></el-table-column>
+				</sc-table-select>
+
+				</el-form-item>
 
     </el-form>
     <template #footer>
       <el-button @click="visible=false" >取 消</el-button>
-      <el-button type="primary" :loading="isSaveing" @click="submit()">保 存</el-button>
+      <el-button type="primary" :loading="isSaveing" @click="submit()">发 送</el-button>
     </template>
   </el-dialog>
 </template>
@@ -30,12 +75,18 @@
   import editor from '@/components/scEditor'
 
   export default {
+		name: 'tableselect',
     emits: ['success', 'closed'],
     components: {
       editor
     },
     data() {
       return {
+				api: this.$API.user.getPageList,
+				props: {
+					label: 'nickname',
+					value: 'id'
+				},
         mode: "add",
         titleMap: {
           add: '新增消息',
@@ -43,15 +94,16 @@
         },
         form: {
 
-           id: '',
-           content_id: '',
+           id: 0,
+           content_id: 0,
            content_type: '',
+					 title: '',
            content: '',
            receive_by: '',
            send_by: '',
-           send_status: '',
-           read_status: '',
         },
+				receive_by: [],
+				send_by: [],
         rules: {
 
         },
@@ -61,9 +113,6 @@
         message_send_status_data: [],
         message_read_status_data: [],
       }
-    },
-    async created() {
-        await this.getDictData();
     },
     methods: {
       //显示
@@ -79,9 +128,12 @@
             this.isSaveing = true;
             let res = null
             if (this.mode == 'add') {
-              res = await this.$API.systemQueueMessage.save(this.form)
-            } else {
-              res = await this.$API.systemQueueMessage.update(this.form.id, this.form)
+							let receiveIds = this.receive_by.map(item => {
+								return item.id
+							});
+							this.form.receive_by = receiveIds;
+							this.form.send_by = this.send_by.id;
+              res = await this.$API.systemQueueMessage.send(this.form)
             }
             this.isSaveing = false;
             if(res.success){
@@ -93,37 +145,7 @@
             }
           }
         })
-      },
-
-      //表单注入数据
-      setData(data){
-
-          this.form.id = data.id;
-          this.form.content_id = data.content_id;
-          this.form.content_type = data.content_type;
-          this.form.content = data.content;
-          this.form.receive_by = data.receive_by;
-          this.form.send_by = data.send_by;
-          this.form.send_status = data.send_status;
-          this.form.read_status = data.read_status;
-      },
-
-      // 获取字典数据
-      getDictData() {
-
-          this.getDict('message_send_status').then(res => {
-              this.message_send_status_data = res.data
-          })
-          this.getDict('message_read_status').then(res => {
-              this.message_read_status_data = res.data
-          })
-      },
-
-
-
-
-
-
+      }
     }
   }
 </script>

@@ -18,13 +18,14 @@
 			>
 				<el-table-column type="selection" width="50"></el-table-column>
 				<el-table-column label="内容类型" prop="content_type" width="100"></el-table-column>
+				<el-table-column label="标题" prop="title" width="200"></el-table-column>
 				<el-table-column label="消息内容" prop="content" width="200"></el-table-column>
 				<el-table-column label="接收人" prop="receive_name" width="100"></el-table-column>
 				<el-table-column label="发送人" prop="send_name" width="100"></el-table-column>
 				<el-table-column
 					label="发送状态"
 					prop="send_status"
-					width="80"
+					width="100"
 				>
 					<template #default="scope">
 						<ma-dict-tag  :options="message_send_status_data" :value="scope.row.send_status" />
@@ -42,7 +43,7 @@
 					</template>
 
 				</el-table-column>
-				<el-table-column label="备注" prop="remark" width="160"></el-table-column>
+<!--				<el-table-column label="备注" prop="remark" width="160"></el-table-column>-->
 
 			</maTable>
 		</el-main>
@@ -72,7 +73,9 @@
 		},
 
 		methods: {
-
+			getData(){
+				this.api.list = this.$API.systemQueueMessage.getLogList;
+			},
 			show(row){
 				this.logsVisible = true;
 				this.log = row.exception_info
@@ -103,8 +106,8 @@
 				const loading = this.$loading();
 				let ids = []
 				this.selection.map(item => ids.push(item.id))
-				this.$API.crontab.deleteLog(ids.join(',')).then(() => {
-					this.$refs.table.upData({ crontab_id: this.crontab_id })
+					this.$API.systemQueueMessage.deletes(ids.join(',')).then(() => {
+					this.$refs.table.upData()
 				})
 				loading.close()
 				this.$message.success("操作成功")

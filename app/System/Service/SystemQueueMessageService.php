@@ -80,7 +80,7 @@ class SystemQueueMessageService extends AbstractService
     public function send(array $data):int
     {
         $this->setAttributes($data);
-        $userIdArr = [$this->receive_by];
+        $userIdArr = $this->receive_by;
         //发送所有用户
         if(!$this->receive_by){
             //获取所有用户Id

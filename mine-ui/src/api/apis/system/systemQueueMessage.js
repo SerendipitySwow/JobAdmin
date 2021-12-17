@@ -17,6 +17,17 @@ export default {
       params
     })
   },
+	/**
+	 * 获取用户消息列表
+	 * @returns
+	 */
+	getUserList (params = {}) {
+		return request({
+			url: 'system/queueMessage/userMessage',
+			method: 'get',
+			params
+		})
+	},
 
 	/**
 	 * 获取消息管理日志列表
@@ -46,9 +57,9 @@ export default {
    * 添加消息管理
    * @returns
    */
-  save (params = {}) {
+  send (params = {}) {
     return request({
-      url: 'system/queueMessage/save',
+      url: 'system/queueMessage/send',
       method: 'post',
       data: params
     })

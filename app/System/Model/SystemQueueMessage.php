@@ -48,7 +48,7 @@ class SystemQueueMessage extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'content_id', 'content_type', 'content', 'receive_by', 'send_by', 'send_status', 'read_status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'content_id', 'content_type','title','content', 'receive_by', 'send_by', 'send_status', 'read_status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
