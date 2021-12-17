@@ -212,6 +212,7 @@
 							type: 'success'
 						})
 					} else {
+						this.$message.error(res.message)
 						this.getCaptchaImg()
 					}
 				}).catch(() => this.getCaptchaImg())

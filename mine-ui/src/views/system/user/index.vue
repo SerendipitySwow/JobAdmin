@@ -349,13 +349,18 @@
           let ids = []
           this.selection.map(item => ids.push(item.id))
           if (this.isRecycle) {
-            this.$API.user.realDeletes(ids.join(',')).then()
+            this.$API.user.realDeletes(ids.join(',')).then(res => {
+              res.success && this.$message.success(res.message)
+              res.success || this.$message.error(res.message)
+            })
           } else {
-            this.$API.user.deletes(ids.join(',')).then()
+            this.$API.user.deletes(ids.join(',')).then(res => {
+              res.success && this.$message.success(res.message)
+              res.success || this.$message.error(res.message)
+            })
           }
           this.$refs.table.upData(this.queryParams)
           loading.close();
-          this.$message.success("操作成功")
         })
       },
 
@@ -366,23 +371,26 @@
         }).then(() => {
           const loading = this.$loading();
           if (this.isRecycle) {
-            this.$API.user.realDeletes(id).then(() => {
-              this.$refs.table.upData(this.queryParams)
+            this.$API.user.realDeletes(id).then(res => {
+              res.success && this.$message.success(res.message)
+              res.success || this.$message.error(res.message)
             })
           } else {
-            this.$API.user.deletes(id).then(() => {
-              this.$refs.table.upData(this.queryParams)
+            this.$API.user.deletes(id).then(res => {
+              res.success && this.$message.success(res.message)
+              res.success || this.$message.error(res.message)
             })
           }
           loading.close();
-          this.$message.success("操作成功")
+          this.$refs.table.upData(this.queryParams)
         }).catch(()=>{})
       },
 
       // 恢复数据
       async recovery (id) {
         await this.$API.user.recoverys(id).then(res => {
-          this.$message.success(res.message)
+          res.success && this.$message.success(res.message)
+          res.success || this.$message.error(res.message)
           this.$refs.table.upData(this.queryParams)
         })
       },
@@ -464,8 +472,9 @@
 
       // 更新用户缓存
       clearCache(row) {
-        this.$API.user.clearCache({id: row.id}).then(() => {
-          this.$message.success('该用户缓存已清空')
+        this.$API.user.clearCache({id: row.id}).then(res => {
+          res.success || this.$message.error(res.message)
+          res.success && this.$message.success('该用户缓存已清空')
         })
       },
 
