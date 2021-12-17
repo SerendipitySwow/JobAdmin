@@ -40,7 +40,10 @@ class QueueController extends MineController
      */
     public function index(): ResponseInterface
     {
-        return $this->success($this->service->getPageList($this->request->all()));
+        $params = $this->request->all();
+        $params['orderBy'] = 'id';
+        $params['orderType'] = 'desc';
+        return $this->success($this->service->getPageList($params));
     }
 
     /**

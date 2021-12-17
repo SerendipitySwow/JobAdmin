@@ -44,6 +44,8 @@ class QueueMessageController extends MineController
         $params = $this->request->all();
 //        $params['receive_by'] = user()->getId();
 //        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
+        $params['orderBy'] = 'id';
+        $params['orderType'] = 'desc';
         return $this->success($this->service->getPageList($params));
     }
 
@@ -58,6 +60,10 @@ class QueueMessageController extends MineController
         $params = $this->request->all();
         $params['receive_by'] = user()->getId();
         $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
+        $params['read_status'] = SystemQueueMessage::STATUS_READ_NO;
+        $params['type'] = 'log';
+        $params['orderBy'] = 'id';
+        $params['orderType'] = 'desc';
         return $this->success($this->service->getList($params));
     }
 
@@ -70,6 +76,11 @@ class QueueMessageController extends MineController
     public function log(): ResponseInterface
     {
         $params = $this->request->all();
+//        $params['orderBy'] = ['id'=>'desc'];
+//        $params['orderBy'] = 'id desc';
+        
+        $params['orderBy'] = 'id';
+        $params['orderType'] = 'desc';
         return $this->success($this->service->getLogPageList($params));
     }
 

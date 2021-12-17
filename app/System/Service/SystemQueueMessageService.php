@@ -110,7 +110,7 @@ class SystemQueueMessageService extends AbstractService
             ];
         }
         return $this->mapper->updateByCondition($condition,[
-            'read_status' => SystemQueueMessage::READ_STATUS_YES
+            'read_status' => SystemQueueMessage::STATUS_READ_YES
         ])?1:0;
     }
 

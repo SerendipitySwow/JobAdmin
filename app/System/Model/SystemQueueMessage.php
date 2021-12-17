@@ -25,18 +25,19 @@ class SystemQueueMessage extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
-    const STATUS_SEND_WAIT = 0;
     //待发送
-    const STATUS_SENDING = 1;
+    const STATUS_SEND_WAIT = 0;
     //发送中
-    const STATUS_SEND_SUCCESS = 2;
+    const STATUS_SENDING = 1;
     //发送成功
-    const STATUS_SEND_FAIL = 3;
+    const STATUS_SEND_SUCCESS = 2;
     //发送失败
-    const READ_STATUS_NO = 0;
+    const STATUS_SEND_FAIL = 3;
     //未读
-    const READ_STATUS_YES = 1;
+    const STATUS_READ_NO = 0;
     //已读
+    const STATUS_READ_YES = 1;
+    
     /**
      * The table associated with the model.
      *

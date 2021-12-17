@@ -65,6 +65,18 @@ export default {
     })
   },
 
+	/**
+	 * 阅读消息
+	 * @returns
+	 */
+	look (params = {}) {
+		return request({
+			url: 'system/queueMessage/look',
+			method: 'put',
+			data: params
+		})
+	},
+
   /**
    * 读取消息管理
    * @returns
