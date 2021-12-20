@@ -62,8 +62,6 @@ class SystemDeptMapper extends AbstractMapper
     {
         if (isset($params['status'])) {
             $query->where('status', $params['status']);
-        } else {
-            $query->where('status', $this->model::ENABLE);
         }
 
         if (isset($params['name'])) {
