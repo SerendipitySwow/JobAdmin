@@ -57,7 +57,7 @@
                   <template #label>
                     所属模块
                     <el-tooltip content="所属模块请对应表模块前缀，否则数据迁移文件不会被执行">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
@@ -86,7 +86,7 @@
                   <template #label>
                     所属菜单
                     <el-tooltip content="分配业务功能在哪个菜单，例如：权限管理">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
                   
@@ -124,7 +124,7 @@
                   <template #label>
                     菜单名称
                     <el-tooltip content="比如，用户管理">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
                   <el-input v-model="form.menu_name"></el-input>
@@ -141,7 +141,7 @@
                   <template #label>
                     包名
                     <el-tooltip content="控制器文件所在目录名，比如：permission">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
@@ -160,7 +160,7 @@
                         生成到模块：<br />
                         后端文件会直接部署到模块，前端vue文件和菜单SQL会打包下载。
                       </template>
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
@@ -181,7 +181,7 @@
                     <template #label>
                       树主ID
                       <el-tooltip content="一般为主键ID">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
@@ -205,7 +205,7 @@
                     <template #label>
                       树父ID
                       <el-tooltip content="树节点的父ID，比如：parent_id">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
@@ -229,7 +229,7 @@
                     <template #label>
                       树名称
                       <el-tooltip content="树显示的名称字段，比如：name">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
