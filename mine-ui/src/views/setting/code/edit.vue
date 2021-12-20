@@ -158,13 +158,13 @@
                         压缩包下载：<br />
                         后端文件、前端vue和菜单SQL文件会打包成压缩文件下载。<br /><br />
                         生成到模块：<br />
-                        后端文件会直接部署到模块，前端vue文件和菜单SQL会打包下载。
+                        后端文件会直接部署到模块（覆盖原文件），前端vue文件和菜单SQL会打包下载。
                       </template>
                       <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
-                  <el-radio-group v-model="form.generate_type">
+                  <el-radio-group v-model="form.generate_type" @change="handleChangeGenType">
                     <el-radio-button label="0">压缩包下载</el-radio-button>
                     <el-radio-button label="1">生成到模块</el-radio-button>
                   </el-radio-group>
@@ -250,6 +250,10 @@
 
             </el-row>
 
+          </el-tab-pane>
+
+          <el-tab-pane label="菜单配置" name="menu">
+            选择菜单
           </el-tab-pane>
 
           <el-tab-pane label="字段管理" name="field">
@@ -447,6 +451,18 @@ export default {
 
   methods: {
 
+    handleChangeGenType(value) {
+      if (value === '1') {
+        this.$confirm('生成到模块会覆盖原文件，确定使用该方式吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then().catch(_=> {
+          this.form.generate_type = '0'
+        })
+      }
+    },
+
     async show (record) {
       this.drawer = true
       this.record = record
@@ -541,5 +557,8 @@ export default {
 <style scoped>
 .form {
   padding: 0 30px;
+}
+:deep(.el-form-item--small .el-form-item__content) {
+  line-height: 22px;
 }
 </style>
