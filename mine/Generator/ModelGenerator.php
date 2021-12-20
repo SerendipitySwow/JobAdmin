@@ -78,7 +78,7 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
         $command = [
             'command'  => 'mine:model-gen',
             '--module' => $this->model->module_name,
-            '--table'  => str_replace(env('DB_PREFIX'), '', $this->model->table_name)
+            '--table'  => $this->model->table_name
         ];
 
         if (! Str::contains($this->model->table_name, Str::lower($this->model->module_name))) {
@@ -93,7 +93,7 @@ class ModelGenerator extends MineGenerator implements CodeGenerator
         $application->setAutoExit(false);
 
         $moduleName = Str::title($this->model->module_name);
-        $modelName  = Str::studly($this->model->table_name);
+        $modelName  = Str::studly(str_replace(env('DB_PREFIX'), '', $this->model->table_name));
 
         if ($application->run($input, $output) === 0) {
 

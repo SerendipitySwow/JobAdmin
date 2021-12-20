@@ -149,9 +149,9 @@ trait ServiceTrait
      * User:mike
      * @param array $condition
      * @param string $columns
-     * @return ?MineModel
+     * @return \Hyperf\Utils\HigherOrderTapProxy|mixed|void|null
      */
-    public function value(array $condition, string $columns = 'id'): ?MineModel
+    public function value(array $condition, string $columns = 'id')
     {
         return $this->mapper->value($condition, $columns);
     }

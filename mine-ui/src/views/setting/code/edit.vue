@@ -57,7 +57,7 @@
                   <template #label>
                     所属模块
                     <el-tooltip content="所属模块请对应表模块前缀，否则数据迁移文件不会被执行">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
@@ -86,7 +86,7 @@
                   <template #label>
                     所属菜单
                     <el-tooltip content="分配业务功能在哪个菜单，例如：权限管理">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
                   
@@ -124,7 +124,7 @@
                   <template #label>
                     菜单名称
                     <el-tooltip content="比如，用户管理">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
                   <el-input v-model="form.menu_name"></el-input>
@@ -141,7 +141,7 @@
                   <template #label>
                     包名
                     <el-tooltip content="控制器文件所在目录名，比如：permission">
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
@@ -158,13 +158,13 @@
                         压缩包下载：<br />
                         后端文件、前端vue和菜单SQL文件会打包成压缩文件下载。<br /><br />
                         生成到模块：<br />
-                        后端文件会直接部署到模块，前端vue文件和菜单SQL会打包下载。
+                        后端文件会直接部署到模块（覆盖原文件），前端vue文件和菜单SQL会打包下载。
                       </template>
-                      <i class="el-icon-question"></i>
+                      <el-icon><el-icon-question-filled /></el-icon>
                     </el-tooltip>
                   </template>
 
-                  <el-radio-group v-model="form.generate_type">
+                  <el-radio-group v-model="form.generate_type" @change="handleChangeGenType">
                     <el-radio-button label="0">压缩包下载</el-radio-button>
                     <el-radio-button label="1">生成到模块</el-radio-button>
                   </el-radio-group>
@@ -181,7 +181,7 @@
                     <template #label>
                       树主ID
                       <el-tooltip content="一般为主键ID">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
@@ -205,7 +205,7 @@
                     <template #label>
                       树父ID
                       <el-tooltip content="树节点的父ID，比如：parent_id">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
@@ -229,7 +229,7 @@
                     <template #label>
                       树名称
                       <el-tooltip content="树显示的名称字段，比如：name">
-                        <i class="el-icon-question"></i>
+                        <el-icon><el-icon-question-filled /></el-icon>
                       </el-tooltip>
                     </template>
 
@@ -250,6 +250,10 @@
 
             </el-row>
 
+          </el-tab-pane>
+
+          <el-tab-pane label="菜单配置" name="menu">
+            选择菜单
           </el-tab-pane>
 
           <el-tab-pane label="字段管理" name="field">
@@ -447,6 +451,18 @@ export default {
 
   methods: {
 
+    handleChangeGenType(value) {
+      if (value === '1') {
+        this.$confirm('生成到模块会覆盖原文件，确定使用该方式吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then().catch(_=> {
+          this.form.generate_type = '0'
+        })
+      }
+    },
+
     async show (record) {
       this.drawer = true
       this.record = record
@@ -541,5 +557,8 @@ export default {
 <style scoped>
 .form {
   padding: 0 30px;
+}
+:deep(.el-form-item--small .el-form-item__content) {
+  line-height: 22px;
 }
 </style>
