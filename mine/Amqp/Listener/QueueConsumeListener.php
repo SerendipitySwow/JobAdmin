@@ -7,19 +7,12 @@
  * Time: 3:13 下午
  */
 declare(strict_types=1);
-/**
- * This file is part of Hyperf.
- *
- * @link     https://www.hyperf.io
- * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
- */
 namespace Mine\Amqp\Listener;
 
 use App\System\Mapper\SystemQueueMapper;
 use App\System\Model\SystemQueue;
 use App\System\Service\SystemQueueService;
+use Hyperf\Utils\Context;
 use Mine\Amqp\Event\AfterConsume;
 use Mine\Amqp\Event\BeforeConsume;
 use Mine\Amqp\Event\ConsumeEvent;
@@ -65,7 +58,7 @@ class QueueConsumeListener implements ListenerInterface
     /**
      * Description:消费前
      * User:mike
-     * @param $producer
+     * @param $message
      */
     public function beforeConsume($message){
         $condition = ['uuid'=>$this->uuid];
@@ -76,7 +69,7 @@ class QueueConsumeListener implements ListenerInterface
     /**
      * Description:消费中
      * User:mike
-     * @param $producer
+     * @param $message
      */
     public function consumeEvent($message){
 //        $condition = ['uuid'=>$this->uuid];
@@ -106,5 +99,15 @@ class QueueConsumeListener implements ListenerInterface
             $data['log_content'] = $this->throwable->getMessage();
         }
         $this->service->updateByCondition($condition,$data);
+    }
+
+    public function setUUID(string $uuid): void
+    {
+        Context::set('uuid', $uuid);
+    }
+
+    public function getUUID(): string
+    {
+        return Context::get('uuid', '');
     }
 }
