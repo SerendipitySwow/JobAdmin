@@ -17,6 +17,7 @@ use App\System\Model\SystemDept;
 use App\System\Model\SystemRole;
 use App\System\Model\SystemUser;
 use Hyperf\Database\Model\Builder;
+use Mine\Exception\MineException;
 
 trait ModelMacroTrait
 {
@@ -30,6 +31,10 @@ trait ModelMacroTrait
         Builder::macro('userDataScope', function(?int $userid = null) use($model)
         {
             $userid = is_null($userid) ? (int) user()->getId() : $userid;
+
+            if (empty($userid)) {
+                throw new MineException('Data Scope missing user_id');
+            }
 
             /* @var Builder $this */
             if ($userid == env('SUPER_ADMIN')) {
