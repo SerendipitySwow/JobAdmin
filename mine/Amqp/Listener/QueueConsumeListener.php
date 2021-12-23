@@ -26,8 +26,7 @@ use Hyperf\Event\Annotation\Listener;
 class QueueConsumeListener implements ListenerInterface
 {
     private $service;
-    private $uuid;
-    private $throwable;
+
     public function listen(): array
     {
         // 返回一个该监听器要监听的事件数组，可以同时监听多个事件
@@ -42,72 +41,64 @@ class QueueConsumeListener implements ListenerInterface
 
     public function process(object $event)
     {
-        $this->service = new SystemQueueService(new SystemQueueMapper());
-        $message = $event->message;
-        $this->throwable = $event->throwable ?? '';
-        if($message){
-            $this->uuid = $event->data['uuid'];
-            
+        $this->service = container()->get(SystemQueueService::class);
+        if ($event->message) {
             $class = get_class($event);
             $func = lcfirst(trim(strrchr($class, '\\'),'\\'));
-            // 事件触发后该监听器要执行的代码写在这里，比如该示例下的发送用户注册成功短信等
-            $this->$func($message);
+            $this->$func($event);
         }
     }
 
     /**
      * Description:消费前
      * User:mike
-     * @param $message
+     * @param object $event
      */
-    public function beforeConsume($message){
-        $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_DOING];
-        $this->service->updateByCondition($condition,$data);
+    public function beforeConsume(object $event)
+    {
+        $this->service->update($event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_DOING ]);
     }
 
     /**
      * Description:消费中
      * User:mike
-     * @param $message
+     * @param object $event
      */
-    public function consumeEvent($message){
-//        $condition = ['uuid'=>$this->uuid];
-//        $data = ['produce_status'=>SystemRabbitmq::CONSUME_STATUS_DOING];
-//        $this->service->update($condition,$data);
+    public function consumeEvent(object $event)
+    {
+        // TODO...
     }
 
     /**
      * Description:消费后
      * User:mike
-     * @param $producer
+     * @param object $event
      */
-    public function afterConsume($message){
-        $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_SUCCESS];
-        $this->service->updateByCondition($condition,$data);
+    public function afterConsume(object $event)
+    {
+        $this->service->update($event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_SUCCESS ]);
     }
+
     /**
      * Description:消费失败
      * User:mike
-     * @param $producer
+     * @param object $event
      */
-    public function failToConsume($message){
-        $condition = ['uuid'=>$this->uuid];
-        $data = ['consume_status'=>SystemQueue::CONSUME_STATUS_4];
-        if($this->throwable){
-            $data['log_content'] = $this->throwable->getMessage();
-        }
-        $this->service->updateByCondition($condition,$data);
+    public function failToConsume(object $event)
+    {
+        $this->service->update($event->data['id'], [
+            'consume_status' => SystemQueue::CONSUME_STATUS_4,
+            'log_content' => $event->throwable ?: $event->throwable->getMessage()
+        ]);
     }
 
-    public function setUUID(string $uuid): void
+    public function setId(string $uuid): void
     {
-        Context::set('uuid', $uuid);
+        Context::set('id', $uuid);
     }
 
-    public function getUUID(): string
+    public function getId(): string
     {
-        return Context::get('uuid', '');
+        return Context::get('id', '');
     }
 }

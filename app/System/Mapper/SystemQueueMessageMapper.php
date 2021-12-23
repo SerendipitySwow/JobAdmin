@@ -30,7 +30,6 @@ class SystemQueueMessageMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        
         // 内容ID
         if (isset($params['content_id'])) {
             $query->where('content_id', '=', $params['content_id']);
@@ -39,11 +38,6 @@ class SystemQueueMessageMapper extends AbstractMapper
         // 内容类型
         if (isset($params['content_type'])) {
             $query->where('content_type', '=', $params['content_type']);
-        }
-
-        // 发送内容
-        if (isset($params['content'])) {
-            $query->where('content', 'like', $params['content']);
         }
 
         // 接收人ID
@@ -59,20 +53,25 @@ class SystemQueueMessageMapper extends AbstractMapper
         if (isset($params['send_status'])) {
             $query->where('send_status', '=', $params['send_status']);
         }
+
         if (isset($params['read_status'])) {
             $query->where('read_status', '=', $params['read_status']);
         }
-        //关联查询用户
-//        $query->with(['receiveUser','sendUser']);
-        $query->with(['receiveUser'=>function($query){
-            $query->select(['id','nickname']);
-        }]);
-        $query->with(['sendUser'=>function($query){
-            $query->select(['id','nickname']);
-        }]);
-        if(!isset($params['type'])){
-            $query->groupBy('send_by');
+
+        // group by
+        if (! isset($params['type'])) {
+            $query->groupBy([ 'send_by' ]);
         }
+
+        //关联查询用户
+        $query->with(['receiveUser' => function($query) {
+            $query->select([ 'id', 'nickname' ]);
+        }]);
+
+        $query->with(['sendUser' => function($query) {
+            $query->select([ 'id', 'nickname' ]);
+        }]);
+
         return $query;
     }
 }

@@ -40,14 +40,19 @@ class QueueProduceListener implements ListenerInterface
             WaitTimeout::class,
         ];
     }
-    
+
+    /**
+     * @param object $event
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Exception
+     */
     public function process(object $event)
     {
-        $this->setUUID(Str::getUUID());
-        $this->service = new SystemQueueService(new SystemQueueMapper());
+        $this->setId(snowflake_id());
+        $this->service = container()->get(SystemQueueService::class);
         $class = get_class($event);
         $func = lcfirst(trim(strrchr($class, '\\'),'\\'));
-        // 事件触发后该监听器要执行的代码写在这里，比如该示例下的发送用户注册成功短信等
         $this->$func($event);
     }
 
@@ -60,14 +65,14 @@ class QueueProduceListener implements ListenerInterface
 
         $queueName = strchr($event->producer->getRoutingKey(),'.',true).'.queue';
 
-        $uuid = $this->getUUID();
+        $id = $this->getId();
 
         $event->producer->setPayload(
-            [ 'uuid'=> $uuid, 'data' => json_decode( $event->producer->payload() ) ]
+            [ 'id'=> $id, 'data' => json_decode( $event->producer->payload() ) ]
         );
 
         $this->service->save([
-            'uuid'=> $uuid,
+            'id'=> $id,
             'exchange_name'=> $event->producer->getExchange(),
             'routing_key_name'=> $event->producer->getRoutingKey(),
             'queue_name'=> $queueName,
@@ -85,9 +90,7 @@ class QueueProduceListener implements ListenerInterface
      */
     public function produceEvent($producer,$delayTime): void
     {
-//        $condition = ['uuid'=>$this->uuid];
-//        $data = ['produce_status'=>SystemRabbitmq::PRODUCE_STATUS_DOING];
-//        $this->service->update($condition,$data);
+        // TODO...
     }
 
     /**
@@ -97,9 +100,7 @@ class QueueProduceListener implements ListenerInterface
      */
     public function afterProduce(object $event): void
     {
-//        $condition = ['uuid'=>$this->uuid];
-//        $data = ['produce_status'=>SystemRabbitmq::PRODUCE_STATUS_SUCCESS];
-//        $this->service->update($condition,$data);
+        // TODO...
     }
 
     /**
@@ -108,22 +109,19 @@ class QueueProduceListener implements ListenerInterface
      */
     public function failToProduce(object $event): void
     {
-        $this->service->updateByCondition(
-            ['uuid' => $this->getUuid()],
-            [
-                'produce_status' => SystemQueue::PRODUCE_STATUS_FAIL,
-                'log_content' => $event->throwable ?? $event->throwable->getMessage()
-            ]
-        );
+        $this->service->update($this->getId(), [
+            'produce_status' => SystemQueue::PRODUCE_STATUS_FAIL,
+            'log_content' => $event->throwable ?: $event->throwable->getMessage()
+        ]);
     }
 
-    public function setUUID(string $uuid): void
+    public function setId(string $uuid): void
     {
-        Context::set('uuid', $uuid);
+        Context::set('id', $uuid);
     }
 
-    public function getUUID(): string
+    public function getId(): string
     {
-        return Context::get('uuid', '');
+        return Context::get('id', '');
     }
 }

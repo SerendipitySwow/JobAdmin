@@ -65,6 +65,7 @@ class SystemQueue extends MineModel
      * @Message("消费重复")
      */
     const CONSUME_STATUS_4 = 4;
+
     use SoftDeletes;
     public $incrementing = false;
     /**
