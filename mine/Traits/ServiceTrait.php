@@ -201,6 +201,17 @@ trait ServiceTrait
     }
 
     /**
+     * 按条件更新数据
+     * @param array $condition
+     * @param array $data
+     * @return bool
+     */
+    public function updateByCondition(array $condition, array $data): bool
+    {
+        return $this->mapper->updateByCondition($condition, $data);
+    }
+
+    /**
      * 单个或批量真实删除数据
      * @param string $ids
      * @return bool

@@ -22,15 +22,15 @@
 									<a :href="item.link" target="_blank">
 										<div class="msg-list__icon">
 											<el-badge is-dot type="danger">
-												<el-avatar :size="40" :src="item.avatar" class="avatar"></el-avatar>
+												<el-avatar :size="40" :src="avatar" class="avatar"></el-avatar>
 											</el-badge>
 										</div>
 										<div class="msg-list__main">
 											<h2>{{item.title}}</h2>
-											<p>{{item.describe}}</p>
+											<p>{{item.content}}</p>
 										</div>
 										<div class="msg-list__time">
-											<p>{{item.time}}</p>
+											<p>{{item.created_at}}</p>
 										</div>
 									</a>
 								</li>
@@ -39,7 +39,7 @@
 						</el-scrollbar>
 					</el-main>
 					<el-footer>
-						<el-button type="primary" size="small">消息中心</el-button>
+						<el-button type="primary" @click="()=>{$router.push('message'); msg= false;}" size="small">消息中心</el-button>
 						<el-button size="small" @click="markRead">全部设为已读</el-button>
 					</el-footer>
 				</el-container>
@@ -70,29 +70,16 @@
 				userNameF: "",
 				avatar: 'img/avatar.jpg',
 				msg: false,
-				msgList: [
-					{
-						id: 1,
-						type: 'user',
-						avatar: "img/avatar.jpg",
-						title: "superAdmin",
-						describe: "如果喜欢就点个星星支持一下哦",
-						link: "https://gitee.com/xmo/MineAdmin",
-						time: "5分钟前"
-					},
-					{
-						id: 3,
-						type: 'system',
-						avatar: "img/avatar.jpg",
-						title: "感谢登录MineAdmin",
-						describe: "Swoole + Hyperf + Vue 3.0 + Vue-Router 4.0 + ElementPlus + Axios 后台管理系统。",
-						link: "https://gitee.com/xmo/MineAdmin",
-						time: "2020年8月1日"
-					}
-				]
+				msgList:[],
 			}
 		},
 		created() {
+			setInterval( () => {
+				this.$API.systemQueueMessage.getUserList().then(res => {
+					this.msgList = res.data;
+				})
+			}, 10000)
+
 			let userInfo = this.$TOOL.data.get('user').user;
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0,1);
@@ -141,7 +128,9 @@
 			},
 			//标记已读
 			markRead(){
-				this.msgList = []
+				this.$API.systemQueueMessage.look().then(res => {
+					this.msgList = []
+				});
 			},
 			// 锁屏
 			lockScreen () {

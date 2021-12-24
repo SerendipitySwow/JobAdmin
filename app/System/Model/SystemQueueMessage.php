@@ -13,7 +13,7 @@ use Mine\MineModel;
  * @property int $receive_by 接收人
  * @property int $send_by 发送人
  * @property string $send_status 发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败
- * @property string $read_status 查看状态 0:未读 1: 未读
+ * @property string $read_status 查看状态 0:未读 1: 已读
  * @property int $created_by 创建者
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
@@ -25,18 +25,19 @@ class SystemQueueMessage extends MineModel
 {
     use SoftDeletes;
     public $incrementing = false;
-    const STATUS_SEND_WAIT = 0;
     //待发送
-    const STATUS_SENDING = 1;
+    const STATUS_SEND_WAIT = 0;
     //发送中
-    const STATUS_SEND_SUCCESS = 2;
+    const STATUS_SENDING = 1;
     //发送成功
-    const STATUS_SEND_FAIL = 3;
+    const STATUS_SEND_SUCCESS = 2;
     //发送失败
-    const READ_STATUS_NO = 0;
+    const STATUS_SEND_FAIL = 3;
     //未读
-    const READ_STATUS_YES = 1;
+    const STATUS_READ_NO = 0;
     //已读
+    const STATUS_READ_YES = 1;
+    
     /**
      * The table associated with the model.
      *
@@ -48,11 +49,29 @@ class SystemQueueMessage extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'content_id', 'content_type', 'content', 'receive_by', 'send_by', 'send_status', 'read_status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
+    protected $fillable = ['id', 'content_id', 'content_type','title','content', 'receive_by', 'send_by', 'send_status', 'read_status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = ['id' => 'integer', 'content_id' => 'integer', 'receive_by' => 'integer', 'send_by' => 'integer', 'created_by' => 'integer', 'updated_by' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    /**
+     * 关联接收人
+     * @return \Hyperf\Database\Model\Relations\HasOne
+     */
+    public function receiveUser() : \Hyperf\Database\Model\Relations\HasOne
+    {
+        return $this->hasOne(SystemUser::class, 'id', 'receive_by');
+    }
+
+    /**
+     * 关联发送人
+     * @return \Hyperf\Database\Model\Relations\HasOne
+     */
+    public function sendUser() : \Hyperf\Database\Model\Relations\HasOne
+    {
+        return $this->hasOne(SystemUser::class, 'id', 'send_by');
+    }
 }

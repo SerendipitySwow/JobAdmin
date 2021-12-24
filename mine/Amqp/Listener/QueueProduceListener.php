@@ -7,19 +7,12 @@
  * Time: 3:13 下午
  */
 declare(strict_types=1);
-/**
- * This file is part of Hyperf.
- *
- * @link     https://www.hyperf.io
- * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
- */
 namespace Mine\Amqp\Listener;
 
 use App\System\Mapper\SystemQueueMapper;
 use App\System\Model\SystemQueue;
 use App\System\Service\SystemQueueService;
+use Hyperf\Utils\Context;
 use Mine\Helper\Str;
 use Mine\Amqp\Event\AfterProduce;
 use Mine\Amqp\Event\BeforeProduce;
@@ -35,11 +28,7 @@ use Hyperf\Event\Annotation\Listener;
 class QueueProduceListener implements ListenerInterface
 {
     private $service;
-    private $exchangeName;
-    private $routingKeyName;
-    private $queueName;
-    private $throwable;
-    private $uuid;
+
     public function listen(): array
     {
         // 返回一个该监听器要监听的事件数组，可以同时监听多个事件
@@ -51,80 +40,87 @@ class QueueProduceListener implements ListenerInterface
             WaitTimeout::class,
         ];
     }
-    
+
+    /**
+     * @param object $event
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Exception
+     */
     public function process(object $event)
     {
-        $this->service = new SystemQueueService(new SystemQueueMapper());
-        $producer = $event->producer;
-        $this->throwable = $event->throwable ?? '';
-        $delayTime = $event->delayTime ?? 0;
+        $this->setId(snowflake_id());
+        $this->service = container()->get(SystemQueueService::class);
         $class = get_class($event);
         $func = lcfirst(trim(strrchr($class, '\\'),'\\'));
-        // 事件触发后该监听器要执行的代码写在这里，比如该示例下的发送用户注册成功短信等
-        $this->$func($producer,$delayTime);
-
+        $this->$func($event);
     }
 
     /**
      * Description:生产前
      * User:mike
-     * @param $producer
+     * @param object $event
      */
-    public function beforeProduce($producer,$delayTime){
-        $queueName = strchr($producer->getRoutingKey(),'.',true).'.queue';
-        $this->exchangeName = $producer->getExchange();
-        $this->routingKeyName = $producer->getRoutingKey();
-        $this->queueName = $queueName;
-        
-        $uuid = Str::getUUID();
-        $this->uuid = $uuid;
-        $content = ['uuid'=>$uuid,'data'=>json_decode($producer->payload())];
-        $producer->setPayload($content);
-        $data = [
-            'uuid'=>$uuid,
-            'exchange_name'=>$this->exchangeName,
-            'routing_key_name'=>$this->routingKeyName,
-            'queue_name'=>$this->queueName,
-            'queue_content'=>$producer->payload(),
-            'delay_time'=>$delayTime,
+    public function beforeProduce(object $event){
+
+        $queueName = strchr($event->producer->getRoutingKey(),'.',true).'.queue';
+
+        $id = $this->getId();
+
+        $event->producer->setPayload(
+            [ 'id'=> $id, 'data' => json_decode( $event->producer->payload() ) ]
+        );
+
+        $this->service->save([
+            'id'=> $id,
+            'exchange_name'=> $event->producer->getExchange(),
+            'routing_key_name'=> $event->producer->getRoutingKey(),
+            'queue_name'=> $queueName,
+            'queue_content'=> $event->producer->payload(),
+            'delay_time'=> $event->delayTime ?? 0,
             'produce_status'=>SystemQueue::PRODUCE_STATUS_SUCCESS
-        ];
-        $this->service->save($data);
+        ]);
     }
 
     /**
      * Description:生产中
      * User:mike
-     * @param $producer
+     * @param object $event
      */
-    public function produceEvent($producer,$delayTime){
-//        $condition = ['uuid'=>$this->uuid];
-//        $data = ['produce_status'=>SystemRabbitmq::PRODUCE_STATUS_DOING];
-//        $this->service->update($condition,$data);
+    public function produceEvent(object $event): void
+    {
+        // TODO...
     }
 
     /**
      * Description:生产后
      * User:mike
-     * @param $producer
+     * @param object $event
      */
-    public function afterProduce($producer,$delayTime){
-//        $condition = ['uuid'=>$this->uuid];
-//        $data = ['produce_status'=>SystemRabbitmq::PRODUCE_STATUS_SUCCESS];
-//        $this->service->update($condition,$data);
+    public function afterProduce(object $event): void
+    {
+        // TODO...
     }
+
     /**
      * Description:生产失败
      * User:mike
-     * @param $producer
      */
-    public function failToProduce($producer,$delayTime){
-        $condition = ['uuid'=>$this->uuid];
-        $data = ['produce_status'=>SystemQueue::PRODUCE_STATUS_FAIL];
-        if($this->throwable){
-            $data['log_content'] = $this->throwable->getMessage();
-        }
-        $this->service->update($condition,$data);
+    public function failToProduce(object $event): void
+    {
+        $this->service->update((int) $this->getId(), [
+            'produce_status' => SystemQueue::PRODUCE_STATUS_FAIL,
+            'log_content' => $event->throwable ?: $event->throwable->getMessage()
+        ]);
+    }
 
+    public function setId(string $uuid): void
+    {
+        Context::set('id', $uuid);
+    }
+
+    public function getId(): string
+    {
+        return Context::get('id', '');
     }
 }
