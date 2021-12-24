@@ -13,7 +13,7 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class QueueMessageAddTitle extends Migration
+class TableStructVersion050 extends Migration
 {
     /**
      * Run the migrations.
