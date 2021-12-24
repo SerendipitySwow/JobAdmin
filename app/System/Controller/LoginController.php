@@ -31,6 +31,8 @@ class LoginController extends MineController
     /**
      * @GetMapping("captcha")
      * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function captcha(): ResponseInterface
@@ -42,6 +44,8 @@ class LoginController extends MineController
      * @PostMapping("login")
      * @param SystemUserLoginRequest $request
      * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function login(SystemUserLoginRequest $request): ResponseInterface

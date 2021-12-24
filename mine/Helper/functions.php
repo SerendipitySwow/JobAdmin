@@ -15,6 +15,7 @@ use Hyperf\Utils\ApplicationContext;
 use Mine\Helper\LoginUser;
 use Mine\Helper\AppVerify;
 use Mine\Helper\Id;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 
 if (! function_exists('container')) {
@@ -181,5 +182,19 @@ if (! function_exists('snowflake_id')) {
     function snowflake_id(): String
     {
         return (new Id())->getId();
+    }
+}
+
+if (! function_exists('event')) {
+    /**
+     * 事件调度快捷方法
+     * @param object $dispatch
+     * @return object
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    function event(object $dispatch): object
+    {
+        return container()->get(EventDispatcherInterface::class)->dispatch($dispatch);
     }
 }
