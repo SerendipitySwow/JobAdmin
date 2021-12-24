@@ -59,9 +59,9 @@ class SystemQueueMessageMapper extends AbstractMapper
         }
 
         // group by
-        if (! isset($params['type'])) {
-            $query->groupBy([ 'send_by' ]);
-        }
+//        if (! isset($params['type'])) {
+//            $query->groupBy([ 'send_by' ]);
+//        }
 
         //关联查询用户
         $query->with(['receiveUser' => function($query) {

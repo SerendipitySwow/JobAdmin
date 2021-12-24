@@ -56,7 +56,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function beforeConsume(object $event)
     {
-        $this->service->update($event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_DOING ]);
+        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_DOING ]);
     }
 
     /**
@@ -76,7 +76,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function afterConsume(object $event)
     {
-        $this->service->update($event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_SUCCESS ]);
+        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_SUCCESS ]);
     }
 
     /**
@@ -86,7 +86,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function failToConsume(object $event)
     {
-        $this->service->update($event->data['id'], [
+        $this->service->update((int) $event->data['id'], [
             'consume_status' => SystemQueue::CONSUME_STATUS_4,
             'log_content' => $event->throwable ?: $event->throwable->getMessage()
         ]);

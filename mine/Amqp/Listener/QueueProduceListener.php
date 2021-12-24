@@ -85,10 +85,9 @@ class QueueProduceListener implements ListenerInterface
     /**
      * Description:生产中
      * User:mike
-     * @param $producer
-     * @param $delayTime
+     * @param object $event
      */
-    public function produceEvent($producer,$delayTime): void
+    public function produceEvent(object $event): void
     {
         // TODO...
     }
@@ -109,7 +108,7 @@ class QueueProduceListener implements ListenerInterface
      */
     public function failToProduce(object $event): void
     {
-        $this->service->update($this->getId(), [
+        $this->service->update((int) $this->getId(), [
             'produce_status' => SystemQueue::PRODUCE_STATUS_FAIL,
             'log_content' => $event->throwable ?: $event->throwable->getMessage()
         ]);
