@@ -19,7 +19,6 @@ use Mine\MineModel;
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
  * @property \Carbon\Carbon $updated_at 更新时间
- * @property string $remark 备注
  */
 class SystemQueueLog extends MineModel
 {
@@ -76,7 +75,7 @@ class SystemQueueLog extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'exchange_name', 'routing_key_name', 'queue_name', 'queue_content', 'log_content', 'produce_status', 'consume_status', 'delay_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'remark'];
+    protected $fillable = ['id', 'exchange_name', 'routing_key_name', 'queue_name', 'queue_content', 'log_content', 'produce_status', 'consume_status', 'delay_time', 'created_by', 'updated_by', 'created_at', 'updated_at'];
     /**
      * The attributes that should be cast to native types.
      *
