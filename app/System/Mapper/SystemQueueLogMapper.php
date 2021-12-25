@@ -3,23 +3,23 @@
 declare(strict_types = 1);
 namespace App\System\Mapper;
 
-use App\System\Model\SystemQueue;
+use App\System\Model\SystemQueueLog;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
 
 /**
  * 队列管理Mapper类
  */
-class SystemQueueMapper extends AbstractMapper
+class SystemQueueLogMapper extends AbstractMapper
 {
     /**
-     * @var SystemQueue
+     * @var SystemQueueLog
      */
     public $model;
 
     public function assignModel()
     {
-        $this->model = SystemQueue::class;
+        $this->model = SystemQueueLog::class;
     }
 
     /**
@@ -30,7 +30,6 @@ class SystemQueueMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        
         // 交换机名称
         if (isset($params['exchange_name'])) {
             $query->where('exchange_name', '=', $params['exchange_name']);
@@ -44,16 +43,6 @@ class SystemQueueMapper extends AbstractMapper
         // 队列名称
         if (isset($params['queue_name'])) {
             $query->where('queue_name', '=', $params['queue_name']);
-        }
-
-        // 队列内容
-        if (isset($params['queue_content'])) {
-            $query->where('queue_content', '=', $params['queue_content']);
-        }
-
-        // 日志内容
-        if (isset($params['log_content'])) {
-            $query->where('log_content', '=', $params['log_content']);
         }
 
         // 生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复

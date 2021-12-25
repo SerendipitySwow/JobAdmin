@@ -6,6 +6,7 @@ namespace App\System\Controller\Logs;
 use App\System\Service\SystemApiLogService;
 use App\System\Service\SystemLoginLogService;
 use App\System\Service\SystemOperLogService;
+use App\System\Service\SystemQueueLogService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -43,6 +44,12 @@ class LogsController extends MineController
      * @var SystemApiLogService
      */
     protected $apiLogService;
+
+    /**
+     * @Inject
+     * @var SystemQueueLogService
+     */
+    protected $queueLogService;
 
     /**
      * 获取登录日志列表

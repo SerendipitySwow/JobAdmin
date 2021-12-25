@@ -3,20 +3,20 @@
 declare(strict_types = 1);
 namespace App\System\Service;
 
-use App\System\Mapper\SystemQueueMapper;
+use App\System\Mapper\SystemQueueLogMapper;
 use Mine\Abstracts\AbstractService;
 
 /**
  * 队列管理服务类
  */
-class SystemQueueService extends AbstractService
+class SystemQueueLogService extends AbstractService
 {
     /**
-     * @var SystemQueueMapper
+     * @var SystemQueueLogMapper
      */
     public $mapper;
 
-    public function __construct(SystemQueueMapper $mapper)
+    public function __construct(SystemQueueLogMapper $mapper)
     {
         $this->mapper = $mapper;
     }

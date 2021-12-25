@@ -74,11 +74,11 @@
 			}
 		},
 		created() {
-			setInterval( () => {
-				this.$API.systemQueueMessage.getUserList().then(res => {
-					this.msgList = res.data;
-				})
-			}, 10000)
+			// setInterval( () => {
+			// 	this.$API.systemQueueMessage.getUserList().then(res => {
+			// 		this.msgList = res.data;
+			// 	})
+			// }, 10000)
 
 			let userInfo = this.$TOOL.data.get('user').user;
 			this.userName = userInfo.username;

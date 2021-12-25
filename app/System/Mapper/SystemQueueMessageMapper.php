@@ -58,11 +58,6 @@ class SystemQueueMessageMapper extends AbstractMapper
             $query->where('read_status', '=', $params['read_status']);
         }
 
-        // group by
-//        if (! isset($params['type'])) {
-//            $query->groupBy([ 'send_by' ]);
-//        }
-
         //关联查询用户
         $query->with(['receiveUser' => function($query) {
             $query->select([ 'id', 'nickname' ]);

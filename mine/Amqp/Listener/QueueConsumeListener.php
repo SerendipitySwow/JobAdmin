@@ -9,9 +9,8 @@
 declare(strict_types=1);
 namespace Mine\Amqp\Listener;
 
-use App\System\Mapper\SystemQueueMapper;
-use App\System\Model\SystemQueue;
-use App\System\Service\SystemQueueService;
+use App\System\Model\SystemQueueLog;
+use App\System\Service\SystemQueueLogService;
 use Hyperf\Utils\Context;
 use Mine\Amqp\Event\AfterConsume;
 use Mine\Amqp\Event\BeforeConsume;
@@ -41,7 +40,7 @@ class QueueConsumeListener implements ListenerInterface
 
     public function process(object $event)
     {
-        $this->service = container()->get(SystemQueueService::class);
+        $this->service = container()->get(SystemQueueLogService::class);
         if ($event->message) {
             $class = get_class($event);
             $func = lcfirst(trim(strrchr($class, '\\'),'\\'));
@@ -56,7 +55,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function beforeConsume(object $event)
     {
-        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_DOING ]);
+        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueueLog::CONSUME_STATUS_DOING ]);
     }
 
     /**
@@ -76,7 +75,7 @@ class QueueConsumeListener implements ListenerInterface
      */
     public function afterConsume(object $event)
     {
-        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueue::CONSUME_STATUS_SUCCESS ]);
+        $this->service->update((int) $event->data['id'], [ 'consume_status' => SystemQueueLog::CONSUME_STATUS_SUCCESS ]);
     }
 
     /**
@@ -87,7 +86,7 @@ class QueueConsumeListener implements ListenerInterface
     public function failToConsume(object $event)
     {
         $this->service->update((int) $event->data['id'], [
-            'consume_status' => SystemQueue::CONSUME_STATUS_4,
+            'consume_status' => SystemQueueLog::CONSUME_STATUS_4,
             'log_content' => $event->throwable ?: $event->throwable->getMessage()
         ]);
     }

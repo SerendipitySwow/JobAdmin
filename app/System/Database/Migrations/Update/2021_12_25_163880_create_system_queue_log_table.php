@@ -13,23 +13,22 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
 
-class CreateSystemQueueTable extends Migration
+class CreateSystemQueueLogTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('system_queue', function (Blueprint $table) {
+        Schema::create('system_queue_log', function (Blueprint $table) {
             $table->engine = 'Innodb';
-            $table->comment('队列管理表');
+            $table->comment('队列日志表');
             $table->addColumn('bigInteger', 'id', ['unsigned' => true, 'comment' => '主键']);
-            $table->addColumn('string', 'uuid', ['length' => 64, 'comment' => 'UUID']);
             $table->addColumn('string', 'exchange_name', ['length' => 32, 'comment' => '交换机名称']);
             $table->addColumn('string', 'routing_key_name', ['length' => 32, 'comment' => '路由名称']);
             $table->addColumn('string', 'queue_name', ['length' => 64, 'comment' => '队列名称']);
-            $table->addColumn('text', 'queue_content', ['comment' => '队列内容'])->nullable();
-            $table->addColumn('text', 'log_content', ['comment' => '队列内容'])->nullable();
+            $table->addColumn('text', 'queue_content', ['comment' => '队列数据'])->nullable();
+            $table->addColumn('text', 'log_content', ['comment' => '队列日志'])->nullable();
             $table->addColumn('char', 'produce_status', ['length' => 1, 'default' => '0', 'comment' => '生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复'])->nullable();
             $table->addColumn('char', 'consume_status', ['length' => 1, 'default' => '0', 'comment' => '消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复'])->nullable();
             $table->addColumn('integer', 'delay_time', ['unsigned' => true, 'comment' => '延迟时间（秒）']);
@@ -48,6 +47,6 @@ class CreateSystemQueueTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('system_queue');
+        Schema::dropIfExists('system_queue_log');
     }
 }

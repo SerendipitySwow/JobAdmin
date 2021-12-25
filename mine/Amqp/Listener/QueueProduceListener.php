@@ -9,11 +9,9 @@
 declare(strict_types=1);
 namespace Mine\Amqp\Listener;
 
-use App\System\Mapper\SystemQueueMapper;
-use App\System\Model\SystemQueue;
-use App\System\Service\SystemQueueService;
+use App\System\Model\SystemQueueLog;
+use App\System\Service\SystemQueueLogService;
 use Hyperf\Utils\Context;
-use Mine\Helper\Str;
 use Mine\Amqp\Event\AfterProduce;
 use Mine\Amqp\Event\BeforeProduce;
 use Mine\Amqp\Event\FailToProduce;
@@ -50,7 +48,7 @@ class QueueProduceListener implements ListenerInterface
     public function process(object $event)
     {
         $this->setId(snowflake_id());
-        $this->service = container()->get(SystemQueueService::class);
+        $this->service = container()->get(SystemQueueLogService::class);
         $class = get_class($event);
         $func = lcfirst(trim(strrchr($class, '\\'),'\\'));
         $this->$func($event);
@@ -78,7 +76,7 @@ class QueueProduceListener implements ListenerInterface
             'queue_name'=> $queueName,
             'queue_content'=> $event->producer->payload(),
             'delay_time'=> $event->delayTime ?? 0,
-            'produce_status'=>SystemQueue::PRODUCE_STATUS_SUCCESS
+            'produce_status'=>SystemQueueLog::PRODUCE_STATUS_SUCCESS
         ]);
     }
 
@@ -109,7 +107,7 @@ class QueueProduceListener implements ListenerInterface
     public function failToProduce(object $event): void
     {
         $this->service->update((int) $this->getId(), [
-            'produce_status' => SystemQueue::PRODUCE_STATUS_FAIL,
+            'produce_status' => SystemQueueLog::PRODUCE_STATUS_FAIL,
             'log_content' => $event->throwable ?: $event->throwable->getMessage()
         ]);
     }
