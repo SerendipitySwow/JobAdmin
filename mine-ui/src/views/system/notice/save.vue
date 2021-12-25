@@ -16,8 +16,9 @@
             </el-select>
         </el-form-item>
 
-        <el-form-item label="选择人员" prop="title">
-            
+        <el-form-item label="接收人员" prop="title">
+            <ma-select-user v-model="users" />
+            <div class="el-form-item-msg">不选择则为所有人发送</div>
         </el-form-item>
 
         <el-form-item label="公告内容" prop="content">
@@ -51,6 +52,8 @@
           add: '新增系统公告',
           edit: '编辑系统公告'
         },
+        // 选择的用户
+        users: [],
         form: {
           
            id: '',

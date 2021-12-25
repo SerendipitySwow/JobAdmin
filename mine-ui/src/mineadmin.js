@@ -10,6 +10,7 @@ import maPhoto from './components/maPhoto'
 import maImport from './components/maImport'
 import maResourceSelect from './components/maResourceSelect'
 import maDictTag from './components/maDictTag'
+import maSelectUser from './components/maSelectUser'
 
 import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
@@ -62,6 +63,7 @@ export default {
 		app.component('maImport', maImport)
 		app.component('maPhoto', maPhoto)
 		app.component('maResourceSelect', maResourceSelect)
+		app.component('maSelectUser', maSelectUser)
 		app.component('scTable', scTable)
 		app.component('scSelect', scSelect)
 		app.component('scDialog', scDialog)
