@@ -81,14 +81,23 @@
         <el-table-column
            label="公告类型"
            prop="type"
-        />
-        <el-table-column
-           label="公告内容"
-           prop="content"
-        />
+        >
+          <template #default="scope">
+            <ma-dict-tag :options="backend_notice_type_data" :value="scope.row.type" />
+          </template>
+        </el-table-column>
+
         <el-table-column
            label="浏览次数"
            prop="click_num"
+        />
+        <el-table-column
+           label="创建时间"
+           prop="created_at"
+        />
+        <el-table-column
+           label="更新时间"
+           prop="updated_at"
         />
 
         <!-- 正常数据操作按钮 -->
@@ -137,7 +146,7 @@
     </el-main>
   </el-container>
 
-  <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
+  <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false" />
 
 </template>
 

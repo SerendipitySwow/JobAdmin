@@ -16,8 +16,8 @@
             </el-select>
         </el-form-item>
 
-        <el-form-item label="接收人员" prop="title">
-            <ma-select-user v-model="users" />
+        <el-form-item label="接收人员" prop="users" v-if="mode === 'add'">
+            <ma-select-user v-model="form.users" />
             <div class="el-form-item-msg">不选择则为所有人发送</div>
         </el-form-item>
 
@@ -55,12 +55,11 @@
         // 选择的用户
         users: [],
         form: {
-          
            id: '',
            title: '',
            type: '',
+           users: [],
            content: '',
-           click_num: '',
            remark: '',
         },
         rules: {
@@ -110,12 +109,10 @@
 
       //表单注入数据
       setData(data){
-        
           this.form.id = data.id;
           this.form.title = data.title;
           this.form.type = data.type;
           this.form.content = data.content;
-          this.form.click_num = data.click_num;
           this.form.remark = data.remark;
       },
 
@@ -126,12 +123,6 @@
               this.backend_notice_type_data = res.data
           })
       },
-
-      
-
-      
-
-      
     }
   }
 </script>

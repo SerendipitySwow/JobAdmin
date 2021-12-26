@@ -82,6 +82,29 @@ class LogsController extends MineController
     }
 
     /**
+     * 获取队列日志列表
+     * @GetMapping("getQueueLogPageList")
+     * @Permission("system:queueLog")
+     */
+    public function getQueueLogPageList(): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->success($this->queueLogService->getPageList($this->request->all()));
+    }
+
+    /**
+     * 删除队列日志
+     * @DeleteMapping("deleteQueueLog/{ids}")
+     * @Permission("system:queueLog:delete")
+     * @OperationLog
+     * @param String $ids
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function deleteQueueLog(String $ids): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->queueLogService->delete($ids) ? $this->success() : $this->error();
+    }
+
+    /**
      * 删除操作日志
      * @DeleteMapping("deleteOperLog/{ids}")
      * @Permission("system:operLog:delete")

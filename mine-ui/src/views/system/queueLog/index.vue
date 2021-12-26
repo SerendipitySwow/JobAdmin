@@ -4,10 +4,18 @@
       <div class="left-panel">
 
         <el-button
+          type="primary"
+          icon="el-icon-plus"
+          v-auth="['system:queueLog:produceStatus']"
+          :disabled="selection.length==0"
+          @click="batchDel"
+        >重新加入队列</el-button>
+
+        <el-button
           type="danger"
           plain
           icon="el-icon-delete"
-          v-auth="['system:SystemQueue:delete']"
+          v-auth="['system:queueLog:delete']"
           :disabled="selection.length==0"
           @click="batchDel"
         >删除</el-button>
@@ -15,8 +23,8 @@
       </div>
       <div class="right-panel">
         <div class="right-panel-search">
-
-          <el-input v-model="queryParams.uuid" placeholder="UUID" clearable></el-input>
+          
+          <el-input v-model="queryParams.queue_name" placeholder="队列名称" clearable></el-input>
 
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -32,7 +40,7 @@
                 更多筛选<el-icon><el-icon-arrow-down /></el-icon>
               </el-button>
             </template>
-            <el-form label-width="80px">
+            <el-form label-width="100px">
 
             <el-form-item label="交换机名称" prop="exchange_name">
                 <el-input v-model="queryParams.exchange_name" placeholder="交换机名称" clearable></el-input>
@@ -42,43 +50,29 @@
                 <el-input v-model="queryParams.routing_key_name" placeholder="路由名称" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="队列名称" prop="queue_name">
-                <el-input v-model="queryParams.queue_name" placeholder="队列名称" clearable></el-input>
-            </el-form-item>
-
-            <el-form-item label="队列内容" prop="queue_content">
-                <el-input v-model="queryParams.queue_content" placeholder="队列内容" clearable></el-input>
-            </el-form-item>
-
-            <el-form-item label="日志内容" prop="log_content">
-                <el-input v-model="queryParams.log_content" placeholder="日志内容" clearable></el-input>
-            </el-form-item>
-
             <el-form-item label="生产状态" prop="produce_status">
-
-            <el-select v-model="queryParams.produce_status" style="width:100%" clearable placeholder="生产状态">
-                <el-option
-                    v-for="(item, index) in queue_produce_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
+              <el-select v-model="queryParams.produce_status" style="width:100%" clearable placeholder="生产状态">
+                  <el-option
+                      v-for="(item, index) in queue_produce_status_data"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                  >{{item.label}}</el-option>
+              </el-select>
             </el-form-item>
 
             <el-form-item label="消费状态" prop="consume_status">
-
-            <el-select v-model="queryParams.consume_status" style="width:100%" clearable placeholder="消费状态">
-                <el-option
-                    v-for="(item, index) in queue_consume_status_data"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                >{{item.label}}</el-option>
-            </el-select>
+              <el-select v-model="queryParams.consume_status" style="width:100%" clearable placeholder="消费状态">
+                  <el-option
+                      v-for="(item, index) in queue_consume_status_data"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                  >{{item.label}}</el-option>
+              </el-select>
             </el-form-item>
 
-            <el-form-item label="延迟时间（秒）" prop="delay_time">
+            <el-form-item label="延迟时间" prop="delay_time">
                 <el-input v-model="queryParams.delay_time" placeholder="延迟时间（秒）" clearable></el-input>
             </el-form-item>
 
@@ -91,22 +85,14 @@
       <maTable
         ref="table"
         :api="api"
-        :column="column"
-        :showRecycle="true"
         row-key="id"
         :hidePagination="false"
         @selection-change="selectionChange"
-        @switch-data="switchData"
         stripe
         remoteSort
       >
         <el-table-column type="selection" width="50"></el-table-column>
 
-
-        <el-table-column
-           label="UUID"
-           prop="uuid"
-        />
         <el-table-column
            label="交换机名称"
            prop="exchange_name"
@@ -119,21 +105,13 @@
            label="队列名称"
            prop="queue_name"
         />
-        <el-table-column
-           label="队列内容"
-           prop="queue_content"
-        />
-        <el-table-column
-           label="日志内容"
-           prop="log_content"
-        />
 
 				<el-table-column
 					label="生产状态"
 					prop="produce_status"
 				>
 					<template #default="scope">
-						<ma-dict-tag  :options="queue_produce_status_data" :value="scope.row.produce_status" />
+						<ma-dict-tag :options="queue_produce_status_data" :value="scope.row.produce_status" />
 					</template>
 
 				</el-table-column>
@@ -142,11 +120,9 @@
            label="消费状态"
            prop="consume_status"
         >
-
 					<template #default="scope">
-						<ma-dict-tag  :options="queue_consume_status_data" :value="scope.row.consume_status" />
+						<ma-dict-tag :options="queue_consume_status_data" :value="scope.row.consume_status" />
 					</template>
-
 				</el-table-column>
 
         <el-table-column
@@ -154,38 +130,14 @@
            prop="delay_time"
         />
 
-        <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="130">
           <template #default="scope">
-
             <el-button
               type="text"
               size="small"
               @click="deletes(scope.row.id)"
-              v-auth="['system:SystemQueue:delete']"
+              v-auth="['system:queueLog:delete']"
             >删除</el-button>
-
-          </template>
-        </el-table-column>
-
-        <!-- 回收站操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
-          <template #default="scope">
-
-            <el-button
-              type="text"
-              size="small"
-              v-auth="['system:SystemQueue:recovery']"
-              @click="recovery(scope.row.id)"
-            >恢复</el-button>
-
-            <el-button
-              type="text"
-              size="small"
-              v-auth="['system:SystemQueue:realDelete']"
-              @click="deletes(scope.row.id)"
-            >删除</el-button>
-
           </template>
         </el-table-column>
 
@@ -193,18 +145,11 @@
     </el-main>
   </el-container>
 
-  <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
-
 </template>
 
 <script>
-  import saveDialog from './save'
-
   export default {
-    name: 'system:SystemQueue',
-    components: {
-      saveDialog
-    },
+    name: 'system:queueLog',
 
     async created() {
         await this.getDictData();
@@ -212,23 +157,13 @@
 
     data() {
       return {
-        dialog: {
-          save: false
-        },
-
         queue_produce_status_data: [],
         queue_consume_status_data: [],
-        column: [],
         povpoerShow: false,
         dateRange:'',
-        api: {
-          list: this.$API.systemQueue.getList,
-          recycleList: this.$API.systemQueue.getRecycleList,
-        },
+        api: { list: this.$API.queueLog.getPageList },
         selection: [],
         queryParams: {
-
-          uuid: undefined,
           exchange_name: undefined,
           routing_key_name: undefined,
           queue_name: undefined,
@@ -238,34 +173,9 @@
           consume_status: undefined,
           delay_time: undefined,
         },
-        isRecycle: false,
       }
     },
     methods: {
-
-      //添加
-      add(){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open()
-        })
-      },
-
-      //编辑
-      tableEdit(row){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open('edit').setData(row)
-        })
-      },
-
-      //查看
-      tableShow(row){
-        this.dialog.save = true
-        this.$nextTick(() => {
-          this.$refs.saveDialog.open('show').setData(row)
-        })
-      },
 
       //批量删除
       async batchDel(){
@@ -275,41 +185,10 @@
           const loading = this.$loading();
           let ids = []
           this.selection.map(item => ids.push(item.id))
-          if (this.isRecycle) {
-            this.$API.systemQueue.realDeletes(ids.join(','))
-            this.$refs.table.upData(this.queryParams)
-          } else {
-            this.$API.systemQueue.deletes(ids.join(','))
-            this.$refs.table.upData(this.queryParams)
-          }
-          loading.close();
-          this.$message.success("操作成功")
-        })
-      },
-
-      // 单个删除
-      async deletes(id) {
-        await this.$confirm(`确定删除该数据吗？`, '提示', {
-          type: 'warning'
-        }).then(async () => {
-          const loading = this.$loading();
-          if (this.isRecycle) {
-            await this.$API.systemQueue.realDeletes(id)
-            this.$refs.table.upData(this.queryParams)
-          } else {
-            await this.$API.systemQueue.deletes(id)
-            this.$refs.table.upData(this.queryParams)
-          }
-          loading.close();
-          this.$message.success("操作成功")
-        }).catch(()=>{})
-      },
-
-      // 恢复数据
-      async recovery (id) {
-        await this.$API.systemQueue.recoverys(id).then(res => {
-          this.$message.success(res.message)
+          this.$API.queueLog.deletes(ids.join(','))
           this.$refs.table.upData(this.queryParams)
+          loading.close()
+          this.$message.success("操作成功")
         })
       },
 
@@ -331,15 +210,8 @@
         this.$refs.table.upData(this.queryParams)
       },
 
-      // 切换数据类型回调
-      switchData(isRecycle) {
-        this.isRecycle = isRecycle
-      },
-
       resetSearch() {
         this.queryParams = {
-
-          uuid: undefined,
           exchange_name: undefined,
           routing_key_name: undefined,
           queue_name: undefined,
@@ -359,7 +231,6 @@
 
       // 获取字典数据
       getDictData() {
-
           this.getDict('queue_produce_status').then(res => {
               this.queue_produce_status_data = res.data
           })
