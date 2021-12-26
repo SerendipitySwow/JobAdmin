@@ -105,6 +105,19 @@ class LogsController extends MineController
     }
 
     /**
+     * 重新加入队列
+     * @DeleteMapping("updateQueueLog/{ids}")
+     * @Permission("system:queueLog:produceStatus")
+     * @OperationLog
+     * @param String $ids
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function updateQueueLog(String $ids): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->queueLogService->updateProduceStatus($ids) ? $this->success() : $this->error();
+    }
+
+    /**
      * 删除操作日志
      * @DeleteMapping("deleteOperLog/{ids}")
      * @Permission("system:operLog:delete")

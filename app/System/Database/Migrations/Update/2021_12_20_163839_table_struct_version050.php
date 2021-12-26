@@ -27,6 +27,18 @@ class TableStructVersion050 extends Migration
                     ->after('content_type')
                     ->nullable();
             }
+
+            if (Schema::hasColumn('system_queue_message','content_id')) {
+                $table->dropColumn(['content_id']);
+            }
+
+            if (Schema::hasColumn('system_queue_message','read_status')) {
+                $table->dropColumn(['read_status']);
+            }
+
+            if (Schema::hasColumn('system_queue_message','receive_by')) {
+                $table->dropColumn(['receive_by']);
+            }
         });
     }
 

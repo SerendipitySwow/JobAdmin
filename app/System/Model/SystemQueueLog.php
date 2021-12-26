@@ -69,7 +69,7 @@ class SystemQueueLog extends MineModel
      *
      * @var string
      */
-    protected $table = 'system_queue';
+    protected $table = 'system_queue_log';
     /**
      * The attributes that are mass assignable.
      *

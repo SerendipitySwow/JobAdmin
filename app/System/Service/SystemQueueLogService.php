@@ -20,4 +20,15 @@ class SystemQueueLogService extends AbstractService
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * 修改队列日志的生产状态
+     * @param string $ids
+     * @return bool
+     */
+    public function updateProduceStatus(string $ids): bool
+    {
+        // TODO...
+        return true;
+    }
 }

@@ -113,12 +113,11 @@ class QueueMessageController extends MineController
      * Description:查看操作
      * User:mike
      * @PutMapping("look")
-     * @param SystemMessageUpdateRequest $request
      * @return ResponseInterface
      */
-    public function look(SystemMessageUpdateRequest $request): ResponseInterface
+    public function look(): ResponseInterface
     {
-        return $this->success($this->service->look($request->post('message_id')));
+        return $this->service->look($this->request->input('id')) ? $this->success() : $this->error();
     }
 
     /**

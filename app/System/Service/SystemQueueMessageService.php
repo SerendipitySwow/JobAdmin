@@ -98,31 +98,28 @@ class SystemQueueMessageService extends AbstractService
     /**
      * Description:查看操作
      * User:mike
-     * @param int $messageId
-     * @return int
+     * @param int $id
+     * @return bool
      */
-    public function look($messageId = 0):int
+    public function look(int $id): bool
     {
-        $condition = $messageId;
-        if(!$messageId){
-            $condition = [
-                'receive_by' => user()->getId()
-            ];
-        }
-        return $this->mapper->updateByCondition($condition,[
+        return $this->mapper->update($id,[
             'read_status' => SystemQueueMessage::STATUS_READ_YES
-        ])?1:0;
+        ]);
     }
 
     /**
      * Description:发送队列
      * User:mike
      * @param array $messageId
-     * @return int
+     * @return bool
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Throwable
      */
-    protected function push(array $messageId):int
+    protected function push(array $messageId): bool
     {
         $message = new MessageProducer(['messageId' => $messageId]);
-        return $this->producer->produce($message,false,5,0)?1:0;
+        return $this->producer->produce($message,false,5,0);
     }
 }
