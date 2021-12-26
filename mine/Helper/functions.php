@@ -9,6 +9,7 @@
  * @Link   https://gitee.com/xmo/MineAdmin
  */
 
+use App\System\Vo\QueueMessageVo;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\ApplicationContext;
@@ -196,5 +197,23 @@ if (! function_exists('event')) {
     function event(object $dispatch): object
     {
         return container()->get(EventDispatcherInterface::class)->dispatch($dispatch);
+    }
+}
+
+if (! function_exists('push_queue_message')) {
+    /**
+     * 推送消息到队列
+     * @param QueueMessageVo $message
+     * @param array $receiveUsers
+     * @return object
+     * @throws Throwable
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    function push_queue_message(QueueMessageVo $message, array $receiveUsers = []): object
+    {
+        return container()
+            ->get(\App\System\Service\SystemQueueMessageService::class)
+            ->pushMessage($message, $receiveUsers);
     }
 }

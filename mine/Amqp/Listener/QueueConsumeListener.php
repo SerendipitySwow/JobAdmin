@@ -38,6 +38,10 @@ class QueueConsumeListener implements ListenerInterface
         ];
     }
 
+    /**
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function process(object $event)
     {
         $this->service = container()->get(SystemQueueLogService::class);
@@ -91,9 +95,9 @@ class QueueConsumeListener implements ListenerInterface
         ]);
     }
 
-    public function setId(string $uuid): void
+    public function setId(string $id): void
     {
-        Context::set('id', $uuid);
+        Context::set('id', $id);
     }
 
     public function getId(): string

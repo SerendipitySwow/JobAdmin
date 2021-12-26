@@ -6,6 +6,7 @@ namespace App\System\Mapper;
 use App\System\Model\SystemQueueMessage;
 use Hyperf\Database\Model\Builder;
 use Mine\Abstracts\AbstractMapper;
+use Mine\Annotation\Transaction;
 
 /**
  * 信息管理Mapper类
@@ -58,15 +59,24 @@ class SystemQueueMessageMapper extends AbstractMapper
             $query->where('read_status', '=', $params['read_status']);
         }
 
-        //关联查询用户
-        $query->with(['receiveUser' => function($query) {
-            $query->select([ 'id', 'nickname' ]);
-        }]);
-
         $query->with(['sendUser' => function($query) {
             $query->select([ 'id', 'nickname' ]);
         }]);
 
         return $query;
+    }
+
+    /**
+     * 保存数据
+     * @Transaction
+     * @param array $data
+     * @return int
+     */
+    public function save(array $data): int
+    {
+        $this->filterExecuteAttributes($data);
+        $model = $this->model::create($data);
+        $model->receiveUser()->sync($data['receive_users']);
+        return $model->{$model->getKeyName()};
     }
 }

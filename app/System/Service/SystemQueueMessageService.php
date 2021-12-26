@@ -8,9 +8,11 @@ use App\System\Mapper\SystemQueueMessageMapper;
 use App\System\Model\SystemQueueMessage;
 use App\System\Model\SystemUser;
 use App\System\Queue\Producer\MessageProducer;
+use App\System\Vo\QueueMessageVo;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
 use Mine\Amqp\DelayProducer;
+use Mine\Exception\NormalStatusException;
 
 /**
  * 信息管理服务类
@@ -21,6 +23,7 @@ class SystemQueueMessageService extends AbstractService
      * @var SystemQueueMessageMapper
      */
     public $mapper;
+
     /**
      * @Inject
      * @var SystemUserService
@@ -39,87 +42,46 @@ class SystemQueueMessageService extends AbstractService
     }
 
     /**
-     * 获取列表数据（带分页）
-     * @param array|null $params
-     * @return array
-     */
-    public function getPageList(?array $params = null):array
-    {
-        $res = parent::getPageList($params);
-        foreach($res['items'] as $key => $info){
-            $info['receive_name'] = $info->receiveUser->nickname;
-            $info['send_name']    = $info->sendUser->nickname;
-            $res['items'][$key] = $info;
-        }
-        return $res;
-    }
-
-    /**
-     * 获取列表数据（带分页）
-     * @param array|null $params
-     * @return array
-     */
-    public function getLogPageList(?array $params = null):array
-    {
-        $params['type'] = 'log';
-        $res = parent::getPageList($params);
-        foreach($res['items'] as $key => $info){
-            $info['receive_name'] = $info->receiveUser->nickname;
-            $info['send_name']    = $info->sendUser->nickname;
-            $res['items'][$key] = $info;
-        }
-        return $res;
-    }
-
-    /**
-     * Description:发送消息
-     * User:mike
-     * @param array $data
-     * @return int
-     */
-    public function send(array $data):int
-    {
-        $this->setAttributes($data);
-        $userIdArr = $this->receive_by;
-        //发送所有用户
-        if(!$this->receive_by){
-            //获取所有用户Id
-            $userIdArr = $this->userService->pluck(['status' => SystemUser::USER_NORMAL],'id');
-        }
-        $data['send_by'] = user()->getId();
-        $messageId       = array_map(function($userId) use ($data){
-            $data['receive_by'] = $userId;
-            return $this->mapper->save($data);
-        },$userIdArr);
-
-        return $this->push($messageId);
-    }
-
-    /**
-     * Description:查看操作
-     * User:mike
-     * @param int $id
-     * @return bool
-     */
-    public function look(int $id): bool
-    {
-        return $this->mapper->update($id,[
-            'read_status' => SystemQueueMessage::STATUS_READ_YES
-        ]);
-    }
-
-    /**
-     * Description:发送队列
-     * User:mike
-     * @param array $messageId
+     * 推送消息到队列
+     * @param QueueMessageVo $message
+     * @param array $receiveUsers
      * @return bool
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Throwable
      */
-    protected function push(array $messageId): bool
+    public function pushMessage(QueueMessageVo $message, array $receiveUsers = []): bool
     {
-        $message = new MessageProducer(['messageId' => $messageId]);
-        return $this->producer->produce($message,false,5,0);
+        if (empty ($message->getTitle())) {
+            throw new NormalStatusException(t('system.queue_missing_message_title'), 500);
+        }
+
+        if (empty ($message->getContent())) {
+            throw new NormalStatusException(t('system.queue_missing_message_content_type'), 500);
+        }
+
+        if (empty ($message->getContentType())) {
+            throw new NormalStatusException(t('system.queue_missing_content'), 500);
+        }
+
+        if (empty($receiveUsers)) {
+            $receiveUsers = $this->userService->pluck(['status' => SystemUser::USER_NORMAL],'id');
+        }
+
+        $data = [
+            'title'         => $message->getTitle(),
+            'content'       => $message->getContent(),
+            'content_type'  => $message->getContentType(),
+            'send_by'       => $message->getSendBy() ?: user()->getId(),
+            'send_status'   => $message->getSendStatus() ?: SystemQueueMessage::STATUS_SEND_WAIT,
+            'receive_users' => $receiveUsers,
+        ];
+
+        $data['id'] = $this->mapper->save($data);
+
+        return $this->producer->produce(
+            new MessageProducer(['message_id' => $data]),
+            false,5,0
+        );
     }
 }

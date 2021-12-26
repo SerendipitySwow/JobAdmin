@@ -39,6 +39,10 @@ class TableStructVersion050 extends Migration
             if (Schema::hasColumn('system_queue_message','receive_by')) {
                 $table->dropColumn(['receive_by']);
             }
+
+            if (Schema::hasColumn('system_queue_message','deleted_at')) {
+                $table->dropColumn(['deleted_at']);
+            }
         });
     }
 
