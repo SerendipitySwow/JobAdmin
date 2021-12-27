@@ -41,12 +41,7 @@ class QueueMessageController extends MineController
      */
     public function index(): ResponseInterface
     {
-        $params = $this->request->all();
-//        $params['receive_by'] = user()->getId();
-//        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
-        $params['orderBy'] = 'id';
-        $params['orderType'] = 'desc';
-        return $this->success($this->service->getPageList($params));
+        return $this->success($this->service->getPageList($this->request->all()));
     }
 
     /**
@@ -57,31 +52,7 @@ class QueueMessageController extends MineController
      */
     public function userMessage(): ResponseInterface
     {
-        $params = $this->request->all();
-        $params['receive_by'] = user()->getId();
-        $params['send_status'] = SystemQueueMessage::STATUS_SEND_SUCCESS;
-        $params['read_status'] = SystemQueueMessage::STATUS_READ_NO;
-        $params['type'] = 'log';
-        $params['orderBy'] = 'id';
-        $params['orderType'] = 'desc';
-        return $this->success($this->service->getList($params));
-    }
-
-    /**
-     * 日志列表
-     * @GetMapping("log")
-     * @return ResponseInterface
-     * @Permission("system:queueMessage:log")
-     */
-    public function log(): ResponseInterface
-    {
-        $params = $this->request->all();
-//        $params['orderBy'] = ['id'=>'desc'];
-//        $params['orderBy'] = 'id desc';
-        
-        $params['orderBy'] = 'id';
-        $params['orderType'] = 'desc';
-        return $this->success($this->service->getLogPageList($params));
+        return $this->success($this->service->getList($this->request->all()));
     }
 
     /**
@@ -93,31 +64,6 @@ class QueueMessageController extends MineController
     public function recycle(): ResponseInterface
     {
         return $this->success($this->service->getPageListByRecycle($this->request->all()));
-    }
-
-    /**
-     * 发送信息
-     * @PostMapping("send")
-     * @param SystemMessageCreateRequest $request
-     * ['content_id','content_type','title','content','receive_by','remark']
-     * @return ResponseInterface
-     * @Permission("system:queueMessage:save")
-     * @OperationLog
-     */
-    public function send(SystemMessageCreateRequest $request): ResponseInterface
-    {
-        return $this->success($this->service->send($request->all()));
-    }
-
-    /**
-     * Description:查看操作
-     * User:mike
-     * @PutMapping("look")
-     * @return ResponseInterface
-     */
-    public function look(): ResponseInterface
-    {
-        return $this->service->look($this->request->input('id')) ? $this->success() : $this->error();
     }
 
     /**
@@ -151,37 +97,10 @@ class QueueMessageController extends MineController
      * @DeleteMapping("delete/{ids}")
      * @param String $ids
      * @return ResponseInterface
-     * @Permission("system:message:delete")
      * @OperationLog
      */
     public function delete(String $ids): ResponseInterface
     {
         return $this->service->delete($ids) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 单个或批量真实删除数据 （清空回收站）
-     * @DeleteMapping("realDelete/{ids}")
-     * @param String $ids
-     * @return ResponseInterface
-     * @Permission("system:message:realDelete")
-     * @OperationLog
-     */
-    public function realDelete(String $ids): ResponseInterface
-    {
-        return $this->service->realDelete($ids) ? $this->success() : $this->error();
-    }
-
-    /**
-     * 单个或批量恢复在回收站的数据
-     * @PutMapping("recovery/{ids}")
-     * @param String $ids
-     * @return ResponseInterface
-     * @Permission("system:message:recovery")
-     * @OperationLog
-     */
-    public function recovery(String $ids): ResponseInterface
-    {
-        return $this->service->recovery($ids) ? $this->success() : $this->error();
     }
 }

@@ -83,7 +83,7 @@
 			let userInfo = this.$TOOL.data.get('user').user;
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0,1);
-			this.avatar = userInfo.avatar
+			this.avatar = this.viewImage(userInfo.avatar)
 			if (this.avatar == '' || this.avatar == null) {
 				this.avatar = '/img/avatar.jpg'
 			}

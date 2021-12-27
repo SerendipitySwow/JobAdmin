@@ -205,7 +205,7 @@ export default {
   created () {
     this.userInfo = this.$TOOL.data.get('user')
     this.formUser = this.userInfo.user
-    this.avatar = this.userInfo.user.avatar
+    this.avatar = this.viewImage(this.userInfo.user.avatar)
     if (this.avatar == '' || this.avatar == null) {
       this.avatar = '/img/avatar.jpg'
     }
