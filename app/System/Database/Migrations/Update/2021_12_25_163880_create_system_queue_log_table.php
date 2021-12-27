@@ -27,7 +27,7 @@ class CreateSystemQueueLogTable extends Migration
             $table->addColumn('string', 'exchange_name', ['length' => 32, 'comment' => '交换机名称']);
             $table->addColumn('string', 'routing_key_name', ['length' => 32, 'comment' => '路由名称']);
             $table->addColumn('string', 'queue_name', ['length' => 64, 'comment' => '队列名称']);
-            $table->addColumn('text', 'queue_content', ['comment' => '队列数据'])->nullable();
+            $table->addColumn('longtext', 'queue_content', ['comment' => '队列数据'])->nullable();
             $table->addColumn('text', 'log_content', ['comment' => '队列日志'])->nullable();
             $table->addColumn('char', 'produce_status', ['length' => 1, 'default' => '0', 'comment' => '生产状态 0:未生产 1:生产中 2:生产成功 3:生产失败 4:生产重复'])->nullable();
             $table->addColumn('char', 'consume_status', ['length' => 1, 'default' => '0', 'comment' => '消费状态 0:未消费 1:消费中 2:消费成功 3:消费失败 4:消费重复'])->nullable();
