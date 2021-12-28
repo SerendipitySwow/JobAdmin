@@ -14,7 +14,6 @@ namespace Mine\Traits;
 use Hyperf\Database\Model\Collection;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
-use Mine\Exception\NormalStatusException;
 use Mine\MineCollection;
 use Mine\MineModel;
 use Mine\MineResponse;
