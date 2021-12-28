@@ -205,12 +205,12 @@ if (! function_exists('push_queue_message')) {
      * 推送消息到队列
      * @param QueueMessageVo $message
      * @param array $receiveUsers
-     * @return object
+     * @return int 消息ID，若失败返回 -1
      * @throws Throwable
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    function push_queue_message(QueueMessageVo $message, array $receiveUsers = []): object
+    function push_queue_message(QueueMessageVo $message, array $receiveUsers = []): int
     {
         return container()
             ->get(\App\System\Service\SystemQueueMessageService::class)

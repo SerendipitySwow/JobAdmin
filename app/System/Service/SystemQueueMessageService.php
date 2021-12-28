@@ -45,12 +45,12 @@ class SystemQueueMessageService extends AbstractService
      * 推送消息到队列
      * @param QueueMessageVo $message
      * @param array $receiveUsers
-     * @return bool
+     * @return int
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Throwable
      */
-    public function pushMessage(QueueMessageVo $message, array $receiveUsers = []): bool
+    public function pushMessage(QueueMessageVo $message, array $receiveUsers = []): int
     {
         if (empty ($message->getTitle())) {
             throw new NormalStatusException(t('system.queue_missing_message_title'), 500);
@@ -80,8 +80,10 @@ class SystemQueueMessageService extends AbstractService
         $data['id'] = $this->mapper->save($data);
 
         return $this->producer->produce(
-            new MessageProducer(['message_id' => $data]),
-            false,5,0
-        );
+            new MessageProducer([ 'message_id' => $data ]),
+            $message->getIsConfirm(),
+            $message->getTimeout(),
+            $message->getDelayTime()
+        ) ? $data['id'] : -1;
     }
 }

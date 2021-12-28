@@ -96,7 +96,7 @@ class SystemQueueMessage extends MineModel
     {
         return $this->belongsToMany(
             SystemUser::class,
-            'queue_message_receive',
+            'system_queue_message_receive',
             'message_id',
             'user_id'
         )->as('receive_users')->withPivot(...['read_status']);

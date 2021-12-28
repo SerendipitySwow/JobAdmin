@@ -44,6 +44,15 @@ class TableStructVersion050 extends Migration
                 $table->dropColumn(['deleted_at']);
             }
         });
+
+        Schema::table('system_notice', function (Blueprint $table) {
+            if (! Schema::hasColumn('system_notice', 'message_id')) {
+                $table->addColumn('bigInteger', 'message_id')
+                    ->comment('消息ID')
+                    ->after('id')
+                    ->nullable();
+            }
+        });
     }
 
     /**

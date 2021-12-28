@@ -74,9 +74,10 @@ class SystemQueueMessageMapper extends AbstractMapper
      */
     public function save(array $data): int
     {
+        $receiveUsers = $data['receive_users'];
         $this->filterExecuteAttributes($data);
         $model = $this->model::create($data);
-        $model->receiveUser()->sync($data['receive_users']);
+        $model->receiveUser()->sync($receiveUsers);
         return $model->{$model->getKeyName()};
     }
 }

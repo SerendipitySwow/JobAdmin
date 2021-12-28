@@ -46,6 +46,24 @@ class QueueMessageVo
     protected $remark;
 
     /**
+     * 是否需要确认
+     * @var bool
+     */
+    protected $isConfirm = false;
+
+    /**
+     * 队列超时时间
+     * @var integer
+     */
+    protected $timeout = 5;
+
+    /**
+     * 队列延迟生产时间秒
+     * @var integer
+     */
+    protected $delayTime = 0;
+
+    /**
      * @return mixed
      */
     public function getTitle(): string
@@ -54,11 +72,13 @@ class QueueMessageVo
     }
 
     /**
-     * @param mixed $title
+     * @param string $title
+     * @return $this
      */
-    public function setTitle(string $title): void
+    public function setTitle(string $title): QueueMessageVo
     {
         $this->title = $title;
+        return $this;
     }
 
     /**
@@ -70,11 +90,13 @@ class QueueMessageVo
     }
 
     /**
-     * @param mixed $contentType
+     * @param string $contentType
+     * @return $this
      */
-    public function setContentType(string $contentType): void
+    public function setContentType(string $contentType): QueueMessageVo
     {
         $this->contentType = $contentType;
+        return $this;
     }
 
     /**
@@ -86,11 +108,13 @@ class QueueMessageVo
     }
 
     /**
-     * @param mixed $content
+     * @param string $content
+     * @return $this
      */
-    public function setContent(string $content): void
+    public function setContent(string $content): QueueMessageVo
     {
         $this->content = $content;
+        return $this;
     }
 
     /**
@@ -103,10 +127,12 @@ class QueueMessageVo
 
     /**
      * @param string $sendBy
+     * @return QueueMessageVo
      */
-    public function setSendBy(string $sendBy): void
+    public function setSendBy(string $sendBy): QueueMessageVo
     {
         $this->sendBy = $sendBy;
+        return $this;
     }
 
     /**
@@ -119,10 +145,12 @@ class QueueMessageVo
 
     /**
      * @param string $sendStatus
+     * @return QueueMessageVo
      */
-    public function setSendStatus(string $sendStatus): void
+    public function setSendStatus(string $sendStatus): QueueMessageVo
     {
         $this->sendStatus = $sendStatus;
+        return $this;
     }
 
     /**
@@ -135,11 +163,68 @@ class QueueMessageVo
 
     /**
      * @param string $remark
+     * @return QueueMessageVo
      */
-    public function setRemark(string $remark): void
+    public function setRemark(string $remark): QueueMessageVo
     {
         $this->remark = $remark;
+        return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsConfirm(): bool
+    {
+        return $this->isConfirm;
+    }
+
+    /**
+     * @param bool $isConfirm
+     * @return QueueMessageVo
+     */
+    public function setIsConfirm(bool $isConfirm): QueueMessageVo
+    {
+        $this->isConfirm = $isConfirm;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     * @return QueueMessageVo
+     */
+    public function setTimeout(int $timeout): QueueMessageVo
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDelayTime(): int
+    {
+        return $this->delayTime;
+    }
+
+    /**
+     * @param int $delayTime
+     * @return QueueMessageVo
+     */
+    public function setDelayTime(int $delayTime): QueueMessageVo
+    {
+        $this->delayTime = $delayTime;
+        return $this;
+    }
+
 
 
 }
