@@ -36,6 +36,10 @@ class TableStructVersion050 extends Migration
                 $table->dropColumn(['content_id']);
             }
 
+            if (Schema::hasColumn('system_queue_message','send_status')) {
+                $table->dropColumn(['send_status']);
+            }
+
             if (Schema::hasColumn('system_queue_message','read_status')) {
                 $table->dropColumn(['read_status']);
             }

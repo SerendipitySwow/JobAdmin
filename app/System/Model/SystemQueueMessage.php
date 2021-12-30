@@ -11,7 +11,6 @@ use Mine\MineModel;
  * @property string $content_type 内容类型
  * @property string $content 消息内容
  * @property int $send_by 发送人
- * @property string $send_status 发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败
  * @property int $created_by 创建者
  * @property int $updated_by 更新者
  * @property \Carbon\Carbon $created_at 创建时间
@@ -21,26 +20,6 @@ use Mine\MineModel;
 class SystemQueueMessage extends MineModel
 {
     public $incrementing = false;
-
-    /**
-     * 待发送
-     */
-    const STATUS_SEND_WAIT = '0';
-
-    /**
-     * 发送中
-     */
-    const STATUS_SENDING = '1';
-
-    /**
-     * 发送成功
-     */
-    const STATUS_SEND_SUCCESS = '2';
-
-    /**
-     * 发送失败
-     */
-    const STATUS_SEND_FAIL = '3';
 
     /**
      * 消息类型：通知
@@ -71,7 +50,7 @@ class SystemQueueMessage extends MineModel
      *
      * @var array
      */
-    protected $fillable = ['id', 'content_type', 'title', 'content', 'send_by', 'send_status', 'created_by', 'updated_by', 'created_at', 'updated_at', 'remark'];
+    protected $fillable = ['id', 'content_type', 'title', 'content', 'send_by', 'created_by', 'updated_by', 'created_at', 'updated_at', 'remark'];
     /**
      * The attributes that should be cast to native types.
      *

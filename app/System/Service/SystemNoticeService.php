@@ -44,7 +44,6 @@ class SystemNoticeService extends AbstractService
         );
         $message->setContent($data['content']);
         $message->setSendBy(user()->getId());
-        $message->setSendStatus(SystemQueueMessage::STATUS_SEND_WAIT);
         $data['message_id'] = push_queue_message($message, $data['users']);
 
         if ($data['message_id'] !== -1) {

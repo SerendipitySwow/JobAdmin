@@ -33,20 +33,13 @@ class MessageConsumer extends ConsumerMessage
     {
         parent::consumeMessage($data, $message);
         $data = $data['data'] ?? [];
-        $messageIdArr = $data['messageId'] ?? [];
 
-        if(! $messageIdArr) {
+        if(empty($data)) {
             return Result::DROP;
         }
 
-        array_map(function($messageId) {
-
-            //发送中
-            $this->service->update($messageId, [ 'send_status' => SystemQueueMessage::STATUS_SENDING ]);
-            //发送成功
-            $this->service->update($messageId, [ 'send_status' => SystemQueueMessage::STATUS_SEND_SUCCESS ]);
-
-        }, $messageIdArr);
+        //发送成功
+        $this->service->update($data['id'], [ 'send_status' => SystemQueueMessage::STATUS_SEND_SUCCESS ]);
 
         return Result::ACK;
     }

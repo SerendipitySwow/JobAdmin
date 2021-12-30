@@ -34,12 +34,6 @@ class QueueMessageVo
     protected $sendBy;
 
     /**
-     * 发送状态
-     * @var string
-     */
-    protected $sendStatus;
-
-    /**
      * 备注
      * @var string
      */
@@ -132,24 +126,6 @@ class QueueMessageVo
     public function setSendBy(string $sendBy): QueueMessageVo
     {
         $this->sendBy = $sendBy;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSendStatus(): string
-    {
-        return $this->sendStatus;
-    }
-
-    /**
-     * @param string $sendStatus
-     * @return QueueMessageVo
-     */
-    public function setSendStatus(string $sendStatus): QueueMessageVo
-    {
-        $this->sendStatus = $sendStatus;
         return $this;
     }
 

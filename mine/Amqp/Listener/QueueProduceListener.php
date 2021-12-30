@@ -9,6 +9,7 @@
 declare(strict_types=1);
 namespace Mine\Amqp\Listener;
 
+use App\System\Mapper\SystemQueueMessageMapper;
 use App\System\Model\SystemQueueLog;
 use App\System\Service\SystemQueueLogService;
 use Hyperf\Utils\Context;
@@ -65,10 +66,6 @@ class QueueProduceListener implements ListenerInterface
 
         $id = $this->getId();
 
-        $event->producer->setPayload(
-            [ 'id'=> $id, 'data' => json_decode( $event->producer->payload() ) ]
-        );
-
         $this->service->save([
             'id'=> $id,
             'exchange_name'=> $event->producer->getExchange(),
@@ -76,7 +73,7 @@ class QueueProduceListener implements ListenerInterface
             'queue_name'=> $queueName,
             'queue_content'=> $event->producer->payload(),
             'delay_time'=> $event->delayTime ?? 0,
-            'produce_status'=>SystemQueueLog::PRODUCE_STATUS_SUCCESS
+            'produce_status'=> SystemQueueLog::PRODUCE_STATUS_SUCCESS
         ]);
     }
 
@@ -97,7 +94,7 @@ class QueueProduceListener implements ListenerInterface
      */
     public function afterProduce(object $event): void
     {
-        // TODO...
+        (new SystemQueueMessageMapper)->save(json_decode($event->producer->payload(), true));
     }
 
     /**

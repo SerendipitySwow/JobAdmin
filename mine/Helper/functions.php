@@ -213,7 +213,7 @@ if (! function_exists('push_queue_message')) {
     function push_queue_message(QueueMessageVo $message, array $receiveUsers = []): int
     {
         return container()
-            ->get(\App\System\Service\SystemQueueMessageService::class)
+            ->get(\App\System\Service\SystemQueueLogService::class)
             ->pushMessage($message, $receiveUsers);
     }
 }
