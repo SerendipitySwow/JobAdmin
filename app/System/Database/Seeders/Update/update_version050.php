@@ -66,6 +66,7 @@ class UpdateVersion050 extends Seeder
             "INSERT INTO `{$table}`(`id`, `name`, `code`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074681620640, '队列生产状态', 'queue_produce_status', '0', NULL, NULL, '2021-12-25 18:22:38', '2021-12-25 18:22:38', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `name`, `code`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074702532768, '队列消费状态', 'queue_consume_status', '0', NULL, NULL, '2021-12-25 18:23:19', '2021-12-25 18:23:19', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `name`, `code`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074866778272, '队列消息类型', 'queue_msg_type', '0', NULL, NULL, '2021-12-25 18:28:40', '2021-12-25 18:28:40', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `name`, `code`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10297494769312, '队列消息状态', 'queue_msg_status', '0', NULL, NULL, '2021-12-30 19:15:40', '2021-12-30 19:15:46', NULL, NULL)",
         ];
     }
 
@@ -89,6 +90,11 @@ class UpdateVersion050 extends Seeder
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074938784928, 10074866778272, '公告', 'announcement', 'queue_msg_type', 2, '0', NULL, NULL, '2021-12-25 18:31:00', '2021-12-25 18:31:00', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074951884448, 10074866778272, '待办', 'todo', 'queue_msg_type', 3, '0', NULL, NULL, '2021-12-25 18:31:26', '2021-12-25 18:31:26', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074951884459, 10074866778272, '抄送我的', 'carbon_copy_mine', 'queue_msg_type', 4, '0', NULL, NULL, '2021-12-25 18:31:26', '2021-12-25 18:31:26', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10297518189728, 10297494769312, '待发送', '0', 'queue_msg_status', 4, '0', NULL, NULL, '2021-12-30 19:16:26', '2021-12-30 19:16:26', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10297523739808, 10297494769312, '发送中', '1', 'queue_msg_status', 3, '0', NULL, NULL, '2021-12-30 19:16:37', '2021-12-30 19:16:37', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10297528934048, 10297494769312, '发送成功', '2', 'queue_msg_status', 2, '0', NULL, NULL, '2021-12-30 19:16:47', '2021-12-30 19:16:47', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10297537282720, 10297494769312, '发送失败', '3', 'queue_msg_status', 1, '0', NULL, NULL, '2021-12-30 19:17:03', '2021-12-30 19:17:07', NULL, NULL)",
+
         ];
     }
 }

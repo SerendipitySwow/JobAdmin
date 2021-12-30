@@ -21,6 +21,10 @@ class TableStructVersion050 extends Migration
     public function up(): void
     {
         Schema::table('system_queue_message', function (Blueprint $table) {
+
+            $table->index('content_type');
+            $table->index('send_by');
+
             if (! Schema::hasColumn('system_queue_message','title')) {
                 $table->addColumn('string', 'title', ['length' => 255])
                     ->comment('消息标题')
