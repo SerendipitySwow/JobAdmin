@@ -5,9 +5,7 @@ declare(strict_types = 1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemQueueMessageMapper;
-use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
-use Mine\Amqp\DelayProducer;
 
 /**
  * 信息管理服务类
@@ -22,5 +20,14 @@ class SystemQueueMessageService extends AbstractService
     public function __construct(SystemQueueMessageMapper $mapper)
     {
         $this->mapper = $mapper;
+    }
+
+    /**
+     * 获取收信箱列表数据
+     */
+    public function getReceiveMessage(array $params = []): array
+    {
+        $params['getReceive'] = true;
+        return $this->mapper->getPageList($params, false);
     }
 }

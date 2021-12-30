@@ -31,37 +31,28 @@ class SystemQueueMessageMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
-        // 内容ID
-        if (isset($params['content_id'])) {
-            $query->where('content_id', '=', $params['content_id']);
-        }
-
         // 内容类型
         if (isset($params['content_type'])) {
             $query->where('content_type', '=', $params['content_type']);
         }
 
-        // 接收人ID
-        if (isset($params['receive_by'])) {
-            $query->where('receive_by', '=', $params['receive_by']);
-        }
-
-        if (isset($params['send_by'])) {
-            $query->where('send_by', '=', $params['send_by']);
-        }
-
-        // 发送状态 0:待发送 1:发送中 2:发送成功 3:发送失败
-        if (isset($params['send_status'])) {
-            $query->where('send_status', '=', $params['send_status']);
-        }
-
-        if (isset($params['read_status'])) {
-            $query->where('read_status', '=', $params['read_status']);
-        }
-
         $query->with(['sendUser' => function($query) {
             $query->select([ 'id', 'nickname' ]);
         }]);
+
+        // 获取收信数据
+        if (isset($params['getReceive'])) {
+            $prefix = env('DB_PREFIX');
+            $query->whereRaw(
+                "id IN ( SELECT message_id FROM {$prefix}queue_message_receive WHERE user_id = ?",
+                user()->getId()
+            );
+        }
+
+        // 收取发信数据
+        if (isset($params['getSend'])) {
+            $query->where('send_by', user()->getId());
+        }
 
         return $query;
     }

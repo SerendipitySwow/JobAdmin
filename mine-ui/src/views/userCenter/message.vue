@@ -11,15 +11,15 @@
 	<el-container>
 		<el-aside width="180px" style="border-right: 1px solid #e6e6e6; padding:10px;">
 			<el-menu size="small" @select="handleSelect" default-active="receive_box">
-				<el-menu-item index="receive_box">
-          <el-icon><el-icon-message /></el-icon>
-          <template #title>收信箱</template>
-        </el-menu-item>
         <el-menu-item index="send_box">
           <el-icon><el-icon-message-box /></el-icon>
           <template #title>已发送</template>
         </el-menu-item>
-        <el-menu-item v-for="item in messageType" :key="item.label" :index="item.label">
+        <el-menu-item index="receive_box">
+          <el-icon><el-icon-message /></el-icon>
+          <template #title>收信箱</template>
+        </el-menu-item>
+        <el-menu-item v-for="item in messageType" :key="item.value" :index="item.value">
           <el-icon><Component :is="typeIcon[item.value] ? typeIcon[item.value] : 'el-icon-message-box'" /></el-icon>
           <template #title>{{ item.label }}</template>
         </el-menu-item>
@@ -77,21 +77,12 @@
         <maTable
           ref="table"
           :api="api"
-          :showRecycle="true"
           @selection-change="selectionChange"
-          @switch-data="switchData"
           stripe
           remoteSort
           remoteFilter
         >
           <el-table-column type="selection" width="50"></el-table-column>
-
-          <el-table-column
-            label="状态"
-            prop="read_status"
-            sortable="custom"
-            width="100"
-          ></el-table-column>
           
           <el-table-column
             label="消息类型"
@@ -149,17 +140,19 @@
 		methods: {
 
       // 菜单点击事件
-      handleSelect() {
+      handleSelect(e) {
+        console.log(e)
+      },
 
+      // 选择事件
+      selectionChange(selection){
+        this.selection = selection
       },
 
       // 查询字典
       getDictData () {
         this.getDict('queue_msg_type').then(res => {
           this.messageType = res.data
-          this.messageType.map(item => {
-            console.log(item)
-          })
         })
       }
 		}
