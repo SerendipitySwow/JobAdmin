@@ -85,7 +85,6 @@
 			this.userNameF = this.userName.substring(0, 1)
 			
 			this.avatar = userInfo.avatar ? this.viewImage(userInfo.avatar) : '/img/avatar.jpg'
-			console.log(this.avatar)
 		},
 		methods: {
 			//个人信息
