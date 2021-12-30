@@ -1,222 +1,182 @@
+<!--
+ * @Descripttion: 分栏明细模板
+ * @version: 1.0
+ * @Author: sakuya
+ * @Date: 2021年7月26日08:59:14
+ * @LastEditors:
+ * @LastEditTime:
+-->
+
 <template>
 	<el-container>
-		<el-header>
-			<div class="left-panel">
-				<el-radio-group v-model="dateType" size="mini" style="margin-right: 15px;">
-					<el-radio-button label="今天"></el-radio-button>
-					<el-radio-button label="昨天"></el-radio-button>
-					<el-radio-button label="最近7天"></el-radio-button>
-					<el-radio-button label="最近30天"></el-radio-button>
-				</el-radio-group>
-				<el-date-picker v-model="date" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
-			</div>
-		</el-header>
-		<el-main>
-			<el-card shadow="never">
-				<div class="number-data">
-					<div class="item">
-						<h2>浏览量(PV)
-							<el-tooltip effect="light">
-								<template #content>
-									<div style="width: 200px;line-height: 2;">
-										即通常说的Page View(PV)，用户每打开一个网站页面就被记录1次。用户多次打开同一页面，浏览量值累计。
-									</div>
-								</template>
-								<el-icon><el-icon-question-filled /></el-icon>
-							</el-tooltip>
-						</h2>
-						<p>65,715</p>
-					</div>
-					<div class="item">
-						<h2>访客数(UV)
-							<el-tooltip effect="light">
-								<template #content>
-									<div style="width: 200px;line-height: 2;">
-										一天之内您网站的独立访客数(以Cookie为依据)，一天内同一访客多次访问您网站只计算1个访客。
-									</div>
-								</template>
-								<el-icon><el-icon-question-filled /></el-icon>
-							</el-tooltip>
-						</h2>
-						<p>8,936</p>
-					</div>
-					<div class="item">
-						<h2>IP数
-							<el-tooltip effect="light">
-								<template #content>
-									<div style="width: 200px;line-height: 2;">
-										一天之内您网站的独立访问ip数。
-									</div>
-								</template>
-								<el-icon><el-icon-question-filled /></el-icon>
-							</el-tooltip>
-						</h2>
-						<p>10,279</p>
-					</div>
-					<div class="item">
-						<h2>跳出率
-							<el-tooltip effect="light">
-								<template #content>
-									<div style="width: 200px;line-height: 2;">
-										只浏览了一个页面便离开了网站的访问次数占总的访问次数的百分比。
-									</div>
-								</template>
-								<el-icon><el-icon-question-filled /></el-icon>
-							</el-tooltip>
-						</h2>
-						<p>27.92%</p>
-					</div>
-					<div class="item">
-						<h2>平均访问时长
-							<el-tooltip effect="light">
-								<template #content>
-									<div style="width: 200px;line-height: 2;">
-										访客在一次访问中，平均打开网站的时长。即每次访问中，打开第一个页面到关闭最后一个页面的平均值，打开一个页面时计算打开关闭的时间差。
-									</div>
-								</template>
-								<el-icon><el-icon-question-filled /></el-icon>
-							</el-tooltip>
-						</h2>
-						<p>00:19:05</p>
-					</div>
-				</div>
-				<div class="chart">
-					<el-row>
-						<el-col :span="8">
-							<scEcharts height="250px" :option="pie"></scEcharts>
-						</el-col>
-						<el-col :span="16">
-							<scEcharts height="250px" :option="option"></scEcharts>
-						</el-col>
-					</el-row>
-				</div>
-			</el-card>
-			<el-card shadow="never">
-				<scTable ref="table" :data="data" show-summary height="auto">
-					<el-table-column label="来源类型" prop="type"></el-table-column>
-					<el-table-column label="网站基础指标" align="center">
-						<el-table-column label="访客数(UV)" prop="uv" width="150"></el-table-column>
-						<el-table-column label="IP数" prop="ip" width="150"></el-table-column>
-					</el-table-column>
-					<el-table-column label="流量质量指标" align="center">
-						<el-table-column label="跳出率" prop="out" width="150"></el-table-column>
-						<el-table-column label="平均访问时长" prop="time" width="150"></el-table-column>
-					</el-table-column>
-				</scTable>
-			</el-card>
-		</el-main>
+		<el-aside width="180px" style="border-right: 1px solid #e6e6e6; padding:10px;">
+			<el-menu size="small" @select="handleSelect" default-active="receive_box">
+				<el-menu-item index="receive_box">
+          <el-icon><el-icon-message /></el-icon>
+          <template #title>收信箱</template>
+        </el-menu-item>
+        <el-menu-item index="send_box">
+          <el-icon><el-icon-message-box /></el-icon>
+          <template #title>已发送</template>
+        </el-menu-item>
+        <el-menu-item v-for="item in messageType" :key="item.label" :index="item.label">
+          <el-icon><Component :is="typeIcon[item.value] ? typeIcon[item.value] : 'el-icon-message-box'" /></el-icon>
+          <template #title>{{ item.label }}</template>
+        </el-menu-item>
+			</el-menu>
+		</el-aside>
+		<el-container ref="printMain">
+      <el-header>
+        <div class="left-panel">
+          <el-button
+            icon="el-icon-plus"
+            v-auth="['system:queueMessage:save']"
+            type="primary"
+            @click="add"
+          >发信息</el-button>
+
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            v-auth="['system:role:delete']"
+            :disabled="selection.length==0"
+            @click="batchDel"
+          >删除</el-button>
+
+          <el-button-group style="margin-left: 10px;">
+            <el-button
+              plain
+              v-auth="['system:attachment:delete']"
+            >全部</el-button>
+
+            <el-button
+              plain
+              v-auth="['system:attachment:delete']"
+            >已读</el-button>
+
+            <el-button
+              plain
+              v-auth="['system:attachment:recovery']"
+            >未读</el-button>
+          </el-button-group>
+        </div>
+        <div class="right-panel">
+          <el-input placeholder="搜索发送人" />
+          <el-input placeholder="搜索标题" />
+          <el-tooltip class="item" effect="dark" content="搜索" placement="top">
+            <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
+          </el-tooltip>
+
+          <el-tooltip class="item" effect="dark" content="清空条件" placement="top">
+            <el-button icon="el-icon-refresh" @click="resetSearch"></el-button>
+          </el-tooltip>
+        </div>
+      </el-header>
+      <el-main class="nopadding">
+        <maTable
+          ref="table"
+          :api="api"
+          :showRecycle="true"
+          @selection-change="selectionChange"
+          @switch-data="switchData"
+          stripe
+          remoteSort
+          remoteFilter
+        >
+          <el-table-column type="selection" width="50"></el-table-column>
+
+          <el-table-column
+            label="状态"
+            prop="read_status"
+            sortable="custom"
+            width="100"
+          ></el-table-column>
+          
+          <el-table-column
+            label="消息类型"
+            prop="content_type"
+            sortable="custom"
+            width="120"
+          ></el-table-column>
+
+          <el-table-column
+            label="发送人"
+            prop="title"
+            sortable="custom"
+            width="120"
+          ></el-table-column>
+
+          <el-table-column
+            label="标题"
+            prop="title"
+            show-overflow-tooltip
+          ></el-table-column>
+
+          <el-table-column
+            label="发送时间"
+            prop="created_at"
+            width="200"
+            sortable="custom"
+          ></el-table-column>
+
+        </maTable>
+      </el-main>
+		</el-container>
 	</el-container>
 </template>
 
 <script>
-	import scEcharts from '@/components/scEcharts';
-
 	export default {
-		name: 'chartlist',
-		components: {
-			scEcharts
-		},
-		data(){
+		name: 'message',
+		data() {
 			return {
-				dateType: "今天",
-				date: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-				data: [
-					{
-						type: "直接访问",
-						pv: "57,847",
-						uv: "7,129",
-						ip: "8,330",
-						out: "26.38%",
-						time: "00:20:35"
-					},
-					{
-						type: "搜索引擎",
-						pv: "5,942",
-						uv: "1,338",
-						ip: "1,449",
-						out: "33.49%",
-						time: "00:11:31"
-					},
-					{
-						type: "外部链接",
-						pv: "1,926",
-						uv: "469",
-						ip: "500",
-						out: "44.53%",
-						time: "00:08:49"
-					}
-				],
-				pie: {
-					tooltip: {
-						trigger: 'item'
-					},
-					series: [
-						{
-							name: '访问来源',
-							type: 'pie',
-							radius: ['55%', '70%'],
-							itemStyle: {
-								borderRadius: 5,
-								borderColor: '#fff',
-								borderWidth: 1
-							},
-							data: [
-								{value: 1048, name: '搜索引擎'},
-								{value: 235, name: '直接访问'},
-								{value: 180, name: '外部链接'}
-							]
-						}
-					]
-				},
-				option: {
-					legend: {
-						data: ['直接访问', '搜索引擎', '外部链接']
-					},
-					tooltip: {
-						trigger: 'axis'
-					},
-					xAxis: {
-						type: 'category',
-						data: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
-						boundaryGap: false,
-					},
-					yAxis: {
-						type: 'value'
-					},
-					series: [{
-						name: '直接访问',
-						data: [120, 210, 150, 80, 70, 110, 130],
-						type: 'line',
-					},
-					{
-						name: '搜索引擎',
-						data: [110, 180, 120, 120, 60, 90, 110],
-						type: 'line',
-					},
-					{
-						name: '外部链接',
-						data: [50, 90, 60, 60, 30, 40, 50],
-						type: 'line',
-					}]
-				}
+        messageType: [],
+        typeIcon: {
+          carbon_copy_mine: 'el-icon-copy-document',
+          todo: 'el-icon-calendar',
+          announcement: 'el-icon-cellphone',
+          notice: 'el-icon-bell',
+        },
+        selection: [],
 			}
+		},
+    
+		async mounted() {
+      await this.getDictData()
+		},
+
+		methods: {
+
+      // 菜单点击事件
+      handleSelect() {
+
+      },
+
+      // 查询字典
+      getDictData () {
+        this.getDict('queue_msg_type').then(res => {
+          this.messageType = res.data
+          this.messageType.map(item => {
+            console.log(item)
+          })
+        })
+      }
 		}
 	}
 </script>
 
-<style scoped>
-	.el-card {margin-bottom: 15px;}
+<style scoped lang="scss">
+  .el-menu-item.is-active {
+    background: var(--el-background-color-base)
+  }
+  .el-menu-item {
+    border-radius: 4px;  
+  }
+	.innerPage {width: 100%;margin:0 auto;}
 
-	.number-data {display: flex;}
-	.number-data .item {flex:1;border-right: 1px solid #f0f0f0;padding:0 20px;}
-	.number-data .item:last-child {border: 0;}
-	.number-data .item h2 {font-size: 12px;color: #787a7d;font-weight: normal;display: flex;align-items: center;}
-	.number-data .item h2 i {margin-left: 5px;color: #8cc5ff;cursor: pointer;}
-	.number-data .item p {font-size: 20px;color: #121315;margin-top: 10px;}
+	@media (max-width: 1610px){
+	.innerPage {width: 100%;}
+	}
 
-	.chart {border-top: 1px solid #f0f0f0;margin-top: 20px;padding-top: 20px;}
-
-	[data-theme='dark'] .number-data .item {border-color: var(--el-border-color-base);}
-	[data-theme='dark'] .number-data .item p {color: #d0d0d0;}
-	[data-theme='dark'] .chart {border-color: var(--el-border-color-base);}
 </style>
