@@ -17,6 +17,10 @@
                     </div>
                 </el-card>
 
+                <el-card shadow="never" header="选择资源组件（SCUI版)">
+                    <sc-file-select />
+                </el-card>
+
                 <el-card shadow="never" header="城市联级选择器">
                     
                     <el-alert title="返回城市编码" type="warning" />

@@ -80,13 +80,12 @@
 			// 	})
 			// }, 10000)
 
-			let userInfo = this.$TOOL.data.get('user').user;
+			let userInfo = this.$TOOL.data.get('user').user
 			this.userName = userInfo.username;
-			this.userNameF = this.userName.substring(0,1);
-			this.avatar = this.viewImage(userInfo.avatar)
-			if (this.avatar == '' || this.avatar == null) {
-				this.avatar = '/img/avatar.jpg'
-			}
+			this.userNameF = this.userName.substring(0, 1)
+			
+			this.avatar = userInfo.avatar ? this.viewImage(userInfo.avatar) : '/img/avatar.jpg'
+			console.log(this.avatar)
 		},
 		methods: {
 			//个人信息

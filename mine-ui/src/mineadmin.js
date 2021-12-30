@@ -16,6 +16,7 @@ import scTable from './components/scTable'
 import scFilterBar from './components/scFilterBar'
 import scUpload from './components/scUpload'
 import scUploadMultiple from './components/scUpload/multiple'
+import scFileSelect from './components/scFileSelect'
 import scFormTable from './components/scFormTable'
 import scTableSelect from './components/scTableSelect'
 import scPageHeader from './components/scPageHeader'
@@ -71,6 +72,7 @@ export default {
 		app.component('scUpload', scUpload)
 		app.component('scUploadMultiple', scUploadMultiple)
 		app.component('scFormTable', scFormTable)
+		app.component('scFileSelect', scFileSelect)
 		app.component('scTableSelect', scTableSelect)
 		app.component('scPageHeader', scPageHeader)
 		app.component('scSelect', scSelect);
