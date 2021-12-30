@@ -80,7 +80,7 @@ class SystemQueueMessageService extends AbstractService
         $data['id'] = $this->mapper->save($data);
 
         return $this->producer->produce(
-            new MessageProducer([ 'message_id' => $data ]),
+            new MessageProducer($data),
             $message->getIsConfirm(),
             $message->getTimeout(),
             $message->getDelayTime()
