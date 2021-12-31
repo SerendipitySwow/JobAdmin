@@ -44,28 +44,6 @@ class SystemDeptMapper extends AbstractMapper
     }
 
     /**
-     * 保存数据
-     */
-    public function save(array $data): int
-    {
-        if (is_array($data['parent_id']) && !empty($data['parent_id'])) {
-            $data['parent_id'] = array_pop($data['parent_id']);
-        }
-        return parent::save($data);
-    }
-
-    /**
-     * 更新数据
-     */
-    public function update(int $id, array $data): bool
-    {
-        if (is_array($data['parent_id']) && !empty($data['parent_id'])) {
-            $data['parent_id'] = array_pop($data['parent_id']);
-        }
-        return parent::update($id, $data);
-    }
-
-    /**
      * @param int $id
      * @return bool
      */
