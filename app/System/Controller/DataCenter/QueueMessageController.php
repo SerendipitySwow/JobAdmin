@@ -34,36 +34,13 @@ class QueueMessageController extends MineController
     protected $service;
 
     /**
-     * 列表
-     * @GetMapping("index")
+     * 接收消息列表
+     * @GetMapping("receiveList")
      * @return ResponseInterface
-     * @Permission("system:queueMessage:index")
      */
-    public function index(): ResponseInterface
+    public function receiveList(): ResponseInterface
     {
-        return $this->success($this->service->getPageList($this->request->all()));
-    }
-
-    /**
-     * 用户信息列表
-     * @GetMapping("userMessage")
-     * @return ResponseInterface
-     * @Permission("system:queueMessage:index")
-     */
-    public function userMessage(): ResponseInterface
-    {
-        return $this->success($this->service->getList($this->request->all()));
-    }
-
-    /**
-     * 回收站列表
-     * @GetMapping("recycle")
-     * @return ResponseInterface
-     * @Permission("system:queueMessage:recycle")
-     */
-    public function recycle(): ResponseInterface
-    {
-        return $this->success($this->service->getPageListByRecycle($this->request->all()));
+        return $this->success($this->service->getReceiveMessage($this->request->all()));
     }
 
     /**
@@ -71,7 +48,6 @@ class QueueMessageController extends MineController
      * @GetMapping("read/{id}")
      * @param int $id
      * @return ResponseInterface
-     * @Permission("system:message:read")
      */
     public function read(int $id): ResponseInterface
     {
@@ -84,7 +60,6 @@ class QueueMessageController extends MineController
      * @param int $id
      * @param SystemMessageUpdateRequest $request
      * @return ResponseInterface
-     * @Permission("system:message:update")
      * @OperationLog
      */
     public function update(int $id, SystemMessageUpdateRequest $request): ResponseInterface

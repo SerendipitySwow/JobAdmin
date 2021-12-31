@@ -5,6 +5,7 @@ namespace App\System\Mapper;
 
 use App\System\Model\SystemQueueMessage;
 use Hyperf\Database\Model\Builder;
+use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
 
@@ -44,7 +45,7 @@ class SystemQueueMessageMapper extends AbstractMapper
         if (isset($params['getReceive'])) {
             $prefix = env('DB_PREFIX');
             $query->whereRaw(
-                "id IN ( SELECT message_id FROM {$prefix}queue_message_receive WHERE user_id = ?",
+                "id IN ( SELECT message_id FROM {$prefix}system_queue_message_receive WHERE user_id = ? )",
                 user()->getId()
             );
         }

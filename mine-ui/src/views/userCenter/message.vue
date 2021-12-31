@@ -1,7 +1,7 @@
 <template>
 	<el-container>
 		<el-aside width="180px" style="border-right: 1px solid #e6e6e6; padding:10px;">
-			<el-menu size="small" @select="handleSelect" default-active="receive_box">
+			<el-menu size="small" @select="handleSelect" :default-active="defaultActive">
         <el-menu-item index="send_box">
           <el-icon><el-icon-message-box /></el-icon>
           <template #title>已发送</template>
@@ -23,7 +23,6 @@
             icon="el-icon-plus"
             v-auth="['system:queueMessage:save']"
             type="primary"
-            @click="add"
           >发信息</el-button>
 
           <el-button
@@ -32,7 +31,6 @@
             icon="el-icon-delete"
             v-auth="['system:role:delete']"
             :disabled="selection.length==0"
-            @click="batchDel"
           >删除</el-button>
 
           <el-button-group style="margin-left: 10px;">
@@ -69,6 +67,7 @@
           ref="table"
           :api="api"
           @selection-change="selectionChange"
+          :autoLoad="false"
           stripe
           remoteSort
           remoteFilter
@@ -113,6 +112,8 @@
 		name: 'message',
 		data() {
 			return {
+        api: { list: () => {} },
+        defaultActive: 'receive_box',
         messageType: [],
         typeIcon: {
           carbon_copy_mine: 'el-icon-copy-document',
@@ -124,15 +125,37 @@
 			}
 		},
     
-		async mounted() {
+		async mounted() { 
       await this.getDictData()
+      await this.loadData()
 		},
 
 		methods: {
 
+      loadData () {
+        if (! this.defaultActive) return
+
+        let table = this.$refs.table
+        this.api.list = this.defaultActive === 'send_box' ? this.$API.queueMessage.getSendList : this.$API.queueMessage.getReceiveList
+        table.getData()
+
+      },
+
+      add() {
+
+      },
+
       // 菜单点击事件
-      handleSelect(e) {
-        console.log(e)
+      handleSelect(name) {
+        this.defaultActive = name
+      },
+
+      handlerSearch() {
+
+      },
+
+      resetSearch() {
+
       },
 
       // 选择事件
