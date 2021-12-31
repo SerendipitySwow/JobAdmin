@@ -134,6 +134,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             '{BUSINESS_EN_NAME}',
+            '{TREE_REQUEST}',
             '{BUSINESS_NAME}',
             '{FORM_LIST}',
             '{FORM_DATA}',
@@ -155,6 +156,7 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     {
         return [
             $this->getBusinessEnName(),
+            $this->getTreeRequest(),
             $this->getBusinessName(),
             $this->getFormList(),
             $this->getFormData(),
@@ -169,6 +171,15 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
         ];
     }
 
+    protected function getTreeRequest(): string
+    {
+        return <<<js
+this.\$API.{$this->getBusinessEnName()}.tree().then(res => {
+            this.treeList = res.data
+        })
+js;
+    }
+
     /**
      * 获取其余搜索列表
      * @return string
@@ -176,7 +187,28 @@ class VueSaveGenerator extends MineGenerator implements CodeGenerator
     protected function getFormList(): string
     {
         $jsCode = '';
+        // 对树表生成级联选择器
+        if (!empty($this->model->options['tree_parent_id'])) {
+            $parent_id = $this->model->options['tree_parent_id'];
+$jsCode .= <<<js
+
+  <el-form-item label="父ID" prop="{$parent_id}">
+        <el-cascader
+            v-model="form.{$parent_id}"
+            clearable
+            style="width:100%"
+            :options="treeList"
+            :props="{ checkStrictly: true }"
+        ></el-cascader>
+    </el-form-item>
+
+js;
+        }
+
         foreach ($this->columns as $column) {
+            if ($this->model->options['tree_parent_id'] === $column->column_name) {
+                continue;
+            }
             if ($column->is_insert === '1' || $column->is_edit === '1') {
                 $jsCode .= $this->getFormListCode($column);
             }

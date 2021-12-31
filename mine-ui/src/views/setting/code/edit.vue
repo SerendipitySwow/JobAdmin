@@ -186,7 +186,7 @@
                     </template>
 
                     <el-select
-                      v-model="form.options.tree_id"
+                      v-model="tree_id"
                       placeholder="请选择树主ID字段"
                       style="width: 100%"
                     >
@@ -210,7 +210,7 @@
                     </template>
 
                     <el-select
-                      v-model="form.options.tree_parent_id"
+                      v-model="tree_parent_id"
                       placeholder="请选择树父ID字段"
                       style="width: 100%"
                     >
@@ -234,7 +234,7 @@
                     </template>
 
                     <el-select
-                      v-model="form.options.tree_name"
+                      v-model="tree_name"
                       placeholder="请选择树名称字段"
                       style="width: 100%"
                     >
@@ -410,6 +410,12 @@ export default {
         // package_name: [{ required: false, pattern: /^[A-Za-z]{3,}$/g, message: '包名必须为3位字母及以上', trigger: 'blur' }]
       },
 
+      tree_id: '',
+
+      tree_parent_id: '',
+
+      tree_name: '',
+
       // 当前记录
       record: null,
 
@@ -511,6 +517,9 @@ export default {
         if (valid) {
             this.form.columns = this.columns
             this.saveLoading = true
+            if ( this.form.type == 'tree') {
+              this.form.options = { tree_id: this.tree_id, tree_parent_id: this.tree_parent_id, tree_name: this.tree_name }
+            }
             let res = await this.$API.generate.update(this.form)
             this.saveLoading = false
             if (res.success) {
@@ -543,7 +552,9 @@ export default {
       }
 
       if (this.form.type == 'tree') {
-        this.form.options = this.record.options
+        this.tree_id = this.record.options.tree_id
+        this.tree_parent_id = this.record.options.tree_parent_id
+        this.tree_name = this.record.options.tree_name
       }
     },
 
