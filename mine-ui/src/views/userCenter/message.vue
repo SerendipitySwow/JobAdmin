@@ -1,12 +1,3 @@
-<!--
- * @Descripttion: 分栏明细模板
- * @version: 1.0
- * @Author: sakuya
- * @Date: 2021年7月26日08:59:14
- * @LastEditors:
- * @LastEditTime:
--->
-
 <template>
 	<el-container>
 		<el-aside width="180px" style="border-right: 1px solid #e6e6e6; padding:10px;">

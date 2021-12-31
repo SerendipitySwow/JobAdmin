@@ -32,14 +32,10 @@ class MessageConsumer extends ConsumerMessage
     public function consumeMessage($data, AMQPMessage $message): string
     {
         parent::consumeMessage($data, $message);
-        $data = $data['data'] ?? [];
 
-        if(empty($data)) {
+        if(empty($data['data'])) {
             return Result::DROP;
         }
-
-        //发送成功
-        $this->service->update($data['id'], [ 'send_status' => SystemQueueMessage::STATUS_SEND_SUCCESS ]);
 
         return Result::ACK;
     }

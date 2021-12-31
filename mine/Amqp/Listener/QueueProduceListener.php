@@ -75,6 +75,10 @@ class QueueProduceListener implements ListenerInterface
             'delay_time'=> $event->delayTime ?? 0,
             'produce_status'=> SystemQueueLog::PRODUCE_STATUS_SUCCESS
         ]);
+
+        $event->producer->setPayload([
+            'queue_id' => $id, 'data' => $event->producer->payload()
+        ]);
     }
 
     /**
@@ -94,7 +98,9 @@ class QueueProduceListener implements ListenerInterface
      */
     public function afterProduce(object $event): void
     {
-        (new SystemQueueMessageMapper)->save(json_decode($event->producer->payload(), true));
+        (new SystemQueueMessageMapper)->save(
+            json_decode(json_decode($event->producer->payload())->data, true)
+        );
     }
 
     /**

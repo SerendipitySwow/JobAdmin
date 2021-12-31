@@ -75,7 +75,6 @@ class SystemMenuMapper extends AbstractMapper
         return $this->model::query()->select(['id', 'parent_id', 'id AS value', 'name AS label'])
             ->where('status', $this->model::ENABLE)
             ->orderBy('sort', 'desc')
-            ->userDataScope()
             ->get()->toTree();
     }
 
