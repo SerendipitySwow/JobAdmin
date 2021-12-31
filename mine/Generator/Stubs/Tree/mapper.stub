@@ -22,6 +22,17 @@ class {CLASS_NAME} extends AbstractMapper
         $this->model = {MODEL}::class;
     }
 
+    /**
+     * 获取前端选择树
+     * @return array
+     */
+    public function getSelectTree(): array
+    {
+        return $this->model::query()
+            ->select(['{FIELD_ID}', '{FIELD_PID}', '{FIELD_ID} AS value', '{FIELD_NAME} AS label'])
+            ->get()->toTree();
+    }
+
 
     /**
      * 查询树名称
@@ -31,28 +42,6 @@ class {CLASS_NAME} extends AbstractMapper
     public function getTreeName(array $ids = null): array
     {
         return $this->model::withTrashed()->whereIn('{FIELD_ID}', $ids)->pluck('{FIELD_NAME}')->toArray();
-    }
-
-    /**
-     * 保存数据
-     */
-    public function save(array $data): int
-    {
-        if (is_array($data['{FIELD_PID}']) && !empty($data['{FIELD_PID}'])) {
-            $data['{FIELD_PID}'] = array_pop($data['{FIELD_PID}']);
-        }
-        return parent::save($data);
-    }
-
-    /**
-     * 更新数据
-     */
-    public function update(int $id, array $data): bool
-    {
-        if (is_array($data['{FIELD_PID}']) && !empty($data['{FIELD_PID}'])) {
-            $data['{FIELD_PID}'] = array_pop($data['{FIELD_PID}']);
-        }
-        return parent::update($id, $data);
     }
 
     /**
