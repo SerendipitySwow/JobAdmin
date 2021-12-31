@@ -190,7 +190,7 @@ class TableGenerator extends MineGenerator
             $option = [ 'length'   => $column['len'] ];
         }
 
-        if (!empty($option['default'])) {
+        if (! empty($column['default'])) {
             $option['default'] = $column['default'];
         }
         $option['comment'] = $column['comment'];

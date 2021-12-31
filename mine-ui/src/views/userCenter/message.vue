@@ -150,10 +150,12 @@
         this.defaultActive = name
       },
 
+      // 处理搜索事件
       handlerSearch() {
 
       },
 
+      // 重置搜索
       resetSearch() {
 
       },

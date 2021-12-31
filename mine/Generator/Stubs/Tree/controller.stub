@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
  * @Controller(prefix="{CONTROLLER_ROUTE}")
  * @Auth
  */
-class DeptController extends MineController
+class {CLASS_NAME} extends MineController
 {
     /**
      * @Inject

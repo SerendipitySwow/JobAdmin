@@ -34,6 +34,28 @@ class {CLASS_NAME} extends AbstractMapper
     }
 
     /**
+     * 保存数据
+     */
+    public function save(array $data): int
+    {
+        if (is_array($data['{FIELD_PID}']) && !empty($data['{FIELD_PID}'])) {
+            $data['{FIELD_PID}'] = array_pop($data['{FIELD_PID}']);
+        }
+        return parent::save($data);
+    }
+
+    /**
+     * 更新数据
+     */
+    public function update(int $id, array $data): bool
+    {
+        if (is_array($data['{FIELD_PID}']) && !empty($data['{FIELD_PID}'])) {
+            $data['{FIELD_PID}'] = array_pop($data['{FIELD_PID}']);
+        }
+        return parent::update($id, $data);
+    }
+
+    /**
      * @param int $id
      * @return bool
      */
