@@ -28,6 +28,17 @@ class SystemQueueMessageService extends AbstractService
     public function getReceiveMessage(array $params = []): array
     {
         $params['getReceive'] = true;
+        unset($params['getSend']);
+        return $this->mapper->getPageList($params, false);
+    }
+
+    /**
+     * 获取已发送列表数据
+     */
+    public function getSendMessage(array $params = []): array
+    {
+        $params['getSend'] = true;
+        unset($params['getReceive']);
         return $this->mapper->getPageList($params, false);
     }
 }

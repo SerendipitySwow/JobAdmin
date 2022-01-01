@@ -44,6 +44,16 @@ class QueueMessageController extends MineController
     }
 
     /**
+     * 已发送消息列表
+     * @GetMapping("sendList")
+     * @return ResponseInterface
+     */
+    public function sendList(): ResponseInterface
+    {
+        return $this->success($this->service->getSendMessage($this->request->all()));
+    }
+
+    /**
      * 读取数据
      * @GetMapping("read/{id}")
      * @param int $id

@@ -21,7 +21,6 @@
         <div class="left-panel">
           <el-button
             icon="el-icon-plus"
-            v-auth="['system:queueMessage:save']"
             type="primary"
           >发信息</el-button>
 
@@ -29,29 +28,21 @@
             type="danger"
             plain
             icon="el-icon-delete"
-            v-auth="['system:role:delete']"
             :disabled="selection.length==0"
           >删除</el-button>
 
-          <el-button-group style="margin-left: 10px;">
-            <el-button
-              plain
-              v-auth="['system:attachment:delete']"
-            >全部</el-button>
-
-            <el-button
-              plain
-              v-auth="['system:attachment:delete']"
-            >已读</el-button>
-
-            <el-button
-              plain
-              v-auth="['system:attachment:recovery']"
-            >未读</el-button>
-          </el-button-group>
+          <el-radio-group
+            v-model="queryParams.read_status"
+            style="margin-left:10px"
+            v-if="defaultActive !== 'send_box'"
+            @change="readStatusChange"
+          >
+            <el-radio-button label="all">全部</el-radio-button>
+            <el-radio-button label="0">未读</el-radio-button>
+            <el-radio-button label="1">已读</el-radio-button>
+          </el-radio-group>
         </div>
         <div class="right-panel">
-          <el-input placeholder="搜索发送人" />
           <el-input placeholder="搜索标题" />
           <el-tooltip class="item" effect="dark" content="搜索" placement="top">
             <el-button type="primary" icon="el-icon-search" @click="handlerSearch"></el-button>
@@ -79,14 +70,19 @@
             prop="content_type"
             sortable="custom"
             width="120"
-          ></el-table-column>
+          >
+            <template #default="scope">
+              <ma-dict-tag :options="messageType" :value="scope.row.content_type" />
+            </template>
+          </el-table-column>
 
           <el-table-column
             label="发送人"
-            prop="title"
+            prop="send_user.nickname"
             sortable="custom"
+            v-if="defaultActive !== 'send_box'"
             width="120"
-          ></el-table-column>
+          />
 
           <el-table-column
             label="标题"
@@ -100,6 +96,15 @@
             width="200"
             sortable="custom"
           ></el-table-column>
+
+          <el-table-column
+            label="操作"
+            width="150"
+          >
+            <el-button type="text">删除</el-button>
+            <el-button type="text">详细</el-button>
+            <el-button type="text" v-if="defaultActive !== 'receive_box'">发送列表</el-button>
+          </el-table-column>
 
         </maTable>
       </el-main>
@@ -121,6 +126,7 @@
           announcement: 'el-icon-cellphone',
           notice: 'el-icon-bell',
         },
+        queryParams: { read_status: 'all' },
         selection: [],
 			}
 		},
@@ -132,13 +138,18 @@
 
 		methods: {
 
-      loadData () {
+      loadData (type = undefined) {
         if (! this.defaultActive) return
 
-        let table = this.$refs.table
         this.api.list = this.defaultActive === 'send_box' ? this.$API.queueMessage.getSendList : this.$API.queueMessage.getReceiveList
-        table.getData()
+        this.queryParams = { read_status: 'all' }
+        this.queryParams.content_type = type
+        this.$refs.table.reload(this.queryParams)
+      },
 
+      readStatusChange(value) {
+        this.queryParams.read_status = value
+        this.$refs.table.upData(this.queryParams)
       },
 
       add() {
@@ -148,6 +159,7 @@
       // 菜单点击事件
       handleSelect(name) {
         this.defaultActive = name
+        this.loadData( (name === 'receive_box' || name === 'send_box') ? undefined : name)
       },
 
       // 处理搜索事件

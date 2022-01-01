@@ -37,22 +37,29 @@ class SystemQueueMessageMapper extends AbstractMapper
             $query->where('content_type', '=', $params['content_type']);
         }
 
-        $query->with(['sendUser' => function($query) {
-            $query->select([ 'id', 'nickname' ]);
-        }]);
-
         // 获取收信数据
         if (isset($params['getReceive'])) {
+            $query->with(['sendUser' => function($query) {
+                $query->select([ 'id', 'username', 'nickname' ]);
+            }]);
             $prefix = env('DB_PREFIX');
-            $query->whereRaw(
-                "id IN ( SELECT message_id FROM {$prefix}system_queue_message_receive WHERE user_id = ? )",
-                user()->getId()
-            );
+            $readStatus = $params['read_status'] ?? 'all';
+            $sql = <<<sql
+                id IN ( 
+                    SELECT `message_id` FROM `{$prefix}system_queue_message_receive` WHERE `user_id` = ?
+                    AND if (? <> 'all', `read_status` = ?, ' 1 = 1 ')
+                )
+            sql;
+            $query->whereRaw($sql, [ user()->getId(), $readStatus, $readStatus ]);
         }
 
         // 收取发信数据
         if (isset($params['getSend'])) {
             $query->where('send_by', user()->getId());
+
+            $query->with(['receiveUser' => function($query) {
+                $query->select('*');
+            }]);
         }
 
         return $query;
