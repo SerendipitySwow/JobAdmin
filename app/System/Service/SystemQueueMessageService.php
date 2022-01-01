@@ -41,4 +41,14 @@ class SystemQueueMessageService extends AbstractService
         unset($params['getReceive']);
         return $this->mapper->getPageList($params, false);
     }
+
+    /**
+     * 获取接收人列表
+     * @param int $id
+     * @return array
+     */
+    public function getReceiveUserList(int $id): array
+    {
+        return $this->mapper->getReceiveUserList($id);
+    }
 }

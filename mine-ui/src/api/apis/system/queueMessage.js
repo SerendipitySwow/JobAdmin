@@ -24,5 +24,17 @@ export default {
             method: 'get',
             params
         })
+    },
+
+    /**
+     * 获取接收人列表
+     * @returns
+     */
+     getReceiveUser (params = {}) {
+        return request({
+            url: 'system/queueMessage/getReceiveUser',
+            method: 'get',
+            params
+        })
     }
 }

@@ -54,27 +54,15 @@ class QueueMessageController extends MineController
     }
 
     /**
-     * 读取数据
-     * @GetMapping("read/{id}")
-     * @param int $id
+     * 获取接收人列表
+     * @GetMapping("getReceiveUser")
      * @return ResponseInterface
      */
-    public function read(int $id): ResponseInterface
+    public function getReceiveUser(): ResponseInterface
     {
-        return $this->success($this->service->read($id));
-    }
-
-    /**
-     * 更新
-     * @PutMapping("update/{id}")
-     * @param int $id
-     * @param SystemMessageUpdateRequest $request
-     * @return ResponseInterface
-     * @OperationLog
-     */
-    public function update(int $id, SystemMessageUpdateRequest $request): ResponseInterface
-    {
-        return $this->service->update($id, $request->all()) ? $this->success() : $this->error();
+        return $this->success(
+            $this->service->getReceiveUserList( $this->request->input('id', 0) )
+        );
     }
 
     /**

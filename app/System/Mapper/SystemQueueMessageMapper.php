@@ -56,13 +56,22 @@ class SystemQueueMessageMapper extends AbstractMapper
         // 收取发信数据
         if (isset($params['getSend'])) {
             $query->where('send_by', user()->getId());
-
-            $query->with(['receiveUser' => function($query) {
-                $query->select('*');
-            }]);
         }
 
         return $query;
+    }
+
+    /**
+     * 获取接收人列表
+     * @param int $id
+     * @return array
+     */
+    public function getReceiveUserList(int $id): array
+    {
+        $model = $this->read($id);
+        $queueMessage = $model->toArray();
+        $queueMessage['receive_users'] = $model->receiveUser;
+        return $queueMessage;
     }
 
     /**
