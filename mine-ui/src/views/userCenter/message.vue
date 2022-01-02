@@ -29,6 +29,7 @@
             plain
             icon="el-icon-delete"
             :disabled="selection.length==0"
+            @click="del(selection, true)"
           >删除</el-button>
 
           <el-radio-group
@@ -101,15 +102,24 @@
             label="操作"
             width="150"
           >
-            <el-button type="text">删除</el-button>
-            <el-button type="text">详细</el-button>
-            <el-button type="text" v-if="defaultActive !== 'receive_box'">发送列表</el-button>
+            <template #default="scope">
+              <el-button type="text" @click="del(scope.row.id)">删除</el-button>
+              <el-button type="text" @click="showDetails(scope.row)">详细</el-button>
+              <el-button type="text" v-if="defaultActive === 'send_box'">发送列表</el-button>
+            </template>
           </el-table-column>
 
         </maTable>
       </el-main>
 		</el-container>
 	</el-container>
+
+  <el-drawer v-model="drawer" title="详细内容" size="50%" >
+    <el-main>
+      <h2 style="font-size: 24px; line-height: 60px;"> {{ row.title }} </h2>
+      <div v-html="row.content"></div>
+    </el-main>
+  </el-drawer>
 </template>
 
 <script>
@@ -128,6 +138,10 @@
         },
         queryParams: { read_status: 'all' },
         selection: [],
+        drawer: false,
+        row: {
+          title: '', content: ''
+        },
 			}
 		},
     
@@ -152,8 +166,27 @@
         this.$refs.table.upData(this.queryParams)
       },
 
+      showDetails(row) {
+        this.drawer = true
+        this.row = row
+      },
+
       add() {
 
+      },
+
+      // 删除
+      async del(id, batch = false) {
+        let msg = batch ? '确定要删除选中的消息吗？' : '确定删除该消息吗？';
+        await this.$confirm(msg, '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$API.queueMessage.deletes(batch ? id.join(',') : id).then(res => {
+            res.success && this.$message.success(res.message)
+            res.success || this.$message.error(res.message)
+          })
+          this.$refs.table.upData(this.queryParams)
+        }).catch(()=>{})
       },
 
       // 菜单点击事件
@@ -164,17 +197,17 @@
 
       // 处理搜索事件
       handlerSearch() {
-
+        this.$refs.table.upData(this.queryParams)
       },
 
       // 重置搜索
       resetSearch() {
-
+        this.loadData(this.defaultActive)
       },
 
       // 选择事件
       selectionChange(selection){
-        this.selection = selection
+        this.selection = selection.map( item => item.id )
       },
 
       // 查询字典

@@ -89,7 +89,7 @@ class SystemDictDataService extends AbstractService
             'orderBy' => 'sort',
             'orderType' => 'desc'
         ];
-        $data = parent::getList(array_merge($args, $params));
+        $data = $this->mapper->getList(array_merge($args, $params), false);
 
         $this->redis->set($key, serialize($data));
 

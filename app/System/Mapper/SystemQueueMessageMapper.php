@@ -32,6 +32,10 @@ class SystemQueueMessageMapper extends AbstractMapper
      */
     public function handleSearch(Builder $query, array $params): Builder
     {
+        if (isset($params['title'])) {
+            $query->where('title', 'like', '%'.$params['content_type'].'%');
+        }
+
         // 内容类型
         if (isset($params['content_type'])) {
             $query->where('content_type', '=', $params['content_type']);
@@ -87,5 +91,24 @@ class SystemQueueMessageMapper extends AbstractMapper
         $model = $this->model::create($data);
         $model->receiveUser()->sync($receiveUsers);
         return $model->{$model->getKeyName()};
+    }
+
+    /**
+     * 删除消息
+     * @param array $ids
+     * @return bool
+     * @throws \Exception
+     * @Transaction
+     */
+    public function delete(array $ids): bool
+    {
+        foreach ($ids as $id) {
+            $model = $this->model::find($id);
+            if ($model) {
+                $model->receiveUser()->detach();
+                $model->delete();
+            }
+        }
+        return true;
     }
 }

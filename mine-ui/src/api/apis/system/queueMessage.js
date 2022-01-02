@@ -36,5 +36,16 @@ export default {
             method: 'get',
             params
         })
+    },
+
+    /**
+     * 删除消息
+     * @returns
+     */
+     deletes (ids) {
+        return request({
+            url: 'system/queueMessage/deletes/' + ids,
+            method: 'delete'
+        })
     }
 }
