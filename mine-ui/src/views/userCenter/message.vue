@@ -105,7 +105,7 @@
             <template #default="scope">
               <el-button type="text" @click="del(scope.row.id)">删除</el-button>
               <el-button type="text" @click="showDetails(scope.row)">详细</el-button>
-              <el-button type="text" v-if="defaultActive === 'send_box'">发送列表</el-button>
+              <el-button type="text" v-if="defaultActive === 'send_box'" @click="showSendList(scope.row.id)">发送列表</el-button>
             </template>
           </el-table-column>
 
@@ -115,11 +115,23 @@
 	</el-container>
 
   <el-drawer v-model="drawer" title="详细内容" size="50%" >
-    <el-main>
+    <el-main v-loading="drawerLoading" element-loading-background="rgba(50, 50, 50, 0.5)"
+        element-loading-text="数据加载中..." style="height:100%;"
+      >
       <h2 style="font-size: 24px; line-height: 60px;"> {{ row.title }} </h2>
       <div v-html="row.content"></div>
     </el-main>
   </el-drawer>
+
+  <sc-dialog v-model="sendDialog" title="发送用户列表"> 
+    <maTable
+      ref="sendList"
+      :api="{ list: $API.getSendList }"
+      :autoLoad="false"
+      stripe
+    >
+    </maTable>
+  </sc-dialog>
 </template>
 
 <script>
@@ -139,6 +151,8 @@
         queryParams: { read_status: 'all' },
         selection: [],
         drawer: false,
+        drawerLoading: true,
+        sendDialog: false,
         row: {
           title: '', content: ''
         },
@@ -166,9 +180,17 @@
         this.$refs.table.upData(this.queryParams)
       },
 
-      showDetails(row) {
+      async showDetails(row) {
+        this.drawerLoading = true
         this.drawer = true
+        await this.$API.queueMessage.updateReadStatus(row.id)
+        this.drawerLoading = false 
         this.row = row
+      },
+
+      showSendList(id) {
+        this.sendDialog = true
+        
       },
 
       add() {

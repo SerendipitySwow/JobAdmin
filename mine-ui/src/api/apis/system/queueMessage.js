@@ -30,7 +30,7 @@ export default {
      * 获取接收人列表
      * @returns
      */
-     getReceiveUser (params = {}) {
+    getReceiveUser (params = {}) {
         return request({
             url: 'system/queueMessage/getReceiveUser',
             method: 'get',
@@ -42,10 +42,21 @@ export default {
      * 删除消息
      * @returns
      */
-     deletes (ids) {
+    deletes (ids) {
         return request({
             url: 'system/queueMessage/deletes/' + ids,
             method: 'delete'
         })
-    }
+    },
+
+    /**
+     * 更新读取状态
+     * @returns
+     */
+    updateReadStatus (ids = {}) {
+        return request({
+            url: 'system/queueMessage/updateReadStatus/' + ids,
+            method: 'put',
+        })
+    },
 }

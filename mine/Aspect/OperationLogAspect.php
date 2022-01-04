@@ -56,17 +56,16 @@ class OperationLogAspect extends AbstractAspect
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
         $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class];
-        if (empty($annotation->menuName)) {
-            $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class];
-        }
         $result = $proceedingJoinPoint->process();
-        $evDispatcher = $this->container->get(EventDispatcherInterface::class);
-        $evDispatcher->dispatch(new Operation($this->getRequestInfo([
-            'code' => $annotation->menuCode ?? '',
-            'name' => $annotation->menuName ?? '',
-            'response_code' => $result->getStatusCode(),
-            'response_data' => $result->getBody()->getContents()
-        ])));
+        if (! empty($annotation->menuName) && ($annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class])) {
+            $evDispatcher = $this->container->get(EventDispatcherInterface::class);
+            $evDispatcher->dispatch(new Operation($this->getRequestInfo([
+                'code' => $annotation->menuCode ?? '',
+                'name' => $annotation->menuName ?? '',
+                'response_code' => $result->getStatusCode(),
+                'response_data' => $result->getBody()->getContents()
+            ])));
+        }
         return $result;
     }
 

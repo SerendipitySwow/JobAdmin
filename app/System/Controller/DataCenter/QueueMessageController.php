@@ -76,4 +76,16 @@ class QueueMessageController extends MineController
     {
         return $this->service->delete($ids) ? $this->success() : $this->error();
     }
+
+    /**
+     * 更新状态到已读
+     * @PutMapping("updateReadStatus/{ids}")
+     * @param String $ids
+     * @return ResponseInterface
+     * @OperationLog
+     */
+    public function updateReadStatus(String $ids): ResponseInterface
+    {
+        return $this->service->updateDataStatus($ids) ? $this->success() : $this->error();
+    }
 }

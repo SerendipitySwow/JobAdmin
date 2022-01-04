@@ -51,4 +51,16 @@ class SystemQueueMessageService extends AbstractService
     {
         return $this->mapper->getReceiveUserList($id);
     }
+
+    /**
+     * 更新中间表数据状态
+     * @param String $ids
+     * @param string $columnName
+     * @param string $value
+     * @return bool
+     */
+    public function updateDataStatus(String $ids, string $columnName = 'read_status', string $value = '1'): bool
+    {
+        return $this->mapper->updateDataStatus(explode(',', $ids), $columnName, $value);
+    }
 }

@@ -111,4 +111,31 @@ class SystemQueueMessageMapper extends AbstractMapper
         }
         return true;
     }
+
+    /**
+     * 更新中间表数据状态
+     * @param array $ids
+     * @param string $columnName
+     * @param string $value
+     * @return bool
+     * @Transaction
+     */
+    public function updateDataStatus(array $ids, string $columnName = 'read_status', string $value = '1'): bool
+    {
+        foreach ($ids as $id) {
+            $result = Db::table('system_queue_message_receive')
+                ->where('message_id', $id)
+                ->where('user_id', user()->getId())
+                ->value($columnName);
+
+            if ($result != $value) {
+                Db::table('system_queue_message_receive')
+                    ->where('message_id', $id)
+                    ->where('user_id', user()->getId())
+                    ->update([ $columnName => $value ]);
+            }
+        }
+
+        return true;
+    }
 }
