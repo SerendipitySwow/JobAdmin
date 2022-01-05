@@ -277,7 +277,7 @@ export default {
       if (res.url) {
         let data = {
           id: this.formUser.id,
-          avatar: res.url
+          avatar: this.viewImage(res.url)
         }
         this.avatar = res.url
         await this.$API.user.updateInfo(data).then(res => {

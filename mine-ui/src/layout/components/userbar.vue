@@ -84,7 +84,7 @@
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0, 1)
 			
-			this.avatar = userInfo.avatar ? this.viewImage(userInfo.avatar) : '/img/avatar.jpg'
+			this.avatar = userInfo.avatar ? userInfo.avatar : '/img/avatar.jpg'
 		},
 		methods: {
 			//个人信息

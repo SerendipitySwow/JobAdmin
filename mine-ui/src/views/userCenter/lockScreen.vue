@@ -26,7 +26,7 @@
         shape="square"
         :size="120"
         fit="cover"
-        :src="viewImage($TOOL.data.get('user').user.avatar)"
+        :src="$TOOL.data.get('user').user.avatar"
         @error="() => true"
       >
       <el-icon><ma-icon-user style="font-size: 120px; margin-left:-53px" /></el-icon>

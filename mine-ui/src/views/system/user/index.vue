@@ -115,7 +115,7 @@
 
             <el-table-column label="头像" width="60">
               <template #default="scope">
-                <el-avatar :src="viewImage(scope.row.avatar)" size="small" @error="() => true">
+                <el-avatar :src="scope.row.avatar" size="small" @error="() => true">
                   <i class="el-icon-s-custom" />
                 </el-avatar>
               </template>

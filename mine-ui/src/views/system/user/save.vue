@@ -193,7 +193,7 @@
       },
 
       handleResource(data) {
-        this.form.avatar = data[0].url
+        this.form.avatar = this.viewImage(data.pop().url)
       },
 
       // 请求部门、角色、岗位数据

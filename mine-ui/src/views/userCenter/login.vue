@@ -86,6 +86,7 @@
 							successText="验证通过"
 							:width="width"
 							handlerIcon="el-icon-d-arrow-right"
+							handlerBg="#efefef"
     						successIcon="el-icon-circle-check"
 							:background="$TOOL.data.get('APP_COLOR') || $CONFIG.COLOR"
 							:textColor="'#fff'"
