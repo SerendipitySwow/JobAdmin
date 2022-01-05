@@ -85,6 +85,9 @@
 			this.userNameF = this.userName.substring(0, 1)
 			
 			this.avatar = userInfo.avatar ? userInfo.avatar : '/img/avatar.jpg'
+
+			var serverWs = 'ws://127.0.0.1:9502/message.io'
+			var ws = new WebSocket(serverWs);
 		},
 		methods: {
 			//个人信息

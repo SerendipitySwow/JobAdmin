@@ -17,6 +17,8 @@ use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middleware;
+use App\System\Middleware\WsAuthMiddleware;
 use Mine\MineController;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -26,7 +28,8 @@ use Swoole\WebSocket\Server;
 /**
  * Class MessageController
  * @package App\System\Controller
- * @Controller(server="message", prefix="message/socket.io")
+ * @Controller(server="message",prefix="message.io")
+ * @Middleware(WsAuthMiddleware::class)
  */
 class MessageController extends MineController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
