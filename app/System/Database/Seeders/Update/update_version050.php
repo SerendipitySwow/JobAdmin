@@ -89,6 +89,7 @@ class UpdateVersion050 extends Seeder
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074938784928, 10074866778272, '公告', 'announcement', 'queue_msg_type', 2, '0', NULL, NULL, '2021-12-25 18:31:00', '2021-12-25 18:31:00', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074951884448, 10074866778272, '待办', 'todo', 'queue_msg_type', 3, '0', NULL, NULL, '2021-12-25 18:31:26', '2021-12-25 18:31:26', NULL, NULL)",
             "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074951884459, 10074866778272, '抄送我的', 'carbon_copy_mine', 'queue_msg_type', 4, '0', NULL, NULL, '2021-12-25 18:31:26', '2021-12-25 18:31:26', NULL, NULL)",
+            "INSERT INTO `{$table}`(`id`, `type_id`, `label`, `value`, `code`, `sort`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`, `remark`) VALUES (10074951884666, 10074866778272, '私信', 'private_message', 'queue_msg_type', 5, '0', NULL, NULL, '2021-12-25 18:31:26', '2021-12-25 18:31:26', NULL, NULL)",
 
         ];
     }

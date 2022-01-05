@@ -3,10 +3,8 @@
 declare(strict_types=1);
 namespace App\System\Controller\DataCenter;
 
-use App\System\Model\SystemQueueMessage;
 use App\System\Service\SystemQueueMessageService;
-use App\System\Request\Message\SystemMessageCreateRequest;
-use App\System\Request\Message\SystemMessageUpdateRequest;
+use App\System\Request\Message\SendPrivateMessageRequest;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
@@ -15,7 +13,6 @@ use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Mine\Annotation\Auth;
 use Mine\Annotation\OperationLog;
-use Mine\Annotation\Permission;
 use Mine\MineController;
 use Psr\Http\Message\ResponseInterface;
 
@@ -54,6 +51,20 @@ class QueueMessageController extends MineController
     }
 
     /**
+     * 发私信
+     * @PostMapping("sendPrivateMessage")
+     * @param SendPrivateMessageRequest $request
+     * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Throwable
+     */
+    public function sendPrivateMessage(SendPrivateMessageRequest $request): ResponseInterface
+    {
+        return $this->service->sendPrivateMessage($request->validated()) ? $this->success() : $this->error();
+    }
+
+    /**
      * 获取接收人列表
      * @GetMapping("getReceiveUser")
      * @return ResponseInterface
@@ -61,7 +72,10 @@ class QueueMessageController extends MineController
     public function getReceiveUser(): ResponseInterface
     {
         return $this->success(
-            $this->service->getReceiveUserList( $this->request->input('id', 0) )
+            $this->service->getReceiveUserList(
+                (int) $this->request->input('id', 0),
+                $this->request->all()
+            )
         );
     }
 

@@ -84,7 +84,7 @@ class SystemDictDataService extends AbstractService
         }
 
         $args = [
-            'select' => 'id, label, value',
+            'select' => ['id', 'label', 'value'],
             'status' => '0',
             'orderBy' => 'sort',
             'orderType' => 'desc'

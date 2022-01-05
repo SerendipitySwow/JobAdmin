@@ -205,7 +205,7 @@ export default {
   created () {
     this.userInfo = this.$TOOL.data.get('user')
     this.formUser = this.userInfo.user
-    this.avatar =  this.userInfo.user.avatar ? this.viewImage(this.userInfo.user.avatar) : '/img/avatar.jpg'
+    this.avatar =  this.userInfo.user.avatar ? this.userInfo.user.avatar : '/img/avatar.jpg'
   },
 
   watch:{
@@ -279,7 +279,7 @@ export default {
           id: this.formUser.id,
           avatar: this.viewImage(res.url)
         }
-        this.avatar = res.url
+        this.avatar = this.viewImage(res.url)
         await this.$API.user.updateInfo(data).then(res => {
             this.$nextTick(() => {
               this.$TOOL.data.set('user', this.userInfo)

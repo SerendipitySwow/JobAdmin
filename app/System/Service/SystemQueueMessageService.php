@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace App\System\Service;
 
 use App\System\Mapper\SystemQueueMessageMapper;
+use App\System\Model\SystemQueueMessage;
+use App\System\Vo\QueueMessageVo;
 use Mine\Abstracts\AbstractService;
 
 /**
@@ -43,13 +45,33 @@ class SystemQueueMessageService extends AbstractService
     }
 
     /**
+     * 发私信
+     * @param array $data
+     * @return bool
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Throwable
+     */
+    public function sendPrivateMessage(array $data): bool
+    {
+        $queueMessage = new QueueMessageVo();
+        $queueMessage->setTitle($data['title']);
+        $queueMessage->setContent($data['content']);
+        // 固定私信类型
+        $queueMessage->setContentType(SystemQueueMessage::TYPE_PRIVATE_MESSAGE);
+        $queueMessage->setSendBy(user()->getId());
+        return push_queue_message($queueMessage, $data['users']) !== -1;
+    }
+
+    /**
      * 获取接收人列表
      * @param int $id
+     * @param array $params
      * @return array
      */
-    public function getReceiveUserList(int $id): array
+    public function getReceiveUserList(int $id, array $params = []): array
     {
-        return $this->mapper->getReceiveUserList($id);
+        return $this->mapper->getReceiveUserList($id, $params);
     }
 
     /**

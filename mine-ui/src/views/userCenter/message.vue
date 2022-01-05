@@ -11,7 +11,7 @@
           <template #title>收信箱</template>
         </el-menu-item>
         <el-menu-item v-for="item in messageType" :key="item.value" :index="item.value">
-          <el-icon><Component :is="typeIcon[item.value] ? typeIcon[item.value] : 'el-icon-message-box'" /></el-icon>
+          <el-icon><Component :is="typeIcon[item.value] ? typeIcon[item.value] : 'el-icon-message'" /></el-icon>
           <template #title>{{ item.label }}</template>
         </el-menu-item>
 			</el-menu>
@@ -22,6 +22,7 @@
           <el-button
             icon="el-icon-plus"
             type="primary"
+            @click="add"
           >发信息</el-button>
 
           <el-button
@@ -105,7 +106,7 @@
             <template #default="scope">
               <el-button type="text" @click="del(scope.row.id)">删除</el-button>
               <el-button type="text" @click="showDetails(scope.row)">详细</el-button>
-              <el-button type="text" v-if="defaultActive === 'send_box'" @click="showSendList(scope.row.id)">发送列表</el-button>
+              <el-button type="text" v-if="defaultActive === 'send_box'" @click="showReceiveList(scope.row.id)">接收人员</el-button>
             </template>
           </el-table-column>
 
@@ -118,28 +119,38 @@
     <el-main v-loading="drawerLoading" element-loading-background="rgba(50, 50, 50, 0.5)"
         element-loading-text="数据加载中..." style="height:100%;"
       >
-      <h2 style="font-size: 24px; line-height: 60px;"> {{ row.title }} </h2>
+      <h2 style="font-size: 24px; line-height: 60px; text-align:center"> {{ row.title }} </h2>
       <div v-html="row.content"></div>
     </el-main>
   </el-drawer>
 
-  <sc-dialog v-model="sendDialog" title="发送用户列表"> 
+  <sc-dialog v-model="sendDialog" title="接收人列表"> 
     <maTable
-      ref="sendList"
-      :api="{ list: $API.getSendList }"
+      ref="receiveList"
+      :api="receiveListApi"
       :autoLoad="false"
       stripe
     >
+      <el-table-column label="用户名" prop="username" />
+      <el-table-column label="昵称" prop="nickname" />
+      <el-table-column label="查看状态" prop="read_status" />
     </maTable>
   </sc-dialog>
+  
+  <create-message ref="send_msg" />
 </template>
 
 <script>
+  import createMessage from './components/createMessage'
 	export default {
 		name: 'message',
+    components: {
+      createMessage
+    },
 		data() {
 			return {
         api: { list: () => {} },
+        receiveListApi: { list: () => {} },
         defaultActive: 'receive_box',
         messageType: [],
         typeIcon: {
@@ -147,6 +158,7 @@
           todo: 'el-icon-calendar',
           announcement: 'el-icon-cellphone',
           notice: 'el-icon-bell',
+          private_message : 'el-icon-chat-line-round',
         },
         queryParams: { read_status: 'all' },
         selection: [],
@@ -188,13 +200,18 @@
         this.row = row
       },
 
-      showSendList(id) {
+      showReceiveList(id) {
         this.sendDialog = true
-        
+        this.$nextTick( () => {
+          this.receiveListApi.list = this.$API.queueMessage.getReceiveUser
+          this.$refs.receiveList.reload({ id })
+        })
       },
 
       add() {
-
+        this.$nextTick(() => {
+          this.$refs.send_msg.open()
+        })
       },
 
       // 删除

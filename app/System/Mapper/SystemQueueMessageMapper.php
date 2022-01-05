@@ -8,6 +8,7 @@ use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Db;
 use Mine\Abstracts\AbstractMapper;
 use Mine\Annotation\Transaction;
+use Mine\MineModel;
 
 /**
  * 信息管理Mapper类
@@ -72,10 +73,18 @@ class SystemQueueMessageMapper extends AbstractMapper
      */
     public function getReceiveUserList(int $id): array
     {
-        $model = $this->read($id);
-        $queueMessage = $model->toArray();
-        $queueMessage['receive_users'] = $model->receiveUser;
-        return $queueMessage;
+        $paginate = Db::table('system_user as u')
+            ->select(Db::raw("u.username, u.nickname, if (r.read_status = '1', '已读', '未读') as read_status "))
+            ->join('system_queue_message_receive as r', 'u.id', '=', 'r.user_id')
+            ->where('r.message_id', $id)
+            ->paginate(
+                $params['pageSize'] ?? $this->model::PAGE_SIZE,
+                ['*'],
+                'page',
+                $params['page'] ?? 1
+            );
+
+        return $this->setPaginate($paginate);
     }
 
     /**

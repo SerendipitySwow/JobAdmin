@@ -5,9 +5,9 @@ namespace App\System\Request\Message;
 use Hyperf\Validation\Request\FormRequest;
 
 /**
- * 信息管理验证数据类 (Update)
+ * 发私信验证
  */
-class SystemMessageUpdateRequest extends FormRequest
+class SendPrivateMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,9 @@ class SystemMessageUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'title' => 'required',
+            'users' => 'required|array',
+            'content' => 'required'
         ];
     }
 }

@@ -59,4 +59,16 @@ export default {
             method: 'put',
         })
     },
+
+    /**
+     * 发私信
+     * @returns
+     */
+    sendPrivateMessage (data = {}) {
+        return request({
+            url: 'system/queueMessage/sendPrivateMessage',
+            method: 'post',
+            data
+        })
+    },
 }

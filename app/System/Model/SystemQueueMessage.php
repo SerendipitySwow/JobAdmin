@@ -40,6 +40,18 @@ class SystemQueueMessage extends MineModel
     const TYPE_TODO = 'todo';
 
     /**
+     * 消息类型：抄送我的
+     * @var string
+     */
+    const TYPE_COPY_MINE = 'carbon_copy_mine';
+
+    /**
+     * 消息类型：私信
+     * @var string
+     */
+    const TYPE_PRIVATE_MESSAGE = 'private_message';
+
+    /**
      * The table associated with the model.
      *
      * @var string
