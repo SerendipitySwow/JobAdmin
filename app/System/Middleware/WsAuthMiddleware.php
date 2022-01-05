@@ -25,8 +25,7 @@ class WsAuthMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        echo 123;
-        if (user()->check($request->input('token', null))) {
+        if (user()->check($request->getQueryParams()['token'] ?? null)) {
             return $handler->handle($request);
         }
         throw new TokenException(t('jwt.validate_fail'));
