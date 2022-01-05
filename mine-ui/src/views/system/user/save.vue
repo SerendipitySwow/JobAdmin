@@ -211,7 +211,6 @@
 
       //表单注入数据
       async setData(data){
-        console.log(data)
         this.loading = true
         this.form.id = data.id
         this.form.avatar = data.avatar
