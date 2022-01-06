@@ -63,6 +63,7 @@
 </template>
 
 <script>
+	import Message from '@/ws-serve/message'
 	export default {
 		data(){
 			return {
@@ -71,6 +72,7 @@
 				avatar: 'img/avatar.jpg',
 				msg: false,
 				msgList:[],
+				wsMessage: null
 			}
 		},
 		created() {
@@ -83,8 +85,11 @@
 			let userInfo = this.$TOOL.data.get('user').user
 			this.userName = userInfo.username;
 			this.userNameF = this.userName.substring(0, 1)
-			
+
 			this.avatar = userInfo.avatar ? userInfo.avatar : '/img/avatar.jpg'
+
+			this.wsMessage = new Message()
+			this.wsMessage.connection()
 		},
 		methods: {
 			//个人信息

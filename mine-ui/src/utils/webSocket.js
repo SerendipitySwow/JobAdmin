@@ -9,11 +9,11 @@ class webSocket
    * websocket 连接句柄
    * @var Websocket
    */
-  ws
+  ws = null
 
   /**
    * 服务器地址
-   * @var 
+   * @var
    */
   serverUrl
 
@@ -57,8 +57,8 @@ class webSocket
 
   /**
    * 构造函数
-   * @param {string} url 
-   * @param {object} events 
+   * @param {string} url
+   * @param {object} events
    */
   constructor(url, events) {
     this.serverUrl = url
@@ -76,7 +76,7 @@ class webSocket
    * 连接websocket
    */
   connection() {
-    if (! this.ws) {
+    if (this.ws) {
       this.ws.close()
       this.ws = null
     }

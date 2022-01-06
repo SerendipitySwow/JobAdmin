@@ -269,4 +269,11 @@ tool.httpBuild = function (data, isPrefix = false) {
     return _result.length ? prefix + _result.join('&') : ''
 }
 
+/**
+ * 获取token
+ */
+tool.getToken = function () {
+    return tool.data.get('token')
+}
+
 export default tool

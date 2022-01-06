@@ -44,11 +44,11 @@ export default {
 		app.config.globalProperties.$API = api
 		app.config.globalProperties.$AUTH = hasPermission
 		app.config.globalProperties.$ROLE = hasRole
-		
+
 		// 全局挂载获取字典数据方法
 		app.config.globalProperties.getDict = api.dataDict.getDict
 		app.config.globalProperties.getDicts = api.dataDict.getDicts
-		
+
 		// 全局挂载显示图片方法
 		app.config.globalProperties.viewImage = tool.viewImage
 
@@ -57,6 +57,9 @@ export default {
 
 		// 全局挂载复制方法
 		app.config.globalProperties.clipboard = useClipboard().toClipboard
+
+		// 全局挂载获取Token
+		app.config.globalProperties.getToken = tool.getToken
 
 		//注册全局组件
 		app.component('maTable', maTable)
@@ -85,7 +88,7 @@ export default {
 		app.directive('role', role)
 		app.directive('time', time)
 		app.directive('copy', copy)
-		
+
 		//统一注册el-icon图标
 		for(let icon in elIcons){
 			app.component(`ElIcon${icon}`, elIcons[icon])
