@@ -16,7 +16,10 @@ namespace App\System\Controller;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
+use Hyperf\Di\Annotation\Inject;
+use Mine\Helper\LoginUser;
 use Mine\MineController;
+use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\WebSocket\Frame;
@@ -29,13 +32,28 @@ use Swoole\WebSocket\Server;
 class MessageController extends MineController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
     /**
+     * @Inject
+     * @var ServerRequestInterface
+     */
+    protected $request;
+
+    /**
+     * @Inject
+     * @var LoginUser
+     */
+    protected $user;
+
+    /**
      * 成功连接到 ws 回调
      * @param Response|Server $server
      * @param Request $request
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function onOpen($server, Request $request): void
     {
-        // TODO: Implement onOpen() method.
+        print_r($this->request->getQueryParams());
+        $userinfo = $this->getUserinfo();
     }
 
     /**
@@ -59,5 +77,12 @@ class MessageController extends MineController implements OnMessageInterface, On
         // TODO: Implement onClose() method.
     }
 
-
+    /**
+     * 获取当前用户信息
+     * @return array
+     */
+    protected function getUserinfo(): array
+    {
+        return $this->user->getUserInfo($this->request->input('token'));
+    }
 }

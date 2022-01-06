@@ -74,11 +74,12 @@ class LoginUser
 
     /**
      * 获取当前登录用户信息
+     * @param string|null $token
      * @return array
      */
-    public function getUserInfo(): array
+    public function getUserInfo(?string $token = null): array
     {
-        return $this->jwt->getParserData();
+        return $this->jwt->getParserData($token);
     }
 
     /**

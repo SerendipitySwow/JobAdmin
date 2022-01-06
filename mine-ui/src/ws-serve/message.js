@@ -7,7 +7,6 @@ class Message {
   ws
 
   constructor() {
-    console.log(process.env.VUE_APP_WS_URL + '?token=' + tool.getToken())
     this.ws = new webSocket(
       process.env.VUE_APP_WS_URL + '?token=' + tool.getToken(), {
         onOpen:  _ => { console.log('已成功连接到消息服务器...') },
@@ -15,6 +14,9 @@ class Message {
         onClose: _ => { console.log('与消息服务器断开...') },
       }
     )
+
+    // 20秒
+    this.ws.heartbeatInterval = 5000
 
     this.registerEvents()
   }
