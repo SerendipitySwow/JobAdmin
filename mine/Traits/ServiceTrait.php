@@ -136,9 +136,9 @@ trait ServiceTrait
     /**
      * 读取一条数据
      * @param int $id
-     * @return MineModel
+     * @return MineModel|null
      */
-    public function read(int $id): MineModel
+    public function read(int $id): ?MineModel
     {
         return $this->mapper->read($id);
     }
