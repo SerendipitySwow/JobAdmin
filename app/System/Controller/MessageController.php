@@ -52,18 +52,32 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     public function onOpen($server, Request $request): void
     {
-        print_r($this->request->getQueryParams());
         $userinfo = $this->getUserinfo();
+        console()->info(
+            "WebSocket [ user connection to message server: id > {$userinfo['id']}, ".
+            "fd > {$request->fd}, time > ". date('Y-m-d H:i:s') .' ]'
+        );
     }
 
     /**
      * 消息回调
      * @param Response|Server $server
      * @param Frame $frame
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function onMessage($server, Frame $frame): void
     {
-        // TODO: Implement onMessage() method.
+        $userinfo = $this->getUserinfo();
+        if ($frame->data == 'PONG') {
+            console()->info(
+                "WebSocket [ user send 'PONG': id > {$userinfo['id']}, ".
+                "fd > {$frame->fd}, time > ". date('Y-m-d H:i:s') .' ]'
+            );
+        } else {
+            echo 'ok';
+            // TODO...
+        }
     }
 
     /**
@@ -71,10 +85,16 @@ class MessageController extends MineController implements OnMessageInterface, On
      * @param Response|\Swoole\Server $server
      * @param int $fd
      * @param int $reactorId
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function onClose($server, int $fd, int $reactorId): void
     {
-        // TODO: Implement onClose() method.
+        $user_id = '';
+        console()->info(
+            "WebSocket [ user close connect for message server: id > {$user_id}, ".
+            "fd > {$fd}, time > ". date('Y-m-d H:i:s') .' ]'
+        );
     }
 
     /**
@@ -83,6 +103,6 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     protected function getUserinfo(): array
     {
-        return $this->user->getUserInfo($this->request->input('token'));
+        return $this->user->getUserInfo($this->request->getQueryParams()['token']);
     }
 }
