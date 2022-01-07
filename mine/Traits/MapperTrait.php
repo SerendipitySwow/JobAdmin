@@ -97,7 +97,7 @@ trait MapperTrait
      * @param bool $isScope
      * @return Builder
      */
-    public function listQuerySetting(?array $params = null, bool $isScope = false): Builder
+    public function listQuerySetting(?array $params, bool $isScope): Builder
     {
         $query = (($params['recycle'] ?? false) === true) ? $this->model::onlyTrashed() : $this->model::query();
 
