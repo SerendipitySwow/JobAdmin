@@ -68,16 +68,16 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     public function onMessage($server, Frame $frame): void
     {
-        $userinfo = $this->getUserinfo();
-        if ($frame->data == 'PONG') {
-            console()->info(
-                "WebSocket [ user send 'PONG': id > {$userinfo['id']}, ".
-                "fd > {$frame->fd}, time > ". date('Y-m-d H:i:s') .' ]'
-            );
-        } else {
-            echo 'ok';
-            // TODO...
-        }
+//        $userinfo = $this->getUserinfo();
+//        if ($frame->data == 'PONG') {
+//            console()->info(
+//                "WebSocket [ user send 'PONG': id > {$userinfo['id']}, ".
+//                "fd > {$frame->fd}, time > ". date('Y-m-d H:i:s') .' ]'
+//            );
+//        } else {
+//            echo 'ok';
+//            // TODO...
+//        }
     }
 
     /**
