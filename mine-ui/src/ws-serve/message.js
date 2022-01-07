@@ -1,5 +1,6 @@
 import webSocket from "@/utils/webSocket"
 import tool from '@/utils/tool'
+import { union, xor, difference } from 'lodash'
 import { ElNotification } from 'element-plus'
 
 class Message {
@@ -25,7 +26,7 @@ class Message {
     this.ws.on('ev_new_message', data => {
       ElNotification.success({
         title: '新消息提示',
-        message: "您收到一条新的消息，请注意查收！",
+        message: "您有新的消息，请注意查收！",
         onClick: data => {
           console.log(data)
         }
