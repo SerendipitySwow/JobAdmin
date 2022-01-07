@@ -87,7 +87,7 @@ trait ModelMacroTrait
                                 break 2;
                             case SystemRole::CUSTOM_SCOPE:
                                 // 自定义数据权限
-                                $deptIds = $role->depts()->get(['id']);
+                                $deptIds = $role->depts()->pluck('id')->toArray();
                                 $this->userIds = array_merge(
                                     $this->userIds,
                                     SystemUser::query()->whereIn('dept_id', $deptIds)->pluck('id')->toArray()
