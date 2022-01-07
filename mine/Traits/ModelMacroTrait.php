@@ -144,7 +144,7 @@ trait ModelMacroTrait
             if($value === NULL){
                 return $this->where($key, $operator);
             }else{
-                return $this->where($key, $operator,$value);
+                return $this->where($key, $operator, $value);
             }
         });
 
@@ -159,7 +159,7 @@ trait ModelMacroTrait
             if($value === NULL){
                 return $this->orWhere($key, $operator);
             }else{
-                return $this->orWhere($key, $operator,$value);
+                return $this->orWhere($key, $operator, $value);
             }
         });
     }
