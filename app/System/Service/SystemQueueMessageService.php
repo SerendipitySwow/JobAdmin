@@ -25,7 +25,25 @@ class SystemQueueMessageService extends AbstractService
     }
 
     /**
+     * 获取用户未读消息
+     * @param int $id
+     * @return mixed
+     */
+    public function getUnreadMessage(int $id)
+    {
+        $params = [
+            'user_id' => $id,
+            'orderBy' => 'created_at',
+            'orderType' => 'desc',
+            'getReceive' => true,
+        ];
+        return $this->mapper->getPageList($params);
+    }
+
+    /**
      * 获取收信箱列表数据
+     * @param array $params
+     * @return array
      */
     public function getReceiveMessage(array $params = []): array
     {
@@ -36,6 +54,8 @@ class SystemQueueMessageService extends AbstractService
 
     /**
      * 获取已发送列表数据
+     * @param array $params
+     * @return array
      */
     public function getSendMessage(array $params = []): array
     {

@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\System\Controller;
 
+use App\System\Service\SystemQueueMessageService;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
 use Hyperf\Di\Annotation\Inject;
-use Mine\Helper\LoginUser;
-use Mine\MineController;
+use Mine\Redis\MineMessageClientRedis;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -29,19 +29,12 @@ use Swoole\WebSocket\Server;
  * Class MessageController
  * @package App\System\Controller
  */
-class MessageController extends MineController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
+class MessageController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
     /**
-     * @Inject
-     * @var ServerRequestInterface
+     * @var int
      */
-    protected $request;
-
-    /**
-     * @Inject
-     * @var LoginUser
-     */
-    protected $user;
+    protected $uid;
 
     /**
      * 成功连接到 ws 回调
@@ -52,9 +45,12 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     public function onOpen($server, Request $request): void
     {
-        $userinfo = $this->getUserinfo();
+        $this->uid = user()->getUserInfo(
+            container()->get(ServerRequestInterface::class)->getQueryParams()['token']
+        )['id'];
+
         console()->info(
-            "WebSocket [ user connection to message server: id > {$userinfo['id']}, ".
+            "WebSocket [ user connection to message server: id > {$this->uid}, ".
             "fd > {$request->fd}, time > ". date('Y-m-d H:i:s') .' ]'
         );
     }
@@ -68,16 +64,12 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     public function onMessage($server, Frame $frame): void
     {
-//        $userinfo = $this->getUserinfo();
-//        if ($frame->data == 'PONG') {
-//            console()->info(
-//                "WebSocket [ user send 'PONG': id > {$userinfo['id']}, ".
-//                "fd > {$frame->fd}, time > ". date('Y-m-d H:i:s') .' ]'
-//            );
-//        } else {
-//            echo 'ok';
-//            // TODO...
-//        }
+        // 非心跳
+        if ($frame->data !== 'PONG') {
+            $service = container()->get(SystemQueueMessageService::class);
+            $data = $service->getUnreadMessage($this->uid);
+            print_r($data);
+        }
     }
 
     /**
@@ -90,19 +82,9 @@ class MessageController extends MineController implements OnMessageInterface, On
      */
     public function onClose($server, int $fd, int $reactorId): void
     {
-        $user_id = '';
         console()->info(
-            "WebSocket [ user close connect for message server: id > {$user_id}, ".
+            "WebSocket [ user close connect for message server: id > {$this->uid}, ".
             "fd > {$fd}, time > ". date('Y-m-d H:i:s') .' ]'
         );
-    }
-
-    /**
-     * 获取当前用户信息
-     * @return array
-     */
-    protected function getUserinfo(): array
-    {
-        return $this->user->getUserInfo($this->request->getQueryParams()['token']);
     }
 }

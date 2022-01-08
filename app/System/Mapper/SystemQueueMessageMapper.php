@@ -55,7 +55,7 @@ class SystemQueueMessageMapper extends AbstractMapper
                     AND if (? <> 'all', `read_status` = ?, ' 1 = 1 ')
                 )
             sql;
-            $query->whereRaw($sql, [ user()->getId(), $readStatus, $readStatus ]);
+            $query->whereRaw($sql, [ $params['user_id'] ?? user()->getId(), $readStatus, $readStatus ]);
         }
 
         // 收取发信数据

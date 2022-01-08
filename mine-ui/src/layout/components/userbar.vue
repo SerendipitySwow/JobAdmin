@@ -129,12 +129,6 @@
 			showMsg(){
 				this.msg = true
 			},
-			//标记已读
-			markRead(){
-				this.$API.systemQueueMessage.look().then(res => {
-					this.msgList = []
-				});
-			},
 			// 锁屏
 			lockScreen () {
 				this.$prompt('请输入锁屏密码，解锁需要此密码', '设置锁屏密码', {
