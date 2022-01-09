@@ -18,16 +18,14 @@ class webSocket
   serverUrl
 
   /**
-   * 心跳发送间隔，默认10秒
-   * @var int
+   * 心跳配置
+   * @var object
    */
-  heartbeatInterval = 10 * 1000
-
-  /**
-   * 心跳定时器
-   * @var function
-   */
-  heaerbeatTimer = null
+  heartbeat = {
+    openHeartbeat: true,    // 是否开启心跳
+    interval: 10 * 1000,   // 心跳发送间隔，默认10秒
+    timer: null            // 心跳定时器
+  }
 
   /**
    * 重连配置
@@ -94,13 +92,7 @@ class webSocket
    * @param {Object} evt Websocket 消息
    */
   onParseData(evt) {
-    let [event, message] = JSON.parse(evt.data)
-
-    return {
-      event,
-      message,
-      data: evt.data,
-    }
+    return JSON.parse(evt.data)
   }
 
   /**
@@ -110,7 +102,7 @@ class webSocket
    */
    onOpen(evt) {
     this.events.onOpen(evt)
-    this.heartbeat()
+    this.sendHeartbeat()
   }
 
   /**
@@ -152,10 +144,12 @@ class webSocket
   /**
    * 向服务器发送心跳数据包
    */
-  heartbeat() {
-    this.heaerbeatTimer = setInterval(_ => {
-      this.ws.send('PONG')
-    }, this.heartbeatInterval)
+  sendHeartbeat() {
+    if (this.heartbeat.openHeartbeat) {
+      this.heaerbeat.timer = setInterval(_ => {
+        this.ws.send('PONG')
+      }, this.heartbeat.interval)
+    }
   }
 
   /**

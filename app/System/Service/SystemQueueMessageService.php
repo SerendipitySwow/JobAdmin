@@ -36,8 +36,9 @@ class SystemQueueMessageService extends AbstractService
             'orderBy' => 'created_at',
             'orderType' => 'desc',
             'getReceive' => true,
+            'read_status' => 0,
         ];
-        return $this->mapper->getPageList($params);
+        return $this->mapper->getPageList($params, false);
     }
 
     /**

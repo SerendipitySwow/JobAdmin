@@ -1,11 +1,13 @@
 import webSocket from "@/utils/webSocket"
 import tool from '@/utils/tool'
-import { union, xor, difference } from 'lodash'
-import { ElNotification } from 'element-plus'
 
 class Message {
 
   ws
+
+  timer = null
+
+  interval = 10 * 1000
 
   constructor() {
     this.ws = new webSocket(
@@ -15,34 +17,14 @@ class Message {
         onClose: _ => { console.log('与消息服务器断开...') },
       }
     )
-
-    // 20秒
-    this.ws.heartbeatInterval = 5000
-
-    this.registerEvents()
+    
+    this.ws.heartbeat.openHeartbeat = false
   }
 
-  registerEvents() {
-    this.ws.on('ev_new_message', data => {
-      ElNotification.success({
-        title: '新消息提示',
-        message: "您有新的消息，请注意查收！",
-        onClick: data => {
-          console.log(data)
-        }
-      })
-    })
-
-    this.ws.on('ev_read_status', data => {
-      // TODO...
-    })
-
-    this.ws.on('ev_error', data => {
-      ElNotification.error({
-        title: '提示',
-        message: data.message,
-      })
-    })
+  getMessage() {
+    this.timer = setInterval(() => {
+      this.ws.send({ event: 'get_unread_message' })
+    }, this.interval)
   }
 
   connection() {

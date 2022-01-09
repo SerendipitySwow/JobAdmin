@@ -64,11 +64,16 @@ class MessageController implements OnMessageInterface, OnOpenInterface, OnCloseI
      */
     public function onMessage($server, Frame $frame): void
     {
-        // 非心跳
-        if ($frame->data !== 'PONG') {
-            $service = container()->get(SystemQueueMessageService::class);
-            $data = $service->getUnreadMessage($this->uid);
-            print_r($data);
+        $data = json_decode($frame->data, true);
+        switch($data['event']) {
+            case 'get_unread_message':
+                $service = container()->get(SystemQueueMessageService::class);
+                $server->push($frame->fd, json_encode([
+                    'event' => 'ev_new_message',
+                    'message' => 'success',
+                    'data' => $service->getUnreadMessage($this->uid)['items']
+                ]));
+                break;
         }
     }
 
