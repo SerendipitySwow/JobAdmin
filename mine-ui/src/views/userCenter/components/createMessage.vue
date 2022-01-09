@@ -58,6 +58,7 @@ export default {
             res.success && this.$message.success(res.message)
             res.success || this.$message.error(res.message)
             this.isSaveing = false
+            this.visible = false
           })
         }
       })

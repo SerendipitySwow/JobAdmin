@@ -176,6 +176,20 @@
       }
     },
     methods: {
+      async deletes(id) {
+        await this.$confirm(`确定删除该条日志吗？`, '提示', {
+          type: 'warning'
+        }).then(() => {
+          const loading = this.$loading();
+          this.$API.queueLog.deletes(id).then(res => {
+            if (res.success) {
+              this.$refs.table.upData(this.queryParams)
+              loading.close()
+              this.$message.success("操作成功")
+            }
+          })
+        })
+      },
 
       //批量删除
       async batchDel(){
@@ -185,10 +199,13 @@
           const loading = this.$loading();
           let ids = []
           this.selection.map(item => ids.push(item.id))
-          this.$API.queueLog.deletes(ids.join(','))
-          this.$refs.table.upData(this.queryParams)
-          loading.close()
-          this.$message.success("操作成功")
+          this.$API.queueLog.deletes(ids.join(',')).then(res=> {
+            if (res.success) {
+              this.$refs.table.upData(this.queryParams)
+              loading.close()
+              this.$message.success("操作成功")
+            }
+          })
         })
       },
 

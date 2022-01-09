@@ -66,6 +66,14 @@ class QueueProduceListener implements ListenerInterface
 
         $id = $this->getId();
 
+        $payload = $event->producer->payload();
+
+        if (! isset($payload['queue_id'])) {
+            $event->producer->setPayload([
+                'queue_id' => $id, 'data' => $payload
+            ]);
+        }
+
         $this->service->save([
             'id'=> $id,
             'exchange_name'=> $event->producer->getExchange(),
@@ -74,10 +82,6 @@ class QueueProduceListener implements ListenerInterface
             'queue_content'=> $event->producer->payload(),
             'delay_time'=> $event->delayTime ?? 0,
             'produce_status'=> SystemQueueLog::PRODUCE_STATUS_SUCCESS
-        ]);
-
-        $event->producer->setPayload([
-            'queue_id' => $id, 'data' => $event->producer->payload()
         ]);
     }
 

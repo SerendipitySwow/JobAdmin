@@ -98,8 +98,8 @@
 			this.wsMessage.getMessage()
 
 			this.wsMessage.ws.on('ev_new_message', (msg, data) => {
+				this.msgList = data
 				if (data.length > this.msgList.length) {
-					this.msgList = data
 					ElNotification.success({
 						title: '新消息提示',
 						message: "您有新的消息，请注意查收！",
