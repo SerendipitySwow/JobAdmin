@@ -136,11 +136,12 @@ export default {
     },
 
     // 删除目录
-    handleDeleteDir(node) {
-      this.$confirm(`确定删除 ${node.name} 目录吗？`, '提示', {
+    handleDeleteDir(data, node) {
+      console.log(node)
+      this.$confirm(`确定删除 ${data.name} 目录吗？`, '提示', {
         type: 'warning'
       }).then(async () => {
-        await this.$API.upload.deleteUploadDir({ name: node.name }).then(async res => {
+        await this.$API.upload.deleteUploadDir({ name: data.name }).then(async res => {
           if (res.success) {
             await this.loadDirs()
             this.$message.success(res.message)
