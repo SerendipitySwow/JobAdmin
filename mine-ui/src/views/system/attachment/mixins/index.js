@@ -137,11 +137,10 @@ export default {
 
     // 删除目录
     handleDeleteDir(data, node) {
-      console.log(node)
       this.$confirm(`确定删除 ${data.name} 目录吗？`, '提示', {
         type: 'warning'
       }).then(async () => {
-        await this.$API.upload.deleteUploadDir({ name: data.name }).then(async res => {
+        await this.$API.upload.deleteUploadDir({ name: this.getParentName(node) }).then(async res => {
           if (res.success) {
             await this.loadDirs()
             this.$message.success(res.message)
@@ -152,6 +151,15 @@ export default {
           this.$message.error(e)
         })
       })
+    },
+
+    getParentName(obj, path = '') {
+      if (obj.level > 1 && obj.parent) {
+        path = this.getParentName(obj.parent, obj.data.name)
+      } else {
+        path = path == '' ? obj.data.name : obj.data.name + '/' + path
+      }
+      return path
     },
 
     handleDirSuccess() {
