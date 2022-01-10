@@ -57,7 +57,7 @@ class OperationLogAspect extends AbstractAspect
     {
         $annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[OperationLog::class];
         $result = $proceedingJoinPoint->process();
-        if (! empty($annotation->menuName) && ($annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class])) {
+        if (! empty($annotation->menuName) || ($annotation = $proceedingJoinPoint->getAnnotationMetadata()->method[Permission::class])) {
             $evDispatcher = $this->container->get(EventDispatcherInterface::class);
             $evDispatcher->dispatch(new Operation($this->getRequestInfo([
                 'code' => $annotation->menuCode ?? '',
