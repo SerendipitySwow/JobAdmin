@@ -66,7 +66,7 @@ class QueueProduceListener implements ListenerInterface
 
         $id = $this->getId();
 
-        $payload = $event->producer->payload();
+        $payload = json_decode($event->producer->payload(), true);
 
         if (! isset($payload['queue_id'])) {
             $event->producer->setPayload([

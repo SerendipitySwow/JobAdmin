@@ -7,6 +7,7 @@ use App\System\Mapper\SystemQueueLogMapper;
 use App\System\Model\SystemUser;
 use App\System\Queue\Producer\MessageProducer;
 use App\System\Vo\QueueMessageVo;
+use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Di\Annotation\Inject;
 use Mine\Abstracts\AbstractService;
 use Mine\Amqp\DelayProducer;
@@ -65,6 +66,13 @@ class SystemQueueLogService extends AbstractService
      */
     public function pushMessage(QueueMessageVo $message, array $receiveUsers = []): int
     {
+        $producer = AnnotationCollector::get(\App\System\Queue\Producer\MessageProducer::class);
+        $consumer = AnnotationCollector::get(\App\System\Queue\Consumer\MessageConsumer::class);
+
+        if (! isset($producer['_c']['Hyperf\Amqp\Annotation\Producer']) || ! isset($consumer['_c']['Hyperf\Amqp\Annotation\Consumer'])) {
+            throw new NormalStatusException(t('system.queue_annotation_not_open'), 500);
+        }
+
         if (empty ($message->getTitle())) {
             throw new NormalStatusException(t('system.queue_missing_message_title'), 500);
         }
