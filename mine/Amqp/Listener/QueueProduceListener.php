@@ -103,7 +103,7 @@ class QueueProduceListener implements ListenerInterface
     public function afterProduce(object $event): void
     {
         (new SystemQueueMessageMapper)->save(
-            json_decode(json_decode($event->producer->payload())->data, true)
+            json_decode($event->producer->payload(), true)['data']
         );
     }
 
