@@ -15,7 +15,6 @@ namespace Mine\Helper;
 use Mine\Exception\TokenException;
 use Mine\MineRequest;
 use Xmo\JWTAuth\JWT;
-use Xmo\JWTAuth\Util\JWTUtil;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class LoginUser
