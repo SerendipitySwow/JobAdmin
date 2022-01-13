@@ -50,7 +50,7 @@ PHP有很多优秀的后台管理系统，但基于Swoole的后台管理系统�
 ## 环境需求
 
 - Swoole >= 4.5.x 并关闭 `Short Name`
-- PHP >= 7.4 并开启以下扩展：
+- PHP >= 8.0 并开启以下扩展：
     - mbstring
     - json
     - pdo
