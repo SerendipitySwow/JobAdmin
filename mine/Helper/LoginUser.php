@@ -43,14 +43,15 @@ class LoginUser
     /**
      * 验证token
      * @param string|null $token
+     * @param string $scene
      * @return bool
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function check(?string $token = null): bool
+    public function check(?string $token = null, string $scene = 'default'): bool
     {
         try {
-            if ($this->jwt->checkToken($token, true, true, true)) {
+            if ($this->jwt->checkToken($token, $scene, true, true, true)) {
                 return true;
             }
         } catch (InvalidArgumentException $e) {
