@@ -1,27 +1,6 @@
 <template>
   <el-container>
     <el-header>
-      <div class="left-panel">
-
-        <el-button
-            icon="el-icon-plus"
-            v-auth="['task:mission:save']"
-            type="primary"
-            @click="add"
-        >新增
-        </el-button>
-
-        <el-button
-            type="danger"
-            plain
-            icon="el-icon-delete"
-            v-auth="['task:mission:delete']"
-            :disabled="selection.length==0"
-            @click="batchDel"
-        >删除
-        </el-button>
-
-      </div>
       <div class="right-panel">
         <div class="right-panel-search">
 
@@ -165,31 +144,18 @@
         <!-- 正常数据操作按钮 -->
         <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
           <template #default="scope">
-
             <el-button
                 type="text"
                 size="small"
-                @click="tableShow(scope.row)"
-                v-auth="['task:mission:view']"
-            >查看
+                @click="tableShow(
+                    {
+                    coroutine_id:scope.row.coroutine_id,
+                    id:scope.row.id,
+                    service_id:scope.row.consul_service_id,
+                    }
+                    )"
+                v-auth="['task:mission:view']">查看任务相关运行信息
             </el-button>
-
-            <el-button
-                type="text"
-                size="small"
-                @click="tableEdit(scope.row, scope.$index)"
-                v-auth="['task:mission:update']"
-            >编辑
-            </el-button>
-
-            <el-button
-                type="text"
-                size="small"
-                @click="deletes(scope.row.id)"
-                v-auth="['task:mission:delete']"
-            >删除
-            </el-button>
-
           </template>
         </el-table-column>
 
@@ -285,10 +251,10 @@ export default {
         this.$refs.info.open('edit').setData(row)
       })
     }, //查看
-    tableShow(row){
+    tableShow(info){
       this.info.show = true
       this.$nextTick(() => {
-        this.$refs.infoDialog.show()
+        this.$refs.infoDialog.show(info)
       })
     }, //批量删除
     async batchDel(){
