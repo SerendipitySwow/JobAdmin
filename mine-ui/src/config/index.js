@@ -3,7 +3,7 @@ const DEFAULT_CONFIG = {
 	APP_MODE: 'dev',
 
 	//标题
-	APP_NAME: "MineAdmin",
+	APP_NAME: "任务管理平台",
 
 	//首页地址
 	DASHBOARD_URL: "/dashboard",

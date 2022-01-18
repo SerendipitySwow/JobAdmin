@@ -9,7 +9,7 @@ export default {
 	},
 	login: {
 		slogan: '高性能 / 精致 / 优雅',
-		describe: '后台基于Swoole的Hyperf框架，前端Vue3 + SCUI (Element-Plus) 的中后台解决方案',
+		describe: '基于MineAdmin开发的任务管理平台',
 		signInTitle: '用户登录',
 		rememberMe: '记住我',
 		forgetPassword: '忘记密码',

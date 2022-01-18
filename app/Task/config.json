@@ -1,0 +1,8 @@
+{
+    "name": "Task",
+    "label": "任务模块",
+    "description": "任务模块",
+    "installed": true,
+    "version": "1.0.0",
+    "order": 0
+}

@@ -2,10 +2,10 @@
 	<div class="login_bg">
 		<div class="login_adv" style="background-image: url(img/auth_banner.jpg);">
 			<div class="login_adv__title">
-				<h2>MineAdmin</h2>
+				<h2>任务管理平台</h2>
 				<h4>{{ $t('login.slogan') }}</h4>
 				<p>{{ $t('login.describe') }}</p>
-				
+
 				<div>
 					<span>
 						<el-icon><ma-icon-mineadmin style="font-size: 48px;" /></el-icon>
@@ -22,10 +22,10 @@
 				<p>{{$CONFIG.APP_NAME}} {{$CONFIG.APP_VER}}</p>
 				<p>Copyright © 2021-2022 mineadmin.com All Rights Reserved. </p>
 				<p><a href="https://beian.miit.gov.cn/" target="_blank" v-if="$TOOL.data.get('site_record_number')" style="color:#fff">{{ $TOOL.data.get('site_record_number') }}</a></p>
-				
+
 			</div>
 		</div>
-		<div class="login_main">
+		<div class="login_main" style="background-image: url(img/login@bg.jpg);">
 			<div class="login_config">
 				<el-button :icon="config.theme=='dark'?'el-icon-sunny':'el-icon-moon'" circle type="info" @click="configTheme"></el-button>
 				<el-dropdown trigger="click" placement="bottom-end" @command="configLang">
@@ -49,7 +49,7 @@
 				</div>
 				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" id="ruleForm" label-width="0" size="large">
 					<el-form-item prop="user">
-						<el-input 
+						<el-input
 							v-model="ruleForm.user"
 							prefix-icon="el-icon-user"
 							clearable :placeholder="$t('login.userPlaceholder')"
@@ -92,7 +92,7 @@
 							:textColor="'#fff'"
 						/>
 					</el-form-item>
-					
+
 					<!-- <el-form-item style="margin-bottom: 10px;">
 						<el-row>
 							<el-col :span="12">
@@ -239,7 +239,7 @@
 			getCaptchaImg () {
 				this.captchaImg = this.$CONFIG.API_URL + '/system/captcha?_time=' + Math.random()
 			},
-			
+
 			configTheme(){
 				this.config.theme = this.config.theme=='default'?'dark':'default'
 			},
