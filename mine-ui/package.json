@@ -26,6 +26,7 @@
 		"vue": "3.2.23",
 		"vue-clipboard3": "^1.0.1",
 		"vue-i18n": "9.1.9",
+		"vue-json-viewer": "3",
 		"vue-router": "4.0.12",
 		"vuedraggable": "4.0.3",
 		"vuex": "4.0.2",

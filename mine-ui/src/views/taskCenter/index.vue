@@ -222,19 +222,19 @@
 
   <save-dialog v-if="dialog.save" ref="saveDialog" @success="handleSuccess" @closed="dialog.save=false"></save-dialog>
 
-    <info v-if="info.show" ref="info"></info>
+  <info-dialog v-if="info.show" ref="infoDialog"  @success="handleSuccess" @closed="info.show=false"></info-dialog>
 
 </template>
 
 <script>
 import saveDialog from './save'
-import info from './info'
+import infoDialog from './info'
 
 export default {
   name: 'task:mission',
   components: {
     saveDialog,
-    info
+    infoDialog
   },
   async created(){
     await this.getDictData();
@@ -286,8 +286,10 @@ export default {
       })
     }, //查看
     tableShow(row){
-      console.log(row)
       this.info.show = true
+      this.$nextTick(() => {
+        this.$refs.infoDialog.show()
+      })
     }, //批量删除
     async batchDel(){
       await this.$confirm(`确定删除选中的 ${this.selection.length} 项吗？`, '提示', {
