@@ -94,7 +94,7 @@
             <el-tag class="mx-1" size="large" v-if="scope.row.status === 1" type="info">处理中</el-tag>
             <el-tag class="mx-1" size="large" v-if="scope.row.status === 2" type="success">已处理</el-tag>
             <el-tag class="mx-1" size="large" v-if="scope.row.status === 3" type="warning">已取消</el-tag>
-            <el-tag class="mx-1" size="large" v-if="scope.row.status === 3" type="danger">处理失败</el-tag>
+            <el-tag class="mx-1" size="large" v-if="scope.row.status === 4" type="danger">处理失败</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -142,9 +142,10 @@
         />
 
         <!-- 正常数据操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-if="!isRecycle">
+        <el-table-column label="操作" fixed="right" align="right" width="130">
           <template #default="scope">
             <el-button
+                v-if="scope.row.status == 1"
                 type="text"
                 size="small"
                 @click="tableShow(
@@ -156,29 +157,6 @@
                     )"
                 v-auth="['task:mission:view']">查看任务相关运行信息
             </el-button>
-          </template>
-        </el-table-column>
-
-        <!-- 回收站操作按钮 -->
-        <el-table-column label="操作" fixed="right" align="right" width="130" v-else>
-          <template #default="scope">
-
-            <el-button
-                type="text"
-                size="small"
-                v-auth="['task:mission:recovery']"
-                @click="recovery(scope.row.id)"
-            >恢复
-            </el-button>
-
-            <el-button
-                type="text"
-                size="small"
-                v-auth="['task:mission:realDelete']"
-                @click="deletes(scope.row.id)"
-            >删除
-            </el-button>
-
           </template>
         </el-table-column>
 

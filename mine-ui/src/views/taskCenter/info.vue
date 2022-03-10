@@ -8,7 +8,6 @@
         <json-viewer
             :value="form.trace_list"
             :expand-depth=5
-            copyable
             boxed
             sort></json-viewer>
       </el-form-item>
@@ -19,13 +18,17 @@
         <el-input v-model="form.executed_function_name" :prefix-icon="'el-icon-edit'"></el-input>
       </el-form-item>
       <el-form-item label="执行的文件行数:">
-        <el-input-number v-model="form.executed_function_line"  placeholder="Please input"></el-input-number>
+        <el-input-number v-model="form.executed_function_line" placeholder="Please input"></el-input-number>
       </el-form-item>
       <el-form-item label="定义的变量:">
-        <el-input v-model="form.vars" ></el-input>
+        <json-viewer
+            :value="form.vars"
+            :expand-depth=5
+            boxed
+            sort></json-viewer>
       </el-form-item>
       <el-form-item label="协程切换次数:">
-        <el-input-number v-model="form.round" ></el-input-number>
+        <el-input-number v-model="form.round"></el-input-number>
       </el-form-item>
       <el-form-item label="协程运行时间:">
         <el-input-number v-model="form.elapsed"></el-input-number>
@@ -167,8 +170,12 @@ export default {
   },
   methods: {
     show(info){
-      console.log(info)
       this.dialogDescShow = true;
+      console.log(this.$API.missionTask.read({
+        id: info.id,
+        coroutine_id: info.coroutine_id,
+        service_id: info.service_id,
+      }))
     }
   }
 }
